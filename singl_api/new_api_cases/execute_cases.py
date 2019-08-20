@@ -72,7 +72,7 @@ def deal_request_method():
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
                     post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                                    data=request_data, table_sheet_name=case_table_sheet)
+                                                    data=old_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
@@ -97,10 +97,7 @@ def deal_request_method():
 def post_request_result_check(row, column, url, host,headers, data, table_sheet_name):
     if isinstance(data, str):
         case_detail = case_table_sheet.cell(row=row, column=2).value
-        # if case_detail =='HDFS，根据statementId取结果数据(datasetId不存在)':
-        if case_detail in ('预览dataset-HDFS-csv,获取预览Dataset的数据(Id不存在)', '预览dataset-HDFS-parquet,获取预览Dataset的数据(Id不存在)',
-                           '预览dataset-HDFS-orc,获取预览Dataset的数据(Id不存在)','预览dataset-HDFS-txt,获取预览Dataset的数据(Id不存在)',
-                           '预览dataset-HDFS-avro,获取预览Dataset的数据(Id不存在)','预览dataset-DB,获取预览数据(Id不存在)'):
+        if '(Id不存在)' in case_detail:
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
             statement = statementId_no_dataset(host, dict_res(data))
@@ -232,8 +229,6 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
                 # 先停用该用户
                 if '57' in HOST_189:
                     res = requests.post(url=disable_user_url_dam, headers=headers, json=user_id_list)
-                # print(headers)
-                #     print(res.content, res.status_code, res.status_code)
                 # 删除该用户
                     res2 = requests.post(url=remove_user_url_dam, headers=headers, json=user_id_list)
                     # print(res2.status_code, res2.text)
@@ -342,9 +337,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 
     # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
     if data:
-        if case_detail in('预览DB dataset,获取预览Dataset的数据(Id存在)','预览dataset-HDFS-csv,获取预览Dataset的数据(Id存在)',
-                          '预览dataset-HDFS-parquet,获取预览Dataset的数据(Id存在)','预览dataset-HDFS-orc,获取预览Dataset的数据(Id存在)',
-                          '预览dataset-HDFS-txt,获取预览Dataset的数据(Id存在)','预览dataset-HDFS-avro,获取预览Dataset的数据(Id存在)'):
+        if '(Id存在)' in case_detail:
             # print(data)
             print('开始执行：', case_detail)
             # data = deal_parameters(data)
@@ -489,61 +482,71 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 
         else:
             print('开始执行：', case_detail)
-            # 分割参数，分割后成为一个列表['61bf20da-f42c-4b35-9142-0fc2a7664e3e', '2']
-            parameters = data.split('&')
-            # print('parameters:', parameters)
-            # 处理存在select语句中的参数，并重新赋值
-            for i in range(len(parameters)):
-                if parameters[i].startswith('select id from'):
-                    # select_result = ms.ExecuQuery(parameters[i])
-                    try:
-                        select_result = ms.ExecuQuery(parameters[i])
-                        parameters[i] = select_result[0]["id"]
-                    except:
-                        print('第%s行参数没有返回结果' % row)
+            print(data)
+            if '&' in data:  # 包含多个参数并以&分割
+                parameters = data.split('&')
+                # print('parameters:', parameters)
+                # 处理存在select语句中的参数，并重新赋值
+                for i in range(len(parameters)):
+                    if parameters[i].startswith('select id from'):
+                        # select_result = ms.ExecuQuery(parameters[i])
+                        try:
+                            select_result = ms.ExecuQuery(parameters[i])
+                            parameters[i] = select_result[0]["id"]
+                        except:
+                            print('第%s行参数没有返回结果' % row)
 
-                elif parameters[i].startswith('select name from'):
+                    elif parameters[i].startswith('select name from'):
+                        try:
+                            select_result = ms.ExecuQuery(parameters[i])
+                            parameters[i] = select_result[0]["name"]
+                        except:
+                            print('第%s行参数没有返回结果' % row)
+                    elif parameters[i].startswith('select execution_id from'):
+                        try:
+                            select_result = ms.ExecuQuery(parameters[i])
+                            parameters[i] = select_result[0]["execution_id"]
+                        except:
+                            print('第%s行参数没有返回结果' % row)
+                # 判断URL中需要的参数个数，并比较和data中的参数个数是否相等
+                if len(parameters) == 1:
                     try:
-                        select_result = ms.ExecuQuery(parameters[i])
-                        parameters[i] = select_result[0]["name"]
-                    except:
-                        print('第%s行参数没有返回结果' % row)
-                elif parameters[i].startswith('select execution_id from'):
-                    try:
-                        select_result = ms.ExecuQuery(parameters[i])
-                        parameters[i] = select_result[0]["execution_id"]
-                    except:
-                        print('第%s行参数没有返回结果' % row)
-            # 判断URL中需要的参数个数，并比较和data中的参数个数是否相等
-            if len(parameters) == 1:
-                try:
-                    url_new = url.format(parameters[0])
+                        url_new = url.format(parameters[0])
+                        print(url_new)
+                        response = requests.get(url=url_new, headers=headers)
+                        # print(response.content, response.status_code, response.text)
+                    except Exception:
+                        return
+                    # print(response.url, response.status_code,response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif len(parameters) == 2:
+                    url_new = url.format(parameters[0], parameters[1])
                     # print(url_new)
                     response = requests.get(url=url_new, headers=headers)
-                    # print(response.content, response.status_code, response.text)
-                except Exception:
-                    return
-                # print(response.url, response.status_code,response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif len(parameters) == 2:
-                url_new = url.format(parameters[0], parameters[1])
-                # print(url_new)
+                    # print(response.url, response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif len(parameters) == 3:
+                    url_new = url.format(parameters[0], parameters[1], parameters[2])
+                    response = requests.get(url=url_new, headers=headers)
+                    # print(response.url, response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                else:
+                    print('请确认第%d行parameters' % row)
+            else:  # 参数中不包含&，只有一个参数
+                parameters = data
+                url_new = url.format(data)
+                print(url_new)
                 response = requests.get(url=url_new, headers=headers)
-                # print(response.url, response.status_code, response.text)
+                print(response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif len(parameters) == 3:
-                url_new = url.format(parameters[0], parameters[1], parameters[2])
-                response = requests.get(url=url_new, headers=headers)
-                # print(response.url, response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            else:
-                print('请确认第%d行parameters' % row)
     # GET 请求参数写在URL中，直接发送请求
     else:
         if case_detail in('根据applicationId获取yarnAppliction任务运行状态','根据applicationId获取yarnAppliction任务的日志command line log'):

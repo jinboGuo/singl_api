@@ -44,5 +44,5 @@ def deal_parameters(data):
     else:
         return
 
-data = "select id from merce_dataset where name = 'API_dataset_HDFS_csv_随机数' and creator = 'admin'"
-print(deal_parameters(data))
+# data = "select id from merce_dataset where name = 'API_dataset_HDFS_csv_随机数' and creator = 'admin'"
+# print(deal_parameters(data))
