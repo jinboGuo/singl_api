@@ -113,6 +113,7 @@ def get_woven_qaoutput_dataset_path():
 
 dir1 = ab_dir('woven-common-3.0.jar')
 
+
 def upload_jar_file_filter():
     url = "%s/api/processconfigs/uploadjar/filter class" % HOST_189
     # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
@@ -166,3 +167,19 @@ def upload_jar_file_dataflow():
         return data_fileName
 
 # upload_jar_file_dataflow()
+
+def upload_file_standard(host,file,url):
+    dir2 = ab_dir(file)
+    # url = "%s/api/woven/upload/read/excel?maxSheet=1&maxRow=10000&maxColumn=3" % host
+    unquote_url = parse.unquote(url)
+    files = {"file": open(dir2, 'rb')}
+    headers = get_headers(host)
+    headers.pop('Content-Type')
+    try:
+        response = requests.post(url, files=files, headers=headers)
+    except:
+        return
+    else:
+        return response.status_code,response.text
+
+# upload_file_standard()

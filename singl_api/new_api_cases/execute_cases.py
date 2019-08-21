@@ -256,13 +256,16 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '数据标准导入文件':
-            files = {'file': open('gender.xls', 'rb')}
-            # headers = get_headers()
+            dir2 = ab_dir('sex.xls')
+            files = {"file": open(dir2, 'rb')}
+            headers = get_headers(host)
             headers.pop('Content-Type')
-            response = requests.post(url, files=files, headers=headers, params=dict_res(data))
+
+            response = requests.post(url, files=files, headers=headers)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
         elif case_detail == "登录":
             headers["Content-Type"] = "application/x-www-form-urlencoded"
             headers.pop('X-AUTH-TOKEN')
