@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
 from new_api_cases.execute_cases import ab_dir
 
-receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haizhong.yu@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
+receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
 receivers_test = ['bingjie.gu@inforefiner.com']
 
 current_path = os.path.abspath(os.path.dirname(__file__))
