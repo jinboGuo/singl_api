@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
 from new_api_cases.execute_cases import ab_dir
 
-receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com']  # 定时任务使用
+receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haizhong.yu@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
 receivers_test = ['bingjie.gu@inforefiner.com']
 
 current_path = os.path.abspath(os.path.dirname(__file__))
@@ -159,13 +159,9 @@ def mail_for_flow(host):
     # 邮件的正文内容----flow执行结果
     f = load_workbook(abs_dir("flow_dataset_info.xlsx"))
     f_sheet = f.get_sheet_by_name("flow_info")
-    cols = f_sheet.max_column
     rows = f_sheet.max_row
-    succeed = 0
     succeed_flow = []
-    failed = 0
     failed_flow = []
-    flow_failed_detail = []
     flow_id_list = GetCheckoutDataSet().get_flow_id()
     total = len(list(set(flow_id_list)))
     # print('flow总数total:', total)
@@ -198,24 +194,24 @@ def mail_for_flow(host):
     # 邮件的正文内容
     filename = time.strftime("%Y%m%d%H", time.localtime()) + '_report.html'
     if len(failed_flow_s) != 0:
-        mail_content = """各位好:
-        
-        flow用例执行信息如下
-        用例执行环境：%s
-        本次Flow用例共执行：%d 个
-        执行成功: %d 个 
-        执行失败: %d 个
-        失败的flow名称为: 
-        %s
-        失败原因请查看附件《flow_info.xlsx》中的log信息
-                    """ % (host, total, len(succeed_flow_s), len(failed_flow_s), failed_flow_s)
+        mail_content = """各位好:        
+        flow用例执行信息如下:
+            用例执行环境：%s
+            本次Flow用例共执行：%d 个
+            执行成功: %d 个 
+            执行失败: %d 个
+            失败的flow名称为: 
+            %s
+            失败原因请查看附件《flow_info.xlsx》中的log信息
+                        """ % (host, total, len(succeed_flow_s), len(failed_flow_s), failed_flow_s)
     else:
         mail_content = """各位好:
-         用例执行环境：%s
-         本次Flow用例共执行: %d 个
-         执行成功: %d 个
-         任务详情请查看附件《flow_info.xlsx》中的log
-                        """ % (host, total, len(succeed_flow_s))
+        flow用例执行信息如下:
+             用例执行环境：%s
+             本次Flow用例共执行: %d 个
+             执行成功: %d 个
+             任务详情请查看附件《flow_info.xlsx》中的log
+                            """ % (host, total, len(succeed_flow_s))
     # print(mail_content)
     # 邮件标题
     mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' Flow用例自动化执行日报'
@@ -252,5 +248,5 @@ def mail_for_flow(host):
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
 
-# host = '192.168.1.76:8515'
-# # mail_for_flow(host)
+# host = '192.168.1.83:8515'
+# mail_for_flow(host)
