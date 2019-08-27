@@ -68,7 +68,7 @@ def main3(host):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    receivers = receivers_list  # 定时任务使用
+    receivers = receivers_test  # 定时任务使用
     msg = MIMEMultipart()
 
     # 邮件的正文内容----API执行结果
@@ -153,8 +153,8 @@ def mail_for_flow(host):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    # receivers = receivers_test  # 调试使用
-    receivers = receivers_list  # 定时任务使用
+    receivers = receivers_test  # 调试使用
+    # receivers = receivers_list  # 定时任务使用
     msg = MIMEMultipart()
     # 邮件的正文内容----flow执行结果
     f = load_workbook(abs_dir("flow_dataset_info.xlsx"))

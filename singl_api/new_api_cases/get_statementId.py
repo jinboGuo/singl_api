@@ -1,6 +1,6 @@
 import requests,json
 from basic_info.get_auth_token import get_headers
-from basic_info.setting import HOST_189, tenant_id_189, tenant_id_81,tenant_id_83
+from basic_info.setting import host, tenant_id_189, tenant_id_81,tenant_id_83
 from util.format_res import dict_res
 
 

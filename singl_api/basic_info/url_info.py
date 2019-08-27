@@ -5,44 +5,44 @@ from basic_info.setting import scheduler_id, zmod_id, zmod_exectuion_id
 
 # -------------------------schedulers---------------------------------------------------
 # 创建scheduler的接口
-create_scheduler_url = "%s/api/schedulers" % HOST_189
+create_scheduler_url = "%s/api/schedulers" % host
 # 查询scheduler的接口
-query_scheduler_url = "%s/api/schedulers/query" % HOST_189
-select_by_schedulerId_url = "%s/api/schedulers/%s" % (HOST_189, scheduler_id)
+query_scheduler_url = "%s/api/schedulers/query" % host
+select_by_schedulerId_url = "%s/api/schedulers/%s" % (host, scheduler_id)
 # 启用scheduler接口
 
-enable_scheduler_url = "%s/api/schedulers/enable" % HOST_189
+enable_scheduler_url = "%s/api/schedulers/enable" % host
 # 停用scheduler接口
-disable_scheduler_url = "%s/api/schedulers/disable" % HOST_189
+disable_scheduler_url = "%s/api/schedulers/disable" % host
 # 批量删除schedulers
-remove_list_url = "%s/api/schedulers/removeList" % HOST_189
+remove_list_url = "%s/api/schedulers/removeList" % host
 # 更新schedulers, scheduler_id给定
-update_scheduler_url = "%s/api/schedulers/%s" % (HOST_189, scheduler_id)
+update_scheduler_url = "%s/api/schedulers/%s" % (host, scheduler_id)
 
 # -------------------------executions----------------------------------------------------
 # 查询execution
-query_exectution_url = "%s/api/executions/query" % HOST_189
+query_exectution_url = "%s/api/executions/query" % host
 # 批量查询execution
-gQuery_execution_url = "%s/api/executions/groupQuery" % HOST_189
+gQuery_execution_url = "%s/api/executions/groupQuery" % host
 # 批量删除schedulers
-delete_schedulers_url = "%s/api/schedulers/removeList" % HOST_189
+delete_schedulers_url = "%s/api/schedulers/removeList" % host
 
 
 # ----------------login-------------------------
-login_url = "%s/api/auth/login" % HOST_189
+login_url = "%s/api/auth/login" % host
 # ----------------dataset---------------------------
-priview_url = "%s/api/datasets/%s/preview?rows=50&tenant=2d7ad891-41c5-4fba-9ff2-03aef3c729e5" % (HOST_189,dataset_id)
-create_dataset_url = '%s/api/datasets' % HOST_189
+priview_url = "%s/api/datasets/%s/preview?rows=50&tenant=2d7ad891-41c5-4fba-9ff2-03aef3c729e5" % (host,dataset_id)
+create_dataset_url = '%s/api/datasets' % host
 # ----------------flow-------------------------------
-create_flow_url = "%s/api/flows/create" % HOST_189
+create_flow_url = "%s/api/flows/create" % host
 # ----------------schema-----------------------
-create_schema_url = '%s/api/schemas' % HOST_189
+create_schema_url = '%s/api/schemas' % host
 
 # ----------------collector-------------------------
-collector_table_url = '%s/api/woven/collectors/c1/resource/2b5ff16f-ca1b-465e-8a6d-69b8b39f8d61/tables?' % HOST_189
+collector_table_url = '%s/api/woven/collectors/c1/resource/2b5ff16f-ca1b-465e-8a6d-69b8b39f8d61/tables?' % host
 
 # ----------------schema接口---------
-create_schema_url = '%s/api/schemas' % HOST_189
+create_schema_url = '%s/api/schemas' % host
 
 # --------------status 接口---------
 query_component_status_url = '%s/api/component_status' % MY_LOGIN_INFO["HOST"]

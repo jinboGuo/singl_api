@@ -7,7 +7,7 @@ from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
 from basic_info.setting import MySQL_CONFIG
 from util.Open_DB import MYSQL
-from basic_info.setting import HOST_189
+from basic_info.setting import host
 from selenium import webdriver
 import random
 
@@ -16,26 +16,26 @@ ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 
 def get_job_tasks_id(job_id):
-    url = '%s/api/woven/collectors/%s/tasks' % (HOST_189, job_id)
+    url = '%s/api/woven/collectors/%s/tasks' % (host, job_id)
     data = {"fieldList": [], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-    response = requests.post(url=url, headers=get_headers(HOST_189), json=data)
+    response = requests.post(url=url, headers=get_headers(host), json=data)
 
     all_task_id = []
     try:
         tasks = dict_res(response.text)['content']
         for item in tasks:
             task_id = item['id']
+            all_task_id.append(task_id)
     except Exception as e:
         print(e)
         return
     else:
-        all_task_id.append(task_id)
         # print(all_task_id)
         return all_task_id
 
 
 # def stop_job_task(job_id):
-#     url = '%s/api/woven/collectors/WOVEN-SERVER/stopTaskList' % HOST_189
+#     url = '%s/api/woven/collectors/WOVEN-SERVER/stopTaskList' % host
 #     task_id = get_job_tasks_id(job_id)
 #     print(task_id)
 #     response = requests.post(url=url, headers=get_headers(), json=task_id)
@@ -44,8 +44,8 @@ def get_job_tasks_id(job_id):
 
 
 def create_new_user(data):
-    url = '%s/api/woven/users' % HOST_189
-    response = requests.post(url=url, headers=get_headers(HOST_189), json=data)
+    url = '%s/api/woven/users' % host
+    response = requests.post(url=url, headers=get_headers(host), json=data)
     user_id = dict_res(response.text)["id"]
     print(user_id)
     return user_id
@@ -55,8 +55,8 @@ def collector_schema_sync(data):
     collector = 'c9'
     # data = '{"useSystemStore": true, "dataSource":{"id": "f8523e1f-b1ff-48cd-be8d-02ab91290d5b", "name": "mysql_test_bj", "type": "JDBC", "driver": "com.mysql.jdbc.Driver", "url": "jdbc:mysql://192.168.1.189:3306/test", "username": "merce", "password": "merce", "dateToTimestamp":false, "catalog": "", "schema": "", "table": "", "selectSQL": "", "dbType": "DB"}, "dataStore":{"path": "/tmp/c1/mysql_test_bj", "format": "csv", "separator": ",", "type": "HDFS"}}'
     # data = '{"useSystemStore":true,"dataSource":{"id":"874de010-c05a-4210-91bb-aca51f3b5619","name":"gbj_0523","type":"JDBC","driver":"com.mysql.jdbc.Driver","url":"jdbc:mysql://192.168.1.199:3306/test","username":"merce","password":"123456","dateToTimestamp":false,"catalog":"","schema":"","table":"","selectSQL":"","dbType":"DB"},"dataStore":{"path":"/tmp/c9/gbj_0523","format":"csv","separator":",","type":"HDFS"}}'
-    url = '%s/api/woven/collectors/%s/schema/fetch' % (HOST_189, collector)
-    response = requests.post(url=url, headers=get_headers(HOST_189), data=data)
+    url = '%s/api/woven/collectors/%s/schema/fetch' % (host, collector)
+    response = requests.post(url=url, headers=get_headers(host), data=data)
     time.sleep(3)
     print(response.text)
     return response.text
@@ -68,7 +68,7 @@ def get_flow_id():
     name = "gbj_for_project_removeList" + str(random.randint(0,999999999999))
     data = {"name": name, "flowType": "dataflow",
             "projectEntity": {"id": "e47fe6f4-6086-49ed-81d1-68704aa82f2d"}, "steps": [], "links": []}
-    url = '%s/api/flows/create' % HOST_189
+    url = '%s/api/flows/create' % host
     response = requests.post(url=url, headers=get_headers(), json=data)
     flow_id = dict_res(response.text)['id']
     print(flow_id)
@@ -99,7 +99,7 @@ def get_applicationId():
 
 def get_woven_qaoutput_dataset_path():
     """查找woven/qaoutput下的所有数据集name，并组装成woven/qaoutput/datasetname的格式"""
-    url = '%s/api/datasets/query' % HOST_189
+    url = '%s/api/datasets/query' % host
     data = {"fieldList":[{"fieldName":"parentId","fieldValue":"4f4d687c-12b3-4e09-9ba9-bcf881249ea0","comparatorOperator":"EQUAL","logicalOperator":"AND"},{"fieldName":"owner","fieldValue":"2059750c-a300-4b64-84a6-e8b086dbfd42","comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
     response = requests.post(url=url,headers=get_headers(), json=data)
     contents = dict_res(response.text)["content"]
@@ -115,10 +115,10 @@ dir1 = ab_dir('woven-common-3.0.jar')
 
 
 def upload_jar_file_filter():
-    url = "%s/api/processconfigs/uploadjar/filter class" % HOST_189
+    url = "%s/api/processconfigs/uploadjar/filter class" % host
     # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
     files = {"file": open(dir1, 'rb')}
-    headers = get_headers(HOST_189)
+    headers = get_headers(host)
     headers.pop('Content-Type')
     try:
         response = requests.post(url, files=files, headers=headers)
@@ -131,11 +131,11 @@ def upload_jar_file_filter():
 
 
 def upload_jar_file_workflow():
-    url = "%s/api/processconfigs/uploadjar/workflow selector" % HOST_189
+    url = "%s/api/processconfigs/uploadjar/workflow selector" % host
     print(url)
     # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
     files = {"file": open(dir1, 'rb')}
-    headers = get_headers(HOST_189)
+    headers = get_headers(host)
     headers.pop('Content-Type')
     try:
         response = requests.post(url, files=files, headers=headers)
@@ -150,11 +150,11 @@ def upload_jar_file_workflow():
 # upload_jar_file_workflow()
 
 def upload_jar_file_dataflow():
-    url = "%s/api/processconfigs/uploadjar/dataflow selector" % HOST_189
+    url = "%s/api/processconfigs/uploadjar/dataflow selector" % host
     unquote_url = parse.unquote(url)
     # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
     files = {"file": open(dir1, 'rb')}
-    headers = get_headers(HOST_189)
+    headers = get_headers(host)
     headers.pop('Content-Type')
     try:
         response = requests.post(url, files=files, headers=headers)

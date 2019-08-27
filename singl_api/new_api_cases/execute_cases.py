@@ -10,7 +10,7 @@ from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_tok
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG
 from util.Open_DB import MYSQL
-from basic_info.setting import HOST_189
+from basic_info.setting import host
 from new_api_cases.deal_parameters import deal_parameters
 import random, unittest
 from new_api_cases.get_statementId import statementId, statementId_no_dataset, get_sql_analyse_statement_id, \
@@ -72,7 +72,7 @@ def deal_request_method():
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
                     post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                                    data=old_data, table_sheet_name=case_table_sheet)
+                                                    data=request_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
@@ -94,7 +94,7 @@ def deal_request_method():
 
 
 # POST请求
-def post_request_result_check(row, column, url, host,headers, data, table_sheet_name):
+def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):
     if isinstance(data, str):
         case_detail = case_table_sheet.cell(row=row, column=2).value
         if '(Id不存在)' in case_detail:
@@ -114,10 +114,10 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
         elif case_detail == '获取SQL执行任务结果':
             print('开始执行：', case_detail)
             # 先获取接口需要使用的statement id 和 数据集分析字段
-            execte_statement_id = get_sql_execte_statement_id(HOST_189,data)  # statement id
+            execte_statement_id = get_sql_execte_statement_id(host,data)  # statement id
             new_url = url.format(execte_statement_id)
             # print('获取SQL执行任务结果URL:', new_url)
-            execte_use_params = get_sql_analyse_dataset_info(HOST_189,data)  # 数据集分析字段
+            execte_use_params = get_sql_analyse_dataset_info(host,data)  # 数据集分析字段
             # print(execte_use_params)
             response = requests.post(url=new_url, headers=headers, json=execte_use_params)
             count_num = 0
@@ -135,7 +135,7 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
         elif case_detail == '批量删除execution':
             print('开始执行：', case_detail)
             # 需要先查询指定flow下的所有execution，从中取出execution id，拼装成list，传递给删除接口
-            query_execution_url = '%s/api/executions/query' % HOST_189
+            query_execution_url = '%s/api/executions/query' % host
             all_exectuions = requests.post(url=query_execution_url, headers=headers, data=data)
             executions_dict = dict_res(all_exectuions.text)
             # print(executions_dict)
@@ -222,12 +222,12 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
                 user_id = user_search_result[0]["id"]
                 user_id_list.append(user_id)
                 # print(user_id_list)
-                disable_user_url = '%s/api/woven/users/disable' % HOST_189
-                remove_user_url = '%s/api/woven/users/removeList' % HOST_189
-                disable_user_url_dam = '%s/api/users/disable' % HOST_189
-                remove_user_url_dam = '%s/api/users/removeList' % HOST_189
+                disable_user_url = '%s/api/woven/users/disable' % host
+                remove_user_url = '%s/api/woven/users/removeList' % host
+                disable_user_url_dam = '%s/api/users/disable' % host
+                remove_user_url_dam = '%s/api/users/removeList' % host
                 # 先停用该用户
-                if '57' in HOST_189:
+                if '57' in host:
                     res = requests.post(url=disable_user_url_dam, headers=headers, json=user_id_list)
                 # 删除该用户
                     res2 = requests.post(url=remove_user_url_dam, headers=headers, json=user_id_list)
@@ -266,7 +266,7 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
-        elif case_detail == "登录":
+        elif case_detail == "获取令牌":
             headers["Content-Type"] = "application/x-www-form-urlencoded"
             headers.pop('X-AUTH-TOKEN')
             response = requests.post(url, headers=headers, data=dict_res(data))
@@ -307,9 +307,9 @@ def post_request_result_check(row, column, url, host,headers, data, table_sheet_
                 data_dict = dict_res(data)
                 # print(data_dict)
                 response = requests.post(url=url, headers=headers, json=data_dict)
-                # print(response.url)
-                # print(response.content)
-                # print(response.status_code, response.text)
+                print(response.url)
+                print(response.content)
+                print(response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -374,7 +374,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('结束指定statementId对应的查询任务'):  # 取消SQL analyse接口
             print('开始执行：', case_detail)
-            cancel_statement_id = get_sql_analyse_statement_id(HOST_189,data)
+            cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(cancel_statement_id)
             response = requests.get(url=new_url, headers=headers)
             clean_vaule(table_sheet_name, row, column)
@@ -383,7 +383,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 
         elif case_detail == ('根据解析sql parse接口返回的statementId,获取dataset name'):
             print('开始执行：', case_detail)
-            datasetName_statementId = steps_sql_parseinit_statemenId(HOST_189,data)
+            datasetName_statementId = steps_sql_parseinit_statemenId(host, data)
             new_url = url.format(datasetName_statementId)
             response = requests.get(url=new_url, headers=headers)
             # print(response.text)
@@ -399,7 +399,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('根据Sql Analyze返回的statementId,获取SqlAnalyze结果'):
             print('开始执行：', case_detail)
-            steps_sql_analyse_statementId = steps_sql_analyzeinit_statementId(HOST_189, data)
+            steps_sql_analyse_statementId = steps_sql_analyzeinit_statementId(host, data)
             new_url = url.format(steps_sql_analyse_statementId)
             response = requests.get(url=new_url, headers=headers)
             # print(response.text)
@@ -415,7 +415,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('结束sqlsource step中指定statementId对应任务'):
             print('开始执行：', case_detail)
-            cancel_sql_parseinit_statementId = steps_sql_parseinit_statemenId(HOST_189, data)
+            cancel_sql_parseinit_statementId = steps_sql_parseinit_statemenId(host, data)
             new_url = url.format(cancel_sql_parseinit_statementId)
             response = requests.get(url=new_url, headers=headers)
             # print(response.text)
@@ -448,7 +448,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '根据statementID获取step的输出字段':
             print('开始执行：', case_detail)
-            init_statementId = get_step_output_init_statementId(HOST_189, data)
+            init_statementId = get_step_output_init_statementId(host, data)
             # print(init_statementId)
             new_url = url.format(init_statementId)
             response = requests.get(url=new_url, headers=headers)
@@ -465,7 +465,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '根据statementID确认step':
             print('开始执行：', case_detail)
-            ensure_statementId = get_step_output_ensure_statementId(HOST_189,data)
+            ensure_statementId = get_step_output_ensure_statementId(host,data)
             # print(ensure_statementId)
             new_url = url.format(ensure_statementId)
             response = requests.get(url=new_url, headers=headers)

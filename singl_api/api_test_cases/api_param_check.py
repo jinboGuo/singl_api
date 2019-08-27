@@ -5,7 +5,7 @@ import unittest
 import requests
 import json
 import time
-from basic_info.setting import MySQL_CONFIG, owner, dataset_resource, schema_resource, HOST_189
+from basic_info.setting import MySQL_CONFIG, owner, dataset_resource, schema_resource, host
 from util.Open_DB import MYSQL
 import os
 
@@ -23,7 +23,7 @@ class ForCreateFlow(unittest.TestCase):
         # flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"name": "", "flowType": "streamflow", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         # response_text = json.loads(res.text)
         # print(res.status_code, res.text)
@@ -40,7 +40,7 @@ class ForCreateFlow(unittest.TestCase):
         # flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"flowType": "streamflow", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         # response_text = json.loads(res.text)
         # print(res.status_code, res.text)
@@ -56,7 +56,7 @@ class ForCreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"name": flow_name, "flowType": "", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         # response_text = json.loads(res.text)
         # print(res.status_code, res.text)
@@ -72,7 +72,7 @@ class ForCreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"name": flow_name, "flowType": "ttttt", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         # response_text = json.loads(res.text)
         # print(res.status_code, res.text)
@@ -88,7 +88,7 @@ class ForCreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"name": flow_name, "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         # response_text = json.loads(res.text)
         # print(res.status_code, res.text)
@@ -130,7 +130,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"name": "", "schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                 "storageConfigurations": self.storageConfigurations, "sliceTime": "", "sliceType": "H",
                 "owner": "2059750c-a300-4b64-84a6-e8b086dbfd42", "resource": {"id": "39386f75-9b28-43a6-a6bf-bd5e0e85d437"}}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, res.text)
         # 取得res.text中的code, 用来做断言
         err = json.loads(res.text)
@@ -144,7 +144,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                 "storageConfigurations": self.storageConfigurations, "sliceTime": "", "sliceType": "H",
                 "owner": "2059750c-a300-4b64-84a6-e8b086dbfd42", "resource": {"id": "39386f75-9b28-43a6-a6bf-bd5e0e85d437"}}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         err = json.loads(res.text)
         err = json.loads(err["err"])
         err_code = int(err["list"][0]["code"])
@@ -157,7 +157,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations, "sliceTime": "", "sliceType": "H",
                 "owner": "2059750c-a300-4b64-84a6-e8b086dbfd42",
                 "resource": {}}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         err = json.loads(res.text)
         err = json.loads(err["err"])
         err_code = int(err["list"][0]["code"])
@@ -169,7 +169,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"name": self.dataset_name, "schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                 "storageConfigurations": self.storageConfigurations, "sliceTime": "", "sliceType": "H",
                 "owner": "2059750c-a300-4b64-84a6-e8b086dbfd42"}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         err = json.loads(res.text)
         err = json.loads(err["err"])
         err_code = int(err["list"][0]["code"])
@@ -182,7 +182,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"name": self.dataset_name, "schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                 "storageConfigurations": self.storageConfigurations, "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": schema_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case08', res.text)
         err = json.loads(res.text)
         err_message = err["err"]
@@ -196,7 +196,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"name": self.dataset_name, "schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                 "storageConfigurations": {}, "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case08', res.text)
         err = json.loads(res.text)
         err = json.loads(err["err"])
@@ -210,7 +210,7 @@ class ForCreateDataSet(unittest.TestCase):
         data = {"name": self.dataset_name, "schema": schema_info, "storage": "HDFS", "expiredPeriod": 0,
                  "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         err = json.loads(res.text)
         err = json.loads(err["err"])
@@ -226,7 +226,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations,
                 "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         err = json.loads(res.text)
         err = json.loads(err["err"])
@@ -243,7 +243,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations,
                 "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         self.assertEqual(res.status_code, 500, 'Schema value 为空时status_code不正确')
 
@@ -258,7 +258,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations,
                 "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         try:
             err = json.loads(res.text)
@@ -279,7 +279,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations,
                 "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         err = json.loads(res.text)
         err = json.loads(err["err"])
@@ -296,7 +296,7 @@ class ForCreateDataSet(unittest.TestCase):
                 "storageConfigurations": self.storageConfigurations,
                 "sliceTime": "", "sliceType": "H",
                 "owner": owner, "resource": dataset_resource}
-        res = requests.post(url=self.create_dataset_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_dataset_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, 'test_case09', res.text)
         err = json.loads(res.text)
         err = json.loads(err["err"])
@@ -318,7 +318,7 @@ class ForCreateSchema(unittest.TestCase):
         schema_name = schema_name[0]["name"]
         data = {"name": schema_name, "fields": [{"name": "id", "type": "int"}],
                 "resource": {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         text = json.loads(res.text)
         message = text["err"]
         # print(res.status_code, res.text)
@@ -328,7 +328,7 @@ class ForCreateSchema(unittest.TestCase):
         """创建schema时name参数的值为空"""
         data = {"name": "", "fields": [{"name": "id", "type": "int"}],
                 "resource": {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # id = json.loads(res.text)
         # print(res.status_code, 'res.text', res.text)
         text = json.loads(res.text)
@@ -343,7 +343,7 @@ class ForCreateSchema(unittest.TestCase):
     def test_case04(self):
         """创建schema时缺失name参数"""
         data = {"fields": [{"name": "id", "type": "int"}], "resource": {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # id = json.loads(res.text)
         # print(res.status_code, res.text)
         text = json.loads(res.text)
@@ -360,7 +360,7 @@ class ForCreateSchema(unittest.TestCase):
 
         data = {"name": ForCreateSchema.schema_name, "fields": [],
                 "resource": {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, res.text)
         # 获取返回的错误内容中的message
         text = json.loads(res.text)
@@ -372,7 +372,7 @@ class ForCreateSchema(unittest.TestCase):
     def test_case06(self):
         """创建schema时缺失fields参数"""
         data = {"name": ForCreateSchema.schema_name, "resource": {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # id = json.loads(res.text)
         # print(res.status_code, res.text)
         text = json.loads(res.text)
@@ -386,7 +386,7 @@ class ForCreateSchema(unittest.TestCase):
     def test_case07(self):
         """创建schema时resource参数为空"""
         data = {"name": ForCreateSchema.schema_name, "fields": [{"name": "id", "type": "int"}], "resource": {}}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # id = json.loads(res.text)
         # print(res.status_code, res.text)
         text = json.loads(res.text)
@@ -400,7 +400,7 @@ class ForCreateSchema(unittest.TestCase):
     def test_case09(self):
         """创建schema时缺少resource参数"""
         data = {"name": ForCreateSchema.schema_name, "fields": [{"name": "id", "type": "int"}]}
-        res = requests.post(url=self.create_schema_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_schema_url, headers=get_headers(host), data=json.dumps(data))
         # id = json.loads(res.text)
         # print(res.status_code, res.text)
         text = json.loads(res.text)
@@ -418,7 +418,7 @@ class ForScheduler(unittest.TestCase):
     def test_case01(self):
         """根据id删除scheduler"""
         data = ["eb9aaab9-0a78-48d1-a1ee-2db49f5", "9ea66e51-f30c-48b9-afc2-a8e7dbc56e24"]
-        res = requests.post(url=self.remove_list_url, headers=get_headers(HOST_189), json=data)
+        res = requests.post(url=self.remove_list_url, headers=get_headers(host), json=data)
         text = res.json()
         self.assertEqual(text, 0, '应删除scheduler个数不正确')
         self.assertEqual(res.status_code, 200, '删除scheduler返回的状态码不正确')
