@@ -72,7 +72,7 @@ def deal_request_method():
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
                     post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                                    data=request_data, table_sheet_name=case_table_sheet)
+                                                    data=old_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
@@ -278,6 +278,22 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '多条件查询流程的输出':
+            try:
+                print(data)
+                result = ms.ExecuQuery(data)
+                print(result)
+                execution_id = result[0]["id"]
+                new_data = {"fieldList": [
+                    {"fieldName": "executionId", "fieldValue": execution_id, "comparatorOperator": "EQUAL",
+                     "logicalOperator": "AND"}], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"},
+                            "offset": 0, "limit": 8}
+                response = requests.post(url=url, headers=headers, json=new_data)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            except Exception:
+                print('没有查到flow：tc_df_top_基本测试 的最新一条execution id')
         else:
             print('开始执行：', case_detail)
             #  SQL语句作为参数，需要先将SQL语句执行，数据库查询返回数据作为接口要传递的参数
