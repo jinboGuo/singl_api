@@ -1,7 +1,7 @@
 # coding:utf-8
 from util.send_mail import mail_for_flow
 from api_test_cases.get_execution_output_json import GetCheckoutDataSet
-from basic_info.setting import HOST_189
+from basic_info.setting import host
 import datetime
 
 
@@ -24,7 +24,7 @@ import datetime
 # fp.close()
 print('------开始执行用例-------')
 start_time = datetime.datetime.now()
-print('用例执行环境：', HOST_189)
+print('用例执行环境：', host)
 print('开始时间', start_time)
 print('------开始执行flow用例------')
 # 执行flow用例
@@ -41,7 +41,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-mail_for_flow(HOST_189)
+mail_for_flow(host)
 
 
 
