@@ -69,6 +69,7 @@ def main3(host):
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
     receivers = receivers_list  # 定时任务使用
+    # receivers = receivers_test  # 调试使用
     msg = MIMEMultipart()
 
     # 邮件的正文内容----API执行结果
@@ -92,18 +93,16 @@ def main3(host):
     if failed_cases != 0:
         mail_content = """各位好:
         本次用例执行环境：%s
-        API用例共执行：%d 条，
-        执行成功: %d 条 
+        API用例共执行：%d 条
+        执行成功: %d 条
         执行失败: %d 条
-        用例执行详情请查看附件《api_cases.xlsx》
-        """ % (host, cases_num, pass_cases, failed_cases)
+        用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases, failed_cases)
     else:
         mail_content = """各位好:
         本次用例执行环境：%s
-        API用例共执行：%d 条，
+        API用例共执行：%d 条
         执行成功: %d 条
-        用例执行详情请查看附件《api_cases.xlsx》
-                       """ % (host, cases_num, pass_cases)
+        用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases)
     # print(mail_content)
     # 邮件标题
     mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' BayMax系统API用例自动化执行日报'
@@ -153,8 +152,8 @@ def mail_for_flow(host):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    receivers = receivers_list  # 调试使用
-    # receivers = receivers_list  # 定时任务使用
+    # receivers = receivers_test  # 调试使用
+    receivers = receivers_list  # 定时任务使用
     msg = MIMEMultipart()
     # 邮件的正文内容----flow执行结果
     f = load_workbook(abs_dir("flow_dataset_info.xlsx"))
@@ -190,28 +189,25 @@ def mail_for_flow(host):
     for disct_id in (disct_ids for disct_ids in failed_flow_s if disct_ids in succeed_flow_s):
         succeed_flow_s.remove(disct_id)
 
-
     # 邮件的正文内容
     filename = time.strftime("%Y%m%d%H", time.localtime()) + '_report.html'
     if len(failed_flow_s) != 0:
-        mail_content = """各位好:        
+        mail_content = """各位好:
         flow用例执行信息如下:
-            用例执行环境：%s
-            本次Flow用例共执行：%d 个
-            执行成功: %d 个 
-            执行失败: %d 个
-            失败的flow名称为: 
-            %s
-            失败原因请查看附件《flow_info.xlsx》中的log信息
-                        """ % (host, total, len(succeed_flow_s), len(failed_flow_s), failed_flow_s)
+        用例执行环境：%s
+        本次Flow用例共执行：%d 个
+        执行成功: %d 个
+        执行失败: %d 个
+        失败的flow名称为:
+        %s
+        失败原因请查看附件《flow_info.xlsx》中的log信息""" % (host, total, len(succeed_flow_s), len(failed_flow_s), failed_flow_s)
     else:
         mail_content = """各位好:
         flow用例执行信息如下:
-             用例执行环境：%s
-             本次Flow用例共执行: %d 个
-             执行成功: %d 个
-             任务详情请查看附件《flow_info.xlsx》中的log
-                            """ % (host, total, len(succeed_flow_s))
+        用例执行环境：%s
+        本次Flow用例共执行: %d 个
+        成功: %d 个
+        任务详情请查看附件《flow_info.xlsx》中的log""" % (host, total, len(succeed_flow_s))
     # print(mail_content)
     # 邮件标题
     mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' Flow用例自动化执行日报'
@@ -250,3 +246,4 @@ def mail_for_flow(host):
 
 # host = '192.168.1.83:8515'
 # mail_for_flow(host)
+# main3(host)
