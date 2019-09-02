@@ -12,9 +12,8 @@ from smtplib import SMTP_SSL
 from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
 from new_api_cases.execute_cases import ab_dir
+from basic_info.setting import receivers_test,receivers_list
 
-receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
-receivers_test = ['bingjie.gu@inforefiner.com']
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
@@ -58,7 +57,7 @@ def send_email(content, title, from_name, from_address, to_address, serverport, 
 
 
 # 发送邮件
-def main3(host):
+def main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
@@ -68,7 +67,7 @@ def main3(host):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    receivers = receivers_list  # 定时任务使用
+    # receivers = receivers_list  # 定时任务使用
     # receivers = receivers_test  # 调试使用
     msg = MIMEMultipart()
 
@@ -142,7 +141,7 @@ def main3(host):
     smtp.quit()
 
 
-def mail_for_flow(host):
+def mail_for_flow(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
@@ -153,7 +152,7 @@ def mail_for_flow(host):
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
     # receivers = receivers_test  # 调试使用
-    receivers = receivers_list  # 定时任务使用
+    # receivers = receivers_list  # 定时任务使用
     msg = MIMEMultipart()
     # 邮件的正文内容----flow执行结果
     f = load_workbook(abs_dir("flow_dataset_info.xlsx"))
@@ -245,5 +244,5 @@ def mail_for_flow(host):
     smtp.quit()
 
 # host = '192.168.1.83:8515'
-# mail_for_flow(host)
-# main3(host)
+# mail_for_flow(host, receivers_test)
+# # main3(host, receivers_test)

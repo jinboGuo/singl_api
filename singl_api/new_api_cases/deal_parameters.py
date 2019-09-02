@@ -32,9 +32,27 @@ def deal_parameters(data):
             print(data)
             data_select_result = ms.ExecuQuery(data)
             print(data_select_result)
+            new_data = []
+            if data_select_result:
+                if len(data_select_result) > 1:
+                    for i in range(len(data_select_result)):
+                        new_data.append(data_select_result[i]["id"])
+                    print(new_data, type(new_data))
+                    return deal_parameters(new_data)
+                else:
+                    try:
+                        data = data_select_result[0]["id"]
+                        print(data)
+                        return deal_parameters(data)
+                    except:
+                        print('请确认第%d行SQL语句')
+        if 'select execution_id' in data:
+            print(data)
+            data_select_result = ms.ExecuQuery(data)
+            print(data_select_result)
             if data_select_result:
                 try:
-                    data = data_select_result[0]["id"]
+                    data = data_select_result[0]["execution_id"]
                     print(data)
                     return deal_parameters(data)
                 except:

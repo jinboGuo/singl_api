@@ -4,6 +4,7 @@ import datetime
 from new_api_cases.execute_cases import deal_request_method
 from new_api_cases.execute_cases import CheckResult
 from basic_info.setting import host
+from basic_info.setting import receivers_list,receivers_test
 
 # from newSuite import NewSuite
 
@@ -34,7 +35,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-main3(host)
+main3(host,receivers_test)
 
 
 

@@ -42,8 +42,8 @@ def parameter_ungzip(parameters):
     # 4. 将解压缩后的byte内容转化成str取出并返回
     par_use = str(no_g, encoding='utf-8')
     return par_use
-
-# res = parameter_ungzip('H4sIAAAAAAAAAIuOBQApu0wNAgAAAA==')
+# tt = 'H4sIAAAAAAAAAGWST4+bMBDFv4vP/DEQAuFYRVX3sFXVZE/VqhrMpJBiTD0OVRrtd98xBDVqOeE3zO+9GXwTpFrUICohAtEDucN1UMdOo6iSfFtsZLHbyE0qA3EhPFzJoT44Y7ns7AUDcQb7BVzL/bHTY8zHl7E30HgxJpgwrhuVFzkmYXnKk3BTZzLclSmGUua7tMm2im2+6yv96kNlhgEV48MzTBDmURJlZcRMzqbAQW9+/BMU6OdTs2j7D8fryLnEs2exUINTLXV//CiSHx7B9lw/N7WqZsMqjpNdGiXbkp3yosoyuY0dkuPuhv1qIA+8KyMQ/TbW22m0Cv1HtpvQsqCMjmZk5OnRftG5x1gnZm4gWsOYSjw6+rnabkDCz+BX7ucYljd9n8LnuG/8xhH+rlqVWSzLtLinW/7jVyRz8dlmlO8ldKu4bupkrAYfRdHkjx32DYnq22sg3LLCT/uPB8/EESywOUvBfx4rjvpO4XJlVtPHGG/z1bEPWxutGdG6Dr3pbR2YCxP0l6Xndebg0XguOdCjqE7QE769AzB4KnmyAgAA'
+# res = parameter_ungzip(tt)
 # print(res)
 # if res:
 #     print('OK')

@@ -3,7 +3,7 @@ from util.send_mail import mail_for_flow
 from api_test_cases.get_execution_output_json import GetCheckoutDataSet
 from basic_info.setting import host
 import datetime
-
+from basic_info.setting import receivers_list,receivers_test
 
 
 # 添加用例集的API用例。暂停

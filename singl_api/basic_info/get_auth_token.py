@@ -11,12 +11,6 @@ def get_auth_token(HOST):
         token = dict_headers['X-AUTH-TOKEN']
         # print(token)
         return token
-    # elif '76' in HOST:
-    #     res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
-    #
-    #     dict_headers = dict(res.headers)
-    #     token = dict_headers['X-AUTH-TOKEN']
-    #     return token
     else:
         res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
         # print(res.url)

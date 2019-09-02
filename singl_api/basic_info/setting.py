@@ -296,3 +296,7 @@ zmod_id = ["e2dbfd88-0e2d-4fa2-b145-75c1a13ab455"]
 zmod_exectuion_id = "c462b867-db09-4adc-b49f-005c646960a6"
 # API用例使用
 collector_id = 'c9'
+
+
+receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
+receivers_test = ['bingjie.gu@inforefiner.com']

@@ -31,8 +31,8 @@ class GetLog(object):
         flow_id = self.get_job_id()[0]
         job_id = self.get_job_id()[1]
         detail_url = "%s/api/executions/query" % self.host
-        data = {"fieldList": [{"fieldName":"flowId","fieldValue":flow_id,"comparatorOperator":"EQUAL","logicalOperator":"AND"},{"fieldName":"jobId","fieldValue":job_id,"comparatorOperator":"EQUAL"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
-        response = requests.post(url=detail_url,headers=get_headers(self.host),json=data)
+        data = {"fieldList": [{"fieldName": "flowId", "fieldValue": flow_id, "comparatorOperator":"EQUAL","logicalOperator":"AND"},{"fieldName":"jobId","fieldValue":job_id,"comparatorOperator":"EQUAL"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        response = requests.post(url=detail_url, headers=get_headers(self.host), json=data)
         # print(response.text)
         try:
             content_info = dict_res(response.text)["content"][0]
