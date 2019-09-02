@@ -41,7 +41,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-mail_for_flow(host)
+mail_for_flow(host,receivers_list)
 
 
 
