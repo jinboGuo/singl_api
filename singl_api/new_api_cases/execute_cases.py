@@ -427,6 +427,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 
         elif case_detail == ('根据解析sql parse接口返回的statementId,获取dataset name'):
             print('开始执行：', case_detail)
+            data = data.encode('utf-8')
+            print('测试：',data, type(data))
             datasetName_statementId = steps_sql_parseinit_statemenId(host, data)
             new_url = url.format(datasetName_statementId)
             response = requests.get(url=new_url, headers=headers)
@@ -459,6 +461,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('结束sqlsource step中指定statementId对应任务'):
             print('开始执行：', case_detail)
+            data = data.encode('utf-8')
             cancel_sql_parseinit_statementId = steps_sql_parseinit_statemenId(host, data)
             new_url = url.format(cancel_sql_parseinit_statementId)
             response = requests.get(url=new_url, headers=headers)
@@ -507,7 +510,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '根据statementID确认step':
+        elif case_detail == '根据statementID确认dataflow step':
             print('开始执行：', case_detail)
             ensure_statementId = get_step_output_ensure_statementId(host,data)
             # print(ensure_statementId)

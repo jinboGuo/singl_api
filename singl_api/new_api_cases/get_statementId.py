@@ -152,11 +152,12 @@ def steps_sql_parseinit_statemenId(HOST,params):
 
 
 # 初始化Sql Analyze,返回任务的statementID
-def steps_sql_analyzeinit_statementId(HOST,params):
+def steps_sql_analyzeinit_statementId(HOST, params):
     url = '%s/api/steps/sql/analyzeinit/dataflow' % HOST
-    res = requests.post(url=url, headers=get_headers(HOST), data=params)
-    print(res.text)
+    params = params.encode('utf-8')
     try:
+        res = requests.post(url=url, headers=get_headers(HOST), data=params)
+        print(res.text)
         res_statementId = json.loads(res.text)
         steps_sql_analyzeinit_statementId = res_statementId['statementId']
         print(steps_sql_analyzeinit_statementId)
