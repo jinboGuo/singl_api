@@ -37,6 +37,7 @@ def statementId(host, datasetId):
 def statementId_flow_use(host, datasetId, tenant):
     url = '%s/api/datasets/%s/previewinit?tenant=%s&rows=50' % (host, datasetId, tenant)
     res = requests.get(url=url, headers=get_headers(host))
+    print(res.status_code, res.text)
     try:
         res_statementId = dict_res(res.text)
         # print('%s数据集获取的statementID信息：%s' %(datasetId, res_statementId))

@@ -11,8 +11,10 @@ from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.setting import host
+from basic_info.setting import tenant_id_83
 from new_api_cases.deal_parameters import deal_parameters
 import random, unittest
+from new_api_cases.get_statementId import statementId_flow_use
 from new_api_cases.get_statementId import statementId, statementId_no_dataset, get_sql_analyse_statement_id, \
     get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
     steps_sql_analyzeinit_statementId,get_step_output_init_statementId,get_step_output_ensure_statementId
@@ -296,6 +298,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     else:
         print('开始执行：', case_detail)
         if data:
+            print(data, type(data))
+            print(isinstance(data, dict))
             data = str(data)
             #  SQL语句作为参数，需要先将SQL语句执行，数据库查询返回数据作为接口要传递的参数
             # if data.startswith('select'):  # 后续根据需要增加其他select内容，如name或者其他？？？？？？
@@ -529,7 +533,24 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
+        elif case_detail == "查看students_info_zmode_测试用分析模板的成功任务执行结果":
+            print(host, data)
+            statement_id = statementId_flow_use(host, data,tenant_id_83)
+            print(statement_id)
+            url = url.format(data,statement_id)
+            response = requests.get(url=url,headers=headers)
+            print(response.status_code, response.text)
+            count_num = 0
+            while ("waiting") in response.text or ("running") in response.text:
+                # print('再次查询前',res.text)
+                response = response = requests.get(url=url,headers=headers)
+                print(response.status_code, response.text)
+                count_num += 1
+                if count_num == 100:
+                    return
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             print('开始执行：', case_detail)
             print(data)
@@ -620,6 +641,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
         else:
             print('开始执行：', case_detail)
             response = requests.get(url=url, headers=headers)
