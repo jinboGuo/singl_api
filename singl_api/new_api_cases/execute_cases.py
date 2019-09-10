@@ -301,27 +301,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print(data, type(data))
             print(isinstance(data, dict))
             data = str(data)
-            #  SQL语句作为参数，需要先将SQL语句执行，数据库查询返回数据作为接口要传递的参数
-            # if data.startswith('select'):  # 后续根据需要增加其他select内容，如name或者其他？？？？？？
-            #     # print('data startswith select:', data)
-            #     data_select_result = ms.ExecuQuery(data)
-            #     # print(data_select_result)
-            #     datas = []
-            #     if data_select_result:
-            #         try:
-            #             for i in range(len(data_select_result)):
-            #                 datas.append(data_select_result[i]["id"])
-            #         except:
-            #             print('请确认第%d行SQL语句' % row)
-            #         else:
-            #             response = requests.post(url=url, headers=headers, json=datas)
-            #             # 将返回的status_code和response.text分别写入第10列和第14列
-            #             # print(response.text, type(response.text))
-            #             clean_vaule(table_sheet_name, row, column)
-            #             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            #             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            #     else:
-            #         print('第%d行参数查询无结果' % row)
             # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
             if data.startswith('{') and data.endswith('}'):
                 # print('data startswith {:', data)
@@ -329,7 +308,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 # print(data_dict)
                 response = requests.post(url=url, headers=headers, json=data_dict)
                 print(response.url)
-                print(response.content)
+                print(response.status_code, response.content)
                 print(response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -353,7 +332,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                        # case_table.save(ab_dir("api_cases.xlsx"))
             else:  # 处理参数是一个字符串id的情况,按照接口格式，放入list中处理
                 new_data = []
                 new_data.append(data)
@@ -685,8 +663,9 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                 write_result(table_sheet_name, row, column, response.status_code)
                 write_result(table_sheet_name, row, column + 4, response.text)
             elif data.startswith('{') and data.endswith('}'):
-                response = requests.put(url=url, headers=headers, data=data)
-                # print(response.status_code, response.text)
+                print(data)
+                response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
+                print(response.status_code, response.text)
                 # print(response.url, response.content)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(table_sheet_name, row, column, response.status_code)
@@ -705,14 +684,14 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
         print('第%s行的参数为空或格式异常' % row)
 
 
-def delete_request_result_check(url, host,data, table_sheet_name, row, column, headers):
+def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
     case_detail = case_table_sheet.cell(row=row, column=2).value
     if isinstance(data, str):
         if case_detail == '':
             pass
         else:
             if data.startswith('select id'):  # sql语句的查询结果当做参数
-                data_select_result = ms.ExecuQuery(data)
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 # print(data_select_result)
                 # print(type(data_select_result))
                 datas = []
@@ -740,7 +719,9 @@ def delete_request_result_check(url, host,data, table_sheet_name, row, column, h
 
             else:
                 new_url = url.format(data)
+                print(new_url)
                 response = requests.delete(url=new_url, headers=headers)
+                print(response.status_code, response.text)
                 # 将返回的status_code和response.text分别写入第10列和第14列
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

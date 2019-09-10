@@ -56,6 +56,16 @@ def deal_parameters(data):
                     return deal_parameters(data)
                 except:
                     print('请确认第%d行SQL语句')
+        if 'select name' in data:
+            # print(data)
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            if data_select_result:
+                try:
+                    data = data_select_result[0]["name"]
+                    print(data)
+                    return deal_parameters(data)
+                except:
+                    print('请确认第%d行SQL语句')
         if 'select execution_id' in data:
             # print(data)
             # data = data.encode('utf-8')
