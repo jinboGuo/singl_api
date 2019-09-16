@@ -80,6 +80,7 @@ def main3(host,receivers):
     pass_cases = 0
     failed_cases = 0
     failed_cases_detail = {}
+    failed_cases_name = []
     for row in range(2, sheet_rows+1):
         if cases_sheet.cell(row=row, column=14).value == 'pass':
             pass_cases += 1
@@ -87,7 +88,7 @@ def main3(host,receivers):
             failed_cases += 1
             case_name = cases_sheet.cell(row=row, column=2).value
             failed_cases_detail[case_name] = cases_sheet.cell(row=row, column=15).value   # 将用例name和失败原因列出
-
+            failed_cases_name.append(cases_sheet.cell(row=row, column=2).value)
     # 邮件的正文内容
     if failed_cases != 0:
         mail_content = """各位好:
@@ -95,7 +96,10 @@ def main3(host,receivers):
         API用例共执行：%d 条
         执行成功: %d 条
         执行失败: %d 条
-        用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases, failed_cases)
+        用例执行详情请查看附件《api_cases.xlsx》
+        失败用例名称如下：
+        %s
+        """ % (host, cases_num, pass_cases, failed_cases,failed_cases_name)
     else:
         mail_content = """各位好:
         本次用例执行环境：%s
@@ -244,5 +248,5 @@ def mail_for_flow(host,receivers):
     smtp.quit()
 
 # host = '192.168.1.83:8515'
-# mail_for_flow(host, receivers_test)
-# # main3(host, receivers_test)
+# # mail_for_flow(host, receivers_test)
+# main3(host, receivers_test)
