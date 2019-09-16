@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
 from util.format_res import dict_res, get_time
-from basic_info.setting import MySQL_CONFIG
+from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
 from util.Open_DB import MYSQL
 from basic_info.setting import host
 from basic_info.setting import tenant_id_83
@@ -295,11 +295,22 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         except Exception:
             print('没有查到flow：tc_df_top_基本测试 的最新一条execution id')
+    elif case_detail == '删除停用状态的用户':
+        # 停用所选id的user
+        new_data = [{"id": data, "enabled": 0}]
+        del_url = '%s/api/user/resetStatus' % host
+        res = requests.post(url=del_url, headers=headers, json=new_data)
+        # 删除指定id的user
+        del_user_id = []
+        del_user_id.append(data)
+        response = requests.post(url=url, headers=headers, json=del_user_id)
+        print('删除后：',response.status_code, response.content)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     else:
         print('开始执行：', case_detail)
         if data:
-            print(data, type(data))
-            print(isinstance(data, dict))
             data = str(data)
             # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
             if data.startswith('{') and data.endswith('}'):
@@ -338,23 +349,23 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 new_data = str(new_data)
                 if "'" in new_data:
                     new_data = new_data.replace("'", '"')
-                    print(new_data)
                     response = requests.post(url=url, headers=headers, data=new_data)
-                    print(response.content)
                     print(response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
-                    print(new_data)
                     response = requests.post(url=url, headers=headers, data=new_data)
-                    print(response.content)
                     print(response.status_code,response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            print('请确认第%d行的data形式' % row)
+            response = requests.post(url=url, headers=headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
     # else:
     #     print('请确认第%d行的data形式' % row)
@@ -363,7 +374,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
 # GET请求
 def get_request_result_check(url, headers, host, data, table_sheet_name, row, column):
     case_detail = case_table_sheet.cell(row=row, column=2).value
-
     # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
     if data:
         if '(Id存在)' in case_detail:
@@ -619,6 +629,19 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '刷新令牌':
+            res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"],
+                                data=MY_LOGIN_INFO2["DATA"])
+            login_info = dict_res(res.text)
+            token = login_info["content"]["accessToken"]
+            new_url = url.format(token)
+            print(new_url)
+            response = requests.get(url=new_url,headers=headers)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
 
         else:
             print('开始执行：', case_detail)
