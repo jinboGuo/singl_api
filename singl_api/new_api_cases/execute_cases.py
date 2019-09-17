@@ -7,6 +7,7 @@ from util import get_host
 from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
+from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
 from util.Open_DB import MYSQL
@@ -172,9 +173,9 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据源状态监控分析图数据':
+    elif case_detail == '数据源状态监控分析图数据':  # 查看当前时间至向前一周的数据源状态
         data = {"fieldList":[{"fieldName":"createTime","fieldValue":get_time(),"comparatorOperator":"GREATER_THAN","logicalOperator":"AND"},{"fieldName":"createTime","fieldValue":1555516800000,"comparatorOperator":"LESS_THAN"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8,"groupBy":"testTime"}
-        response = requests.post(url=url,headers=headers,json=data)
+        response = requests.post(url=url,headers=headers, json=data)
         # print(response.status_code,response.text)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -214,49 +215,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '创建name为dudu666666的用户':
-        user_search = 'select id from merce_user where name = "dudu666666"'
-        user_search_result = ms.ExecuQuery(user_search)
-        # 先判断dudu666666用户是否存在，若存在，先执行删除操作，再创建
-        if user_search_result:
-            print('存在dudu666666用户，先删除再创建')
-            user_id_list = []
-            user_id = user_search_result[0]["id"]
-            user_id_list.append(user_id)
-            # print(user_id_list)
-            disable_user_url = '%s/api/woven/users/disable' % host
-            remove_user_url = '%s/api/woven/users/removeList' % host
-            disable_user_url_dam = '%s/api/users/disable' % host
-            remove_user_url_dam = '%s/api/users/removeList' % host
-            # 先停用该用户
-            if '57' in host:
-                res = requests.post(url=disable_user_url_dam, headers=headers, json=user_id_list)
-            # 删除该用户
-                res2 = requests.post(url=remove_user_url_dam, headers=headers, json=user_id_list)
-                # print(res2.status_code, res2.text)
-            # 创建dudu666666用户
-                response = requests.post(url=url, headers=headers, data=data)
-                # print(response.status_code, response.text)
-            else:
-                res = requests.post(url=disable_user_url, headers=headers, json=user_id_list)
-
-            # 删除该用户
-                res2 = requests.post(url=remove_user_url, headers=headers, json=user_id_list)
-
-            # 创建dudu666666用户
-                response = requests.post(url=url, headers=headers, data=data)
-                # print(response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:
-            print('不存在dudu666666用户，开始执行创建用户的用例')
-            # 创建dudu666666用户
-            response = requests.post(url=url, headers=headers, data=data)
-            # print(response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '数据标准导入文件':
         dir2 = ab_dir('sex.xls')
         files = {"file": open(dir2, 'rb')}
@@ -272,11 +230,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         headers["Content-Type"] = "application/x-www-form-urlencoded"
         headers.pop('X-AUTH-TOKEN')
         response = requests.post(url, headers=headers, data=dict_res(data))
-        # print(type(data))
-        # print('headers', headers)
-        # print(response.content)
-        # print(response.headers)
-        # print(response.status_code,response.text)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -308,6 +261,60 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '登录' in case_detail :
+        new_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        if case_detail == '登录':
+            data = {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '密码错误的账户登录':
+            data = {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456555'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '不存在的账户登录':
+            data = {'name': encrypt_rf('admin12399999999999999'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '没有权限的账户登录':
+            data = {'name': encrypt_rf('user_without_pression'), 'password': encrypt_rf('123456'),
+                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '有权限，密码过期的账户登录':
+            data = {'name': encrypt_rf('user_pwd_expired'), 'password': encrypt_rf('123456'),
+                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '有权限，用户有效期过期的账户登录':
+            data = {'name': encrypt_rf('user_time_expired'), 'password': encrypt_rf('123456'),
+                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '有权限，密码和用户有效期均过期的账户登录':
+            data = {'name': encrypt_rf('user_expired'), 'password': encrypt_rf('123456'),
+                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+            response = requests.post(url=url, headers=new_headers, data=data)
+            print(response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     else:
         print('开始执行：', case_detail)
         if data:
