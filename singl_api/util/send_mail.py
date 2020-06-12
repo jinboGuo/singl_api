@@ -67,14 +67,14 @@ def main3(host,receivers):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    # receivers = receivers_list  # 定时任务使用
-    # receivers = receivers_test  # 调试使用
+    receivers = receivers_list  # 定时任务使用
+    #receivers = receivers_test  # 调试使用
     msg = MIMEMultipart()
 
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
     api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
-    cases_sheet = api_cases_table.get_sheet_by_name('tester')
+    cases_sheet = api_cases_table.get_sheet_by_name('57')
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
     pass_cases = 0
@@ -139,7 +139,7 @@ def main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("顾冰洁，王志明", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gj，wz", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -155,8 +155,8 @@ def mail_for_flow(host,receivers):
     # 发件人的邮箱
     sender_163_mail = "ruifan_test@163.com"
     # 收件人邮箱
-    # receivers = receivers_test  # 调试使用
-    # receivers = receivers_list  # 定时任务使用
+    #receivers = receivers_test  # 调试使用
+    receivers = receivers_list  # 定时任务使用
     msg = MIMEMultipart()
     # 邮件的正文内容----flow执行结果
     f = load_workbook(abs_dir("flow_dataset_info.xlsx"))
@@ -242,11 +242,11 @@ def mail_for_flow(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("顾冰洁，王志明", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gj，a", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
 
-# host = '192.168.1.83:8515'
-# # mail_for_flow(host, receivers_test)
-# main3(host, receivers_test)
+#host = '192.168.1.82:8515'
+#mail_for_flow(host, receivers_test)
+#main3(host, receivers_list)

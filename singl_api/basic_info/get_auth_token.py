@@ -1,6 +1,6 @@
 # coding:utf-8
 import requests
-from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root,MY_LOGIN_INFO_dam,MY_LOGIN_INFO_root_dam
+from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root,MY_LOGIN_INFO_dam,MY_LOGIN_INFO_root_dam,MY_LOGIN_INFO_dsp_admin,MY_LOGIN_INFO_dsp_customer
 from util.format_res import dict_res
 # admin账户登录，普通请求
 # 获取登录后返回的X-AUTH-TOKEN
@@ -68,3 +68,51 @@ def get_headers_root(HOST):
 #
 # host = 'http://192.168.1.76:8515'
 # print(get_auth_token(host))
+#
+# admin用户登录使用
+def get_auth_token_admin(HOST):
+    if '57' in HOST:
+        res = requests.post(url=MY_LOGIN_INFO_dsp_admin["URL"], headers=MY_LOGIN_INFO_dsp_admin["HEADERS"],
+                            data=MY_LOGIN_INFO_dsp_admin["DATA"])
+        dict_headers = dict(res.headers)
+        token = dict_headers['Authorization']
+        # print(token)
+        return token
+    else:
+        res = requests.post(url=MY_LOGIN_INFO_dsp_admin["URL"], headers=MY_LOGIN_INFO_dsp_admin["HEADERS"],
+                            data=MY_LOGIN_INFO_dsp_admin["DATA"])
+        dict_headers = dict_res(res.text)
+        token = dict_headers['content']["access_token"]
+        # print(token)
+        return 'Bearer ' + token
+
+# 组装headers， 接口请求时调用
+def get_headers_admin(HOST):
+    Authorization = get_auth_token_admin(HOST)
+    headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
+    print(headers)
+    return headers
+
+# customer用户登录使用
+def get_auth_token_customer(HOST):
+    if '57' in HOST:
+        res = requests.post(url=MY_LOGIN_INFO_dsp_customer["URL"], headers=MY_LOGIN_INFO_dsp_customer["HEADERS"],
+                            data=MY_LOGIN_INFO_dsp_customer["DATA"])
+        dict_headers = dict(res.headers)
+        token = dict_headers['Authorization']
+        # print(token)
+        return token
+    else:
+        res = requests.post(url=MY_LOGIN_INFO_dsp_customer["URL"], headers=MY_LOGIN_INFO_dsp_customer["HEADERS"],
+                            data=MY_LOGIN_INFO_dsp_customer["DATA"])
+        dict_headers = dict_res(res.text)
+        token = dict_headers['content']["access_token"]
+        # print(token)
+        return 'Bearer ' + token
+
+# 组装headers， 接口请求时调用
+def get_headers_customer(HOST):
+    Authorization = get_auth_token_customer(HOST)
+    headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
+    print(headers)
+    return headers

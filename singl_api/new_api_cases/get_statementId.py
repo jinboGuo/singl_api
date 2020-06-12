@@ -1,6 +1,6 @@
 import requests,json
 from basic_info.get_auth_token import get_headers
-from basic_info.setting import host, tenant_id_189, tenant_id_81,tenant_id_83
+from basic_info.setting import host, tenant_id_189, tenant_id_81,tenant_id_83,tenant_id_82
 from util.format_res import dict_res
 
 
@@ -16,27 +16,34 @@ def get_tenant(host):
     elif '83' in host:
         tenant_id = tenant_id_83
         return tenant_id
+#     elif '84' in host:
+#         tenant_id = tenant_id_84
+#         return tenant_id
+    elif '82' in host:
+        tenant_id = tenant_id_82
+        return tenant_id
     else:
-        print('使用的host不在预期中，请确认host信息')
+        #print('使用的host不在预期中，请确认host信息')
         return
 
 
 # datasetId存在时
-def statementId(host, datasetId):
+def statementId(host , param):
 
-    url = '%s/api/datasets/%s/previewinit?tenant=%s' % (host, datasetId, get_tenant(host))
-    res = requests.get(url=url, headers=get_headers(host))
+    data = param.split('&')
+    url = '%s/api/datasets/%s/previewinit?tenant=%s' % (host, data[0], get_tenant(host))
+    res = requests.post(url=url, headers=get_headers(host), json=dict_res(data[1]))
     try:
         res_statementId = json.loads(res.text)
         statementId = res_statementId['statementId']
-        return statementId
+        return data[0], statementId, data[1]
     except KeyError:
         return
 
 
 def statementId_flow_use(host, datasetId, tenant):
-    url = '%s/api/datasets/%s/previewinit?tenant=%s&rows=50' % (host, datasetId, tenant)
-    res = requests.get(url=url, headers=get_headers(host))
+    url = '%s/api/datasets/%s/previewinit?tenant=%s&rows=50' % (host, datasetId, get_tenant(host))
+    res = requests.post(url=url, headers=get_headers(host))
     print(res.status_code, res.text)
     try:
         res_statementId = dict_res(res.text)
@@ -49,16 +56,30 @@ def statementId_flow_use(host, datasetId, tenant):
     else:
         return statementId
 
+def statementId_flow_output_use(host, datasetId):
+    url = '%s/api/datasets/%s/previewinit??tenant=db09f359-1e4d-4b3c-872e-7775bd8eed8b&rows=50' % (host, datasetId)
+    res = requests.get(url=url, headers=get_headers(host))
+    print("555555555",res.status_code, res.text)
+    try:
+        res_statementId = dict_res(res.text)
+        # print('%s数据集获取的statementID信息：%s' %(datasetId, res_statementId))
+        statementId = res_statementId['statementId']
+        print('%s数据集获取的statementID：%s' % (datasetId, statementId))
+    except:
+        print('数据集%s的statementID返回空' % datasetId)
+        return
+    else:
+        return statementId
 
 def preview_result_flow_use(host, datasetId, tenant, statementID):
     if isinstance(statementID, int):
-        url = "%s/api/datasets/%s/previewresult?tenant=%s&statementId=%d" % (host, datasetId, tenant, statementID)
-        res = requests.get(url=url, headers=get_headers(host))
+        url = "%s/api/datasets/%s/previewresult?tenant=%s&statementId=%d" % (host, datasetId, get_tenant(host), statementID)
+        res = requests.post(url=url, headers=get_headers(host))
         print(res.url)
         print('%s数据集preview_result:%s' % (datasetId, res.text))
         count_num = 0
         while 'waiting' in res.text or 'running' in res.text:
-            res = requests.get(url=url, headers=get_headers(host))
+            res = requests.post(url=url, headers=get_headers(host))
         try:
             dataset_result = dict_res(res.text)['content']
         except KeyError:
@@ -72,11 +93,12 @@ def preview_result_flow_use(host, datasetId, tenant, statementID):
 
 # datasetId不存在时
 def statementId_no_dataset(host, param):
-    url = '%s/api/datasets/new/previewinit?tenant=%s' % (host, tenant_id_189)
+    url = '%s/api/datasets/new/previewinit?tenant=%s' % (host, get_tenant(host))
     res = requests.post(url=url, headers=get_headers(host), json=param)
     try:
         res_statementId = json.loads(res.text)
         statementId = res_statementId['statementId']
+        print('stateid',statementId)
         return statementId
     except KeyError:
         return
@@ -102,10 +124,10 @@ def get_sql_analyse_dataset_info(host, params):
     # print(sql_analyse_statement_id)
     url = ' %s/api/datasets/sql/analyzeresult?statementId=%s' % (host, sql_analyse_statement_id)
     res = requests.get(url=url, headers=get_headers(host))
-    print(res.text)
+    #print(res.text)
     count_num = 0
     while ("waiting") in res.text or ("running") in res.text:
-        print('再次查询前',res.text)
+        print('再次查询前', res.text)
         res = requests.get(url=url, headers=get_headers(host))
         count_num += 1
         if count_num == 100:
@@ -128,11 +150,11 @@ def get_sql_analyse_dataset_info(host, params):
 def get_sql_execte_statement_id(HOST,param):
     url = '%s/api/datasets/sql/executeinit' % HOST
     res = requests.post(url=url, headers=get_headers(HOST), data=param)
-    print(res.text)
+    #print(res.text)
     try:
         res_statementId = json.loads(res.text)
         sql_analyse_statement_id = res_statementId['statementId']
-        print(sql_analyse_statement_id)
+        #print(sql_analyse_statement_id)
         return sql_analyse_statement_id
     except KeyError:
         return
@@ -179,10 +201,12 @@ def get_step_output_init_statementId(HOST,params):
 
 def get_step_output_ensure_statementId(HOST,params):
     url = '%s/api/steps/validateinit/dataflow' % HOST
-    res = requests.post(url=url, headers=get_headers(HOST), data=params)
     try:
+        res = requests.post(url=url, headers=get_headers(HOST), data=params)
         print(dict_res(res.text)["statementId"])
-        return dict_res(res.text)["statementId"]
+        res_statementId = json.loads(res.text)
+        output_stattementid=res_statementId['statementId']
+        return output_stattementid
     except:
         return
 

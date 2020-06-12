@@ -40,13 +40,12 @@ class MYSQL:
         return res
 
 
-# if __name__ == '__main__':
-#     from basic_info.setting import MySQL_CONFIG
-#     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-#     sql = 'select name from merce_schema order  by create_time desc limit 1'
-#     res = ms.ExecuQuery(sql)
-#
-#     print(res)
+#if __name__ == '__main__':
+     #from basic_info.setting import MySQL_CONFIG
+     #ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+     #sql = 'select id,enabled from dsp_customer order  by create_time desc limit 2'
+     #res = ms.ExecuQuery(sql)
+     #print(res)
 
 
 

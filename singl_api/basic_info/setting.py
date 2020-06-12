@@ -15,6 +15,7 @@ email_list = {
 email_to = {
     "gubingjie": "bingjie.gu@inforefiner.com",
     "daming": "zhiming.wang@inforefiner.com",
+    "xuhaonan": "haonan.xu@inforefiner.com",
             }
 
 # ------84环境使用--------
@@ -99,22 +100,56 @@ email_to = {
 # }
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.83:8515"
+host = "http://192.168.1.82:8515"
+#host = "http://192.168.1.84:8000"
 # 数据库的连接配置，需要根据不同环境进行变更
-MySQL_CONFIG = {
-    'HOST': '192.168.1.199',
+# MySQL_CONFIG = {
+#     'HOST': '192.168.1.199',
+#     "PORT": 3306,
+#     "USER": 'merce',
+#     "PASSWORD": '123456',
+#     "DB": 'wac666',
+#     'case_db': 'test'}
+MySQL_CONFIG1 = {
+    'HOST': '192.168.1.75',
     "PORT": 3306,
     "USER": 'merce',
-    "PASSWORD": '123456',
-    "DB": 'wac666',
+    "PASSWORD": 'merce',
+    "DB": 'test_flow',
     'case_db': 'test'}
-
+MySQL_CONFIG = {
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'demo18',
+    'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
 tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
 tenant_id_76 = "d545436b-3f53-4c89-b1b7-966faa5f2d13"
 tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
 tenant_id_83 = "fc75a4d5-72af-486b-9a48-c35aeaefedca"
+tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
+
+# dsp customer账户登录信息
+MY_LOGIN_INFO_dsp_customer = {
+ "HEADERS": {'Content-Type': 'application/json', "Authorization": 'Basic Y3VzdG9tZXI6MTIzNDU2', "Accept": "application/json"},
+ "URL": "http://192.168.1.82:8008/api/auth/oauth/token",
+ "DATA": {'username': 'test007', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'},
+ "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
+             'grant_type': 'customer_password'},
+ "HOST": "http://192.168.1.82:8008"
+}
+
+# dsp admin账户登录信息
+MY_LOGIN_INFO_dsp_admin = {
+ "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
+ "URL": "http://192.168.1.82:8008/api/auth/oauth/token",
+ "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
+ "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
+ "HOST": "http://192.168.1.82:8008"
+}
 
 MY_LOGIN_INFO = {
  "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -298,5 +333,11 @@ zmod_exectuion_id = "c462b867-db09-4adc-b49f-005c646960a6"
 collector_id = 'c9'
 
 
-receivers_list = ['bingjie.gu@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com', 'xiuhuan.sun@inforefiner.com']  # 定时任务使用
-receivers_test = ['bingjie.gu@inforefiner.com']
+receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
+receivers_test = ['jinbo.guo@inforefiner.com', 'guojinbo2006@126.com']
+
+# ----------added by guojinbo-----------------------------
+# 创建flow和schedulers时可以使用的schema和dataset
+data_flow_name =['dataflow-pivot-自动化测试','dataflow-unpivot-自动化测试','dataflow-colSplitStep-自动化测试','dataflow-ExplodeStep-自动化测试']
+work_flow_name =['workflow-pivot-自动化测试','workflow-unpivot-自动化测试','workflow-colSplitStep-自动化测试','workflow-ExplodeStep-自动化测试']
+stream_flow_name =['streamflow-pivot-自动化测试','streamflow-unpivot-自动化测试','streamflow-colSplitStep-自动化测试','streamflow-ExplodeStep-自动化测试']

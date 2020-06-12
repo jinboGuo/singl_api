@@ -1,24 +1,23 @@
 # coding:utf-8
 from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG
+from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1
 from util.format_res import get_time
 import random
+import json
 
 def get_dataflow_data(flow_name):
     print("开始执行get_dataflow_data(flow_name)")
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
     try:
-        sql = 'select id, flow_type from merce_flow where name = "%s"' % flow_name
-        flow_info = ms.ExecuQuery(sql)
-        print(sql)
-        print('flow_info:', flow_info)
+        sql = "select id, name,flow_type from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
     except Exception as e:
         raise e
     else:
         try:
             flow_id = flow_info[0]["id"]
             flow_type = flow_info[0]["flow_type"]
-            # print(flow_name, flow_type)
+            flow_name = flow_info[0]["name"]
         except KeyError as e:
             raise e
 
@@ -98,3 +97,35 @@ def get_dataflow_data(flow_name):
     }
     return data
 
+def get_executions_data(flow_name):
+    print("开始执行get_executions_data(flow_name)")
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    try:
+        sql = "select id from merce_flow_execution where flow_name = '%s' order by create_time desc limit 1" % flow_name
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('flow_info:', flow_info)
+    except Exception as e:
+        raise e
+    else:
+        try:
+            execution_Id = flow_info[0]["id"]
+        except KeyError as e:
+            raise e
+
+    new_data = {"fieldList":[{"fieldName":"executionId","fieldValue": execution_Id, "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+
+    return new_data
+
+def set_upsert_data():
+    print("开始执行set_upsert_data")
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    try:
+      sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
+      ms.ExecuNoQuery(sql.encode('utf-8'))
+      sql ="UPDATE `test_flow`.`training`  set ts=CURRENT_TIMESTAMP "
+      ms.ExecuNoQuery(sql.encode('utf-8'))
+    except Exception as e:
+        raise e
+
+#set_upsert_data()

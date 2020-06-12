@@ -37,15 +37,34 @@ def deal_parameters(data):
                 if len(data_select_result) > 1:
                     for i in range(len(data_select_result)):
                         new_data.append(data_select_result[i]["id"])
-                    # print(new_data, type(new_data))
+                    print(new_data, type(new_data))
                     return deal_parameters(new_data)
                 else:
                     try:
                         data = data_select_result[0]["id"]
-                        # print(data)
+                        print(data)
                         return deal_parameters(data)
                     except:
                         print('请确认第%d行SQL语句')
+        if 'select enabled,id' in data:
+            #new_data = []
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            if data_select_result:
+                if len(data_select_result) > 1:
+                    for i in range(len(data_select_result)):
+                       if data_select_result[i]["enabled"] == 1:
+                           data_select_result[i]["enabled"] = 0
+                       else:
+                           data_select_result[i]["enabled"] = 1
+                       print(data_select_result)
+                    return deal_parameters(data_select_result)
+                else:
+                    if data_select_result[0]["enabled"] == 1:
+                        data_select_result[0]["enabled"] = 0
+                    else:
+                        data_select_result[0]["enabled"] = 1
+                        print(data_select_result)
+                    return deal_parameters(data_select_result)
         if 'select output_data_id' in data:
             # print(data)
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -74,7 +93,7 @@ def deal_parameters(data):
             if data_select_result:
                 try:
                     data = data_select_result[0]["execution_id"]
-                    # print(data)
+                    print(data)
                     return deal_parameters(data)
                 except:
                     print('请确认第%d行SQL语句')
@@ -85,5 +104,5 @@ def deal_parameters(data):
     else:
         return
 
-# data = "select id from merce_zrule where `name` like 'API_create_%' and name not like '%测试用%'  ORDER BY create_time desc limit 3"
-# print(deal_parameters(data))
+#data = "select id from merce_zrule where `name` like 'API_create_%' and name not like '%测试用%'  ORDER BY create_time desc limit 3"
+#print(deal_parameters(data))
