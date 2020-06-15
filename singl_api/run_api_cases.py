@@ -35,7 +35,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-main3(host, receivers_test)
+#main3(host, receivers_test)
 
 
 
