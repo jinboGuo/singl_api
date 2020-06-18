@@ -3,15 +3,16 @@ import os
 import time
 from urllib import parse
 import requests
-from basic_info.get_auth_token import get_headers
+from basic_info.get_auth_token import get_headers, get_headers_admin
 from util.format_res import dict_res
-from basic_info.setting import MySQL_CONFIG
+from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.setting import host
 from selenium import webdriver
 import random
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+#ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 
@@ -74,6 +75,38 @@ def get_flow_id():
     print(flow_id)
     return flow_id
 
+def admin_flow_id(data):
+    # ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    # try:
+    #     sql = "select id from dsp_data_service where name like 'test_hdfs_student2020_%' ORDER BY create_time desc limit 1"
+    #     flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+    #     print(sql)
+    #     print('service_id:', flow_info[0]["id"])
+    # except Exception as e:
+    #     raise e
+    url = '%s/api/dsp/platform/service/infoById?id=%s' % (host, data)
+    response = requests.get(url=url, headers=get_headers_admin(host))
+    flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
+    print(flow_id)
+    return flow_id
+
+def customer_flow_id(data):
+    url = '%s/api/dsp/consumer/service/infoById?id=%s' % (host, data)
+    response = requests.get(url=url, headers=get_headers_admin(host))
+    flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
+    print(flow_id)
+    return flow_id
+def get_service_id(data):
+    try:
+        sql = "select id from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('service_id:', flow_info[0]["id"])
+    except Exception as e:
+        raise e
+    new_data = {"dataServiceId": flow_info[0]["id"], "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1", "encrypted": "false", "offset": 0, "size": 100}
+    print(new_data)
+    return new_data
 def get_applicationId():
     """进入yarn页面，获取状态为finished的application id"""
     # 进入yarn页面，获取状态为finished的application id
@@ -183,3 +216,5 @@ def upload_file_standard(host,file,url):
         return response.status_code,response.text
 
 # upload_file_standard()
+#get_dsp_flow_id(data)
+#get_service_id()

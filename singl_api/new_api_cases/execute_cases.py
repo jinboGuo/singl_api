@@ -28,7 +28,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id,collector_sch
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('821')
+case_table_sheet = case_table.get_sheet_by_name('82')
 all_rows = case_table_sheet.max_row
 # print(case_table_sheet.cell(row=2, column=10).value, case_table_sheet.cell(row=2,column=12).value)
 jar_dir = ab_dir('woven-common-3.0.jar')
