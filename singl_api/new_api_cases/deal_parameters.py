@@ -30,7 +30,7 @@ def deal_parameters(data):
             data = data.replace('监控结束时间', get_now_time()[1])
             # print(data)
             return deal_parameters(data)
-        if 'select id' in data:
+        if 'select id from' in data:
             print("00000", data)
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             print("999999", data_select_result)
@@ -39,8 +39,9 @@ def deal_parameters(data):
                 if len(data_select_result) > 1:
                     for i in range(len(data_select_result)):
                         new_data.append(data_select_result[i]["id"])
-                    print("8888",new_data, type(new_data))
-                    return deal_parameters(new_data)
+                    l = ','.join([str(i) for i in new_data])
+                    print("L=", l)
+                    return l
                 else:
                     try:
                         data = data_select_result[0]["id"]
@@ -71,20 +72,40 @@ def deal_parameters(data):
                     return data_select_result
                 except:
                     print('请确认第%d行SQL语句')
-        if 'select status,id' in data:
-            new_data = {}
+        if 'select status,id from' in data:
+            new_data = {'status': '', 'id': ""}
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            print("data_select_result1:", data_select_result)
             if data_select_result:
-                if data_select_result[0]["status"] == "1":
-                        data_select_result[0]["status"] = "0"
-                        new_data["status"] = data_select_result[0]["status"]
-                        new_data["id"] = str(data_select_result[0]["id"])
-                else:
-                        data_select_result[0]["status"] = "1"
-                        new_data["status"] = data_select_result[0]["status"]
-                        new_data["id"] = str(data_select_result[0]["id"])
-                print(new_data, type(new_data))
-                return new_data
+                try:
+                    if data_select_result[0]["status"] == 1 and 'is_running=1' in data:  # 正在运行服务，停止
+                            status = "2"
+                            id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': id}
+                            print("new_data1:", new_data)
+                            return new_data
+                    elif data_select_result[0]["status"] == 0 and 'is_running=0' in data:  # 待部署服务，启用
+                            status = "1"
+                            id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': id}
+                            print("new_data2:", new_data)
+                            return new_data
+                    elif 'is_running=2' in data:  # 失败服务，停用
+                        status = "2"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        print("new_data3:", new_data)
+                        return new_data
+                    else:   # 停止服务 ，启用
+                        status = "1"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        print("new_data4:", new_data)
+                        return new_data
+                except:
+                      return {'status': '3', 'id': '725070733486587904'}
+            else:
+                 return {'status': '2', 'id': '725070733486587904'}
         if 'select output_data_id' in data:
             # print(data)
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))

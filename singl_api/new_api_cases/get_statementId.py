@@ -1,6 +1,6 @@
 import requests,json
 from basic_info.get_auth_token import get_headers
-from basic_info.setting import host, tenant_id_189, tenant_id_81,tenant_id_83,tenant_id_82
+from basic_info.setting import host, tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123
 from util.format_res import dict_res
 
 
@@ -16,9 +16,9 @@ def get_tenant(host):
     elif '83' in host:
         tenant_id = tenant_id_83
         return tenant_id
-#     elif '84' in host:
-#         tenant_id = tenant_id_84
-#         return tenant_id
+    elif '123' in host:
+        tenant_id = tenant_id_123
+        return tenant_id
     elif '82' in host:
         tenant_id = tenant_id_82
         return tenant_id
@@ -29,16 +29,18 @@ def get_tenant(host):
 
 # datasetId存在时
 def statementId(host , param):
-
     data = param.split('&')
-    url = '%s/api/datasets/%s/previewinit?tenant=%s' % (host, data[0], get_tenant(host))
-    res = requests.post(url=url, headers=get_headers(host), json=dict_res(data[1]))
-    try:
-        res_statementId = json.loads(res.text)
-        statementId = res_statementId['statementId']
-        return data[0], statementId, data[1]
-    except KeyError:
-        return
+    if data:
+        url = '%s/api/datasets/%s/previewinit?tenant=%s' % (host, data[0], get_tenant(host))
+        res = requests.post(url=url, headers=get_headers(host), json=dict_res(data[1]))
+        try:
+            res_statementId = json.loads(res.text)
+            statementId = res_statementId['statementId']
+            return data[0], statementId, data[1]
+        except:
+            return 1, 1, 1
+    else:
+        return 1, 1, 1
 
 
 def statementId_flow_use(host, datasetId, tenant):
@@ -52,7 +54,7 @@ def statementId_flow_use(host, datasetId, tenant):
         # print('%s数据集获取的statementID：%s' % (datasetId, statementId))
     except:
         print('数据集%s的statementID返回空' % datasetId)
-        return
+        return 1
     else:
         return statementId
 
@@ -67,7 +69,7 @@ def statementId_flow_output_use(host, datasetId):
         print('%s数据集获取的statementID：%s' % (datasetId, statementId))
     except:
         print('数据集%s的statementID返回空' % datasetId)
-        return
+        return 0
     else:
         return statementId
 
@@ -82,8 +84,8 @@ def preview_result_flow_use(host, datasetId, tenant, statementID):
             res = requests.post(url=url, headers=get_headers(host))
         try:
             dataset_result = dict_res(res.text)['content']
-        except KeyError:
-            return
+        except:
+            return 0
         else:
             print('%s数据集dataset_result: %s ' % (datasetId, dataset_result))
             return dataset_result
