@@ -77,13 +77,91 @@ def get_flow_id():
     print(flow_id)
     return flow_id
 
+def resource_data_push_event_hdfs_txt(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except:
+        return "725053770861379584"
+    new_data = {"name":"test_hdfs_txt_event","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":0,"transferType":1,"custTableName":"","custDataSourceId":"715969033517662208","custDataSourceName":"test_hdfs_text0529","otherConfiguration":{"scheduleType":"event","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
+    print(new_data)
+    return new_data
+
+def resource_data_push_once_mysql(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except:
+        return "725053770861379584"
+    new_data = {"name":"test_once_mysql","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":1,"custTableName":"student_2020","custDataSourceId":"715961791531712512","custDataSourceName":"test_mysql","otherConfiguration":{"scheduleType":"once","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
+    print(new_data)
+    return new_data
+
+def resource_data_push_once_hdfs_csv(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except:
+        return "725053770861379584"
+    new_data = {"name":"test_once_hdfs_csv","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":0,"custTableName":"","custDataSourceId":"715880057666535424","custDataSourceName":"test_hdfs_csv","otherConfiguration":{"scheduleType":"once","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
+    print(new_data)
+    return new_data
+
+def push_resource_data_open(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except :
+        return "725053770861379584"
+    new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"], "isPull":0,"isPush":1,"pullServiceMode":[],"pushServiceMode":["1","0"],"expiredTime":"","openStatus":1,"description":""}
+    print(new_data)
+    return new_data
+
+def pull_resource_data_open(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except :
+        return "722830072351817728"
+    new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"],"isPull":1,"isPush":0,"pullServiceMode":["2"],"pushServiceMode":[],"expiredTime":"","openStatus":1,"description":""}
+    print(new_data)
+    return new_data
+
+def resource_data_pull_es(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+    except:
+        return "725053770861379584"
+    new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"sink_es","description":"","serviceMode":2,"transferType":0,"dataResId": flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}}]}
+    print(new_data)
+    return new_data
+
 def resource_data(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:
         sql = "select id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('resource_id:', flow_info[0]["id"])
     except:
         return
     new_data = {"name": "test_hdfs_student2020","datasetName":"test_hdfs_student2020","storage":"HDFS","encoder":"UTF-8","incrementField":"age","openStatus":1,"categoryId":"0","datasetId":"82e50c27-8b4a-440d-8807-eb970e6a7571","expiredTime":0,"type":0,"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"id":flow_info[0]["id"]}
@@ -96,7 +174,7 @@ def appconfig_data(data):
         sql = "select id from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_dc_appconfig:', flow_info[0]["id"])
     except:
         return
     new_data = {"accessIp":["192.168.2.142"],"name":"autotest_appconfig_随机数","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","creator":"customer3","createTime":"2020-06-28 14:11:07","lastModifier":"customer3","lastModifiedTime":"2020-06-28 14:22:00","description":"","id":flow_info[0]["id"],"custId":"b398ff8e-8a90-436d-adc6-08ee08b42958","custName":"customer3","accessKey":"015a2147-34c4-4456-ad6d-a94b513ad6e0","publicKey":"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKvJ3JxEUIYtnPDK3Jcn+naxiDgEzCUWeUnM56dInCVTduhBuBPbkmi7Oor+4dZ/eF5+q/h7Ay/o1WHuFbwf6NUCAwEAAQ=="}
@@ -108,20 +186,25 @@ def cust_data_source(data):
         sql = "select id from dsp_cust_data_source where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_cust_data_source:', flow_info[0]["id"])
     except:
         return
     new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime":"2020-06-24 19:25:05","lastModifier":"customer3","lastModifiedTime":"2020-06-24 19:25:05"}
     print(new_data)
     return new_data
 
-def corn_application_oracle():
+def corn_application_oracle(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:
-        new_data = {"name":"test_cron_oracle","description":"","dataResId":"715891501552369664","dataResName":"test_hdfs_student2020","serviceMode":1,"transferType":1,"custTableName":"autotest_student","custDataSourceId":"717026599119093760","custDataSourceName":"test_oracle","otherConfiguration":{"scheduleType":"cron","cron":"0 0/5 * * * ? ","startTime": get_now(), "endTime": get_tomorrow()},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
-        print(new_data)
-        return new_data
+        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
-        return 1
+        return "725053770861379584"
+    new_data = {"name":"test_cron_oracle","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":1,"custTableName":"autotest_student","custDataSourceId":"717026599119093760","custDataSourceName":"test_oracle","otherConfiguration":{"scheduleType":"cron","cron":"0 0/5 * * * ? ","startTime": get_now(), "endTime": get_tomorrow()},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
+    print(new_data)
+    return new_data
 
 
 def admin_flow_id(data):
@@ -170,7 +253,7 @@ def application_pull_data(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "722842814173413376"
     new_data = {"applicationId": flow_info[0]["id"], "description": "", "enabled": 1, "expiredTime": "0", "name": "sink_es", "status": 0, "type": 0, "auditMind": "yyy"}
@@ -183,7 +266,7 @@ def application_once_hdfs_csv(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except :
         return "723150172099444736"
     new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"test_once_hdfs_csv","status":0,"type":1,"scheduleType":"once","serviceConfiguration":{"cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
@@ -195,7 +278,7 @@ def application_once_mysql(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except :
         return "723150172099444736"
     new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"test_once_mysql","status":0,"type":1,"scheduleType":"once","serviceConfiguration":{"cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
@@ -208,7 +291,7 @@ def application_event_hdfs_txt(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "723180170952835072"
     new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"test_hdfs_txt_event","status":0,"type":1,"scheduleType":"event","serviceConfiguration":{"cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
@@ -221,7 +304,7 @@ def application_cron_oracle(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "723189466339999744"
     new_data = {"applicationId": flow_info[0]["id"], "description": "", "enabled": 1, "expiredTime": "0", "name":"test_cron_oracle", "status":0,"type":1,"scheduleType":"cron","serviceConfiguration":{"cron":"0 0/5 * * * ? ","startTime": get_now(), "endTime": get_tomorrow()}, "fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
@@ -234,7 +317,7 @@ def application_cron_mysql(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "723189466339999744"
     new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"test_mysql","status":0,"type":1,"scheduleType":"cron","serviceConfiguration":{"cron":"0 0/5 * * * ? ","startTime":"1592463600000","endTime":"1592496000000"},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
@@ -247,7 +330,7 @@ def application_cron_hdfs_csv(data):
         sql = "select id from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('service_id:', flow_info[0]["id"])
+        print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "723189466339999744"
     new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"hdfs_csv","status":0,"type":1,"scheduleType":"cron","serviceConfiguration":{"cron":"0 0/5 * * * ? ","startTime":"1592463600000","endTime":"1592496000000"},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"auditMind":"yyy"}
