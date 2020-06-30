@@ -77,6 +77,31 @@ def get_flow_id():
     print(flow_id)
     return flow_id
 
+def resource_data(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('service_id:', flow_info[0]["id"])
+    except:
+        return
+    new_data = {"name": "test_hdfs_student2020","datasetName":"test_hdfs_student2020","storage":"HDFS","encoder":"UTF-8","incrementField":"age","openStatus":1,"categoryId":"0","datasetId":"82e50c27-8b4a-440d-8807-eb970e6a7571","expiredTime":0,"type":0,"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"id":flow_info[0]["id"]}
+    print(new_data)
+    return new_data
+
+def appconfig_data(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select id from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('service_id:', flow_info[0]["id"])
+    except:
+        return
+    new_data = {"accessIp":["192.168.2.142"],"name":"autotest_appconfig_随机数","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","creator":"customer3","createTime":"2020-06-28 14:11:07","lastModifier":"customer3","lastModifiedTime":"2020-06-28 14:22:00","description":"","id":flow_info[0]["id"],"custId":"b398ff8e-8a90-436d-adc6-08ee08b42958","custName":"customer3","accessKey":"015a2147-34c4-4456-ad6d-a94b513ad6e0","publicKey":"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKvJ3JxEUIYtnPDK3Jcn+naxiDgEzCUWeUnM56dInCVTduhBuBPbkmi7Oor+4dZ/eF5+q/h7Ay/o1WHuFbwf6NUCAwEAAQ=="}
+    print(new_data)
+    return new_data
 def cust_data_source(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:
@@ -86,7 +111,7 @@ def cust_data_source(data):
         print('service_id:', flow_info[0]["id"])
     except:
         return
-    new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime":"2020-06-24 19:25:05","lastModifier":"customer3","lastModifiedTime":"2020-06-24 19:25:05"}
+    new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime":"2020-06-24 19:25:05","lastModifier":"customer3","lastModifiedTime":"2020-06-24 19:25:05"}
     print(new_data)
     return new_data
 

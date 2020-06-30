@@ -31,7 +31,6 @@ def deal_parameters(data):
             # print(data)
             return deal_parameters(data)
         if 'select id from' in data:
-            print("00000", data)
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             print("999999", data_select_result)
             new_data = []
@@ -44,9 +43,12 @@ def deal_parameters(data):
                     return l
                 else:
                     try:
-                        data = data_select_result[0]["id"]
-                        print("7777", data, type(data))
-                        return data
+                        if "select id from dsp_data_resource where name like 'test_hdfs_student%' order by create_time limit 1" in data:
+                            new_data.append(str(data_select_result[0]['id']))
+                            return new_data
+                        else:
+                            data = data_select_result[0]["id"]
+                            return data
                     except:
                         print('请确认第%d行SQL语句')
         if 'select enabled,id' in data:
@@ -54,15 +56,6 @@ def deal_parameters(data):
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             print("22333333333", data_select_result)
             if len(data_select_result):
-                # if len(data_select_result) > 1:
-                #     for i in range(len(data_select_result)):
-                #        if data_select_result[i]["enabled"] == 1:
-                #            data_select_result[i]["enabled"] = 0
-                #        else:
-                #            data_select_result[i]["enabled"] = 1
-                #     print(data_select_result, type(data_select_result))
-                #     return deal_parameters(data_select_result)
-                # else:
                 try:
                     if data_select_result[0]["enabled"] == 1:
                         data_select_result[0]["enabled"] = 0
