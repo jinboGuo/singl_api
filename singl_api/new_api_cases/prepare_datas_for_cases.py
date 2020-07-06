@@ -43,7 +43,7 @@ def get_job_tasks_id(job_id):
 #     print(task_id)
 #     response = requests.post(url=url, headers=get_headers(), json=task_id)
 #     print(response.url)
-#     print(response.status_code, response.text)
+#     print("response data:", response.status_code, response.text)
 
 
 def create_new_user(data):
@@ -82,7 +82,7 @@ def resource_data_push_event_hdfs_txt(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
@@ -95,7 +95,7 @@ def resource_data_push_once_mysql(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
@@ -108,7 +108,7 @@ def resource_data_push_once_hdfs_csv(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
@@ -121,7 +121,7 @@ def push_resource_data_open(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except :
         return "725053770861379584"
@@ -134,7 +134,7 @@ def pull_resource_data_open(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except :
         return "722830072351817728"
@@ -147,7 +147,7 @@ def resource_data_pull_es(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
@@ -160,7 +160,7 @@ def resource_data(data):
     try:
         sql = "select id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id:', flow_info[0]["id"])
     except:
         return
@@ -173,7 +173,7 @@ def appconfig_data(data):
     try:
         sql = "select id from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('dsp_dc_appconfig:', flow_info[0]["id"])
     except:
         return
@@ -185,7 +185,7 @@ def cust_data_source(data):
     try:
         sql = "select id from dsp_cust_data_source where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('dsp_cust_data_source:', flow_info[0]["id"])
     except:
         return
@@ -198,7 +198,7 @@ def corn_application_oracle(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
+        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
