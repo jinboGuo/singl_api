@@ -18,7 +18,8 @@ from new_api_cases.prepare_datas_for_cases import admin_flow_id, customer_flow_i
     application_event_hdfs_txt, \
     application_pull_data, application_once_mysql, application_cron_oracle, corn_application_oracle, cust_data_source, \
     appconfig_data, resource_data, resource_data_push_once_hdfs_csv, resource_data_push_once_mysql, \
-    resource_data_push_event_hdfs_txt, push_resource_data_open, resource_data_pull_es, pull_resource_data_open
+    resource_data_push_event_hdfs_txt, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
+    pull_Aggs
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -339,6 +340,18 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
         new_data = pull_data(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
+        print(new_data)
+        response = requests.post(url=url, headers=header, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif case_detail == '申请服务数据聚合':
+        print('开始执行：', case_detail)
+        print("request   url:", url)
+        header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
+        new_data = pull_Aggs(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=header, data=new_data)
         print("response data:", response.status_code, response.text)
         clean_vaule(table_sheet_name, row, column)
@@ -537,6 +550,24 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '查询接入配置' in case_detail:
+            print('开始执行：', case_detail)
+            new_url = url.format(data)
+            print("request   url:", new_url)
+            response = requests.get(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '获取申请服务秘钥' in case_detail:
+            print('开始执行：', case_detail)
+            new_url = url.format(data)
+            print("request   url:", new_url)
+            response = requests.get(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '审批申请记录' in case_detail:
             print('开始执行：', case_detail)
             new_url = url.format(data)
@@ -564,7 +595,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('服务删除'):  # 取消SQL analyse接口
+        elif case_detail == '服务删除':  # 取消SQL analyse接口
             print('开始执行：', case_detail)
             new_url = url.format(data)
             print("request   url:", new_url)

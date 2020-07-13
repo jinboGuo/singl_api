@@ -4,13 +4,12 @@ from basic_info.setting import MySQL_CONFIG, Dsp_MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-#ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+#ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data):
     if data:
-    # print(data)
         if '随机数' in data:
             # print(data)
             data = data.replace('随机数', str(random.randint(0, 999999999999999)))
@@ -20,11 +19,9 @@ def deal_parameters(data):
             return deal_parameters(data)
         if '当前时间戳' in data:
             data = data.replace('当前时间戳', get_timestamp(0))
-            # print(deal_parameters(new_data))
             return deal_parameters(data)
         if '监控开始时间' in data:
             data = data.replace('监控开始时间', get_now_time()[0])
-            # print(data)
             return deal_parameters(data)
         if '监控结束时间' in data:
             data = data.replace('监控结束时间', get_now_time()[1])
@@ -32,7 +29,7 @@ def deal_parameters(data):
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            #print("999999", data_select_result)
+            print("999999", data_select_result)
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -40,12 +37,11 @@ def deal_parameters(data):
                         new_data.append(data_select_result[i]["id"])
                     if "select id from merce_dss" in data:
                         return new_data
-                    elif "select id from merce_schema " in data:
+                    elif "select id from merce_schema" in data:
                         return new_data
                     else:
-                        l = ','.join([str(i) for i in new_data])
-                    #print("L=", l)
-                        return l
+                        dat = ','.join([str(i) for i in new_data])
+                        return dat
                 else:
                     try:
                         if "select id from dsp_data_resource where name like 'test_hdfs_student%' order by create_time limit 1" in data:
@@ -54,7 +50,10 @@ def deal_parameters(data):
                         elif "select id from merce_schema where name = 'mysql_upsert_dataset_training' ORDER BY create_time desc limit 1" in data:
                             data = data_select_result[0]["id"]
                             return data
-                        elif "select id from merce_schema where name" in data or "select id from merce_schema where id" in data:
+                        elif "select id from merce_schema where name like 'mysql%' ORDER BY create_time desc limit 1" == data:
+                            data = data_select_result[0]["id"]
+                            return data
+                        elif "select id from merce_schema where name like" in data or "select id from merce_schema where id =" in data:
                             new_data.append(str(data_select_result[0]['id']))
                             return new_data
                         else:
@@ -63,61 +62,60 @@ def deal_parameters(data):
                     except:
                         print('请确认第%d行SQL语句')
         if 'select enabled,id' in data:
-            #new_data = []
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            #print("22333333333", data_select_result)
             if len(data_select_result):
                 try:
                     if data_select_result[0]["enabled"] == 1:
                         data_select_result[0]["enabled"] = 0
                     else:
                         data_select_result[0]["enabled"] = 1
-                    #print(data_select_result, type(data_select_result))
                     return data_select_result
                 except:
                     print('请确认第%d行SQL语句')
         if 'select status,id from' in data:
-            new_data = {'status': '', 'id': ""}
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             print("data_select_result1:", data_select_result)
             if data_select_result:
                 try:
                     if data_select_result[0]["status"] == 1 and 'is_running=1' in data:  # 正在运行服务，停止
-                            status = "2"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
-                            #print("new_data1:", new_data)
-                            return new_data
+                        status = "2"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
                     elif data_select_result[0]["status"] == 0 and 'is_running=0' in data:  # 待部署服务，启用
-                            status = "1"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
-                            #print("new_data2:", new_data)
-                            return new_data
+                        status = "1"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
                     elif 'is_running=2' in data:  # 失败服务，停用
                         status = "2"
                         id = str(data_select_result[0]["id"])
                         new_data = {'status': status, 'id': id}
-                        #print("new_data3:", new_data)
                         return new_data
                     else:   # 停止服务 ，启用
                         status = "1"
                         id = str(data_select_result[0]["id"])
                         new_data = {'status': status, 'id': id}
-                        #print("new_data4:", new_data)
                         return new_data
                 except:
-                      return {'status': '3', 'id': '725070733486587904'}
+                    return {'status': '3', 'id': '725070733486587904'}
             else:
-                 return {'status': '2', 'id': '725070733486587904'}
+                return {'status': '2', 'id': '725070733486587904'}
         if 'select output_data_id' in data:
-            # print(data)
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
                     data = data_select_result[0]["output_data_id"]
-                    #print(data)
                     return deal_parameters(data)
+                except:
+                    print('请确认第%d行SQL语句')
+        if 'select access_key' in data:
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            if data_select_result:
+                try:
+                    data = data_select_result[0]["access_key"]
+                    print(data)
+                    return data
                 except:
                     print('请确认第%d行SQL语句')
         if 'select name' in data:
@@ -126,19 +124,14 @@ def deal_parameters(data):
             if data_select_result:
                 try:
                     data = data_select_result[0]["name"]
-                    #print(data)
                     return deal_parameters(data)
                 except:
                     print('请确认第%d行SQL语句')
         if 'select execution_id' in data:
-            # print(data)
-            # data = data.encode('utf-8')
-            data_select_result = ms.ExecuQuery(data)
-            # print(data_select_result)
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
                     data = data_select_result[0]["execution_id"]
-                    #print(data)
                     return deal_parameters(data)
                 except:
                     print('请确认第%d行SQL语句')

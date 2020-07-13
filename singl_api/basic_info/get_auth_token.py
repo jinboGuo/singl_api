@@ -9,15 +9,11 @@ def get_auth_token(HOST):
         res = requests.post(url=MY_LOGIN_INFO_dam["URL"], headers=MY_LOGIN_INFO_dam["HEADERS"], data=MY_LOGIN_INFO_dam["DATA"])
         dict_headers = dict(res.headers)
         token = dict_headers['X-AUTH-TOKEN']
-        # print(token)
         return token
     else:
         res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
-        # print(res.url)
         dict_headers = dict_res(res.text)
-        # print(dict_headers)
         token = dict_headers['content']["accessToken"]
-        # print(token)
         return 'Bearer ' + token
 
 
@@ -25,7 +21,6 @@ def get_auth_token(HOST):
 def get_headers(HOST):
     x_auth_token = get_auth_token(HOST)
     headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
-    # print(headers)
     return headers
 
 
@@ -38,7 +33,6 @@ def get_headers_upload(HOST):
                'Referer': 'http://192.168.1.189:8515/',
                 'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
                }
-    # print(headers)
     return headers
 
 
@@ -49,14 +43,12 @@ def get_auth_token_root(HOST):
                             data=MY_LOGIN_INFO_dam["DATA"])
         dict_headers = dict(res.headers)
         token = dict_headers['X-AUTH-TOKEN']
-        # print(token)
         return token
     else:
         res = requests.post(url=MY_LOGIN_INFO_root["URL"], headers=MY_LOGIN_INFO_root["HEADERS"],
                             data=MY_LOGIN_INFO_root["DATA"])
         dict_headers = dict_res(res.text)
         token = dict_headers['content']["accessToken"]
-        # print(token)
         return 'Bearer ' + token
 
 # 组装headers， 接口请求时调用
@@ -65,10 +57,7 @@ def get_headers_root(HOST):
     headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
     # print(headers)
     return headers
-#
-# host = 'http://192.168.1.76:8515'
-# print(get_auth_token(host))
-#
+
 # admin用户登录使用
 def get_auth_token_admin(HOST):
     if '57' in HOST:
@@ -76,21 +65,18 @@ def get_auth_token_admin(HOST):
                             data=MY_LOGIN_INFO_dsp_admin["DATA"])
         dict_headers = dict(res.headers)
         token = dict_headers['Authorization']
-        # print(token)
         return token
     else:
         res = requests.post(url=MY_LOGIN_INFO_dsp_admin["URL"], headers=MY_LOGIN_INFO_dsp_admin["HEADERS"],
                             data=MY_LOGIN_INFO_dsp_admin["DATA"])
         dict_headers = dict_res(res.text)
         token = dict_headers['content']["access_token"]
-        # print(token)
         return 'Bearer ' + token
 
 # 组装headers， 接口请求时调用
 def get_headers_admin(HOST):
     Authorization = get_auth_token_admin(HOST)
     headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
-    print(headers)
     return headers
 
 # customer用户登录使用
@@ -100,19 +86,16 @@ def get_auth_token_customer(HOST):
                             data=MY_LOGIN_INFO_dsp_customer["DATA"])
         dict_headers = dict(res.headers)
         token = dict_headers['Authorization']
-        # print(token)
         return token
     else:
         res = requests.post(url=MY_LOGIN_INFO_dsp_customer["URL"], headers=MY_LOGIN_INFO_dsp_customer["HEADERS"],
                             data=MY_LOGIN_INFO_dsp_customer["DATA"])
         dict_headers = dict_res(res.text)
         token = dict_headers['content']["access_token"]
-        # print(token)
         return 'Bearer ' + token
 
 # 组装headers， 接口请求时调用
 def get_headers_customer(HOST):
     Authorization = get_auth_token_customer(HOST)
     headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
-    print(headers)
     return headers

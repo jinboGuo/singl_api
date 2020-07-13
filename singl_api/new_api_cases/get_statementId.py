@@ -31,21 +31,23 @@ def get_tenant(host):
 def statementId(host , param):
     data = param.split('&')
     if data:
-        url = '%s/api/datasets/%s/previewinit?tenant=%s' % (host, data[0], get_tenant(host))
+        url = '%s/api/datasets/%s/previewinit?rows=50' % (host, data[0])
         res = requests.post(url=url, headers=get_headers(host), json=dict_res(data[1]))
         try:
             res_statementId = json.loads(res.text)
+            print("ids:", res_statementId)
             statementId = res_statementId['statementId']
+            print(data[0], statementId, data[1])
             return data[0], statementId, data[1]
         except:
-            return 1, 1, 1
+            return '59b30d45-8583-4e00-9413-e65057e57028', 1, ""
     else:
-        return 1, 1, 1
+        return '59b30d45-8583-4e00-9413-e65057e57028', 1, ""
 
 
 def statementId_flow_use(host, datasetId, tenant):
     url = '%s/api/datasets/%s/previewinit?tenant=%s&rows=50' % (host, datasetId, get_tenant(host))
-    res = requests.post(url=url, headers=get_headers(host))
+    res = requests.get(url=url, headers=get_headers(host))
     print(res.status_code, res.text)
     try:
         res_statementId = dict_res(res.text)

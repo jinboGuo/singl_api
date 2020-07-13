@@ -134,26 +134,35 @@ def pull_resource_data_open(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except :
         return "722830072351817728"
-    new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"],"isPull":1,"isPush":0,"pullServiceMode":["2"],"pushServiceMode":[],"expiredTime":"","openStatus":1,"description":""}
-    print(new_data)
-    return new_data
-
+    if 'sink_es' in data:
+        new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"],"isPull": 1, "isPush": 0, "pullServiceMode": ["2"], "pushServiceMode": [], "expiredTime":"","openStatus":1,"description":""}
+        print(new_data)
+        return new_data
+    elif 'snow_dataset_dsp' in data:
+        new_data = {"name":flow_info[0]["name"], "id": flow_info[0]["id"], "isPull": 1, "isPush": 0, "pullServiceMode": ["2"], "pushServiceMode": [], "expiredTime":"","openStatus":1,"description":""}
+        print(new_data)
+        return new_data
+    else:
+        return
 def resource_data_pull_es(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
         print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return "725053770861379584"
-    new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"sink_es","description":"","serviceMode":2,"transferType":0,"dataResId": flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}}]}
-    print(new_data)
-    return new_data
+    if 'sink_es' in data:
+        new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"sink_es","description":"","serviceMode":2,"transferType":0,"dataResId": flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}}]}
+        return new_data
+    elif 'snow_dataset_dsp' in data:
+        new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"snow_dataset_dsp_","description":"","serviceMode":2,"transferType":0,"dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"Div5AirportID","sourceType":"int","targetField":"Div5AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginAirportSeqID","sourceType":"int","targetField":"OriginAirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1AirportID","sourceType":"int","targetField":"Div1AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSElapsedTime","sourceType":"int","targetField":"CRSElapsedTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestCityMarketID","sourceType":"int","targetField":"DestCityMarketID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4TailNum","sourceType":"string","targetField":"Div4TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3WheelsOff","sourceType":"string","targetField":"Div3WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TotalAddGTime","sourceType":"string","targetField":"TotalAddGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestState","sourceType":"string","targetField":"DestState","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginCityName","sourceType":"string","targetField":"OriginCityName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestStateFips","sourceType":"string","targetField":"DestStateFips","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5TailNum","sourceType":"string","targetField":"Div5TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WheelsOn","sourceType":"int","targetField":"WheelsOn","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FirstDepTime","sourceType":"string","targetField":"FirstDepTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4WheelsOn","sourceType":"string","targetField":"Div4WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3WheelsOn","sourceType":"string","targetField":"Div3WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Diverted","sourceType":"int","targetField":"Diverted","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDelay","sourceType":"int","targetField":"ArrDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginAirportID","sourceType":"int","targetField":"OriginAirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TailNum","sourceType":"string","targetField":"TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSDepTime","sourceType":"int","targetField":"CRSDepTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FlightDate","sourceType":"date","targetField":"FlightDate","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"LateAircraftDelay","sourceType":"int","targetField":"LateAircraftDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1LongestGTime","sourceType":"string","targetField":"Div1LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2AirportID","sourceType":"int","targetField":"Div2AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DayOfWeek","sourceType":"int","targetField":"DayOfWeek","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"NASDelay","sourceType":"int","targetField":"NASDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4AirportID","sourceType":"int","targetField":"Div4AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2WheelsOff","sourceType":"string","targetField":"Div2WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestCityName","sourceType":"string","targetField":"DestCityName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginStateFips","sourceType":"string","targetField":"OriginStateFips","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3AirportSeqID","sourceType":"int","targetField":"Div3AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4WheelsOff","sourceType":"string","targetField":"Div4WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"LongestAddGTime","sourceType":"string","targetField":"LongestAddGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TaxiOut","sourceType":"int","targetField":"TaxiOut","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ActualElapsedTime","sourceType":"int","targetField":"ActualElapsedTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDelay","sourceType":"int","targetField":"DepDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4AirportSeqID","sourceType":"int","targetField":"Div4AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Month","sourceType":"int","targetField":"Month","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepartureDelayGroups","sourceType":"string","targetField":"DepartureDelayGroups","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5TotalGTime","sourceType":"string","targetField":"Div5TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4Airport","sourceType":"string","targetField":"Div4Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginWac","sourceType":"int","targetField":"OriginWac","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DistanceGroup","sourceType":"int","targetField":"DistanceGroup","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginCityMarketID","sourceType":"int","targetField":"OriginCityMarketID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrTimeBlk","sourceType":"string","targetField":"ArrTimeBlk","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CancellationCode","sourceType":"string","targetField":"CancellationCode","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2TailNum","sourceType":"string","targetField":"Div2TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepTime","sourceType":"int","targetField":"DepTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrTime","sourceType":"int","targetField":"ArrTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WeatherDelay","sourceType":"int","targetField":"WeatherDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5LongestGTime","sourceType":"string","targetField":"Div5LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDel15","sourceType":"int","targetField":"DepDel15","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2Airport","sourceType":"string","targetField":"Div2Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginState","sourceType":"string","targetField":"OriginState","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1WheelsOff","sourceType":"string","targetField":"Div1WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3AirportID","sourceType":"int","targetField":"Div3AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1TotalGTime","sourceType":"string","targetField":"Div1TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivActualElapsedTime","sourceType":"string","targetField":"DivActualElapsedTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDelayMinutes","sourceType":"int","targetField":"ArrDelayMinutes","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4TotalGTime","sourceType":"string","targetField":"Div4TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivArrDelay","sourceType":"string","targetField":"DivArrDelay","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivReachedDest","sourceType":"string","targetField":"DivReachedDest","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1Airport","sourceType":"string","targetField":"Div1Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CarrierDelay","sourceType":"int","targetField":"CarrierDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Carrier","sourceType":"string","targetField":"Carrier","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepTimeBlk","sourceType":"string","targetField":"DepTimeBlk","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Dest","sourceType":"string","targetField":"Dest","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2AirportSeqID","sourceType":"int","targetField":"Div2AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TaxiIn","sourceType":"int","targetField":"TaxiIn","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivAirportLandings","sourceType":"string","targetField":"DivAirportLandings","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivDistance","sourceType":"string","targetField":"DivDistance","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestAirportSeqID","sourceType":"int","targetField":"DestAirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginStateName","sourceType":"string","targetField":"OriginStateName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Distance","sourceType":"int","targetField":"Distance","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Year","sourceType":"int","targetField":"Year","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5WheelsOff","sourceType":"string","targetField":"Div5WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSArrTime","sourceType":"int","targetField":"CRSArrTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDelayMinutes","sourceType":"int","targetField":"DepDelayMinutes","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2WheelsOn","sourceType":"string","targetField":"Div2WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestWac","sourceType":"int","targetField":"DestWac","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1WheelsOn","sourceType":"string","targetField":"Div1WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4LongestGTime","sourceType":"string","targetField":"Div4LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrivalDelayGroups","sourceType":"int","targetField":"ArrivalDelayGroups","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3TotalGTime","sourceType":"string","targetField":"Div3TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2LongestGTime","sourceType":"string","targetField":"Div2LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"UniqueCarrier","sourceType":"string","targetField":"UniqueCarrier","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FlightNum","sourceType":"string","targetField":"FlightNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Flights","sourceType":"int","targetField":"Flights","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DayOfMonth","sourceType":"int","targetField":"DayOfMonth","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDel15","sourceType":"int","targetField":"ArrDel15","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5AirportSeqID","sourceType":"int","targetField":"Div5AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1TailNum","sourceType":"string","targetField":"Div1TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5Airport","sourceType":"string","targetField":"Div5Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5WheelsOn","sourceType":"string","targetField":"Div5WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"AirlineID","sourceType":"int","targetField":"AirlineID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"AirTime","sourceType":"int","targetField":"AirTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestAirportID","sourceType":"int","targetField":"DestAirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WheelsOff","sourceType":"int","targetField":"WheelsOff","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Cancelled","sourceType":"int","targetField":"Cancelled","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2TotalGTime","sourceType":"string","targetField":"Div2TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestStateName","sourceType":"string","targetField":"DestStateName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Origin","sourceType":"string","targetField":"Origin","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3Airport","sourceType":"string","targetField":"Div3Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3LongestGTime","sourceType":"string","targetField":"Div3LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Quarter","sourceType":"int","targetField":"Quarter","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1AirportSeqID","sourceType":"int","targetField":"Div1AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"SecurityDelay","sourceType":"int","targetField":"SecurityDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3TailNum","sourceType":"string","targetField":"Div3TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]}]}
+        return new_data
+    else:
+        return
 
 def resource_data(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
@@ -243,9 +252,288 @@ def pull_data(data):
         print('service_id:', flow_info[0]["id"])
     except:
         return
-    new_data = {"dataServiceId": flow_info[0]["id"], "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1", "encrypted": "false", "offset": 0, "size": 100, "timestamp": 1}
-    print(new_data)
-    return new_data
+    if 'snow_dataset_dsp' in data:
+        new_data = {
+            "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1",
+            "dataServiceId": flow_info[0]["id"],
+            "timestamp": "1594026624140",
+            "encrypted": "false",
+            "query": {
+                "fieldGroup": {
+                    "index": 0,
+                    "group": "false",
+                    "andOr": "AND",
+                    "fields": [{
+                        "index": 1,
+                        "group": "false",
+                        "andOr": "AND",
+                        "name": "DestCityName",
+                        "oper": "LIKE",
+                        "value": [
+                            '%CA%'
+                        ]
+                    },
+                        {
+                            "index": 2,
+                            "group": "false",
+                            "andOr": "OR",
+                            "name": "FlightNum",
+                            "oper": "NOT_EQUAL",
+                            "value": [
+                                '108'
+                            ]
+                        }],
+                    "fieldGroups": []
+                },
+                "ordSort": [
+                    {
+                        "name": "FlightNum",
+                        "order": "DESC"
+                    }],
+                "pageable": {
+                    "pageable": "true",
+                    "pageNum": 1,
+                    "pageSize": 91,
+                    "offset": "0"
+                },
+                "selectProperties": [
+                    "FlightNum",
+                    "TailNum",
+                    "OriginState",
+                    "DestCityName"
+                ]
+            }
+        }
+        return new_data
+    elif 'sink_es' in data:
+        new_data = {
+            "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1",
+            "dataServiceId": flow_info[0]["id"],
+            "timestamp": "1594026624140",
+            "encrypted": "false",
+            "query": {
+                "fieldGroup": {
+                    "index": 0,
+                    "group": "false",
+                    "andOr": "AND",
+                    "fields": [
+
+                        {
+                            "index": 1,
+                            "group": "false",
+                            "andOr": "AND",
+                            "name": "AGE",
+                            "oper": "IN",
+                            "value": [
+                                2
+                            ]
+                        }],
+                    "fieldGroups": []
+                },
+                "pageable": {
+                    "pageable": "true",
+                    "pageNum": 1,
+                    "pageSize": 91,
+                    "offset": "0"
+                },
+                "selectProperties": [
+                    "TIME",
+                    "NAME",
+                    "AGE",
+                    "GENDER"
+                ]
+            }
+        }
+        return new_data
+    else:
+        return
+
+def pull_Aggs(data):
+    ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+    try:
+        sql = "select id from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('service_id:', flow_info[0]["id"])
+    except:
+        return
+    if 'sink_es' in data:
+        new_data = {
+            "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1",
+            "dataServiceId": flow_info[0]["id"],
+            "encrypted": "false",
+            "query": {
+                "aggFields": [{
+                    "aggType": "AVG",
+                    "alias": "AVG_DestWac",
+                    "name": "AGE"
+                },
+                    {
+                        "aggType": "SUM",
+                        "alias": "SUM_DestWac",
+                        "name": "AGE"
+                    },
+                    {
+                        "aggType": "MIN",
+                        "alias": "MIN_DestWac",
+                        "name": "AGE"
+                    },
+                    {
+                        "aggType": "MAX",
+                        "alias": "MAX_DestWac",
+                        "name": "AGE"
+                    },
+                    {
+                        "aggType": "COUNT",
+                        "alias": "COUNT_DestWac",
+                        "name": "AGE"
+                    }
+                ],
+                "fieldGroup": {
+                    "index": 0,
+                    "group": "false",
+                    "andOr": "AND",
+                    "fields": [{
+                        "index": 1,
+                        "andOr": "AND",
+                        "name": "GENDER",
+                        "oper": "EQUAL",
+                        "value": [
+                            "GENDER"
+                        ]
+                    }]
+                },
+                "groupFields": [
+                    "NAME"
+                ],
+                "havingFieldGroup": {
+                    "index": 0,
+                    "andOr": "AND",
+                    "fields": [{
+                        "index": 0,
+                        "andOr": "AND",
+                        "name": "MAX_DestWac",
+                        "oper": "BETWEEN",
+                        "value": [
+                            0, 1000000
+                        ]
+                    }]
+                },
+                "ordSort": [{
+                    "name": "MIN_DestWac"
+                }],
+                "pageable": {
+                    "pageNum": 1,
+                    "pageSize": 500,
+                    "pageable": "true"
+                }
+            },
+            "timestamp": 1
+        }
+        return new_data
+    elif 'snow_dataset_dsp' in data:
+        new_data = {
+            "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1",
+            "dataServiceId": flow_info[0]["id"],
+            "encrypted": "false",
+            "query": {
+                "aggFields": [{
+                    "aggType": "AVG",
+                    "alias": "AVG_DestWac",
+                    "distinct": "false",
+                    "name": "DestWac"
+                },
+                    {
+                        "aggType": "SUM",
+                        "alias": "SUM_DestWac",
+                        "name": "DestWac"
+                    },
+                    {
+                        "aggType": "MIN",
+                        "alias": "MIN_DestWac",
+                        "distinct": "false",
+                        "name": "DestWac"
+                    },
+                    {
+                        "aggType": "MAX",
+                        "alias": "MAX_DestWac",
+                        "name": "DestWac"
+                    },
+                    {
+                        "aggType": "COUNT",
+                        "alias": "COUNT_DestWac",
+                        "distinct": "false",
+                        "name": "DestWac"
+                    }
+                ],
+                "fieldGroup": {
+                    "index": 0,
+                    "group": "false",
+                    "andOr": "AND",
+                    "fields": [{
+                        "index": 0,
+                        "andOr": "AND",
+                        "name": "OriginCityName",
+                        "oper": "NOT_LIKE",
+                        "value": [
+                            "%CA%"
+                        ]
+                    },
+                        {
+                            "index": 1,
+                            "andOr": "AND",
+                            "name": "OriginCityName",
+                            "oper": "NOT_LIKE",
+                            "value": [
+                                "%CA%"
+                            ]
+                        }]
+                },
+                "groupFields": [
+                    "FlightNum",
+                    "Year",
+                    "Month",
+                    "FlightDate"
+                ],
+                "havingFieldGroup": {
+                    "index": 0,
+                    "andOr": "AND",
+                    "fields": [{
+                        "index": 0,
+                        "andOr": "AND",
+                        "name": "MAX_DestWac",
+                        "oper": "BETWEEN",
+                        "value": [
+                            0, 10000
+                        ]
+                    }]
+                },
+                "ordSort": [{
+                    "name": "MIN_DestWac"
+                },
+                    {
+                        "name": "COUNT_DestWac",
+                        "order": "DESC"
+                    },
+                    {
+                        "name": "FlightNum",
+                        "order": "ASC"
+                    },
+                    {
+                        "name": "FlightDate",
+                        "order": "ASC"
+                    }],
+                "pageable": {
+                    "pageNum": 1,
+                    "pageSize": 500,
+                    "pageable": "true"
+                }
+            },
+            "timestamp": 1
+        }
+        return new_data
+    else:
+        return
 
 def application_pull_data(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
@@ -256,10 +544,15 @@ def application_pull_data(data):
         print('dsp_data_application:', flow_info[0]["id"])
     except:
         return "722842814173413376"
-    new_data = {"applicationId": flow_info[0]["id"], "description": "", "enabled": 1, "expiredTime": "0", "name": "sink_es", "status": 0, "type": 0, "auditMind": "yyy"}
-    print(new_data)
-    return new_data
-
+    ""
+    if 'sink_es' in data:
+        new_data = {"applicationId": flow_info[0]["id"], "description": "", "enabled": 1, "expiredTime": "0", "name": "sink_es", "status": 0, "type": 0, "auditMind": "yyy"}
+        return new_data
+    elif 'snow_dataset_dsp' in data:
+        new_data = {"applicationId":flow_info[0]["id"],"description":"","enabled":1,"expiredTime":"0","name":"snow_dataset_dsp_","status":0,"type":0,"auditMind":"yyy"}
+        return new_data
+    else:
+        return
 def application_once_hdfs_csv(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:

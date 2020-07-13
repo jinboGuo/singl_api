@@ -104,14 +104,10 @@ def get_executions_data(flow_name):
         sql = "select id from merce_flow_execution where flow_name = '%s' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('flow_info:', flow_info)
-    except Exception as e:
-        raise e
-    else:
-        try:
-            execution_Id = flow_info[0]["id"]
-        except KeyError as e:
-            raise e
+        print('execution_Id:', flow_info[0]["id"])
+        execution_Id = flow_info[0]["id"]
+    except KeyError as e:
+            return
 
     new_data = {"fieldList":[{"fieldName":"executionId","fieldValue": execution_Id, "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
 
@@ -125,7 +121,23 @@ def set_upsert_data():
       ms.ExecuNoQuery(sql.encode('utf-8'))
       sql ="UPDATE `test_flow`.`training`  set ts=CURRENT_TIMESTAMP "
       ms.ExecuNoQuery(sql.encode('utf-8'))
-    except Exception as e:
-        raise e
+    except Exception:
+        return
 
 #set_upsert_data()
+
+def set_upsert_datas():
+    print("开始执行set_upsert_data")
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    try:
+        count=1
+        sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
+        while 1:
+            print("插入count：",count)
+            ms.ExecuNoQuery(sql.encode('utf-8'))
+            count+=1
+            if count==150000:
+                break
+    except Exception:
+        return
+#set_upsert_datas()
