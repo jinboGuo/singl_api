@@ -3,30 +3,27 @@ import json
 import os
 import re
 import time
-# from selenium import webdriver
 from util import get_host
 from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
-from util.format_res import dict_res, get_time
-from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO_dsp_admin, MY_LOGIN_INFO_dsp_customer, Dsp_MySQL_CONFIG
+from util.format_res import dict_res
+from basic_info.setting import  MY_LOGIN_INFO_dsp_admin, Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
-from basic_info.get_auth_token import get_auth_token_admin,get_headers_admin, get_headers_customer,get_auth_token_customer
+from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.deal_parameters import deal_parameters
-import random, unittest
-from new_api_cases.prepare_datas_for_cases import admin_flow_id, customer_flow_id, pull_data, application_once_hdfs_csv, \
-    application_event_hdfs_txt, \
-    application_pull_data, application_once_mysql, application_cron_oracle, corn_application_oracle, cust_data_source, \
+import unittest
+from new_api_cases.prepare_datas_for_cases import admin_flow_id, customer_flow_id, pull_data, \
+    application_pull_data, corn_application_oracle, cust_data_source, \
     appconfig_data, resource_data, resource_data_push_once_hdfs_csv, resource_data_push_once_mysql, \
     resource_data_push_event_hdfs_txt, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
-    pull_Aggs
+    pull_Aggs, application_push_approval
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('dsp')
 all_rows = case_table_sheet.max_row
-# print(case_table_sheet.cell(row=2, column=10).value, case_table_sheet.cell(row=2,column=12).value)
 jar_dir = ab_dir('woven-common-3.0.jar')
 
 
@@ -166,46 +163,46 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据订阅记录审批-once_hdfs_csv':
+    elif '数据订阅记录审批' in case_detail:
         print('开始执行：', case_detail)
         print("request   url:", url)
-        new_data = application_once_hdfs_csv(data)
+        new_data = application_push_approval(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
         print("response data:", response.status_code, response.text)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据订阅记录审批-cron_oracle':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = application_cron_oracle(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据订阅记录审批-event_hdfs_txt':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = application_event_hdfs_txt(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据订阅记录审批-once_mysql':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = application_once_mysql(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '数据订阅记录审批-cron_oracle':
+    #     print('开始执行：', case_detail)
+    #     print("request   url:", url)
+    #     new_data = application_push_approval(data)
+    #     new_data = json.dumps(new_data, separators=(',', ':'))
+    #     response = requests.post(url=url, headers=headers, data=new_data)
+    #     print("response data:", response.status_code, response.text)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '数据订阅记录审批-event_hdfs_txt':
+    #     print('开始执行：', case_detail)
+    #     print("request   url:", url)
+    #     new_data = application_event_hdfs_txt(data)
+    #     new_data = json.dumps(new_data, separators=(',', ':'))
+    #     response = requests.post(url=url, headers=headers, data=new_data)
+    #     print("response data:", response.status_code, response.text)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '数据订阅记录审批-once_mysql':
+    #     print('开始执行：', case_detail)
+    #     print("request   url:", url)
+    #     new_data = application_once_mysql(data)
+    #     new_data = json.dumps(new_data, separators=(',', ':'))
+    #     response = requests.post(url=url, headers=headers, data=new_data)
+    #     print("response data:", response.status_code, response.text)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '数据申请记录审批':
         print('开始执行：', case_detail)
         print("request   url:", url)
@@ -246,29 +243,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '批量删除execution':
-        print('开始执行：', case_detail)
-        # 需要先查询指定flow下的所有execution，从中取出execution id，拼装成list，传递给删除接口
-        query_execution_url = '%s/api/executions/query' % host
-        all_exectuions = requests.post(url=query_execution_url, headers=headers, data=data)
-        executions_dict = dict_res(all_exectuions.text)
-        # print(executions_dict)
-        try:
-            executions_content = executions_dict['content']
-            all_ids = [] # 该list用来存储所有的execution id
-            for item in executions_content:
-                executions_content_id = item['id']
-                all_ids.append(executions_content_id)
-        except Exception as e:
-            print(e)
-        else:  # 取出一个id放入一个新的list，作为传递给removeLIst接口的参数
-            removelist_data = []
-            removelist_data.append(all_ids[-1])
-            # 执行删除操作
-            removeList_result = requests.post(url=url, headers=headers, json=removelist_data)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=removeList_result.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=removeList_result.text)
     elif case_detail == '启用消费者':
         print('开始执行：', case_detail)
         print("request   url:", url)
