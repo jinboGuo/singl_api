@@ -7,7 +7,7 @@ import time
 
 import requests
 # 配置数据库连接
-from util.timestamp_13 import timestamp_now
+from util.timestamp_13 import timestamp_now, timestamp_utc
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ''''''
@@ -103,29 +103,48 @@ class operateKafka:
     def __init__(self):
         myhosts = "192.168.1.82:9094"
         client = KafkaClient(hosts=myhosts)                         # 可接受多个Client这是重点
-        self.topic = client.topics['test_kafka06291']    # 选择一个topic
+        self.topic = client.topics['test_kafka08031']    # 选择一个topic
 
     """
     function:send message to kafka
     dataList:数据格式是list，每个元素是tuple格式
-    author:01376233
+    author:
     """
-    def sendMessage(self, dataList):
+    def sendMessage(self, data):
         with self.topic.get_sync_producer() as producer:
-            for data in dataList:
+            for i in data:
                 # transform tuple to dic
-                #mydict = {'t1': data[0], 't2': data[1], 't3': data[2], 't4': data[3], 't5': data[4]}
-                #python_to_json = json.dumps(data, ensure_ascii=False)
-                for i in range(len(data)):
-                #print( data[i], end="")
-                 producer.produce((str(data[i])).encode())
+                 mydict = {'t1': data[0], 't2': data[1], 't3': data[2], 't4': data[3], 't5': data[4], 't6': data[5]}
+                 #python_to_json = json.dumps(data, ensure_ascii=False)
+                 python_to_json = json.dumps(mydict, default=str)
+                #for i in range(len(data)):
+                 print( python_to_json)#, end=",")
+                 #producer.produce((str(data)).encode())
+            producer.produce(str(python_to_json).encode())
 
 
-# myopKafka = operateKafka()
+Kafka = operateKafka()
 #
 # #print(t1)
-# while 1:
-#     time.sleep(10)
-#     t1 = timestamp_now()
-#     df = [(t1 , 1, 'li', 'a3', 58), (t1 , 2, 'huang', 'b3', 68), (t1 , 3, 'liu', 'c3', 98), (t1 , 4, 'zhao', 'a4', 81), (t1 , 5, 'bai', 'b5', 78), (t1, 6, 'qin', 'c6', 89), (t1, 7, 'zhang', 'a7', 87), (t1, 8, 'guo', 'b8', 86), (t1, 9, 'xiang', 'c9', 88)]
-#     #myopKafka.sendMessage(df)
+n = 1
+while 1:
+    if n % 10 == 0:
+        #print("stop 10s")
+        time.sleep(10)
+    #t1 = timestamp_now()
+    t1 = timestamp_utc()
+    df = (n, t1, n+1, 'li'+str(n), 'a'+str(n), n*1)# (t1 , 2, 'huang', 'b3', 68), (t1 , 3, 'liu', 'c3', 98), (t1 , 4, 'zhao', 'a4', 81), (t1 , 5, 'bai', 'b5', 78), (t1, 6, 'qin', 'c6', 89), (t1, 7, 'zhang', 'a7', 87), (t1, 8, 'guo', 'b8', 86), (t1, 9, 'xiang', 'c9', 88)]
+    Kafka.sendMessage(df)
+    n += 1
+
+
+
+# -*- coding: utf-8 -*-
+from elasticsearch import Elasticsearch
+def es_create():
+    es = Elasticsearch(hosts="192.168.2.142", port=9200, http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证
+    es.indices.create(index="sink_es3", ignore=400)
+
+    data = {"name": "小明", "age": "8", "gender": "男"}
+    res = es.index(index="sink_es3", doc_type="doc", body=data)
+    print(res)

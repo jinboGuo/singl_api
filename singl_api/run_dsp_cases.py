@@ -24,10 +24,11 @@ from basic_info.setting import receivers_list,receivers_test
 # print('开始执行用例集用例')
 # runner.run(testcase)
 # fp.close()
-print('------开始执行用例-------')
+print('--------开始执行用例-------')
 start_time = datetime.datetime.now()
 print('开始时间：', start_time)
-print('------开始执行api case------')
+print('--------开始执行api case-------')
+
 # 执行API用例并对比结果
 deal_request_method()
 CheckResult().deal_result()

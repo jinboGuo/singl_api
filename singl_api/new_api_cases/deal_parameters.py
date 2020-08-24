@@ -4,8 +4,8 @@ from basic_info.setting import MySQL_CONFIG, Dsp_MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
 
-#ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+#ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data):
@@ -29,7 +29,7 @@ def deal_parameters(data):
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            print("999999", data_select_result)
+            #print("999999", data_select_result)
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -74,7 +74,7 @@ def deal_parameters(data):
                     print('请确认第%d行SQL语句')
         if 'select status,id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            print("data_select_result1:", data_select_result)
+            #print("data_select_result1:", data_select_result)
             if data_select_result:
                 try:
                     if data_select_result[0]["status"] == 1 and 'is_running=1' in data:  # 正在运行服务，停止
