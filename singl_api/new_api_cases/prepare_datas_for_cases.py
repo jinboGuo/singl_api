@@ -216,6 +216,7 @@ def customer_flow_id(data):
         return flow_id
     except:
         return 1
+
 def pull_data(data):
     ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
     try:
