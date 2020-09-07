@@ -138,7 +138,7 @@ def main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -241,7 +241,7 @@ def mail_for_flow(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gj，a", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -249,6 +249,7 @@ def mail_for_flow(host,receivers):
 #host = '192.168.1.82:8515'
 #mail_for_flow(host, receivers_test)
 #main3(host, receivers_list)
+
 def dsp_main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
@@ -331,7 +332,7 @@ def dsp_main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()

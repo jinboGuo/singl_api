@@ -343,7 +343,7 @@ collector_id = 'c9'
 
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['jinbo.guo@inforefiner.com', '289332729@qq.com']
+receivers_list = ['jinbo.guo@inforefiner.com', '289332729@qq.com', 'qian.feng@inforefiner.com']
 receivers_test = ['jinbo.guo@inforefiner.com', 'guojinbo2006@126.com']
 
 # ----------added by guojinbo-----------------------------
