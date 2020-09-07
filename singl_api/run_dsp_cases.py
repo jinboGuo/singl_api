@@ -3,7 +3,7 @@ from util.send_mail import dsp_main3
 import datetime
 from new_api_cases.execute_dsp_cases import deal_request_method
 from new_api_cases.execute_dsp_cases import CheckResult
-from basic_info.setting import host
+from basic_info.setting import dsp_host
 from basic_info.setting import receivers_list
 
 # from newSuite import NewSuite
@@ -36,7 +36,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-dsp_main3(host, receivers_list)
+dsp_main3(dsp_host, receivers_list)
 
 
 
