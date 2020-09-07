@@ -300,7 +300,7 @@ def dsp_main3(host,receivers):
         用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases)
     # print(mail_content)
     # 邮件标题
-    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' BayMax系统API用例自动化执行日报'
+    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + 'DSP系统API用例自动化执行日报'
 
     # 添加邮件正文，格式 MIMEText:
     msg.attach(MIMEText(mail_content, "plain", 'utf-8'))
