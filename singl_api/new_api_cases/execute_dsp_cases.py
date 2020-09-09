@@ -13,7 +13,7 @@ from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.prepare_datas_for_cases import admin_flow_id, customer_flow_id, pull_data, corn_application_oracle, cust_data_source, \
+from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pull_data, corn_application_oracle, cust_data_source, \
     appconfig_data, resource_data, resource_data_push_once_hdfs_csv, resource_data_push_once_mysql, \
     resource_data_push_event_hdfs_txt, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
     pull_Aggs, application_push_approval, application_pull_approval

@@ -1,6 +1,7 @@
 import requests,json
 from basic_info.get_auth_token import get_headers
-from basic_info.setting import host, tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123
+from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
+    tenant_id_84
 from util.format_res import dict_res
 
 
@@ -22,8 +23,11 @@ def get_tenant(host):
     elif '82' in host:
         tenant_id = tenant_id_82
         return tenant_id
+    elif '84' in host:
+        tenant_id = tenant_id_84
+        return tenant_id
     else:
-        #print('使用的host不在预期中，请确认host信息')
+        print('使用的host不在预期中，请确认host信息')
         return
 
 
@@ -51,9 +55,8 @@ def statementId_flow_use(host, datasetId, tenant):
     print(res.status_code, res.text)
     try:
         res_statementId = dict_res(res.text)
-        # print('%s数据集获取的statementID信息：%s' %(datasetId, res_statementId))
+        print('%s数据集获取的statementID信息：%s' % (datasetId, res_statementId))
         statementId = res_statementId['statementId']
-        # print('%s数据集获取的statementID：%s' % (datasetId, statementId))
     except:
         print('数据集%s的statementID返回空' % datasetId)
         return 1
@@ -63,7 +66,6 @@ def statementId_flow_use(host, datasetId, tenant):
 def statementId_flow_output_use(host, datasetId):
     url = '%s/api/datasets/%s/previewinit??tenant=db09f359-1e4d-4b3c-872e-7775bd8eed8b&rows=50' % (host, datasetId)
     res = requests.get(url=url, headers=get_headers(host))
-    print("555555555",res.status_code, res.text)
     try:
         res_statementId = dict_res(res.text)
         # print('%s数据集获取的statementID信息：%s' %(datasetId, res_statementId))
@@ -81,7 +83,6 @@ def preview_result_flow_use(host, datasetId, tenant, statementID):
         res = requests.post(url=url, headers=get_headers(host))
         print(res.url)
         print('%s数据集preview_result:%s' % (datasetId, res.text))
-        count_num = 0
         while 'waiting' in res.text or 'running' in res.text:
             res = requests.post(url=url, headers=get_headers(host))
         try:
@@ -112,11 +113,9 @@ def statementId_no_dataset(host, param):
 def get_sql_analyse_statement_id(host, param):
     url = ' %s/api/datasets/sql/analyzeinit' % host
     res = requests.post(url=url, headers=get_headers(host), data=param)
-    # print(res.text)
     try:
         res_statementId = json.loads(res.text)
         sql_analyse_statement_id = res_statementId['statementId']
-        # print(sql_analyse_statement_id)
         return sql_analyse_statement_id
     except KeyError:
         return
@@ -128,7 +127,6 @@ def get_sql_analyse_dataset_info(host, params):
     # print(sql_analyse_statement_id)
     url = ' %s/api/datasets/sql/analyzeresult?statementId=%s' % (host, sql_analyse_statement_id)
     res = requests.get(url=url, headers=get_headers(host))
-    #print(res.text)
     count_num = 0
     while ("waiting") in res.text or ("running") in res.text:
         print('再次查询前', res.text)
@@ -142,8 +140,6 @@ def get_sql_analyse_dataset_info(host, params):
     if '"statement":"available"' in res.text:
         text_dict = json.loads(res.text)
         text_dict_content = text_dict["content"]
-        # print(res.text)
-        # print(text_dict_content)
         return text_dict_content
     else:
         print('获取数据集输出字段失败')
@@ -154,7 +150,6 @@ def get_sql_analyse_dataset_info(host, params):
 def get_sql_execte_statement_id(HOST,param):
     url = '%s/api/datasets/sql/executeinit' % HOST
     res = requests.post(url=url, headers=get_headers(HOST), data=param)
-    #print(res.text)
     try:
         res_statementId = json.loads(res.text)
         sql_analyse_statement_id = res_statementId['statementId']
@@ -213,11 +208,3 @@ def get_step_output_ensure_statementId(HOST,params):
         return output_stattementid
     except:
         return
-
-# params = '{"id":"source_9","name":"source_9","type":"source","x":168,"y":239,"otherConfigurations":{"schema":"schema_for_students_startjoin_step","schemaId":"31caabd3-ed37-415d-bc51-5c039f5b7689","sessionCache":"","datasetId":"5ebd5da6-793d-4cf9-bb4a-f84301eb0c4e","interceptor":"","dataset":"gbj_use_students_short_84","ignoreMissingPath":false},"outputConfigurations":[{"id":"output","fields":[{"column":"sId","alias":""},{"column":"sName","alias":""},{"column":"sex","alias":""},{"column":"age","alias":""},{"column":"class","alias":""}]}]}'
-# get_step_output_ensure_statementId(params)
-
-# params = '{"id":"source_9","name":"source_9","type":"source","x":168,"y":239,"otherConfigurations":{"schema":"schema_for_students_startjoin_step","schemaId":"31caabd3-ed37-415d-bc51-5c039f5b7689","sessionCache":"","datasetId":"5ebd5da6-793d-4cf9-bb4a-f84301eb0c4e","interceptor":"","dataset":"gbj_use_students_short_84","ignoreMissingPath":false},"outputConfigurations":[{"id":"output","fields":[{"column":"sId","alias":""},{"column":"sName","alias":""},{"column":"sex","alias":""},{"column":"age","alias":""},{"column":"class","alias":""}]}]}'
-
-# get_step_output_init_statementId(params)
-
