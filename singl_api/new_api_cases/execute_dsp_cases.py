@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import  MY_LOGIN_INFO_dsp_admin, Dsp_MySQL_CONFIG
+from basic_info.setting import MY_LOGIN_INFO_dsp_admin, Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
