@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="0f49178f-7a3e-4093-87e3-100384954789" name="Default" comment="更新">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/get_statementId.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/get_statementId.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
     </list>
     <ignored path="singl_api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,58 +41,45 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
+        <entry file="file://$PROJECT_DIR$/util/send_mail.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="32" column="12" lean-forward="true" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
+            <state relative-caret-position="376">
+              <caret line="334" column="54" lean-forward="true" selection-start-line="334" selection-start-column="54" selection-end-line="334" selection-end-column="54" />
               <folding>
-                <element signature="e#15#51#0" expanded="true" />
+                <element signature="e#15#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/util/get_tenant.py">
+        <entry file="file://$PROJECT_DIR$/basic_info/url_info.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="35" column="32" lean-forward="true" selection-start-line="35" selection-start-column="32" selection-end-line="35" selection-end-column="32" />
+            <state relative-caret-position="-1562">
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#15#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1835">
+              <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
+              <folding>
+                <element signature="e#15#45#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py">
+        <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="235" column="82" selection-start-line="235" selection-start-column="82" selection-end-line="235" selection-end-column="82" />
-              <folding>
-                <element signature="e#15#64#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api_test_cases/cases_for_analysis_zmod.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="90" column="88" selection-start-line="90" selection-start-column="88" selection-end-line="90" selection-end-column="88" />
-              <folding>
-                <element signature="e#15#64#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4085">
-              <caret line="215" column="54" selection-start-line="215" selection-start-column="54" selection-end-line="215" selection-end-column="54" />
+            <state relative-caret-position="2219">
+              <caret line="344" column="149" lean-forward="true" selection-start-line="344" selection-start-column="149" selection-end-line="344" selection-end-column="149" />
               <folding>
                 <element signature="e#15#24#0" expanded="true" />
               </folding>
@@ -97,40 +88,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1235">
-              <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="139" selection-start-line="139" selection-end-line="139" selection-end-column="53" />
+            <state relative-caret-position="188">
+              <caret line="113" column="23" selection-start-line="113" selection-start-column="23" selection-end-line="113" selection-end-column="23" />
               <folding>
                 <element signature="e#15#24#0" expanded="true" />
               </folding>
@@ -192,11 +153,8 @@
         <option value="$PROJECT_DIR$/util/timestamp_13.py" />
         <option value="$PROJECT_DIR$/new_api_cases/test.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_cases.py" />
-        <option value="$PROJECT_DIR$/basic_info/setting.py" />
-        <option value="$PROJECT_DIR$/util/send_mail.py" />
         <option value="$PROJECT_DIR$/run_dsp_cases.py" />
         <option value="$PROJECT_DIR$/run_api_cases.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_analysis_model.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_analysis_zmod.py" />
@@ -207,12 +165,15 @@
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_server_status.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_weird_dataflow.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_dataset_api.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
         <option value="$PROJECT_DIR$/util/get_tenant.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/get_statementId.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/util/send_mail.py" />
+        <option value="$PROJECT_DIR$/basic_info/setting.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/get_statementId.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
       </list>
     </option>
   </component>
@@ -237,6 +198,21 @@
             <path>
               <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="api_test_cases" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="basic_info" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -270,29 +246,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.run_dsp_cases">
-    <configuration name="ready_dataflow_data" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="singl_api" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/basic_info" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.send_mail">
     <configuration name="run_api_cases" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -329,6 +283,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_dsp_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="send_mail" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="singl_api" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/send_mail.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -383,11 +359,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.send_mail" />
         <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.timestamp_13" />
         <item itemvalue="Python.run_api_cases" />
-        <item itemvalue="Python.ready_dataflow_data" />
       </list>
     </recent_temporary>
   </component>
@@ -432,6 +408,8 @@
       <workItem from="1599473962212" duration="2225000" />
       <workItem from="1599478484207" duration="506000" />
       <workItem from="1599630500060" duration="2890000" />
+      <workItem from="1599633887669" duration="67000" />
+      <workItem from="1599638456027" duration="2265000" />
     </task>
     <task id="LOCAL-00001" summary="更新邮件为tester">
       <created>1592186053181</created>
@@ -615,7 +593,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599633304025</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="更新">
+      <created>1599633929088</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1599633929088</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -624,7 +609,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="399182000" />
+    <option name="totallyTimeSpent" value="401514000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -637,19 +622,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="3" y="22" width="1749" height="1046" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42276424" visible="true" weight="0.26939017" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42276424" visible="true" weight="0.27531084" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.57723576" side_tool="true" weight="0.18976545" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8436214" weight="0.32456142" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8436214" visible="true" weight="0.32456142" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32894737" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.7608052" visible="true" weight="0.3256579" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.7608052" weight="0.3256579" />
       <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.49946696" weight="0.329718" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.2391948" side_tool="true" weight="0.32894737" />
@@ -731,7 +715,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/singl_api$timestamp_13.coverage" NAME="timestamp_13 Coverage Results" MODIFIED="1596452906265" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$run_dsp_cases.coverage" NAME="run_dsp_cases Coverage Results" MODIFIED="1599018264301" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/singl_api$send_mail.coverage" NAME="send_mail Coverage Results" MODIFIED="1592791006899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
+    <SUITE FILE_PATH="coverage/singl_api$send_mail.coverage" NAME="send_mail Coverage Results" MODIFIED="1599651151754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$ready_dataflow_data.coverage" NAME="ready_dataflow_data Coverage Results" MODIFIED="1593589741841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/basic_info" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_dsp_cases_py.coverage" NAME="Unittests in execute_dsp_cases.py Coverage Results" MODIFIED="1592450249285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$run_api_cases.coverage" NAME="run_api_cases Coverage Results" MODIFIED="1596075770868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -740,41 +724,6 @@
     <SUITE FILE_PATH="coverage/singl_api$deal_parameters.coverage" NAME="deal_parameters Coverage Results" MODIFIED="1592308252246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://E:/python3.7/Lib/site-packages/requests/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="172" selection-start-line="172" selection-end-line="172" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="1757" selection-start-line="1757" selection-end-line="1757" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/python3.7/Lib/zipfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="1324" selection-start-line="1324" selection-end-line="1324" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/python3.7/Lib/site-packages/openpyxl/worksheet/worksheet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="241" selection-start-line="241" selection-end-line="241" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/python3.7/Lib/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="402" selection-start-line="402" selection-end-line="402" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://E:/python3.7/Lib/json/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131">
@@ -786,13 +735,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="515" selection-start-line="515" selection-end-line="515" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/format_res.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -916,42 +858,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5339">
-          <caret line="294" column="19" selection-start-line="294" selection-start-column="15" selection-end-line="294" selection-end-column="19" />
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="31" column="9" selection-start-line="31" selection-start-column="9" selection-end-line="31" selection-end-column="9" />
-          <folding>
-            <element signature="e#15#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
           <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
           <folding>
             <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-349">
-          <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
-          <folding>
-            <element signature="e#15#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1052,66 +964,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="218" selection-start-line="218" selection-end-line="218" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="139" selection-start-line="139" selection-end-line="139" selection-end-column="53" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/get_tenant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="35" column="32" lean-forward="true" selection-start-line="35" selection-start-column="32" selection-end-line="35" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="32" column="12" lean-forward="true" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
+        <state relative-caret-position="513">
+          <caret line="32" column="12" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
           <folding>
             <element signature="e#15#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
+    <entry file="file://$PROJECT_DIR$/util/get_tenant.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        <state relative-caret-position="646">
+          <caret line="35" column="32" selection-start-line="35" selection-start-column="32" selection-end-line="35" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
+        <state relative-caret-position="4256">
           <caret line="235" column="82" selection-start-line="235" selection-start-column="82" selection-end-line="235" selection-end-column="82" />
           <folding>
             <element signature="e#15#64#0" expanded="true" />
@@ -1121,7 +996,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api_test_cases/cases_for_analysis_zmod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
+        <state relative-caret-position="1634">
           <caret line="90" column="88" selection-start-line="90" selection-start-column="88" selection-end-line="90" selection-end-column="88" />
           <folding>
             <element signature="e#15#64#0" expanded="true" />
@@ -1131,7 +1006,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4085">
+        <state relative-caret-position="3857">
           <caret line="215" column="54" selection-start-line="215" selection-start-column="54" selection-end-line="215" selection-end-column="54" />
           <folding>
             <element signature="e#15#24#0" expanded="true" />
@@ -1141,7 +1016,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
+        <state relative-caret-position="95">
           <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
@@ -1151,8 +1026,121 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1235">
+        <state relative-caret-position="190">
           <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
+          <folding>
+            <element signature="e#15#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2219">
+          <caret line="344" column="149" lean-forward="true" selection-start-line="344" selection-start-column="149" selection-end-line="344" selection-end-column="149" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="113" column="23" selection-start-line="113" selection-start-column="23" selection-end-line="113" selection-end-column="23" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/count_items.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/data_from_db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3023">
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/encrypt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-456">
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/format_res.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="22" column="28" lean-forward="true" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/clean_test_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="64" column="36" lean-forward="true" selection-start-line="64" selection-start-column="36" selection-end-line="64" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="334" column="54" lean-forward="true" selection-start-line="334" selection-start-column="54" selection-end-line="334" selection-end-column="54" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/url_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1562">
+          <folding>
+            <element signature="e#15#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1835">
+          <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
+          <folding>
+            <element signature="e#15#45#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

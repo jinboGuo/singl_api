@@ -46,17 +46,6 @@ def deal_parameters(data):
                             return data
                     except:
                         print('请确认第%d行SQL语句')
-        if 'select enabled,id' in data:
-            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            if len(data_select_result):
-                try:
-                    if data_select_result[0]["enabled"] == 1:
-                        data_select_result[0]["enabled"] = 0
-                    else:
-                        data_select_result[0]["enabled"] = 1
-                    return data_select_result
-                except:
-                    print('请确认第%d行SQL语句')
         if 'select output_data_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:

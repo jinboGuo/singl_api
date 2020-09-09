@@ -1,4 +1,4 @@
-import requests,json
+import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
     tenant_id_84

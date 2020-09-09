@@ -344,10 +344,4 @@ collector_id = 'c9'
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
 receivers_list = ['jinbo.guo@inforefiner.com', '289332729@qq.com', 'qian.feng@inforefiner.com']
-receivers_test = ['jinbo.guo@inforefiner.com', 'guojinbo2006@126.com']
-
-# ----------added by guojinbo-----------------------------
-# 创建flow和schedulers时可以使用的schema和dataset
-data_flow_name =['dataflow-pivot-自动化测试','dataflow-unpivot-自动化测试','dataflow-colSplitStep-自动化测试','dataflow-ExplodeStep-自动化测试']
-work_flow_name =['workflow-pivot-自动化测试','workflow-unpivot-自动化测试','workflow-colSplitStep-自动化测试','workflow-ExplodeStep-自动化测试']
-stream_flow_name =['streamflow-pivot-自动化测试','streamflow-unpivot-自动化测试','streamflow-colSplitStep-自动化测试','streamflow-ExplodeStep-自动化测试']
+receivers_test = ['jinbo.guo@inforefiner.com', 'guojinbo2006@126.com', '289332729@qq.com', 'qian.feng@inforefiner.com']
