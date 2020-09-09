@@ -5,7 +5,7 @@ import requests
 import json
 import time
 from basic_info.setting import MySQL_CONFIG, Flows_resourceid, idnameage_schema_name, idnameage_schema_id, tenant_id_189, \
-    left_age_dataset_name, left_age_dataset_id, query_flow_name, query_flow_version, flow_update_id, HOST_189
+    left_age_dataset_name, left_age_dataset_id, query_flow_name, query_flow_version, flow_update_id, host
 from util.Open_DB import MYSQL
 from basic_info.url_info import query_flows_url, create_flows_url, query_flowname_url, query_flowname_version_url, \
     flow_update_url, \
@@ -25,7 +25,7 @@ class CreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'flow'
         data = {"name": flow_name, "flowType": "dataflow", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         response_text = json.loads(res.text)
         # 查询创建的flow id, name, type，并组装成一个dict， 和response对比
@@ -45,7 +45,7 @@ class CreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'workflow'
         data = {"name": flow_name, "flowType": "workflow", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         response_text = json.loads(res.text)
         # 查询创建的flow id, name, type，并组装成一个dict， 和response对比
@@ -65,7 +65,7 @@ class CreateFlow(unittest.TestCase):
         flow_name = time.strftime("%Y%m%d%H%M%S", time.localtime()) + 'streamflow'
         data = {"name": flow_name, "flowType": "streamflow", "resource": {"id": "8cb5f399-ec5d-4236-98d3-88f0d1d19d2b"},
                 "steps": [], "links": []}
-        res = requests.post(url=self.create_flow_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.create_flow_url, headers=get_headers(host), data=json.dumps(data))
         # response
         response_text = json.loads(res.text)
         # 查询创建的flow id, name, type，并组装成一个dict， 和response对比
@@ -95,8 +95,8 @@ class GetDataSet(unittest.TestCase):
         except Exception as e:
             raise e
         else:
-            url2 = '%s/api/datasets/%s?tenant=%s' % (HOST_189, dataset_id, tenant_id_189)
-            response = requests.get(url=url2, headers=get_headers(HOST_189)).text
+            url2 = '%s/api/datasets/%s?tenant=%s' % (host, dataset_id, tenant_id_189)
+            response = requests.get(url=url2, headers=get_headers(host)).text
             response = json.loads(response)
             response_id = response["id"]
             response_name = response["name"]
@@ -114,7 +114,7 @@ class ApiFlows(unittest.TestCase):
         time.sleep(3)
         data = {"fieldList": [{"fieldName": "parentId", "fieldValue": Flows_resourceid, "comparatorOperator": "EQUAL"}],
                 "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-        res = requests.post(url=query_flows_url, headers=get_headers(HOST_189), json=data)
+        res = requests.post(url=query_flows_url, headers=get_headers(host), json=data)
         # response
         response_text = res.json()
         # print(response_text)
@@ -137,7 +137,7 @@ class ApiFlows(unittest.TestCase):
         data = {"fieldList": [{"fieldName": "parentId", "fieldValue": Flows_resourceid, "comparatorOperator": "EQUAL"},
                               {"fieldName": "name", "fieldValue": "%students_flow%", "comparatorOperator": "LIKE"}],
                 "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-        res = requests.post(url=query_flows_url, headers=get_headers(HOST_189), json=data)
+        res = requests.post(url=query_flows_url, headers=get_headers(host), json=data)
         # response
         response_text = res.json()
         print(response_text)
@@ -174,9 +174,9 @@ class ApiFlows(unittest.TestCase):
                 '{"id":"sink_0","type":"sink","x":366,"y":173,"name":"sink_0",' \
                 '"inputConfigurations":[{"id":"input","fields":[{"column":"id"},{"column":"name"},{"column":"age"}]}],' \
                 '"outputConfigurations":null,' \
-                '"otherConfigurations":{"dataset":"' + flow_sink_dataset_name + '","schema":"' + idnameage_schema_name + '","schemaId":"' + idnameage_schema_id + '","type":"HDFS","format":"csv","separator":",","quoteChar":"\\"","escapeChar":"\\\\","path":"/tmp/py/out/source/auto/' + flow_sink_dataset_name + '","sql":"","table":"","specifiedStringColumnTypes":[{"name":"","dataType":"","length":""}],"driver":"","url":"","user":"","password":"","brokers":"","topic":"","groupId":"","partitionColumns":"","namespace":"","columns":"","description":"","expiredTime":"0","sliceTimeColumn":"","sliceType":"H","mode":"append","nullValue":""}}], "links": [{"source":"source_0","target":"sink_0","targetInput":"input"}],"tenant":{"id":"' + tenant_id + '"}}'
+                '"otherConfigurations":{"dataset":"' + flow_sink_dataset_name + '","schema":"' + idnameage_schema_name + '","schemaId":"' + idnameage_schema_id + '","type":"HDFS","format":"csv","separator":",","quoteChar":"\\"","escapeChar":"\\\\","path":"/tmp/py/out/source/auto/' + flow_sink_dataset_name + '","sql":"","table":"","specifiedStringColumnTypes":[{"name":"","dataType":"","length":""}],"driver":"","url":"","user":"","password":"","brokers":"","topic":"","groupId":"","partitionColumns":"","namespace":"","columns":"","description":"","expiredTime":"0","sliceTimeColumn":"","sliceType":"H","mode":"append","nullValue":""}}], "links": [{"source":"source_0","target":"sink_0","targetInput":"input"}],"tenant":{"id":"' + get_tenant(host) + '"}}'
 
-        res = requests.post(url=create_flows_url, headers=get_headers(HOST_189), data=data)
+        res = requests.post(url=create_flows_url, headers=get_headers(host), data=data)
         # response
         # print(res.status_code,res.text)
         response_text = json.loads(res.text)
@@ -196,14 +196,14 @@ class ApiFlows(unittest.TestCase):
     def test_case04(self):
         """根据名称查询流程"""
         # 该接口没有返回值
-        res = requests.get(url=query_flowname_url, headers=get_headers(HOST_189))
+        res = requests.get(url=query_flowname_url, headers=get_headers(host))
         # print('case04', res.text, res.status_code)
         self.assertEqual(res.status_code, 204, 'flow根据name查询返回的status_code不正确')
         time.sleep(3)
 
     def test_case05(self):
         """根据名称和版本查询历史流程"""
-        res = requests.get(url=query_flowname_version_url, headers=get_headers(HOST_189))
+        res = requests.get(url=query_flowname_version_url, headers=get_headers(host))
         print('case05',query_flowname_version_url)
         print('case05',res.status_code,res.text)
         response_text = json.loads(res.text)
@@ -235,7 +235,7 @@ class ApiFlows(unittest.TestCase):
         from basic_info.get_flow_body import get_flow_update_body
         flow_body = get_flow_update_body()
         flow_body_id = flow_update_id
-        res = requests.put(url=flow_update_url, data=json.dumps(flow_body), headers=get_headers(HOST_189))
+        res = requests.put(url=flow_update_url, data=json.dumps(flow_body), headers=get_headers(host))
         print(flow_body, flow_body_id)
         response_text = json.loads(res.text)
         # 查询创建的flow version，并组装成一个dict， 和response对比
@@ -248,7 +248,7 @@ class ApiFlows(unittest.TestCase):
         time.sleep(3)
     def test_case08(self):
         """根据老的版本查询历史流程"""
-        res = requests.get(url=query_flow_history_version_url, headers=get_headers(HOST_189))
+        res = requests.get(url=query_flow_history_version_url, headers=get_headers(host))
         # print(res.status_code,res.text)
         response_text = json.loads(res.text)
         # print(response_text["id"])
@@ -266,7 +266,7 @@ class ApiFlows(unittest.TestCase):
 
     def test_case09(self):
         """根据老的id查询历史流程"""
-        res = requests.get(url=query_flow_history_id_url, headers=get_headers(HOST_189))
+        res = requests.get(url=query_flow_history_id_url, headers=get_headers(host))
         # print(res.status_code,res.text)
         response_text = json.loads(res.text)
         print(response_text)
@@ -285,7 +285,7 @@ class ApiFlows(unittest.TestCase):
 
     def test_case10(self):
         """根据老的版本查询流程"""
-        res = requests.get(url=query_flow_version_url, headers=get_headers(HOST_189))
+        res = requests.get(url=query_flow_version_url, headers=get_headers(host))
         # print(res.status_code,res.text)
         response_text = json.loads(res.text)
         print(response_text)

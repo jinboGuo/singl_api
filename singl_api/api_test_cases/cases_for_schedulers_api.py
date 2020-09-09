@@ -86,7 +86,7 @@ class SelectSchedulers(unittest.TestCase):
     """测试scheduler查询接口"""
     def test_case01(self):
         """用来id查询scheduler"""
-        res = requests.get(url=select_by_schedulerId_url, headers=get_headers(HOST_189))
+        res = requests.get(url=select_by_schedulerId_url, headers=get_headers(host))
         schedulerid = dict_res(res.text)["id"]
         # print(scheduler_id)
         # print(type(text), text)
@@ -110,7 +110,7 @@ class QuerySchedulers(unittest.TestCase):
                 }
         # 提取出参数中的查询关键词
         fieldValue = data["fieldList"][0]["fieldValue"][1:-1]
-        res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code, res.text)
         query_results = dict_res(res.text)
         # print(type(query_results["content"]))
@@ -131,7 +131,7 @@ class QuerySchedulers(unittest.TestCase):
         # 提取出参数中的查询关键词
         fieldValue = data["fieldList"][0]["fieldValue"]
 
-        res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         query_results = dict_res(res.text)
         # print(type(query_results["content"]))
         # 将查询结果中的第一个值进行dictionary格式化
@@ -150,7 +150,7 @@ class QuerySchedulers(unittest.TestCase):
                 }
         # 提取出参数中的查询关键词
         fieldValue = data["fieldList"][0]["fieldValue"]
-        res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         # query_results = dict_res(res.text)
         # # print(type(query_results["content"]))
         # # 将查询结果中的第一个值进行dictionary格式化
@@ -171,7 +171,7 @@ class QuerySchedulers(unittest.TestCase):
         # 提取出参数中的查询关键词
         fieldValue = data["fieldList"][0]["fieldValue"]
 
-        res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         query_results = dict_res(res.text)
         # print(type(query_results["content"]))
         # 将查询结果中的第一个值进行dictionary格式化
@@ -193,7 +193,7 @@ class QuerySchedulers(unittest.TestCase):
                    "limit":8}
             data_name = data["fieldList"][0]["fieldValue"][1:-1]
             data_flowType = data["fieldList"][1]["fieldValue"]
-            res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+            res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
             # print(res.status_code, res.text)
             #
             # query_results = dict_res(res.text)
@@ -218,7 +218,7 @@ class QuerySchedulers(unittest.TestCase):
             "offset": 0,
             "limit": 8
         }
-        res = requests.post(url=self.query_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=self.query_scheduler_url, headers=get_headers(host), data=json.dumps(data))
 
         query_results = dict_res(res.text)
         # print(res.text, query_results)
@@ -236,7 +236,7 @@ class EnableDisable(unittest.TestCase):
         """启用计划"""
         data = []
         data.append(scheduler_id)
-        res = requests.post(url=enable_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=enable_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code)
         self.assertEqual(res.status_code, 204, msg="启用计划接口调用失败")
 
@@ -244,7 +244,7 @@ class EnableDisable(unittest.TestCase):
         """停用计划"""
         data = []
         data.append(scheduler_id)
-        res = requests.post(url=disable_scheduler_url, headers=get_headers(HOST_189), data=json.dumps(data))
+        res = requests.post(url=disable_scheduler_url, headers=get_headers(host), data=json.dumps(data))
         # print(res.status_code)
         self.assertEqual(res.status_code, 204, msg="停用计划接口调用失败")
 
@@ -257,7 +257,7 @@ class EnableDisable(unittest.TestCase):
         time.sleep(2)
         id2 = create_schedulers()
         data.append(id2)
-        res = requests.post(url=remove_list_url, headers=get_headers(HOST_189), json=data)
+        res = requests.post(url=remove_list_url, headers=get_headers(host), json=data)
         self.assertEqual(res.status_code, 200, "批量删除接口调用失败")
 
 

@@ -3,7 +3,7 @@ import unittest
 import requests
 import time
 from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG, HOST_189
+from basic_info.setting import MySQL_CONFIG, host
 from util.format_res import dict_res
 from basic_info.ready_dataflow_data import get_dataflow_data
 from basic_info.url_info import create_scheduler_url
@@ -24,7 +24,7 @@ class ExecuteWeirdDataflow(unittest.TestCase):
     def test_create_scheduler(self):
         print("开始执行test_create_scheduler(self)")
         data = get_dataflow_data('tc_auto_df_sink_hdfs_path使用$进行分区、使用sliceTimeColumn1545633382888')
-        res = requests.post(url=create_scheduler_url, headers=get_headers(HOST_189), json=data)
+        res = requests.post(url=create_scheduler_url, headers=get_headers(host), json=data)
         print(res.url)
         print(res.status_code)
         self.assertEqual(201, res.status_code, '创建scheduler失败，失败原因%s' % res.text)
@@ -75,8 +75,8 @@ class ExecuteWeirdDataflow(unittest.TestCase):
         if sink_dataset_list:
             L = []
             for dataset_id in sink_dataset_list:
-                priview_url = "%s/api/datasets/%s/preview?rows=5000&tenant=2d7ad891-41c5-4fba-9ff2-03aef3c729e5" % (HOST_189, dataset_id)
-                result = requests.get(url=priview_url, headers=get_headers(HOST_189))
+                priview_url = "%s/api/datasets/%s/preview?rows=5000&tenant=2d7ad891-41c5-4fba-9ff2-03aef3c729e5" % (host, dataset_id)
+                result = requests.get(url=priview_url, headers=get_headers(host))
                 L.append(result.text)
             different_result = [i for i in self.expected_result if i not in L]
             self.assertEqual(len(self.expected_result), len(L))

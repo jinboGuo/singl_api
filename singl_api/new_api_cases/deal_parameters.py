@@ -1,11 +1,10 @@
 import random
 from util.timestamp_13 import *
-from basic_info.setting import MySQL_CONFIG, Dsp_MySQL_CONFIG
+from basic_info.setting import MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-#ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data):

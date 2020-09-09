@@ -3,7 +3,7 @@ from basic_info.get_auth_token import get_headers
 import unittest, time, requests, random
 from basic_info.setting import preProcessFlowId, preProcessFlowName, processDataId
 from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG,  HOST_189
+from basic_info.setting import MySQL_CONFIG, host
 from util.format_res import get_time
 from util.timestamp_13 import timestamp_to_13
 
@@ -147,7 +147,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual(200, response.status_code, '按照修改时间查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -169,7 +169,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual(200, response.status_code, '根据数据类型_Any查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -182,7 +182,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual( 200, response.status_code,'根据数据类型_Number查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -195,7 +195,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual(200, response.status_code, '根据数据类型_String查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -208,7 +208,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual(200, response.status_code, '根据数据类型_Date查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -221,7 +221,7 @@ class QueryRule(unittest.TestCase):
                 "offset":0,
                 "limit":8
                 }
-        response = requests.post(url=self.rule_query_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.rule_query_url, headers=get_headers(host), json=data)
         # print(response.status_code, response.json())
         self.assertEqual(200, response.status_code, '根据数据类型_Other查询规则失败,失败原因%s' % response.text)
         if response.json()["totalElements"]:
@@ -231,11 +231,11 @@ class QueryRule(unittest.TestCase):
 class QueryAndUpdateRuleDetail(unittest.TestCase):
     # rule id
     sql_rule_id = CasesForRule().test_create_rule_SQL()
-    query_rule_detail_url = "%s/api/woven/rule/%s" % (HOST_189, sql_rule_id)
+    query_rule_detail_url = "%s/api/woven/rule/%s" % (host, sql_rule_id)
 
     def test_rule_detail(self):
         """查询规则详细信息：最新一条sql规则"""
-        response = requests.get(url=self.query_rule_detail_url, headers=get_headers(HOST_189))
+        response = requests.get(url=self.query_rule_detail_url, headers=get_headers(host))
         # print(response.status_code, response.url, response.json())
         self.assertEqual(200, response.status_code, '查询规则详情接口调用失败,失败原因%s' % response.text)
         self.assertEqual(self.sql_rule_id, response.json()["id"], '查询规则不一致')
@@ -274,7 +274,7 @@ class QueryAndUpdateRuleDetail(unittest.TestCase):
                 "regexFlag":0,
                 "expiredPeriod":0
                 }
-        response = requests.put(url=self.query_rule_detail_url, headers=get_headers(HOST_189), json=data)
+        response = requests.put(url=self.query_rule_detail_url, headers=get_headers(host), json=data)
         self.assertEqual(204, response.status_code, '更新规则接口调用失败,失败原因%s' % response.text)
 
 
@@ -288,7 +288,7 @@ class RemoveRule(unittest.TestCase):
         data = [item[key] for item in rule_id_list for key in item]
         # print(data)
         if data:
-            response = requests.post(url=rule_removeList_url, headers=get_headers(HOST_189), json=data)
+            response = requests.post(url=rule_removeList_url, headers=get_headers(host), json=data)
             self.assertEqual(200, response.status_code, '删除规则接口调用失败,失败原因%s' % response.text)
 
 
@@ -307,7 +307,7 @@ class CreateAnalysisModel(unittest.TestCase):
                 "processDataId": processDataId,
                 "processDataType": "Dataset"
                 }
-        response = requests.post(url=self.create_analysis_model, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.create_analysis_model, headers=get_headers(host), json=data)
         self.assertEqual(201, response.status_code, '分析模板创建失败,失败原因%s' % response.text)
         self.assertIsNotNone(response.json(), '分析模板创建后返回None')
         return response.json()["id"]
@@ -329,8 +329,8 @@ class CreateAnalysisModel(unittest.TestCase):
                "inputGroup":{"0": {"name": "inputELColumns", "value": "*"},
                              "1": {"name": "customExpression", "value": "/\\d/"}}}}
 
-        url = "%s/api/woven/zmodrules/%s" % (HOST_189, modelId)
-        response = requests.post(url=url, headers=get_headers(HOST_189), json=data)
+        url = "%s/api/woven/zmodrules/%s" % (host, modelId)
+        response = requests.post(url=url, headers=get_headers(host), json=data)
         self.assertEqual(201, response.status_code, '分析模板规则添加失败,失败原因%s' % response.text)
 
     def test_create_analysis_model2(self):
@@ -342,7 +342,7 @@ class CreateAnalysisModel(unittest.TestCase):
                 "processDataId": processDataId,
                 "processDataType": "Dataset"
                 }
-        response = requests.post(url=self.create_analysis_model, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=self.create_analysis_model, headers=get_headers(host), json=data)
         self.assertEqual(201, response.status_code, '分析模板创建失败,失败原因%s' % response.text)
         self.assertIsNotNone(response.json(), '分析模板创建后返回None')
         time.sleep(5)
@@ -356,16 +356,16 @@ class CreateAnalysisModel(unittest.TestCase):
         # data = []
         # data.append(model_id)
         data = [item[key] for item in model_id_info for key in item]
-        response = requests.post(url=zmod_removeList_url, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=zmod_removeList_url, headers=get_headers(host), json=data)
         self.assertEqual(204, response.status_code, '删除分析模板失败,失败原因%s' % response.text)
         # print(response.status_code)
 
 class QueryAnalysisRule(unittest.TestCase):
     def test_query_analysis_rule(self):
         """查看单个模板的分析规则"""
-        query_zmod_rule = "%s/api/woven/zmodrules/%s/detailslist" % (HOST_189, CreateAnalysisModel().test_create_analysis_model1())
+        query_zmod_rule = "%s/api/woven/zmodrules/%s/detailslist" % (host, CreateAnalysisModel().test_create_analysis_model1())
         data = {"fieldList": [], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-        response = requests.post(url=query_zmod_rule, headers=get_headers(HOST_189), json=data)
+        response = requests.post(url=query_zmod_rule, headers=get_headers(host), json=data)
         self.assertEqual(200, response.status_code, '查询分析模板规则的接口调用失败,失败原因%s' % response.text)
 
 

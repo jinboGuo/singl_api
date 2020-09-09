@@ -1,6 +1,6 @@
 # coding:utf-8
 from basic_info.url_info import collector_table_url
-from basic_info.setting import datasource_id,HOST_189
+from basic_info.setting import datasource_id,host
 import unittest, requests
 from basic_info.get_auth_token import get_headers
 
@@ -10,7 +10,7 @@ class ForCollector(unittest.TestCase):
     def test_01(self):
         limit = 50
         par = {'id': datasource_id, 'limit': limit}
-        response = requests.get(url=collector_table_url, headers=get_headers(HOST_189), params=par)
+        response = requests.get(url=collector_table_url, headers=get_headers(host), params=par)
         response_json = response.json()
         total = response_json['total']
         content = response_json["content"]

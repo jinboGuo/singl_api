@@ -1,6 +1,6 @@
 # coding:utf-8
 import unittest
-from basic_info.setting import MY_LOGIN_INFO2,HOST_189
+from basic_info.setting import MY_LOGIN_INFO2,host
 import requests
 import json
 from util.encrypt import encrypt_rf
