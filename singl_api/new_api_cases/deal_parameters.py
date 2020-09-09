@@ -29,7 +29,6 @@ def deal_parameters(data):
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            #print("999999", data_select_result)
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -44,19 +43,6 @@ def deal_parameters(data):
                         return dat
                 else:
                     try:
-                        if "select id from dsp_data_resource where name like 'test_hdfs_student%' order by create_time limit 1" in data:
-                            new_data.append(str(data_select_result[0]['id']))
-                            return new_data
-                        elif "select id from merce_schema where name = 'mysql_upsert_dataset_training' ORDER BY create_time desc limit 1" in data:
-                            data = data_select_result[0]["id"]
-                            return data
-                        elif "select id from merce_schema where name like 'mysql%' ORDER BY create_time desc limit 1" == data:
-                            data = data_select_result[0]["id"]
-                            return data
-                        elif "select id from merce_schema where name like" in data or "select id from merce_schema where id =" in data:
-                            new_data.append(str(data_select_result[0]['id']))
-                            return new_data
-                        else:
                             data = data_select_result[0]["id"]
                             return data
                     except:
@@ -72,35 +58,6 @@ def deal_parameters(data):
                     return data_select_result
                 except:
                     print('请确认第%d行SQL语句')
-        if 'select status,id from' in data:
-            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            #print("data_select_result1:", data_select_result)
-            if data_select_result:
-                try:
-                    if data_select_result[0]["status"] == 1 and 'is_running=1' in data:  # 正在运行服务，停止
-                        status = "2"
-                        id = str(data_select_result[0]["id"])
-                        new_data = {'status': status, 'id': id}
-                        return new_data
-                    elif data_select_result[0]["status"] == 0 and 'is_running=0' in data:  # 待部署服务，启用
-                        status = "1"
-                        id = str(data_select_result[0]["id"])
-                        new_data = {'status': status, 'id': id}
-                        return new_data
-                    elif 'is_running=2' in data:  # 失败服务，停用
-                        status = "2"
-                        id = str(data_select_result[0]["id"])
-                        new_data = {'status': status, 'id': id}
-                        return new_data
-                    else:   # 停止服务 ，启用
-                        status = "1"
-                        id = str(data_select_result[0]["id"])
-                        new_data = {'status': status, 'id': id}
-                        return new_data
-                except:
-                    return {'status': '3', 'id': '725070733486587904'}
-            else:
-                return {'status': '2', 'id': '725070733486587904'}
         if 'select output_data_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
@@ -141,6 +98,3 @@ def deal_parameters(data):
             return data
     else:
         return
-
-#data = "select id from merce_zrule where `name` like 'API_create_%' and name not like '%测试用%'  ORDER BY create_time desc limit 3"
-#print(deal_parameters(data))
