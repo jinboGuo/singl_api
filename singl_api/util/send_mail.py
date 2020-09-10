@@ -12,7 +12,7 @@ from smtplib import SMTP_SSL
 from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
 from new_api_cases.execute_cases import ab_dir
-from basic_info.setting import receivers_test, receivers_list, host
+from basic_info.setting import receivers_list, host
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
@@ -73,7 +73,7 @@ def main3(host,receivers):
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
     api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
-    cases_sheet = api_cases_table.get_sheet_by_name('84')
+    cases_sheet = api_cases_table.get_sheet_by_name('82')
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
     pass_cases = 0
@@ -336,3 +336,5 @@ def dsp_main3(host,receivers):
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
+
+dsp_main3(host,receivers_list)

@@ -100,7 +100,7 @@ Dsp_MySQL_CONFIG = {
  }
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.84:8515"
+host = "http://192.168.1.82:8515"
 #host = "http://192.168.21.123:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -129,7 +129,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_84',
+    "DB": 'merce_82',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
