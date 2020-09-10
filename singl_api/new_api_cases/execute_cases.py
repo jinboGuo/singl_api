@@ -3,7 +3,6 @@ import json
 import os
 import re
 import time
-# from selenium import webdriver
 from util import get_host
 from openpyxl import load_workbook
 import requests
@@ -12,11 +11,10 @@ from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
 from util.Open_DB import MYSQL
-from basic_info.setting import host
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data
-from basic_info.setting import tenant_id_83,data_flow_name
+from basic_info.setting import tenant_id_83
 from new_api_cases.deal_parameters import deal_parameters
-import random, unittest
+import unittest
 from new_api_cases.get_statementId import statementId_flow_use, statementId_flow_output_use
 from new_api_cases.get_statementId import statementId, statementId_no_dataset, get_sql_analyse_statement_id, \
     get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
@@ -30,7 +28,6 @@ ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('84')
 all_rows = case_table_sheet.max_row
-# print(case_table_sheet.cell(row=2, column=10).value, case_table_sheet.cell(row=2,column=12).value)
 jar_dir = ab_dir('woven-common-3.0.jar')
 
 
@@ -1245,13 +1242,3 @@ class CheckResult(unittest.TestCase):
             else:
                 print('请确认status code或response.text对比结果')
         case_table.save(ab_dir('api_cases.xlsx'))
-
-
-
-# 调试
-# 执行用例
-# deal_request_method()
-# # # # 对比用例结果
-# g = CheckResult()
-# g.deal_result()
-
