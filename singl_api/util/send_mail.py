@@ -337,4 +337,4 @@ def dsp_main3(host,receivers):
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
 
-dsp_main3(host,receivers_list)
+#dsp_main3(host,receivers_list)
