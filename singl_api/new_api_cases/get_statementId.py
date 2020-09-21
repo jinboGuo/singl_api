@@ -1,7 +1,7 @@
 import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
-    tenant_id_84
+    tenant_id_84, tenant_id_199
 from util.format_res import dict_res
 
 
@@ -25,6 +25,9 @@ def get_tenant(host):
         return tenant_id
     elif '84' in host:
         tenant_id = tenant_id_84
+        return tenant_id
+    elif '199' in host:
+        tenant_id = tenant_id_199
         return tenant_id
     else:
         print('使用的host不在预期中，请确认host信息')

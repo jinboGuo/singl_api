@@ -26,7 +26,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id,collector_sch
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('82')
+case_table_sheet = case_table.get_sheet_by_name('199')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 
@@ -279,13 +279,13 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         count_num = 0
         time.sleep(5)
         while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
-            print('再次查询前', response.text)
+            #print('再次查询前', response.text)
             response = requests.post(url=url, headers=headers, data=data)
             time.sleep(5)
             count_num += 1
             #if ('"type":"SUCCEEDED"') in response.text or ("FAILED")in response.text or ("KILLED") in response.text:
             #return
-            if count_num == 150:
+            if count_num == 80:
                 return
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -342,6 +342,24 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         print("data:", data)
         new_data = json.dumps(data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
+        print(response.text, response.status_code)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '根据Sql语句解析表名,初始化ParseSql任务'in case_detail:
+        print('开始执行：', case_detail)
+        print("data:", data)
+        #new_data = json.dumps(data, separators=(',', ':'))
+        response = requests.post(url=url, headers=headers, data=data)
+        print(response.text, response.status_code)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '初始化Sql Analyze,返回statementId'in case_detail:
+        print('开始执行：', case_detail)
+        print("data:", data)
+        #new_data = json.dumps(data, separators=(',', ':'))
+        response = requests.post(url=url, headers=headers, data=data)
         print(response.text, response.status_code)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -650,7 +668,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             new_url = url.format(cancel_statement_id)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)
-            clean_vaule(table_sheet_name, row, column)
+            clean_vaule(table_sheet_name,
+                        row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
@@ -744,7 +763,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '根据statementID确认step':
             print('开始执行：', case_detail)
-            ensure_statementId = get_step_output_ensure_statementId(host,data)
+            ensure_statementId = get_step_output_ensure_statementId(host, data)
             new_url = url.format(ensure_statementId)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)

@@ -106,10 +106,10 @@ def get_executions_data(flow_name):
         print(sql)
         print('execution_Id:', flow_info[0]["id"])
         execution_Id = flow_info[0]["id"]
-    except KeyError as e:
+    except KeyError:
             return
 
-    new_data = {"fieldList":[{"fieldName":"executionId","fieldValue": execution_Id, "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+    new_data = {"fieldList": [{"fieldName": "executionId", "fieldValue": execution_Id, "comparatorOperator": "EQUAL","logicalOperator":"AND"}], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
 
     return new_data
 

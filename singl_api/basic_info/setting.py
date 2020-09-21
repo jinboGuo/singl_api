@@ -129,12 +129,12 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce-82',
+    "DB": 'merce_199',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
 tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
-tenant_id_76 = "d545436b-3f53-4c89-b1b7-966faa5f2d13"
+tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
 tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
 tenant_id_83 = "fc75a4d5-72af-486b-9a48-c35aeaefedca"
 tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"

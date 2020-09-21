@@ -22,6 +22,7 @@ def get_tenant(host):
     tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
     tenant_id_83 = "fc75a4d5-72af-486b-9a48-c35aeaefedca"
     tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
+    tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
     if host_env_num == '189':
         return tenant_id_189
     elif host_env_num == '81':
@@ -32,5 +33,7 @@ def get_tenant(host):
         return tenant_id_82
     elif host_env_num == "83":
         return tenant_id_83
+    elif host_env_num == "199":
+        return tenant_id_199
     else:
         print("目前只处理189,81,82,83,84环境tenant，若不包含在内，请添加")
