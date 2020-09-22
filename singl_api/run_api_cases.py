@@ -1,4 +1,5 @@
 # coding:utf-8
+from basic_info.ready_dataflow_data import delete_autotest_datas
 from util.send_mail import main3
 import datetime
 from new_api_cases.execute_cases import deal_request_method
@@ -24,6 +25,9 @@ from basic_info.setting import receivers_list
 # print('开始执行用例集用例')
 # runner.run(testcase)
 # fp.close()
+
+#清除测试数据
+delete_autotest_datas()
 print('------开始执行用例-------')
 start_time = datetime.datetime.now()
 print('开始时间：', start_time)
@@ -34,6 +38,7 @@ CheckResult().deal_result()
 stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
+delete_autotest_datas()
 # 发送邮件
 main3(host, receivers_list)
 

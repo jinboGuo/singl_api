@@ -140,4 +140,21 @@ def set_upsert_datas():
                 break
     except Exception:
         return
-#set_upsert_datas()
+
+#删除测试数据
+def delete_autotest_datas():
+    print("------开始删除数据-------")
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    try:
+        flow_sql = "delete from merce_flow where name like 'test%' "
+        dataset_sql = "delete from merce_dataset where name like 'test%'"
+        schema_sql = "delete from merce_schema where name like 'test%'"
+        print("删除flow表测试数据")
+        ms.ExecuNoQuery(flow_sql.encode('utf-8'))
+        print("删除dataset表测试数据")
+        ms.ExecuNoQuery(dataset_sql.encode('utf-8'))
+        print("删除schema表测试数据")
+        ms.ExecuNoQuery(schema_sql.encode('utf-8'))
+    except:
+       return
+#delete_autotest_datas()
