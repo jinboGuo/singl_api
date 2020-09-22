@@ -40,6 +40,9 @@ def deal_parameters(data):
                     else:
                         dat = ','.join([str(i) for i in new_data])
                         return dat
+                elif "select id from merce_schema" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    return new_data
                 else:
                     try:
                             data = data_select_result[0]["id"]

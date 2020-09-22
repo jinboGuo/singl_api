@@ -26,7 +26,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id,collector_sch
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('199')
+case_table_sheet = case_table.get_sheet_by_name('841')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 
@@ -984,56 +984,78 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
-    if data and isinstance(data, str):
-        if '&' in data:
-            # 分隔参数
-            parameters = data.split('&')
-            # 拼接URL
-            new_url = url.format(parameters[0])
-            print(new_url)
-            print(parameters)
-            # 发送的参数体
-            parameters_data = parameters[-1]
-            if parameters_data.startswith('{'):
-                response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
-                print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column+4, response.text)
-            else:
-                print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
+    case_detail = case_table_sheet.cell(row=row, column=2).value
+    #if data and isinstance(data, str):
+    if case_detail == '项目目录改名':
+        print('开始执行：', case_detail)
+        print(type(data))
+        response = requests.put(url=url, headers=headers, data=data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(table_sheet_name, row, column, response.status_code)
+        write_result(table_sheet_name, row, column+4, response.text)
+    elif case_detail == '更新schema':
+        print('开始执行：', case_detail)
+        parameters = data.split('&')
+        new_url = url.format(parameters[0])
+        print(new_url)
+        print(parameters[1])
+        #new_data = json.dumps(parameters[1])
+        print(type(parameters[1]))
+        response = requests.put(url=new_url, headers=headers, data=parameters[1])
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(table_sheet_name, row, column, response.status_code)
+        write_result(table_sheet_name, row, column+4, response.text)
+    elif '&' in data:
+        # 分隔参数
+        parameters = data.split('&')
+        # 拼接URL
+        new_url = url.format(parameters[0])
+        print(new_url)
+        print(parameters)
+        # 发送的参数体
+        parameters_data = parameters[1]
+        if parameters_data.startswith('{'):
+            response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column+4, response.text)
         else:
-            if data.startswith('select id'):
-                result = ms.ExecuQuery(data)
-                new_data = result[0]["id"]
-                print(new_data, type(new_data))
-                new_url = url.format(new_data)
-                print('new_url:', new_url)
-                response = requests.put(url=new_url, headers=headers)
-                print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            elif data.startswith('{') and data.endswith('}'):
-                #print(data)
-                response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
-                print("response data:", response.status_code, response.text)
-                print(response.url, response.content)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            elif data.startswith('[') and data.endswith(']'):
-                pass
-            else:
-                new_url = url.format(data)
-                # print('new_url:', new_url)
-                response = requests.put(url=new_url, headers=headers)
-                print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
+            print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
     else:
-        print('第%s行的参数为空或格式异常' % row)
+        if data.startswith('select id'):
+            result = ms.ExecuQuery(data)
+            new_data = result[0]["id"]
+            print(new_data, type(new_data))
+            new_url = url.format(new_data)
+            print('new_url:', new_url)
+            response = requests.put(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column + 4, response.text)
+        elif data.startswith('{') and data.endswith('}'):
+            print(data)
+            response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
+            print("response data:", response.status_code, response.text)
+            print(response.url, response.content)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column + 4, response.text)
+        elif data.startswith('[') and data.endswith(']'):
+            pass
+        else:
+            new_url = url.format(data)
+            # print('new_url:', new_url)
+            response = requests.put(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column + 4, response.text)
+    #else:
+        #print('第%s行的参数为空或格式异常' % row)
 
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
