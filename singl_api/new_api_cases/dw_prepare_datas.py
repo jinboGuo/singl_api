@@ -5,7 +5,7 @@ from urllib import parse
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
 from util.format_res import dict_res
-from basic_info.setting import Dsp_MySQL_CONFIG
+from basic_info.setting import Dw_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.setting import host
 from selenium import webdriver
@@ -13,7 +13,7 @@ import random
 
 from util.timestamp_13 import get_now, get_tomorrow
 
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 

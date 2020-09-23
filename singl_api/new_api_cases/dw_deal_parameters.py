@@ -1,10 +1,10 @@
 import random
 from util.timestamp_13 import *
-from basic_info.setting import MySQL_CONFIG
+from basic_info.setting import Dw_MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data):
@@ -28,6 +28,7 @@ def deal_parameters(data):
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            #print("999999", data_select_result)
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -40,18 +41,65 @@ def deal_parameters(data):
                     else:
                         dat = ','.join([str(i) for i in new_data])
                         return dat
-                elif "select id from merce_schema where name like 'gtest_mysql_0428_training_%'" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_resource_dir" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
                 else:
                     try:
+                        if "select id from dsp_data_resource where name like 'test_hdfs_student%' order by create_time limit 1" in data:
+                            new_data.append(str(data_select_result[0]['id']))
+                            return new_data
+                        elif "select id from merce_schema where name = 'mysql_upsert_dataset_training' ORDER BY create_time desc limit 1" in data:
+                            data = data_select_result[0]["id"]
+                            return data
+                        elif "select id from merce_schema where name like 'mysql%' ORDER BY create_time desc limit 1" == data:
+                            data = data_select_result[0]["id"]
+                            return data
+                        elif "select id from merce_schema where name like" in data or "select id from merce_schema where id =" in data:
+                            new_data.append(str(data_select_result[0]['id']))
+                            return new_data
+                        else:
                             data = data_select_result[0]["id"]
                             return data
                     except:
                         print('请确认第%d行SQL语句')
+        if 'select enabled,id' in data:
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            if len(data_select_result):
+                try:
+                    if data_select_result[0]["enabled"] == 1:
+                        data_select_result[0]["enabled"] = 0
+                    else:
+                        data_select_result[0]["enabled"] = 1
+                    return data_select_result
+                except:
+                    print('请确认第%d行SQL语句')
+        if 'select status,id from' in data:
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            #print("data_select_result1:", data_select_result)
+            if data_select_result:
+                try:
+                    if data_select_result[0]["status"] == 1 and 'is_running=1' in data:  # 正在运行服务，停止
+                        status = "2"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
+                    elif data_select_result[0]["status"] == 0 and 'is_running=0' in data:  # 待部署服务，启用
+                        status = "1"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
+                    elif 'is_running=2' in data:  # 失败服务，停用
+                        status = "2"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
+                    else:   # 停止服务 ，启用
+                        status = "1"
+                        id = str(data_select_result[0]["id"])
+                        new_data = {'status': status, 'id': id}
+                        return new_data
+                except:
+                    return {'status': '3', 'id': '725070733486587904'}
+            else:
+                return {'status': '2', 'id': '725070733486587904'}
         if 'select output_data_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:

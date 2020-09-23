@@ -337,4 +337,89 @@ def dsp_main3(host,receivers):
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
 
-#dsp_main3(host,receivers_list)
+def dw_main3(host,receivers):
+    # 163邮箱smtp服务器
+    host_server = "smtp.163.com"
+    # 发件人
+    sender_163 = "ruifan_test@163.com"
+    # pwd为发件人163邮箱的授权码
+    pwd = "ruifantest2018"
+    # 发件人的邮箱
+    sender_163_mail = "ruifan_test@163.com"
+    # 收件人邮箱
+    receivers = receivers_list  # 定时任务使用
+    #receivers = receivers_test  # 调试使用
+    msg = MIMEMultipart()
+
+    # 邮件的正文内容----API执行结果
+    # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
+    api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
+    cases_sheet = api_cases_table.get_sheet_by_name('dw')
+    sheet_rows = cases_sheet.max_row
+    cases_num = sheet_rows - 1
+    pass_cases = 0
+    failed_cases = 0
+    failed_cases_detail = {}
+    failed_cases_name = []
+    for row in range(2, sheet_rows+1):
+        if cases_sheet.cell(row=row, column=14).value == 'pass':
+            pass_cases += 1
+        else:
+            failed_cases += 1
+            case_name = cases_sheet.cell(row=row, column=2).value
+            failed_cases_detail[case_name] = cases_sheet.cell(row=row, column=15).value   # 将用例name和失败原因列出
+            failed_cases_name.append(cases_sheet.cell(row=row, column=2).value)
+    # 邮件的正文内容
+    if failed_cases != 0:
+        mail_content = """各位好:
+        本次用例执行环境：%s
+        API用例共执行：%d 条
+        执行成功: %d 条
+        执行失败: %d 条
+        用例执行详情请查看附件《api_cases.xlsx》
+        失败用例名称如下：
+        %s
+        """ % (host, cases_num, pass_cases, failed_cases, failed_cases_name)
+    else:
+        mail_content = """各位好:
+        本次用例执行环境：%s
+        API用例共执行：%d 条
+        执行成功: %d 条
+        用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases)
+    # print(mail_content)
+    # 邮件标题
+    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' DSP系统API用例自动化执行日报'
+
+    # 添加邮件正文，格式 MIMEText:
+    msg.attach(MIMEText(mail_content, "plain", 'utf-8'))
+
+    # 添加api用例 excel表格
+    # 添加附件，就是加上一个MIMEBase，从本地读取一个文件:
+    # 添加API用例集执行报告
+    apicases_filepath = ab_dir('api_cases.xlsx')
+    with open(apicases_filepath, 'rb') as a:
+        # 设置附件的MIME和文件名:
+        mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
+        # 加上必要的头信息:
+        mime.add_header('Content-Disposition', 'attachment', filename='api_casex.xlsx')
+        mime.add_header('Content-ID', '<0>')
+        mime.add_header('X-Attachment-Id', '0')
+        # 把附件的内容读进来:
+        mime.set_payload(a.read())
+        # # 用Base64编码:
+        encoders.encode_base64(mime)
+        # 添加到MIMEMultipart:
+        msg.attach(mime)
+
+    # ssl登录
+    smtp = SMTP_SSL(host_server)
+    # set_debuglevel()是用来调试的。参数值为1表示开启调试模式，参数值为0关闭调试模式
+    smtp.set_debuglevel(0)
+    smtp.ehlo(host_server)
+    smtp.login(sender_163_mail, pwd)
+    msg["Subject"] = Header(mail_title, 'utf-8')
+    msg["From"] = sender_163
+    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    smtp.sendmail(sender_163_mail, receivers, msg.as_string())
+    print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    smtp.quit()

@@ -143,17 +143,17 @@ def set_upsert_datas():
 
 #删除测试数据
 def delete_autotest_datas():
-    print("------开始删除数据-------")
+    print("------开始删除测试数据-------")
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
     try:
         flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%'"
-        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test%'  "
+        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%'  "
         schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%'"
         print("删除flow表测试数据 ", flow_sql)
         ms.ExecuNoQuery(flow_sql.encode('utf-8'))
-        print("删除dataset表测试数据 ",dataset_sql)
+        print("删除dataset表测试数据 ", dataset_sql)
         ms.ExecuNoQuery(dataset_sql.encode('utf-8'))
-        print("删除schema表测试数据 ",schema_sql)
+        print("删除schema表测试数据 ", schema_sql)
         ms.ExecuNoQuery(schema_sql.encode('utf-8'))
     except:
        return

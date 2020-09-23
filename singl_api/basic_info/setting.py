@@ -69,11 +69,11 @@ email_to = {
 # }
 
 # MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
+#     'HOST': '192.168.1.82',
 #     "PORT": 3306,
 #     "USER": 'merce',
 #     "PASSWORD": '123456',
-#     "DB": 'merce',
+#     "DB": 'merce_199',
 #     'case_db': 'test'
 # }
 # # -------81环境使用-------
@@ -87,7 +87,7 @@ email_to = {
 #     "PASSWORD": 'merce',
 #     "DB": 'database_81'
 # }
-# # -------76环境使用-------
+# # -------dsp环境使用-------
 # # # HOST
 dsp_host = "http://192.168.1.82:8008"
 # # # # # 数据库连接信息
@@ -98,6 +98,17 @@ Dsp_MySQL_CONFIG = {
      "PASSWORD": 'merce',
      "DB": 'merce_83'
  }
+# # -------dw环境使用-------
+# # # HOST
+dw_host = "http://192.168.1.83:8515"
+# # # # # 数据库连接信息
+Dw_MySQL_CONFIG = {
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_83'
+}
 # -------83环境使用-------
 # HOST
 host = "http://192.168.1.199:8515"

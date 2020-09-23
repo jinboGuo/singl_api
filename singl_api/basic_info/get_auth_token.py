@@ -1,6 +1,6 @@
 # coding:utf-8
 import requests
-from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root,MY_LOGIN_INFO_dam,MY_LOGIN_INFO_root_dam,MY_LOGIN_INFO_dsp_admin,MY_LOGIN_INFO_dsp_customer
+from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root,MY_LOGIN_INFO_dam,MY_LOGIN_INFO_dsp_admin,MY_LOGIN_INFO_dsp_customer
 from util.format_res import dict_res
 # admin账户登录，普通请求
 # 获取登录后返回的X-AUTH-TOKEN
