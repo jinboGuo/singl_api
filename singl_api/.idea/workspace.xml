@@ -4,8 +4,8 @@
     <list default="true" id="0f49178f-7a3e-4093-87e3-100384954789" name="Default" comment="更新">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
     </list>
     <ignored path="singl_api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,12 +39,24 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
+        <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="989" column="35" selection-start-line="989" selection-start-column="35" selection-end-line="989" selection-end-column="35" />
+            <state relative-caret-position="229">
+              <caret line="146" column="21" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
               <folding>
-                <element signature="e#15#26#0" expanded="true" />
+                <element signature="e#15#45#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/run_api_cases.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+              <folding>
+                <element signature="e#15#79#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,7 +65,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-114">
+            <state relative-caret-position="627">
+              <caret line="47" column="55" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1729">
               <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -63,96 +87,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="188">
-              <caret line="126" selection-start-line="126" selection-end-line="126" />
-              <folding>
-                <element signature="e#15#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_api_cases.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="42" selection-start-line="42" selection-end-line="42" />
-              <folding>
-                <element signature="e#15#79#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1957">
-              <caret line="121" column="56" selection-start-line="105" selection-start-column="36" selection-end-line="105" selection-end-column="51" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1929">
-              <caret line="113" column="23" selection-start-line="113" selection-start-column="23" selection-end-line="113" selection-end-column="23" />
-              <folding>
-                <element signature="e#15#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="156" column="51" lean-forward="true" selection-start-line="144" selection-start-column="4" selection-end-line="144" selection-end-column="25" />
-              <folding>
-                <element signature="e#15#45#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
-              <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+              <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
               <folding>
                 <element signature="e#15#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
-              <folding>
-                <element signature="e#15#51#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="179" column="4" selection-start-line="179" selection-start-column="4" selection-end-line="179" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -223,7 +163,6 @@
         <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py" />
         <option value="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" />
-        <option value="$PROJECT_DIR$/basic_info/setting.py" />
         <option value="$PROJECT_DIR$/util/get_tenant.py" />
         <option value="$PROJECT_DIR$/new_api_cases/get_statementId.py" />
         <option value="$PROJECT_DIR$/util/send_mail.py" />
@@ -231,13 +170,15 @@
         <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_cases.py" />
-        <option value="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" />
         <option value="$PROJECT_DIR$/run_api_cases.py" />
+        <option value="$PROJECT_DIR$/basic_info/setting.py" />
+        <option value="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="131" />
+    <option name="x" value="218" />
+    <option name="y" value="40" />
     <option name="width" value="1749" />
     <option name="height" value="1046" />
   </component>
@@ -256,6 +197,16 @@
             <path>
               <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="basic_info" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="new_api_cases" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -450,7 +401,7 @@
       <workItem from="1600138232260" duration="250000" />
       <workItem from="1600139528657" duration="3587000" />
       <workItem from="1600400929912" duration="2695000" />
-      <workItem from="1600655773548" duration="34157000" />
+      <workItem from="1600655773548" duration="46666000" />
     </task>
     <task id="LOCAL-00001" summary="更新邮件为tester">
       <created>1592186053181</created>
@@ -704,7 +655,35 @@
       <option name="project" value="LOCAL" />
       <updated>1600761411542</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="更新">
+      <created>1600768210264</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1600768210264</updated>
+    </task>
+    <task id="LOCAL-00038" summary="更新">
+      <created>1600768716514</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1600768716514</updated>
+    </task>
+    <task id="LOCAL-00039" summary="更新">
+      <created>1600768747473</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1600768747473</updated>
+    </task>
+    <task id="LOCAL-00040" summary="更新">
+      <created>1600775976761</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1600775976761</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -716,7 +695,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="444618000" />
+    <option name="totallyTimeSpent" value="457127000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -728,15 +707,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="131" y="0" width="1749" height="1046" extended-state="0" />
+    <frame x="218" y="40" width="1749" height="1046" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42276424" visible="true" weight="0.18176436" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.42276424" visible="true" weight="0.18176436" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.57723576" side_tool="true" weight="0.18976545" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8436214" visible="true" weight="0.32456142" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8436214" visible="true" weight="0.32456142" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3991228" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32894737" />
@@ -812,11 +792,11 @@
     <SUITE FILE_PATH="coverage/singl_api$timestamp_13.coverage" NAME="timestamp_13 Coverage Results" MODIFIED="1596452906265" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$run_dsp_cases.coverage" NAME="run_dsp_cases Coverage Results" MODIFIED="1600680571224" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$send_mail.coverage" NAME="send_mail Coverage Results" MODIFIED="1599651151754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
-    <SUITE FILE_PATH="coverage/singl_api$ready_dataflow_data.coverage" NAME="ready_dataflow_data Coverage Results" MODIFIED="1600768011943" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/basic_info" />
+    <SUITE FILE_PATH="coverage/singl_api$ready_dataflow_data.coverage" NAME="ready_dataflow_data Coverage Results" MODIFIED="1600832411478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/basic_info" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_dsp_cases_py.coverage" NAME="Unittests in execute_dsp_cases.py Coverage Results" MODIFIED="1592450249285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$get_statementId.coverage" NAME="get_statementId Coverage Results" MODIFIED="1600668058603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$test.coverage" NAME="test Coverage Results" MODIFIED="1596681607319" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$run_api_cases.coverage" NAME="run_api_cases Coverage Results" MODIFIED="1600764932920" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/singl_api$run_api_cases.coverage" NAME="run_api_cases Coverage Results" MODIFIED="1600775852573" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$prepare_datas_for_cases.coverage" NAME="prepare_datas_for_cases Coverage Results" MODIFIED="1592447910514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$deal_parameters.coverage" NAME="deal_parameters Coverage Results" MODIFIED="1592308252246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_cases_py.coverage" NAME="Unittests in execute_cases.py Coverage Results" MODIFIED="1600668628899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
@@ -1048,16 +1028,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/count_items.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1111,39 +1081,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/Open_DB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/get_tenant.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="665">
           <caret line="35" column="31" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="179" column="4" selection-start-line="179" selection-start-column="4" selection-end-line="179" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="306" column="55" selection-start-line="306" selection-start-column="55" selection-end-line="306" selection-end-column="55" />
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1171,26 +1114,6 @@
     <entry file="file://$PROJECT_DIR$/new_api_cases/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="989" column="35" selection-start-line="989" selection-start-column="35" selection-end-line="989" selection-end-column="35" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-114">
-          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1957">
@@ -1203,11 +1126,68 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1929">
-          <caret line="113" column="23" selection-start-line="113" selection-start-column="23" selection-end-line="113" selection-end-column="23" />
+        <state relative-caret-position="257">
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
           <folding>
             <element signature="e#15#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="179" column="4" selection-start-line="179" selection-start-column="4" selection-end-line="179" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="47" column="55" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1729">
+          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1784">
+          <caret line="207" column="21" selection-start-line="207" selection-start-column="21" selection-end-line="207" selection-end-column="21" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/Open_DB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1221,22 +1201,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
+    <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        <state relative-caret-position="229">
+          <caret line="146" column="21" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
           <folding>
-            <element signature="e#15#79#0" expanded="true" />
+            <element signature="e#15#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
+    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="156" column="51" lean-forward="true" selection-start-line="144" selection-start-column="4" selection-end-line="144" selection-end-column="25" />
+        <state relative-caret-position="357">
+          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
           <folding>
-            <element signature="e#15#45#0" expanded="true" />
+            <element signature="e#15#79#0" expanded="true" />
           </folding>
         </state>
       </provider>
