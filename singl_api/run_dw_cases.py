@@ -36,7 +36,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-dw_main3(dw_host, receivers_list)
+#dw_main3(dw_host, receivers_list)
 
 
 

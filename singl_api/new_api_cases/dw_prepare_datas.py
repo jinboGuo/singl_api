@@ -17,115 +17,29 @@ ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PA
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 
-def get_job_tasks_id(job_id):
-    url = '%s/api/woven/collectors/%s/tasks' % (host, job_id)
-    data = {"fieldList": [], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-    response = requests.post(url=url, headers=get_headers(host), json=data)
-
-    all_task_id = []
-    try:
-        tasks = dict_res(response.text)['content']
-        for item in tasks:
-            task_id = item['id']
-            all_task_id.append(task_id)
-    except Exception as e:
-        print(e)
-        return
-    else:
-        return all_task_id
-
-
-def create_new_user(data):
-    url = '%s/api/woven/users' % host
-    response = requests.post(url=url, headers=get_headers(host), json=data)
-    user_id = dict_res(response.text)["id"]
-    #print(user_id)
-    return user_id
-
-def collector_schema_sync(data):
-    """获取采集器元数据同步后返回的task id"""
-    collector = 'c9'
-    url = '%s/api/woven/collectors/%s/schema/fetch' % (host, collector)
-    response = requests.post(url=url, headers=get_headers(host), data=data)
-    time.sleep(3)
-    #print(response.text)
-    return response.text
-
-
-def get_flow_id():
-    name = "gbj_for_project_removeList" + str(random.randint(0,999999999999))
-    data = {"name": name, "flowType": "dataflow",
-            "projectEntity": {"id": "e47fe6f4-6086-49ed-81d1-68704aa82f2d"}, "steps": [], "links": []}
-    url = '%s/api/flows/create' % host
-    response = requests.post(url=url, headers=get_headers(), json=data)
-    flow_id = dict_res(response.text)['id']
-    #print(flow_id)
-    return flow_id
-
-def resource_data_push_event_hdfs_txt(data):
+def query_business_data(data):
 
     try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
-    except:
-        return "725053770861379584"
-    new_data = {"name":"test_hdfs_txt_event","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":0,"transferType":1,"custTableName":"","custDataSourceId":"715969033517662208","custDataSourceName":"test_hdfs_text0529","otherConfiguration":{"scheduleType":"event","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
-    #print(new_data)
-    return new_data
-
-def resource_data_push_once_mysql(data):
-
-    try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
-    except:
-        return "725053770861379584"
-    new_data = {"name":"test_once_mysql","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":1,"custTableName":"student_2020","custDataSourceId":"715961791531712512","custDataSourceName":"test_mysql","otherConfiguration":{"scheduleType":"once","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
-    #print(new_data)
-    return new_data
-
-def resource_data_push_once_hdfs_csv(data):
-
-    try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
-    except:
-        return "725053770861379584"
-    new_data = {"name":"test_once_hdfs_csv","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":0,"custTableName":"","custDataSourceId":"715880057666535424","custDataSourceName":"test_hdfs_csv","otherConfiguration":{"scheduleType":"once","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
-    #print(new_data)
-    return new_data
-
-def push_resource_data_open(data):
-
-    try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+        id = flow_info[0]["id"]
+        print('business-id: ', id)
     except :
-        return "725053770861379584"
-    new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"], "isPull":0,"isPush":1,"pullServiceMode":[],"pushServiceMode":["1","0"],"expiredTime":"","openStatus":1,"description":""}
-    return new_data
+        return "725053770861379584", 0
+    new_data = {"params":{"pageable":{"pageNum":0,"pageSize":8,"pageable":"true"}}}
+    return new_data, id
 
-def pull_resource_data_open(data):
+def update_business_data(data):
     try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+        id = flow_info[0]["id"]
+        print('business-id:', id)
     except :
         return "722830072351817728"
-    if 'gjb_sink_es' in data:
-        new_data = {"name": flow_info[0]["name"], "id": flow_info[0]["id"],"isPull": 1, "isPush": 0, "pullServiceMode": ["2"], "pushServiceMode": [], "expiredTime":"","openStatus":1,"description":""}
-        return new_data
-    elif 'snow_dataset_dsp' in data:
-        new_data = {"name":flow_info[0]["name"], "id": flow_info[0]["id"], "isPull": 1, "isPush": 0, "pullServiceMode": ["2"], "pushServiceMode": [], "expiredTime":"","openStatus":1,"description":""}
-        return new_data
-    else:
-        return
+    new_data = {"id": flow_info[0]["id"], "tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator":"admin","createTime":"2020-09-23T09:37:24.000+0000","lastModifier":"admin","lastModifiedTime":"2020-09-23T09:37:24.000+0000","name":"api_auto_business随机数","alias":"api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
+    return new_data, id
+
 def resource_data_pull_es(data):
 
     try:
