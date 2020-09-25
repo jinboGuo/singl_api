@@ -300,6 +300,16 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif case_detail == '执行关联表结果预览sql':
+        print('开始执行：', case_detail)
+        new_data = {"pageable":{"pageNum":1,"pageSize":10,"pageable":"true"},"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}
+        new_url = url.format(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        response = requests.post(url=new_url, headers=headers, data=new_data)
+        #print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif '登录' in case_detail:
         new_headers = {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic ZHNwOjEyMzQ1Ng==', "Accept": "application/json"}
         if case_detail == '管理员登录':

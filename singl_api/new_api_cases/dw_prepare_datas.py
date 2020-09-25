@@ -4,6 +4,7 @@ import time
 from urllib import parse
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
+from new_api_cases.dw_deal_parameters import deal_parameters
 from util.format_res import dict_res
 from basic_info.setting import Dw_MySQL_CONFIG
 from util.Open_DB import MYSQL
@@ -17,101 +18,122 @@ ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PA
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 
-def query_business_data(data):
-
+def query_subject_data(data):
     try:
         sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        id = flow_info[0]["id"]
-        print('business-id: ', id)
+        business_id = flow_info[0]["id"]
+        print('business-id:', business_id)
     except :
-        return "725053770861379584", 0
-    new_data = {"params":{"pageable":{"pageNum":0,"pageSize":8,"pageable":"true"}}}
-    return new_data, id
+        return "722830072351817728"
+    new_data = {"params": {"pageable": {"pageNum": 0, "pageSize": 8, "pageable": "true"}}}
+    return new_data, business_id
 
 def update_business_data(data):
     try:
         sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        id = flow_info[0]["id"]
-        print('business-id:', id)
+        business_id = flow_info[0]["id"]
+        print('business-id:', business_id)
+    except :
+        return "722830072351817728", 0
+    new_data = {"id": business_id, "tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator":"admin","createTime":"2020-09-23T09:37:24.000+0000","lastModifier":"admin","lastModifiedTime":"2020-09-23T09:37:24.000+0000","name":"api_auto_business随机数","alias":"api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
+    return new_data, business_id
+
+def add_subject_data(data):
+
+    try:
+        sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        business_id = flow_info[0]["id"]
+        print('business-id:', business_id)
     except :
         return "722830072351817728"
-    new_data = {"id": flow_info[0]["id"], "tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator":"admin","createTime":"2020-09-23T09:37:24.000+0000","lastModifier":"admin","lastModifiedTime":"2020-09-23T09:37:24.000+0000","name":"api_auto_business随机数","alias":"api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
-    return new_data, id
+    new_data = {"alias": "api_subject", "abbr": "api_subject随机数", "name": "api_auto_subject随机数", "description":"api_auto_subject","bussinessId": business_id}
+    return new_data, business_id
 
-def resource_data_pull_es(data):
-
-    try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
-    except:
-        return "725053770861379584"
-    if 'gjb_sink_es' in data:
-        new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"gjb_sink_es","description":"","serviceMode":2,"transferType":0,"dataResId": flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}}]}
-        return new_data
-    elif 'snow_dataset_dsp' in data:
-        new_data = {"custAppId":"715879478366044160","custAppName":"192.168.2.142","name":"snow_dataset_dsp_","description":"","serviceMode":2,"transferType":0,"dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"fieldMappings":[{"index":0,"sourceField":"Div5AirportID","sourceType":"int","targetField":"Div5AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginAirportSeqID","sourceType":"int","targetField":"OriginAirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1AirportID","sourceType":"int","targetField":"Div1AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSElapsedTime","sourceType":"int","targetField":"CRSElapsedTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestCityMarketID","sourceType":"int","targetField":"DestCityMarketID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4TailNum","sourceType":"string","targetField":"Div4TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3WheelsOff","sourceType":"string","targetField":"Div3WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TotalAddGTime","sourceType":"string","targetField":"TotalAddGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestState","sourceType":"string","targetField":"DestState","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginCityName","sourceType":"string","targetField":"OriginCityName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestStateFips","sourceType":"string","targetField":"DestStateFips","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5TailNum","sourceType":"string","targetField":"Div5TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WheelsOn","sourceType":"int","targetField":"WheelsOn","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FirstDepTime","sourceType":"string","targetField":"FirstDepTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4WheelsOn","sourceType":"string","targetField":"Div4WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3WheelsOn","sourceType":"string","targetField":"Div3WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Diverted","sourceType":"int","targetField":"Diverted","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDelay","sourceType":"int","targetField":"ArrDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginAirportID","sourceType":"int","targetField":"OriginAirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TailNum","sourceType":"string","targetField":"TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSDepTime","sourceType":"int","targetField":"CRSDepTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FlightDate","sourceType":"date","targetField":"FlightDate","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"LateAircraftDelay","sourceType":"int","targetField":"LateAircraftDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1LongestGTime","sourceType":"string","targetField":"Div1LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2AirportID","sourceType":"int","targetField":"Div2AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DayOfWeek","sourceType":"int","targetField":"DayOfWeek","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"NASDelay","sourceType":"int","targetField":"NASDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4AirportID","sourceType":"int","targetField":"Div4AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2WheelsOff","sourceType":"string","targetField":"Div2WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestCityName","sourceType":"string","targetField":"DestCityName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginStateFips","sourceType":"string","targetField":"OriginStateFips","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3AirportSeqID","sourceType":"int","targetField":"Div3AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4WheelsOff","sourceType":"string","targetField":"Div4WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"LongestAddGTime","sourceType":"string","targetField":"LongestAddGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TaxiOut","sourceType":"int","targetField":"TaxiOut","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ActualElapsedTime","sourceType":"int","targetField":"ActualElapsedTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDelay","sourceType":"int","targetField":"DepDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4AirportSeqID","sourceType":"int","targetField":"Div4AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Month","sourceType":"int","targetField":"Month","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepartureDelayGroups","sourceType":"string","targetField":"DepartureDelayGroups","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5TotalGTime","sourceType":"string","targetField":"Div5TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4Airport","sourceType":"string","targetField":"Div4Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginWac","sourceType":"int","targetField":"OriginWac","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DistanceGroup","sourceType":"int","targetField":"DistanceGroup","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginCityMarketID","sourceType":"int","targetField":"OriginCityMarketID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrTimeBlk","sourceType":"string","targetField":"ArrTimeBlk","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CancellationCode","sourceType":"string","targetField":"CancellationCode","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2TailNum","sourceType":"string","targetField":"Div2TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepTime","sourceType":"int","targetField":"DepTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrTime","sourceType":"int","targetField":"ArrTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WeatherDelay","sourceType":"int","targetField":"WeatherDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5LongestGTime","sourceType":"string","targetField":"Div5LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDel15","sourceType":"int","targetField":"DepDel15","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2Airport","sourceType":"string","targetField":"Div2Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginState","sourceType":"string","targetField":"OriginState","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1WheelsOff","sourceType":"string","targetField":"Div1WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3AirportID","sourceType":"int","targetField":"Div3AirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1TotalGTime","sourceType":"string","targetField":"Div1TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivActualElapsedTime","sourceType":"string","targetField":"DivActualElapsedTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDelayMinutes","sourceType":"int","targetField":"ArrDelayMinutes","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4TotalGTime","sourceType":"string","targetField":"Div4TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivArrDelay","sourceType":"string","targetField":"DivArrDelay","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivReachedDest","sourceType":"string","targetField":"DivReachedDest","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1Airport","sourceType":"string","targetField":"Div1Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CarrierDelay","sourceType":"int","targetField":"CarrierDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Carrier","sourceType":"string","targetField":"Carrier","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepTimeBlk","sourceType":"string","targetField":"DepTimeBlk","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Dest","sourceType":"string","targetField":"Dest","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2AirportSeqID","sourceType":"int","targetField":"Div2AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TaxiIn","sourceType":"int","targetField":"TaxiIn","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivAirportLandings","sourceType":"string","targetField":"DivAirportLandings","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DivDistance","sourceType":"string","targetField":"DivDistance","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestAirportSeqID","sourceType":"int","targetField":"DestAirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"OriginStateName","sourceType":"string","targetField":"OriginStateName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Distance","sourceType":"int","targetField":"Distance","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Year","sourceType":"int","targetField":"Year","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5WheelsOff","sourceType":"string","targetField":"Div5WheelsOff","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"CRSArrTime","sourceType":"int","targetField":"CRSArrTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DepDelayMinutes","sourceType":"int","targetField":"DepDelayMinutes","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2WheelsOn","sourceType":"string","targetField":"Div2WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestWac","sourceType":"int","targetField":"DestWac","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1WheelsOn","sourceType":"string","targetField":"Div1WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div4LongestGTime","sourceType":"string","targetField":"Div4LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrivalDelayGroups","sourceType":"int","targetField":"ArrivalDelayGroups","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3TotalGTime","sourceType":"string","targetField":"Div3TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2LongestGTime","sourceType":"string","targetField":"Div2LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"UniqueCarrier","sourceType":"string","targetField":"UniqueCarrier","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"FlightNum","sourceType":"string","targetField":"FlightNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Flights","sourceType":"int","targetField":"Flights","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DayOfMonth","sourceType":"int","targetField":"DayOfMonth","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"ArrDel15","sourceType":"int","targetField":"ArrDel15","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5AirportSeqID","sourceType":"int","targetField":"Div5AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1TailNum","sourceType":"string","targetField":"Div1TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5Airport","sourceType":"string","targetField":"Div5Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div5WheelsOn","sourceType":"string","targetField":"Div5WheelsOn","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"AirlineID","sourceType":"int","targetField":"AirlineID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"AirTime","sourceType":"int","targetField":"AirTime","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestAirportID","sourceType":"int","targetField":"DestAirportID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"WheelsOff","sourceType":"int","targetField":"WheelsOff","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Cancelled","sourceType":"int","targetField":"Cancelled","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div2TotalGTime","sourceType":"string","targetField":"Div2TotalGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"DestStateName","sourceType":"string","targetField":"DestStateName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Origin","sourceType":"string","targetField":"Origin","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3Airport","sourceType":"string","targetField":"Div3Airport","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3LongestGTime","sourceType":"string","targetField":"Div3LongestGTime","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Quarter","sourceType":"int","targetField":"Quarter","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div1AirportSeqID","sourceType":"int","targetField":"Div1AirportSeqID","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"SecurityDelay","sourceType":"int","targetField":"SecurityDelay","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"Div3TailNum","sourceType":"string","targetField":"Div3TailNum","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]}]}
-        return new_data
-    else:
-        return
-
-def resource_data(data):
+def update_subject_data(data):
 
     try:
-        sql = "select id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
+        sql = "select id,business_id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
-        print('resource_id:', flow_info[0]["id"])
-    except:
-        return
-    new_data = {"name": "test_hdfs_student2020","datasetName":"test_hdfs_student2020","storage":"HDFS","encoder":"UTF-8","incrementField":"age","openStatus":1,"categoryId":"0","datasetId":"82e50c27-8b4a-440d-8807-eb970e6a7571","expiredTime":0,"type":0,"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"id":flow_info[0]["id"]}
+        subject_id, business_id = flow_info[0]["id"], flow_info[0]["business_id"]
+        print('subject-id:', subject_id)
+    except :
+        return "722830072351817728"
+    new_data = {"id": subject_id, "tenantId": "e5188f23-d472-4b2d-9cfa-97a0d65994cf", "owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator": "admin", "createTime": "2020-09-24T02:43:04.000+0000", "lastModifier": "admin","lastModifiedTime":"2020-09-24T02:43:04.000+0000","name":"api_auto_subject随机数","alias":"api_subject随机数","abbr":"api_subject随机数", "businessId": business_id, "parentId":"0","description":"api_auto_subject","children":[],"selfCode":"758639635533398016","parentCode":"0"}
+    return new_data, subject_id
+
+def add_projects_data(data):
+
+    try:
+        sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        business_id = flow_info[0]["id"]
+        print('business-id:', business_id)
+    except :
+        return "722830072351817728"
+    new_data = {"alias": "api_projects", "name": "api_auto_projects随机数", "type": "", "description": "api_auto_projects","businessId": business_id, "abbr": "api_projects随机数"}
+    return new_data, business_id
+
+def update_projects_data(data):
+
+    try:
+        sql = "select id,business_id from dw_project where name like '%s%%%%' order by create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        project_id, business_id = flow_info[0]["id"], flow_info[0]["business_id"]
+        print('project-id:', project_id)
+    except :
+        return "722830072351817728"
+    new_data = {"id": project_id, "tenantId": "e5188f23-d472-4b2d-9cfa-97a0d65994cf", "owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator": "admin", "createTime": "2020-09-24T05:52:09.000+0000", "lastModifier": "admin","lastModifiedTime": "2020-09-24T05:52:09.000+0000", "name": "api_auto_projects随机数", "alias": "api_projects", "abbr": "api_projects随机数", "businessId": business_id, "description": "api_auto_projects"}
+    return new_data, project_id
+
+def update_tag_data(data):
+
+    try:
+        sql = "select id from dw_tagdef where name like '%s%%%%' order by create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        tag_id = flow_info[0]["id"]
+        print('tag-id:', tag_id)
+    except :
+        return "722830072351817728"
+    new_data = {"id": tag_id, "tenantId": "e5188f23-d472-4b2d-9cfa-97a0d65994cf", "owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320", "creator": "admin", "createTime": "2020-09-24T08:21:53.000+0000", "lastModifier": "admin", "lastModifiedTime": "2020-09-24T08:21:53.000+0000","name":"api_auto_tag随机数","alias":"api_tag随机数","abbr":"","parentTagOption":"","options":[{"name":"大","alias":"big","orderNum":""},{"name":"小","alias":"small","orderNum":""},{"name":"长","alias":"long","orderNum":""}],"description":"api_auto_tag","scope":"","isSetName":1}
+    return new_data, tag_id
+
+def add_taggroup_data(data):
+    try:
+        sql = "select id from dw_tagdef where name like '%s%%%%' order by create_time desc limit 1" % data
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        tag_id = flow_info[0]["id"]
+        print('tag-id:', tag_id)
+    except :
+        return "722830072351817728"
+    new_data = {"alias": "api_taggroup随机数", "createTime": "", "description": "api_auto_taggroup", "tagIds": tag_id, "name": "api_auto_taggroup随机数"}
     return new_data
 
-def appconfig_data(data):
+def update_taggroup_data(data):
 
     try:
-        sql = "select id from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        sql = "select id,tag_ids from dw_taggroup where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_dc_appconfig:', flow_info[0]["id"])
-    except:
-        return
-    new_data = {"accessIp":["192.168.2.142"],"name":"autotest_appconfig_随机数","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","creator":"customer3","createTime":"2020-06-28 14:11:07","lastModifier":"customer3","lastModifiedTime":"2020-06-28 14:22:00","description":"","id":flow_info[0]["id"],"custId":"b398ff8e-8a90-436d-adc6-08ee08b42958","custName":"customer3","accessKey":"015a2147-34c4-4456-ad6d-a94b513ad6e0","publicKey":"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKvJ3JxEUIYtnPDK3Jcn+naxiDgEzCUWeUnM56dInCVTduhBuBPbkmi7Oor+4dZ/eF5+q/h7Ay/o1WHuFbwf6NUCAwEAAQ=="}
-    return new_data
-def cust_data_source(data):
+        taggroup_id, tag_id = flow_info[0]["id"], flow_info[0]["tag_ids"]
+        print('taggroup-id tag-id:', taggroup_id, tag_id)
+    except :
+        return "722830072351817728",0
+    new_data = {"id": taggroup_id, "tenantId": "e5188f23-d472-4b2d-9cfa-97a0d65994cf", "owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator": "admin", "createTime": "2020-09-24T09:39:41.000+0000", "lastModifier": "admin", "lastModifiedTime": "2020-09-24T10:13:34.000+0000","name":"api_auto_taggroup随机数","alias":"api_taggroup随机数", "abbr": "", "description": "", "tagIds": tag_id}
+    return new_data, taggroup_id
+
+def update_namerule_data(data):
 
     try:
-        sql = "select id from dsp_cust_data_source where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        sql = "select id from dw_name_rules where alias like '%s%%%%'  order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_cust_data_source:', flow_info[0]["id"])
-    except:
-        return
-    new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime":"2020-06-24 19:25:05","lastModifier":"customer3","lastModifiedTime":"2020-06-24 19:25:05"}
-    return new_data
-
-def corn_application_oracle(data):
-
-    try:
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', flow_info[0]["id"], flow_info[0]["name"])
-    except:
-        return "725053770861379584"
-    new_data = {"name":"test_cron_oracle","description":"","dataResId":flow_info[0]["id"],"dataResName":flow_info[0]["name"],"serviceMode":1,"transferType":1,"custTableName":"autotest_student","custDataSourceId":"717026599119093760","custDataSourceName":"test_oracle","otherConfiguration":{"scheduleType":"cron","cron":"0 0/5 * * * ? ","startTime": get_now(), "endTime": get_tomorrow()},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
-    print(new_data)
-    return new_data
-
-
-def admin_flow_id(data):
-    try:
-        url = '%s/api/dsp/platform/service/infoById?id=%s' % (host, data)
-        response = requests.get(url=url, headers=get_headers_admin(host))
-        flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
-        print(flow_id)
-        return flow_id
-    except:
-        return 1
+        namerule_id = flow_info[0]["id"]
+        print('namerule-id:', namerule_id)
+    except :
+        return "722830072351817728",0
+    new_data = {"id": namerule_id, "tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf", "owner":"83f2ad7f-1d9f-4ad0-953f-db8e7d285320","creator":"admin","createTime":"2020-09-25T03:29:45.000+0000","lastModifier":"admin","lastModifiedTime":"2020-09-25T03:44:53.000+0000","name":"metadata_subject","alias":"api_auto_namerule随机数","abbr":"api_rule随机数","description":"","rules":"metadata"}
+    return new_data, namerule_id
 
 def customer_flow_id(data):
     try:
