@@ -877,7 +877,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             print('开始执行：', case_detail)
-            if '&' in data:  # 包含多个参数并以&分割
+            if '&' in str(data):  # 包含多个参数并以&分割
                 parameters = data.split('&')
                 # 处理存在select语句中的参数，并重新赋值
                 for i in range(len(parameters)):
@@ -1007,7 +1007,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
         clean_vaule(table_sheet_name, row, column)
         write_result(table_sheet_name, row, column, response.status_code)
         write_result(table_sheet_name, row, column+4, response.text)
-    elif '&' in data:
+    elif '&' in str(data):
         # 分隔参数
         parameters = data.split('&')
         # 拼接URL

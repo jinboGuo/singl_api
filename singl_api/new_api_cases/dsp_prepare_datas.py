@@ -11,7 +11,7 @@ from basic_info.setting import host
 from selenium import webdriver
 import random
 
-from util.timestamp_13 import get_now, get_tomorrow
+from util.timestamp_13 import get_now, get_tomorrow, data_now
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -169,7 +169,7 @@ def appconfig_data(data):
         print('dsp_dc_appconfig:', flow_info[0]["id"])
     except:
         return
-    new_data = {"accessIp":["192.168.2.142"],"name":"autotest_appconfig_随机数","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","creator":"customer3","createTime":"2020-06-28 14:11:07","lastModifier":"customer3","lastModifiedTime":"2020-06-28 14:22:00","description":"","id":flow_info[0]["id"],"custId":"b398ff8e-8a90-436d-adc6-08ee08b42958","custName":"customer3","accessKey":"015a2147-34c4-4456-ad6d-a94b513ad6e0","publicKey":"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKvJ3JxEUIYtnPDK3Jcn+naxiDgEzCUWeUnM56dInCVTduhBuBPbkmi7Oor+4dZ/eF5+q/h7Ay/o1WHuFbwf6NUCAwEAAQ=="}
+    new_data = {"accessIp":["192.168.2.142"],"name":"autotest_appconfig_随机数","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now(),"description":"","id":flow_info[0]["id"],"custId":"b398ff8e-8a90-436d-adc6-08ee08b42958","custName":"customer3","accessKey":"015a2147-34c4-4456-ad6d-a94b513ad6e0","publicKey":"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKvJ3JxEUIYtnPDK3Jcn+naxiDgEzCUWeUnM56dInCVTduhBuBPbkmi7Oor+4dZ/eF5+q/h7Ay/o1WHuFbwf6NUCAwEAAQ=="}
     return new_data
 def cust_data_source(data):
 
@@ -179,7 +179,7 @@ def cust_data_source(data):
         print('dsp_cust_data_source:', flow_info[0]["id"])
     except:
         return
-    new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime":"2020-06-24 19:25:05","lastModifier":"customer3","lastModifiedTime":"2020-06-24 19:25:05"}
+    new_data = {"id":flow_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":"b398ff8e-8a90-436d-adc6-08ee08b42958","enabled":1,"tenantId":"e5188f23-d472-4b2d-9cfa-97a0d65994cf","creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now()}
     return new_data
 
 def corn_application_oracle(data):
@@ -549,108 +549,3 @@ def application_push_approval(data):
             return
     except:
        return "723150172099444736"
-def get_applicationId():
-    """进入yarn页面，获取状态为finished的application id"""
-    # 进入yarn页面，获取状态为finished的application id
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.implicitly_wait(10)
-    # 进入ambari页面，然后进入yarn页面
-    driver.get('http://192.168.1.81:8080/#/main/services/YARN/heatmaps')
-    driver.find_element_by_xpath('.//div[@class="well login span4"]/input[1]').send_keys('admin')
-    driver.find_element_by_xpath('.//div[@class="well login span4"]/input[2]').send_keys('admin')
-    driver.find_element_by_xpath('.//div[@class="well login span4"]/button').click()
-    driver.get('http://info2:8088/cluster')
-    driver.get('http://info2:8088/cluster/apps/FINISHED')
-    # 获取所有finished状态的application id
-    all_applications = driver.find_elements_by_xpath('.//*[@id="apps"]/tbody/tr/td[1]/a')
-    # 返回第一个application id，提供给case进行查询该applicationId的log
-    application_id = all_applications[0].text
-    time.sleep(3)
-    # print(application_id)
-    # print(type(application_id))
-    return application_id
-
-
-def get_woven_qaoutput_dataset_path():
-    """查找woven/qaoutput下的所有数据集name，并组装成woven/qaoutput/datasetname的格式"""
-    url = '%s/api/datasets/query' % host
-    data = {"fieldList":[{"fieldName":"parentId","fieldValue":"4f4d687c-12b3-4e09-9ba9-bcf881249ea0","comparatorOperator":"EQUAL","logicalOperator":"AND"},{"fieldName":"owner","fieldValue":"2059750c-a300-4b64-84a6-e8b086dbfd42","comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
-    response = requests.post(url=url,headers=get_headers(), json=data)
-    contents = dict_res(response.text)["content"]
-    path = []
-    for content in contents:
-        content_path = 'woven/qaoutput/' + content["name"]
-        content_path.replace('/', '%252F')   # 应该使用parse.quote() 进行URL编码进行处理。稍后解决
-        path.append(content_path.replace('/', '%252F'))
-    # print(path)
-    return path
-
-dir1 = ab_dir('woven-common-3.0.jar')
-
-
-def upload_jar_file_filter():
-    url = "%s/api/processconfigs/uploadjar/filter class" % host
-    # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-    # print(response.text)
-        filter_fileName = dict_res(response.text)["fileName"]
-    except:
-        return
-    else:
-        return filter_fileName
-
-
-def upload_jar_file_workflow():
-    url = "%s/api/processconfigs/uploadjar/workflow selector" % host
-    print(url)
-    # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-        print(response.text)
-        workflow_fileName = dict_res(response.text)["fileName"]
-        print(workflow_fileName)
-    except:
-        return
-    else:
-        return workflow_fileName
-
-
-def upload_jar_file_dataflow():
-    url = "%s/api/processconfigs/uploadjar/dataflow selector" % host
-    unquote_url = parse.unquote(url)
-    # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-    # print(response.text)
-        data_fileName = dict_res(response.text)["fileName"]
-        print(data_fileName)
-    except:
-        return
-    else:
-        return data_fileName
-
-
-def upload_file_standard(host,file,url):
-    dir2 = ab_dir(file)
-    # url = "%s/api/woven/upload/read/excel?maxSheet=1&maxRow=10000&maxColumn=3" % host
-    unquote_url = parse.unquote(url)
-    files = {"file": open(dir2, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-    except:
-        return
-    else:
-        return response.status_code, response.text

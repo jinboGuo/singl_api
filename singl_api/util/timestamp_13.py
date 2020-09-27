@@ -41,7 +41,7 @@ def get_now():
     return millis
 
 def get_tomorrow():
-    import datetime, time
+    import datetime,time
     # 生成13时间戳   eg:1557842280000
     now = datetime.datetime.now()
     tomorrow = now + datetime.timedelta(days=1)
@@ -72,3 +72,18 @@ def timestamp_utc():
     print(times)
     return times
 #timestamp_now1()
+
+def datatime_now():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y-%m-%dT%H:%M:%S')
+    time =str(now_time_nyr) + '.000+0000'
+    return str(time)
+
+def data_now():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y-%m-%d %H:%M:%S')
+    print(now_time_nyr)
+    return str(time)
+#data_now()

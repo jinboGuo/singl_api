@@ -632,7 +632,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         else:
             print('开始执行：', case_detail)
             #print(data)
-            if '&' in data:  # 包含多个参数并以&分割
+            if '&' in str(data):  # 包含多个参数并以&分割
                 parameters = data.split('&')
                 # print('parameters:', parameters)
                 # 处理存在select语句中的参数，并重新赋值
@@ -724,7 +724,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
     if data and isinstance(data, str):
-        if '&' in data:
+        if '&' in str(data):
             # 分隔参数
             parameters = data.split('&')
             # 拼接URL

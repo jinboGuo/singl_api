@@ -1,4 +1,6 @@
 import random
+
+from util.format_res import dict_res
 from util.timestamp_13 import *
 from basic_info.setting import Dw_MySQL_CONFIG
 import os
@@ -140,3 +142,17 @@ def deal_parameters(data):
             return data
     else:
         return
+
+
+#new_data = { "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "api_auto_business随机数", "alias": "api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
+
+def deal_random(new_data):
+    dict_res(new_data)
+    for key, value in new_data.items():
+        if '随机数' in str(value):
+            i = value.replace('随机数', str(random.randint(0, 999)))
+            new_data[key] = str(i)
+    print(new_data)
+    return new_data
+
+#deal_random(new_data)

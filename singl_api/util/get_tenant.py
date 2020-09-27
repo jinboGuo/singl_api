@@ -1,10 +1,11 @@
 import urllib.parse
 import sys, os
+from basic_info.setting import Dw_MySQL_CONFIG
+from util.Open_DB import MYSQL
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
 sys.path.append(root_path)
-
 
 def get_env_num(host):
     host_netloc = urllib.parse.urlparse(host).netloc
@@ -37,3 +38,16 @@ def get_tenant(host):
         return tenant_id_199
     else:
         print("目前只处理189,81,82,83,84环境tenant，若不包含在内，请添加")
+
+def get_owner():
+    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+    try:
+      osql = "select id from merce_user where creator='SYSTEM' and last_modifier='admin' and name='admin' "
+      owners = ms.ExecuQuery(osql)
+      if owners:
+         owner = owners[0]["id"]
+         return owner
+    except TypeError:
+      return "018479ae-01a7-4603-9e1f-77e11af63f68"
+
+#get_owner()

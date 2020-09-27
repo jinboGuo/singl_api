@@ -20,7 +20,7 @@ from new_api_cases.dw_prepare_datas import pull_data, update_business_data, \
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('842')
+case_table_sheet = case_table.get_sheet_by_name('dw')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 
@@ -159,8 +159,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '修改已绑定标签组的标签':
         print('开始执行：', case_detail)
-        new_data, taggroup_id = update_taggroup_data(data)
-        new_url = url.format(taggroup_id)
+        new_data, tag_id = update_tag_data(data)
+        new_url = url.format(tag_id)
         print("request   url:", new_url)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=new_url, headers=headers, data=new_data)
@@ -447,7 +447,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         else:
             print('开始执行：', case_detail)
             #print(data)
-            if '&' in data:  # 包含多个参数并以&分割
+            if '&' in str(data):  # 包含多个参数并以&分割
                 parameters = data.split('&')
                 # print('parameters:', parameters)
                 # 处理存在select语句中的参数，并重新赋值
@@ -540,7 +540,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
     case_detail = case_table_sheet.cell(row=row, column=2).value
     if data and isinstance(data, str):
     #if data:
-        if '&' in data:
+        if '&' in str(data):
             # 分隔参数
             parameters = data.split('&')
             # 拼接URL
