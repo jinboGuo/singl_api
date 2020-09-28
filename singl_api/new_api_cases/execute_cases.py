@@ -569,7 +569,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                  result = ms.ExecuQuery(data)
                  if result:
                    new_data = result[0]["id"]
-                   #new_url = url.format(new_data)
+                   new_url = url.format(new_data)
                    response = requests.post(url=url, headers=headers, data=new_data)
                    print("response data:", response.status_code, response.text)
                    clean_vaule(table_sheet_name, row, column)
@@ -588,13 +588,14 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif data.startswith('[') and data.endswith(']'):
                 if "'" in data:
                     data = data.replace("'", '"')
+                    print(data)
                     response = requests.post(url=url, headers=headers, data=data)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
-                    #print(data)
+                    print(data)
                     response = requests.post(url=url, headers=headers, data=data)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
@@ -605,6 +606,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 new_data.append(data)
                 new_data = str(new_data)
                 if "'" in new_data:
+                    print(data)
                     new_data = new_data.replace("'", '"')
                     response = requests.post(url=url, headers=headers, data=new_data)
                     print("response data:", response.status_code, response.text)
@@ -612,12 +614,14 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
+                    print(data)
                     response = requests.post(url=url, headers=headers, data=new_data)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
+            print(data)
             response = requests.post(url=url, headers=headers, data=data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)

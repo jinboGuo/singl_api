@@ -28,6 +28,7 @@ def deal_parameters(data):
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            print(data_select_result)
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -46,10 +47,14 @@ def deal_parameters(data):
                 elif "select id from merce_resource_dir" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
+                elif "select id from merce_user" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    print(new_data)
+                    return new_data
                 else:
                     try:
-                            data = data_select_result[0]["id"]
-                            return data
+                        data = data_select_result[0]["id"]
+                        return data
                     except:
                         print('请确认第%d行SQL语句')
         if 'select output_data_id' in data:
@@ -60,13 +65,28 @@ def deal_parameters(data):
                     return deal_parameters(data)
                 except:
                     print('请确认第%d行SQL语句')
-        if 'select access_key' in data:
+        if 'SELECT enabled, id FROM' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            if data_select_result:
+            if len(data_select_result) > 1:
+                for i in range(len(data_select_result)):
+                 try:
+                        if data_select_result[i]["enabled"] == 1:
+                            data_select_result[i]["enabled"] = 0
+                        else:
+                            data_select_result[i]["enabled"] = 1
+                 except:
+                     print('请确认第%d行SQL语句')
+                print(data_select_result)
+                return data_select_result
+            else:
                 try:
-                    data = data_select_result[0]["access_key"]
-                    print(data)
-                    return data
+                    if data_select_result[0]["enabled"] == 1:
+                        data_select_result[0]["enabled"] = 0
+                        print(data_select_result)
+                    else:
+                        data_select_result[0]["enabled"] = 1
+                        print(data_select_result)
+                    return data_select_result
                 except:
                     print('请确认第%d行SQL语句')
         if 'select name' in data:
