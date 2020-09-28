@@ -238,17 +238,17 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '已停用服务启用':
         print('开始执行：', case_detail)
-        #print("request   url:", url)
+        print("request   data:", data)
         response = requests.post(url=url, headers=headers, json=data)
-        #print("response data:", response.status_code, response.text)
+        print("response data:", response.status_code, response.text)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif '服务停用' in case_detail:
         print('开始执行：', case_detail)
-        #print("request   url:", url)
+        print("request   data:", data)
         response = requests.post(url=url,headers=headers, json=data)
-        #print("response data:", response.status_code, response.text)
+        print("response data:", response.status_code, response.text)
         time.sleep(20)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -512,7 +512,16 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '服务删除':  # 取消SQL analyse接口
+        elif case_detail == '服务删除':  #
+            print('开始执行：', case_detail)
+            new_url = url.format(data)
+            print("request   url:", new_url)
+            response = requests.get(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == ('删除启用状态用户'):  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -521,7 +530,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('删除启用状态用户'):  # 取消SQL analyse接口
+        elif '查询数据资源' in case_detail:  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -530,7 +539,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询数据资源' in case_detail:  # 取消SQL analyse接口
+        elif '按照id查询申请记录' in case_detail:  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -539,7 +548,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '按照id查询申请记录' in case_detail:  # 取消SQL analyse接口
+        elif '根据id查询数据集' in case_detail:  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -548,7 +557,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '根据id查询数据集' in case_detail:  # 取消SQL analyse接口
+        elif '删除数据源' in case_detail:  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -557,7 +566,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除数据源' in case_detail:  # 取消SQL analyse接口
+        elif '删除接入配置' in case_detail:  #
             print('开始执行：', case_detail)
             new_url = url.format(data)
             #print("request   url:", new_url)
@@ -566,16 +575,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除接入配置' in case_detail:  # 取消SQL analyse接口
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('消费者查询订阅服务'):  # 取消SQL analyse接口
+        elif case_detail == ('消费者查询订阅服务'):  #
             print('开始执行：', case_detail)
             #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
@@ -593,7 +593,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('管理员查询申请服务'):  # 取消SQL analyse接口
+        elif case_detail == ('管理员查询申请服务'):  #
             print('开始执行：', case_detail)
             #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
@@ -611,7 +611,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('消费者查询申请服务'):  # 取消SQL analyse接口
+        elif case_detail == ('消费者查询申请服务'):  #
             print('开始执行：', case_detail)
             #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
