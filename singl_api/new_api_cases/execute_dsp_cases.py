@@ -23,7 +23,6 @@ ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('dsp')
 all_rows = case_table_sheet.max_row
-jar_dir = ab_dir('woven-common-3.0.jar')
 
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
@@ -388,9 +387,9 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             if data.startswith('{') and data.endswith('}'):
                 # print('data startswith {:', data)
                 data_dict = dict_res(data)
-                #print("request   url:", url)
+                print("request   url:", url)
                 response = requests.post(url=url, headers=headers, json=data_dict)
-                #print("response data:", response.status_code, response.text)
+                print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -398,18 +397,18 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif data.startswith('[') and data.endswith(']'):
                 if "'" in data:
                     data = data.replace("'", '"')
-                    #print(data)
-                    #print("request   url:", url)
+                    print(data)
+                    print("request   url:", url)
                     response = requests.post(url=url, headers=headers, data=data)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
-                    #print(data)
-                    #print("request   url:", url)
+                    print(data)
+                    print("request   url:", url)
                     response = requests.post(url=url, headers=headers, data=data)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -419,23 +418,23 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 new_data = str(new_data)
                 if "'" in new_data:
                     new_data = new_data.replace("'", '"')
-                    #print("request   url:", url)
+                    print("request   url:", url)
                     response = requests.post(url=url, headers=headers, data=new_data)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
-                    #print("request   url:", url)
+                    print("request   url:", url)
                     response = requests.post(url=url, headers=headers, data=new_data)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -496,7 +495,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('管理员查询订阅服务'):  # 取消SQL analyse接口
             print('开始执行：', case_detail)
-            #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
             #print("request   url:", new_url)
             response = requests.get(url=new_url, headers=headers)
@@ -577,7 +575,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('消费者查询订阅服务'):  #
             print('开始执行：', case_detail)
-            #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
             #print("request   url:", new_url)
             response = requests.get(url=new_url, headers=headers)
@@ -595,7 +592,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('管理员查询申请服务'):  #
             print('开始执行：', case_detail)
-            #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
             #print("request   url:", new_url)
             response = requests.get(url=new_url, headers=headers)
@@ -613,7 +609,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == ('消费者查询申请服务'):  #
             print('开始执行：', case_detail)
-            #cancel_statement_id = get_sql_analyse_statement_id(host, data)
             new_url = url.format(data)
             #print("request   url:", new_url)
             response = requests.get(url=new_url, headers=headers)
@@ -661,64 +656,50 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 if len(parameters) == 1:
                     try:
                         url_new = url.format(parameters[0])
-                        #print("request   url:", url_new)
+                        print("request   url:", url_new)
                         response = requests.get(url=url_new, headers=headers)
-                        #print("response data:", response.status_code, response.text)
+                        print("response data:", response.status_code, response.text)
                     except Exception:
                         return
-                    #print(response.url, response.status_code,response.text)
+                    print(response.url, response.status_code,response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif len(parameters) == 2:
                     url_new = url.format(parameters[0], parameters[1])
-                    #print("request   url:", url_new)
+                    print("request   url:", url_new)
                     response = requests.get(url=url_new, headers=headers)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif len(parameters) == 3:
                     url_new = url.format(parameters[0], parameters[1], parameters[2])
-                    #print("request url:", url_new)
+                    print("request url:", url_new)
                     response = requests.get(url=url_new, headers=headers)
-                    #print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
                     print('请确认第%d行parameters' % row)
             else:  # 参数中不包含&，只有一个参数
-                parameters = data
                 url_new = url.format(data)
-                #print("request   url:", url_new)
+                print("request   url:", url_new)
                 response = requests.get(url=url_new, headers=headers)
-                #print("response data:", response.status_code, response.text)
+                print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     # GET 请求参数写在URL中，直接发送请求
     else:
-        if case_detail == '刷新令牌':
-            res = requests.post(url=MY_LOGIN_INFO_dsp_admin["URL"], headers=MY_LOGIN_INFO_dsp_admin["HEADERS"],
-                                data=MY_LOGIN_INFO_dsp_admin["DATA"])
-            login_info = dict_res(res.text)
-            token = login_info["content"]["accessToken"]
-            new_url = url.format(token)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url,headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:
-            print('开始执行：', case_detail)
-            #print("request   url:", url)
-            response = requests.get(url=url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        print('开始执行：', case_detail)
+        print("request   url:", url)
+        response = requests.get(url=url, headers=headers)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
 
 # PUT请求
