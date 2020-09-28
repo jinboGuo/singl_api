@@ -85,5 +85,5 @@ def data_now():
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%d %H:%M:%S')
     print(now_time_nyr)
-    return str(time)
+    return str(now_time_nyr)
 #data_now()
