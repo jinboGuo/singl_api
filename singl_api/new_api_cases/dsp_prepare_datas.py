@@ -154,11 +154,13 @@ def resource_data(data):
     try:
         sql = "select id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print(sql)
+        print(sql)
         print('resource_id:', flow_info[0]["id"])
     except:
         return
     new_data = {"name": "gjb_test_hdfs_student2020随机数","datasetName":"gjb_tester_hdfs_student2020","storage":"HDFS","encoder":"UTF-8","incrementField":"age","openStatus":1,"categoryId":"0","datasetId":"82e50c27-8b4a-440d-8807-eb970e6a7571","expiredTime":0,"type":0,"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"id":flow_info[0]["id"]}
+    from new_api_cases.dw_deal_parameters import deal_random
+    deal_random(new_data)
     return new_data
 
 def appconfig_data(data):
