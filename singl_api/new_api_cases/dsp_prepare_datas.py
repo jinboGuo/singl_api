@@ -204,8 +204,8 @@ def resource_data_dss(data):
         print('dss_id-name:', flow_info[0]["id"], flow_info[0]["name"])
     except:
         return
-    if 'gjb_tester_hdfs_student2020' in data:
-        new_data = {"name": "api_datasource随机数", "sourceType": "DATASOURCE", "datasetName": flow_info[0]["name"], "datasetId":flow_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings": [], "openStatus":0,"type":0,"isIncrementField":false,"incrementField":"","encoder":"UTF-8","timeStamp":"","storage":"DB","dataset":"","query":{"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}}
+    if 'autotest_mysql' in data:
+        new_data = {"name": "api_datasource随机数", "sourceType": "DATASOURCE", "datasetName": flow_info[0]["name"], "datasetId":flow_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings": [], "openStatus":0,"type":0,"isIncrementField":"false","incrementField":"","encoder":"UTF-8","timeStamp":"","storage":"DB","dataset":"","query":{"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}}
         deal_random(new_data)
         return new_data
     else:
