@@ -1,11 +1,10 @@
 import random
 from util.timestamp_13 import *
-from basic_info.setting import  Dsp_MySQL_CONFIG
+from basic_info.setting import Dsp_MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data):
     if data:
@@ -50,14 +49,16 @@ def deal_parameters(data):
                             return data
                     except:
                         print('请确认第%d行SQL语句')
-        if 'select enabled,id' in data:
+        if 'select enabled,id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            print(data_select_result)
             if len(data_select_result):
                 try:
                     if data_select_result[0]["enabled"] == 1:
                         data_select_result[0]["enabled"] = 0
                     else:
                         data_select_result[0]["enabled"] = 1
+                        print(data_select_result)
                     return data_select_result
                 except:
                     print('请确认第%d行SQL语句')
