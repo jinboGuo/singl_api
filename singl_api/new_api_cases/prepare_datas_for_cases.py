@@ -190,3 +190,42 @@ def upload_file_standard(host,file,url):
         return
     else:
         return response.status_code, response.text
+
+def dss_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id,owner from merce_resource_dir where creator='admin' and name='Datasources' and parent_id is null"
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('dss_id-owner:', flow_info[0]["id"], flow_info[0]["owner"])
+    except:
+        return
+    if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
+        new_data = {"id": "", "name": "gjb_api_for_all_type_JDBC_datasource_test_82_随机数", "type": "DB", "description": "","owner": flow_info[0]["owner"], "attributes": {"jarPath": "/app/flowconfig/jarUploadPath/save/43b0571d-c8e8-4053-b936-600ed5ee03de_mysql-connector-java-5.1.38.jar", "DBType": "Mysql", "host": "192.168.1.57", "port": 3306, "database": "test", "user": "merce", "password": "merce", "driver": "com.mysql.jdbc.Driver","properties":[{"name":"","value":""}],"url":"jdbc:mysql://192.168.1.57:3306/test", "chineseName": "", "dateToTimestamp": "false", "catalog": "", "schema": "", "name":"Mysql"}, "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_for_all_type_http_datasource_test' in data:
+        new_data = {"id": "", "name": "gjb_for_all_type_http_datasource_test_82_随机数", "type": "HTTP", "description":"","attributes":{"method":"GET","rootPath":"gbj_http","parameters":"","url":"gbj_http","properties":[{"name":"","value":""}]}, "owner": flow_info[0]["owner"], "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_for_all_type_ftp_datasource_test' in data:
+        new_data = {"id":"","name":"gjb_for_all_type_ftp_datasource_test_82_随机数","type":"FTP","description":"","attributes":{"host":"info4","port":"22","username":"europa","password":"europa","recursive":"true","secure":"true","skipHeader": "false", "dir": "/home/europa/ftp_auto_import", "fieldsSeparator": ","}, "owner": flow_info[0]["owner"], "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_for_all_type_socket_datasource_test' in data:
+        new_data = {"id":"","name":"gjb_for_all_type_socket_datasource_test_82_随机数","type":"socket","description":"","attributes":{"charset":"utf-8","ipAddress":"gbj_socket","port":"gbj_socket", "protocol": "TCP"}, "owner": flow_info[0]["owner"], "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_for_all_type_MANGODB_datasource_test' in data:
+        new_data = {"id":"","name":"gjb_for_all_type_MANGODB_datasource_test_82_随机数","type":"MONGODB","description":"","attributes":{"address":"gbj_mangodb","port":"27017","username":"gbj_mangodb","password":"gbj_mangodb","database":"gbj_mangodb"}, "owner": flow_info[0]["owner"], "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_for_all_type_es_datasource_test' in data:
+        new_data = {"id":"","name":"gjb_for_all_type_es_datasource_test_随机数","type":"ES","description":"","attributes":{"clusterName":"es85","ipAddresses":"192.168.1.85:9200","index":"test","indexType":"test","version":"5.x"}, "owner": flow_info[0]["owner"], "resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'datasource_query' in data:
+        new_data = {"fieldList": [{"fieldName":"parentId","fieldValue": flow_info[0]["id"], "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject": {"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        return new_data
+    else:
+        return
