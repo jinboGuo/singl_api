@@ -19,9 +19,9 @@ from new_api_cases.get_statementId import statementId_flow_use, statementId_flow
 from new_api_cases.get_statementId import statementId, statementId_no_dataset, get_sql_analyse_statement_id, \
     get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
     steps_sql_analyzeinit_statementId,get_step_output_init_statementId,get_step_output_ensure_statementId
-from new_api_cases.prepare_datas_for_cases import get_job_tasks_id,collector_schema_sync, get_applicationId,\
-    get_woven_qaoutput_dataset_path,upload_jar_file_workflow,upload_jar_file_dataflow,upload_jar_file_filter
-
+from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, get_applicationId, \
+    get_woven_qaoutput_dataset_path, upload_jar_file_workflow, upload_jar_file_dataflow, upload_jar_file_filter, \
+    dss_data
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -107,6 +107,32 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         #print("new_url", new_url)
         data = data.encode('utf-8')
         response = requests.post(url=new_url, headers=headers, data=data)
+        print(response.text, response.status_code)
+        # print(response.url)
+        # 将返回的status_code和response.text分别写入第10列和第14列
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '创建数据源' in case_detail:
+        # 先获取statementId,然后格式化URL，再发送请求
+        print('开始执行：', case_detail)
+        new_data = dss_data(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data:", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print(response.text, response.status_code)
+        # print(response.url)
+        # 将返回的status_code和response.text分别写入第10列和第14列
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif case_detail == '查看数据源列表':
+        # 先获取statementId,然后格式化URL，再发送请求
+        print('开始执行：', case_detail)
+        new_data = dss_data(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data:", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
         print(response.text, response.status_code)
         # print(response.url)
         # 将返回的status_code和response.text分别写入第10列和第14列
