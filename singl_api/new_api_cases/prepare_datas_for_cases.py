@@ -197,7 +197,7 @@ def dss_data(data):
         sql = "select id,owner from merce_resource_dir where creator='admin' and name='Datasources' and parent_id is null"
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         print(sql)
-        print('dss_id-owner:', flow_info[0]["id"], flow_info[0]["owner"])
+        print('dss_id-owner-name:', flow_info[0]["id"], flow_info[0]["owner"], flow_info[0]["name"])
     except:
         return
     if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
@@ -228,4 +228,242 @@ def dss_data(data):
         new_data = {"fieldList": [{"fieldName":"parentId","fieldValue": flow_info[0]["id"], "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject": {"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
         return new_data
     else:
+        return
+
+def upddss_data(data):
+    try:
+        sql = "select id,owner,name,tenant_id,resource_id from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data
+        dss_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        dss_id = dss_info[0]["id"]
+        print('dss_id-owner-name:', dss_info[0]["id"], dss_info[0]["owner"], dss_info[0]["name"])
+    except:
+        return
+    if 'test_Mysql' in data:
+        print("dss_id-name:",dss_id, dss_info[0]["name"])
+        new_data = {"id": dss_id, "name": dss_info[0]["name"], "type": "DB","description":"","owner": dss_info[0]["owner"],"attributes":{"schema":"","lastSyncTime":1587440780432,"useSystemStore":"true","jarPath":"mysql-connector-java-5.1.48.jar","catalog":"","lastSyncTaskId":"","DBType":"Mysql","batchsize":10000,"url":"jdbc:mysql://192.168.1.75:3306/merce","database":"merce","password":"AES(cad2fb721d282f6e5151605a1874ffe4)","driver":"com.mysql.jdbc.Driver","port":3306,"host":"192.168.1.75","chineseName":"","name":"mysql-connector-5.1.48","dataStore":{"path":"/tmp/collecter/c1/test_Mysql","schemaResource":"","datasetResourceId":"","format":"csv","clusterId":"","fields":[],"type":"HDFS","separator":",","schemaResourceId":"","sliceTime":"","dataResource":""},"user":"merce","properties":[{"name":"","value":""}],"dateToTimestamp":"false"}, "tenantId": dss_info[0]["tenant_id"],"creator":"admin","createTime":1587439760000,"lastModifier":"admin","lastModifiedTime":1593769577000,"version":4,"enabled":1,"resourceId": dss_info[0]["resource_id"],"expiredPeriod":0}
+        return dss_id, new_data
+    else:
+       return
+
+def dataset_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id,tenant_id,owner from merce_resource_dir where creator='admin' and name='Datasets' and parent_id is null"
+        dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('dataset_id-owner-tenant_id:', dataset_info[0]["id"], dataset_info[0]["owner"], dataset_info[0]["tenant_id"])
+        schema_id, schema_resourceid,schema_name = schema_data(data)
+    except:
+        return
+    if 'gjb_test_ftp_dataset' in data:
+        new_data = {"id":"","name":"gjb_test_ftp_dataset_随机数","schema":{"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM", "name": schema_name, "creator": "admin", "createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1, "description":"gjb_ttest_mysql0420_training","resourceId": schema_resourceid,"fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"FTP","expiredPeriod":0,"storageConfigurations":{"user":"europa","password":"AES(11b5a9d816c0a4fd8f99ef1e7de42d32)","format":"csv","path":"ftp://info4/home/europa/gbj_ftp/demo.csv","relativePath":"ftp://info4/home/europa/gbj_ftp/demo.csv","header":"false","ignoreRow":0,"separator":",","quoteChar":"\"","escapeChar":"\\","csv":"csv"},"sliceTime":"","sliceType":"H","schemaVersion":1,"clusterId":"","resource":{"id": dataset_info[0]["id"]},"description":"gjb_ttest_mysql0420_training","schemaId": schema_id}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_hbase' in data:
+        new_data = {"id": "", "name": "gjb_test_hbase_随机数", "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM", "name": schema_name, "creator": "admin", "createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1, "description": "tester_mysql0420_training", "resourceId": schema_resourceid, "fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"HBASE","expiredPeriod":0,"storageConfigurations":{"table":"test_hbase2020","namespace":"default","columns":"rowKey:key,:ts,:code,:total,:forward_total,:reverse_total,:sum_flow","columnsKey":"id","columnsColumns":"","isSingle":"true","columnsItems":0,"undefined":"csv"},"sliceTime":"","sliceType":"H","schemaVersion":1,"clusterId":"","resource": {"id": dataset_info[0]["id"]},"description":"gjb_test-hbase_随机数","schemaId": schema_id}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_es_dataset' in data:
+        new_data = {"id":"","name":"gjb_test_es_dataset_随机数","schema":{"id": schema_id, "tenantId": dataset_info[0]["tenant_id"],"owner":"SYSTEM", "name": schema_name, "creator": "admin", "createTime": 1587370889000, "lastModifier":"admin","lastModifiedTime":1587370889000, "version": 1, "enabled": 1, "description":"","resourceId": schema_resourceid, "fields":[{"name":"Name","type":"string","alias":"","description":""},{"name":"Sex","type":"string","alias":"","description":""},{"name":"Age","type":"int","alias":"","description":""},{"name":"Identity_code","type":"string","alias":"","description":""},{"name":"C_time","type":"string","alias":"","description":""},{"name":"Data_long","type":"bigint","alias":"","description":""},{"name":"Data_double","type":"double","alias":"","description":""},{"name":"Data_boolean","type":"boolean","alias":"","description":""},{"name":"time_col","type":"timestamp","alias":"","description":""},{"name":"Str_time","type":"bigint","alias":"","description":""},{"name":"Salary","type":"string","alias":"","description":""},{"name":"Null_data","type":"string","alias":"","description":""},{"name":"City","type":"string","alias":"","description":""},{"name":"data1","type":"string","alias":"","description":""},{"name":"data2","type":"string","alias":"","description":""},{"name":"data3","type":"string","alias":"","description":""},{"name":"data4","type":"string","alias":"","description":""},{"name":"data5","type":"string","alias":"","description":""},{"name":"data6","type":"string","alias":"","description":""},{"name":"data7","type":"string","alias":"","description":""},{"name":"data8","type":"string","alias":"","description":""},{"name":"data9","type":"string","alias":"","description":""}],"oid": schema_id,"newest":1,"isHide":0,"expiredPeriod":0},"storage":"ElasticSearch","expiredPeriod":0,"storageConfigurations":{"clusterName":"elasticsearch","ipAddresses":"info5:9203","index":"test_stre","indexType":"test_stre"},"sliceTime":"","sliceType":"H","schemaVersion":1, "clusterId":"", "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_SearchOne_dataset' in data:
+        new_data = {"id":"","name":"gjb_test_SearchOne_dataset_随机数","schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner":"SYSTEM","name": schema_name, "creator": "admin", "createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled":1,"description":"tester_mysql0420_training", "resourceId": schema_resourceid, "fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"SearchOne","expiredPeriod":0,"storageConfigurations":{"clusterName":"my-cluster","ipAddresses":"192.168.1.81:9200,192.168.1.82:9200,192.168.1.84:9200","index":"test_new_0103","indexType":"test_new_0103"},"sliceTime":"","sliceType":"H","owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_HDFS_dataset' in data:
+        new_data = {"id":"","name":"gjb_test_HDFS_dataset_随机数", "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"],"owner": "SYSTEM", "name": schema_name, "creator":"admin","createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1, "description":"tester_mysql0420_training", "resourceId": schema_resourceid, "fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"HDFS","expiredPeriod":0,"storageConfigurations":{"format":"csv","path":"/tmp/gbj/datas_for_test/students.txt","relativePath":"/tmp/gbj/datas_for_test/students.txt","pathMode":"exact","header":"false","separator":",","quoteChar":"\"","escapeChar":"\\"},"sliceTime":"","sliceType":"H","owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_kafka_dataset' in data:
+        new_data = {"id": "","name": "gjb_test_kafka_dataset_随机数", "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM", "name": schema_name, "creator":"admin","createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1,"description":"tester_mysql0420_training", "resourceId": schema_resourceid, "fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}], "oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"KAFKA","expiredPeriod":0,"storageConfigurations":{"format":"csv","zookeeper":"info1:2181,info2:2181,info3:2181/europa/app/kafka","brokers":"info3:9093","topic":"kafka_new610","groupId":"kafka_new610","version":"0.10","reader":"","separator":",","header":"false","quoteChar":"\"","escapeChar":"\\"},"sliceTime":"","sliceType":"H","owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_test_hive_dataset' in data:
+        new_data = {"id":"","name": "gjb_test_hive_dataset_随机数", "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"],"owner": "SYSTEM", "name": schema_name, "creator":"admin","createTime": 1587370296000, "lastModifier": "admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1, "description":"tester_mysql0420_training", "resourceId": schema_resourceid, "fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"HIVE","expiredPeriod":0,"storageConfigurations":{"sql":"","table":"students_info_hive_sink_0617","partitionColumns":""},"sliceTime":"","sliceType":"H","owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_ttest_hdfs' == data.split("&")[0]:
+        dataset_id, dataset_name = get_dataset_data(data)
+        new_data = {"id": dataset_id, "name": dataset_name, "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM", "name": schema_name, "creator": "admin", "createTime": 1587370296000, "lastModifier": "admin", "lastModifiedTime": 1587985137000, "version": 1, "enabled": 1, "description":"tester_mysql0420_training", "resourceId": schema_resourceid, "fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":0,"isHide":0,"expiredPeriod":0},"storage":"HDFS","expiredPeriod":0,"storageConfigurations":{"quoteChar":"\"","escapeChar":"\\","encryptColumns":"","csv":"csv","format":"csv","clusterId":"cluster1","encryptKey":"","separator":",","path":"/auto_test/","relativePath":"/home/auto_test/gjb/out8","pathMode":"exact","header":"false","ignoreRow":"0"},"sliceTime":"","sliceType":"H","owner":"SYSTEM","schemaVersion":1,"tenantId": dataset_info[0]["tenant_id"], "creator":"admin","createTime":1587551105000,"lastModifier":"admin","lastModifiedTime":1589939697000,"version":3,"enabled":1,"resourceId": dataset_info[0]["id"],"schemaId": schema_id, "recordNumber":0,"byteSize":0,"analysisTime":0,"isRelated":1,"isHide":0}
+        deal_random(new_data)
+        return dataset_id, new_data
+    else:
+        return
+
+def upddataset_data(data):
+    try:
+        data = data.split("&")
+        sql = "select id,owner,name,tenant_id,resource_id from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[0]
+        dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        dataset_id = dataset_info[0]["id"]
+        print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["owner"], dataset_info[0]["name"])
+        schema_id, schema_resourceid,schema_name = schema_data(data)
+    except:
+        return
+    if 'gjb_ttest_hdfs' in data:
+        print("dataset_id-name:",dataset_info, dataset_info[0]["name"])
+        new_data = {"id": dataset_id,"name":dataset_info[0]["name"],"schema":{"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner":"SYSTEM", "name": schema_name,"creator":"admin","createTime":1587370296000,"lastModifier":"admin","lastModifiedTime":1587985137000,"version":1,"enabled":1,"description":"tester_mysql0420_training","resourceId": schema_resourceid,"fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid":"4e4b83b8-4a11-4bc9-ab0f-0de993e4851a","newest":0,"isHide":0,"expiredPeriod":0},"storage":"HDFS","expiredPeriod":0,"storageConfigurations":{"quoteChar":"\"","escapeChar":"\\","encryptColumns":"","csv":"csv","format":"csv","clusterId":"cluster1","encryptKey":"","separator":",","path":"/auto_test/","relativePath":"/home/auto_test/gjb/out8","pathMode":"exact","header":"false","ignoreRow":"0"},"sliceTime":"","sliceType":"H","owner":"SYSTEM","schemaVersion":1,"tenantId":dataset_info[0]["tenant_id"],"creator":"admin","createTime":1587551105000,"lastModifier":"admin","lastModifiedTime":1589939697000,"version":3,"enabled":1,"resourceId":dataset_info[0]["resource_id"], "schemaId": schema_id,"recordNumber":0,"byteSize":0,"analysisTime":0,"isRelated":1,"isHide":0}
+        return dataset_id, new_data
+    else:
+        return
+
+def get_dataset_data(data):
+    try:
+        if '&' in data:
+            data = data.split("&")
+            sql = "select id,name from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[0]
+            dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            dataset_id = dataset_info[0]["id"]
+            dataset_name = dataset_info[0]["name"]
+            print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
+            return dataset_id, dataset_name
+        else:
+            sql = "select id,name from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[0]
+            dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            dataset_id = dataset_info[0]["id"]
+            dataset_name = dataset_info[0]["name"]
+            print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
+            return dataset_id, dataset_name
+    except:
+        return
+
+def schema_data(data):
+    try:
+        if '&' in data:
+            data = data.split('&')
+            sql = "select id,name,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time limit 1" % data[1]
+            schema_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            print('schema_id-resource_id-name:', schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"])
+            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
+        else:
+            sql = "select id,name,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time limit 1" % data[1]
+            schema_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            print('schema_id-resource_id-name:', schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"])
+            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
+    except:
+        return
+
+def create_schema_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id,tenant_id from merce_resource_dir where creator='admin' and name='Schemas' and parent_id is null"
+        resource_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-tenant_id:', resource_info[0]["id"], resource_info[0]["tenant_id"])
+    except:
+        return
+    if 'gtest_mysql_0428_training' in data:
+        new_data = {"id": "", "name": "gtest_mysql_0428_training_随机数", "alias": "", "description":"gtest_mysql_0428_training_随机数","fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"owner":"","tenantId":resource_info[0]["tenant_id"],"creator":"admin","lastModifier":"admin","version":1,"enabled":1,"resourceId": resource_info[0]["id"],"oid":"","newest":1,"isHide":0,"expiredPeriod":0,"resource":{"id": resource_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    else:
+        return
+
+def updschema_data(data):
+    try:
+        sql = "select id,owner,tenant_id,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        schema_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        schema_id = schema_info[0]["id"]
+        print('schema_id-owner-tenant_id:', schema_info[0]["id"], schema_info[0]["owner"], schema_info[0]["tenant_id"])
+    except:
+        return
+    if 'gtest_mysql_0428_training' in data:
+        new_data = {"id": schema_info[0]["id"], "name":"gtest_mysql_0428_training_随机数","alias":"","description":"gtest_mysql_0428_training","fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"owner": schema_info[0]["owner"], "tenantId": schema_info[0]["tenant_id"],"creator":"admin","createTime":1587370296000,"lastModifier":"admin","lastModifiedTime":1603140944000, "version": 1, "enabled": 1, "resourceId": schema_info[0]["resource_id"], "oid": schema_info[0]["id"],"newest":1,"isHide":0,"expiredPeriod":0}
+        from new_api_cases.dw_deal_parameters import deal_random
+        deal_random(new_data)
+        return schema_id, new_data
+    else:
+        return
+
+def create_flow_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id,owner,tenant_id from merce_resource_dir where creator='admin' and name='Flows' and parent_id is null"
+        resource_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-owner-tenant_id:', resource_info[0]["id"], resource_info[0]["owner"], resource_info[0]["tenant_id"])
+        schema_id, schema_resourceid,schema_name = schema_data(data)
+        dataset_id, dataset_name = flow_dataset_data(data)
+    except:
+        return
+    if 'gjb_api_create_flow_dataflow' in data:
+        new_data = {"name": "gjb_api_create_flow_dataflow_随机数", "flowType": "dataflow", "resource": {"id": resource_info[0]["id"]}, "steps": [{"id":"source_1","name":"source_1","type":"source","otherConfigurations":{"schema": "schema_name","dataset-paths":"","schemaId": schema_id, "sessionCache":"","interceptor":"","dataset":[{"rule":"set_1","dataset":dataset_name,"ignoreMissingPath":"false","datasetId":dataset_id,"storage":"HDFS"}]},"outputConfigurations":{"output":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"x":355,"y":113,"uiConfigurations":{"output":["output"]}},{"id":"sink_1","name":"sink_1","type":"sink","otherConfigurations":{"schema":"test_pivot","description":"","outputMode":"","type":"HDFS","autoSchema":"true","nullValue":"","mode":"append","path":"/auto_test/gjb/pivot/","isDisable":"false","countWrittenRecord":"false","datasetId":"","dataResource":"","schedulerUnit":"","quoteChar":"\"","escapeChar":"\\","schemaResource":"","schemaVersion":"1","expiredTemp":"","sliceTimeColumn":"","format":"csv","trigger":"","maxFileSize":"","maxFileNumber":"","separator":",","expiredTime":"","schedulerVal":"","checkpointLocation":"","schemaId":schema_id,"time":"s","dataset":"test_pivot","sliceType":"H","idColumn":""},"inputConfigurations":{"input":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"outputConfigurations":{},"x":916,"y":135,"uiConfigurations":{"input":["input"]}}],"links":[{"name":"","source":"source_1","sourceOutput":"output","target":"sink_1","targetInput":"input","input":"input"}],"oid":"$null","creator":"admin","createTime":1603187474000,"lastModifier":"admin","lastModifiedTime":1603189710000,"owner":resource_info[0]["owner"],"version":1,"enabled":1,"tenantId":resource_info[0]["tenant_id"],"resourceId": resource_info[0]["id"],"isHide":0,"parameters":[],"expiredPeriod":0}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_api_create_flow_workflow' in data:
+        new_data = {"name": "gjb_api_create_flow_workflow_随机数", "flowType": "workflow", "resource": {"id": resource_info[0]["id"]}, "steps": [], "links": []}
+        deal_random(new_data)
+        return new_data
+    elif 'gjb_api_create_flow_streamflow' in data:
+        new_data = {"name": "gjb_api_create_flow_streamflow_随机数", "flowType": "streamflow", "resource": {"id": resource_info[0]["id"]}, "steps": [], "links": []}
+        deal_random(new_data)
+        return new_data
+    else:
+        return
+
+def flow_data(data):
+    try:
+        if '&' in data:
+            data = data.split('&')
+            sql = "select id,name from merce_flow where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
+            flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            print('flow_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+            return flow_info[0]["id"], flow_info[0]["name"]
+        else:
+            sql = "select id,name from merce_flow where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
+            flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            print('flow_id-name:', flow_info[0]["id"], flow_info[0]["name"])
+            return flow_info[0]["id"], flow_info[0]["name"]
+    except:
+        return
+
+def update_flow_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id,owner,tenant_id from merce_resource_dir where creator='admin' and name='Flows' and parent_id is null"
+        resource_info = ms.ExecuQuery(sql.encode('utf-8'))
+        print(sql)
+        print('resource_id-owner-tenant_id:', resource_info[0]["id"], resource_info[0]["owner"], resource_info[0]["tenant_id"])
+        schema_id, schema_resourceid,schema_name = schema_data(data)
+        flow_id, flow_name = flow_data(data)
+        dataset_id, dataset_name = flow_dataset_data(data)
+    except:
+        return
+    if 'gjb_api_create_flow_dataflow' in data:
+        new_data = {"steps":[{"id":"source_1","name":"source_1","type":"source","otherConfigurations":{"schema":"pivot","dataset-paths":"","schemaId": schema_id,"sessionCache":"","interceptor":"","dataset":[{"rule":"set_1","dataset":dataset_name,"ignoreMissingPath":"false","datasetId":dataset_id,"storage":"HDFS"}]},"outputConfigurations":{"output":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"x":355,"y":113,"uiConfigurations":{"output":["output"]}},{"id":"sink_1","name":"sink_1","type":"sink","otherConfigurations":{"schema":"test_pivot","description":"","outputMode":"","type":"HDFS","autoSchema":"true","nullValue":"","mode":"append","path":"/auto_test/gjb/pivot/","isDisable":"false","countWrittenRecord":"false","datasetId":"","dataResource":"","schedulerUnit":"","quoteChar":"\"","escapeChar":"\\","schemaResource":"","schemaVersion":"1","expiredTemp":"","sliceTimeColumn":"","format":"csv","trigger":"","maxFileSize":"","maxFileNumber":"","separator":",","expiredTime":"","schedulerVal":"","checkpointLocation":"","schemaId":schema_id,"time":"s","dataset":"test_pivot","sliceType":"H","idColumn":""},"inputConfigurations":{"input":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"outputConfigurations":{},"x":916,"y":135,"uiConfigurations":{"input":["input"]}}],"links":[{"target":"sink_1","source":"source_1","sourceOutput":"output","targetInput":"input","linkStrategy":""}], "id": flow_id, "name": flow_name,"flowType":"dataflow","oid":"$null","creator":"admin","createTime":1603187474000,"lastModifier":"admin","lastModifiedTime":1603189710000,"owner":resource_info[0]["owner"],"version":1,"enabled":1,"tenantId":resource_info[0]["tenant_id"],"resourceId":resource_info[0]["id"],"isHide":0,"parameters":[],"expiredPeriod":0}
+        deal_random(new_data)
+        return flow_id, new_data
+    else:
+        return
+
+def flow_dataset_data(data):
+    try:
+        if '&' in data:
+            data = data.split("&")
+            sql = "select id,name from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[2]
+            dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            dataset_id = dataset_info[0]["id"]
+            dataset_name = dataset_info[0]["name"]
+            print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
+            return dataset_id, dataset_name
+        else:
+            sql = "select id,name from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[2]
+            dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
+            print(sql)
+            dataset_id = dataset_info[0]["id"]
+            dataset_name = dataset_info[0]["name"]
+            print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
+            return dataset_id, dataset_name
+    except:
         return

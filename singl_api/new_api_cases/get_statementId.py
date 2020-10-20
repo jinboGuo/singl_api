@@ -2,6 +2,7 @@ import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
     tenant_id_84, tenant_id_199
+from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
 
 
@@ -35,21 +36,24 @@ def get_tenant(host):
 
 
 # datasetId存在时
-def statementId(host , param):
-    data = param.split('&')
-    if data:
-        url = '%s/api/datasets/%s/previewinit?rows=50' % (host, data[0])
-        res = requests.post(url=url, headers=get_headers(host), json=dict_res(data[1]))
+def statementId(host, param):
+    from new_api_cases.prepare_datas_for_cases import dataset_data
+    dataset_id, new_data = dataset_data(param)
+    print("new_data -dataset_id", new_data, dataset_id)
+    if new_data:
+        url = '%s/api/datasets/%s/previewinit?rows=50' % (host, dataset_id)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        res = requests.post(url=url, headers=get_headers(host), data=new_data)
         try:
             res_statementId = json.loads(res.text)
             print("ids:", res_statementId)
             statementId = res_statementId['statementId']
-            print(data[0], statementId, data[1])
-            return data[0], statementId, data[1]
+            print("statementid:", statementId)
+            return dataset_id, statementId, new_data
         except:
-            return '59b30d45-8583-4e00-9413-e65057e57028', 1, ""
+            return '59b30d45-8583-4e00-9413-e65057e57028', 1
     else:
-        return '59b30d45-8583-4e00-9413-e65057e57028', 1, ""
+        return '59b30d45-8583-4e00-9413-e65057e57028', 1
 
 
 def statementId_flow_use(host, datasetId, tenant):
@@ -101,13 +105,15 @@ def preview_result_flow_use(host, datasetId, tenant, statementID):
 
 # datasetId不存在时
 def statementId_no_dataset(host, param):
-    url = '%s/api/datasets/new/previewinit?tenant=%s' % (host, get_tenant(host))
-    res = requests.post(url=url, headers=get_headers(host), json=param)
+    new_data = dataset_data(param)
+    new_data = json.dumps(new_data, separators=(',', ':'))
+    url = '%s/api/datasets/new/previewinit?rows=50' % host
+    res = requests.post(url=url, headers=get_headers(host), data=new_data)
     try:
         res_statementId = json.loads(res.text)
         statementId = res_statementId['statementId']
-        print('stateid',statementId)
-        return statementId
+        print('statement_id: ', statementId)
+        return statementId, new_data
     except KeyError:
         return
 
