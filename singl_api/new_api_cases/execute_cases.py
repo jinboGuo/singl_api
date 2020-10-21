@@ -11,7 +11,7 @@ from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
 from util.Open_DB import MYSQL
-from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data
+from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data, query_dataflow_data
 from basic_info.setting import tenant_id_83
 from new_api_cases.deal_parameters import deal_parameters
 import unittest
@@ -27,7 +27,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('199')
+case_table_sheet = case_table.get_sheet_by_name('842')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 
@@ -317,7 +317,10 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         print('开始执行：', case_detail)
         #insert、update training
         set_upsert_data()
+        new_data = get_dataflow_data(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=data)
+        print(response.text, response.status_code)
         count_num = 0
         while ("waiting") in response.text or ("running") in response.text:
             print('再次查询前',response.text)
@@ -328,15 +331,17 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '提交colSplit-pivot-unpivot-ExplodeStep-dataflow':
+    elif case_detail == '提交colSplit-pivot-unpivot-Explode-dataflow':
         print('开始执行：', case_detail)
         new_data = get_dataflow_data(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
+        print(response.text, response.status_code)
         count_num = 0
-        while ("waiting") in response.text or ("running") in response.text:
-            print('再次查询前',response.text)
+        while ("waiting") in response.text or ("RUNNING") in response.text:
+            print('再次查询前', response.text)
             response = requests.post(url=url, headers=headers, data=data)
+            time.sleep(5)
             count_num += 1
             if count_num == 100:
                 return
@@ -345,14 +350,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '查找executions-colSplit-pivot-unpivot-Explode-dataflow':
         print('开始执行：', case_detail)
-        #new_data = get_dataflow_data(data)
-        #new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=data)
+        new_data = query_dataflow_data(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print(response.text, response.status_code)
         count_num = 0
         time.sleep(5)
         while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
             print('再次查询前', response.text)
-            response = requests.post(url=url, headers=headers, data=data)
+            response = requests.post(url=url, headers=headers, data=new_data)
             time.sleep(5)
             count_num += 1
             #if ('"type":"SUCCEEDED"') in response.text or ("FAILED")in response.text or ("KILLED") in response.text:
@@ -367,6 +373,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         new_data = get_executions_data(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
+        print(response.text, response.status_code)
         count_num = 0
         while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
             print('再次查询前', response.text)
@@ -379,8 +386,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '查找executions-es-upsert-dataflow':
         print('开始执行：', case_detail)
-        #new_data = get_dataflow_data(data)
-        #new_data = json.dumps(new_data, separators=(',', ':'))
+        new_data = query_dataflow_data(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
         print("url:", url)
         response = requests.post(url=url, headers=headers, data=data)
         count_num = 0
@@ -527,30 +534,30 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '注册工作流选择器':
-        fileName = upload_jar_file_workflow()
-        new_url = url.format(fileName)
-        response = requests.post(url=new_url, headers=headers, data=data)
-        print(response.text, response.status_code)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '注册批处理选择器':
-        fileName = upload_jar_file_dataflow()
-        new_url = url.format(fileName)
-        response = requests.post(url=new_url, headers=headers, data=data)
-        print(response.text, response.status_code)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '注册过滤器':
-        fileName = upload_jar_file_filter()
-        new_url = url.format(fileName)
-        response = requests.post(url=new_url, headers=headers, data=data)
-        print(response.text, response.status_code)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '注册工作流选择器':
+    #     fileName = upload_jar_file_workflow()
+    #     new_url = url.format(fileName)
+    #     response = requests.post(url=new_url, headers=headers, data=data)
+    #     print(response.text, response.status_code)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '注册批处理选择器':
+    #     fileName = upload_jar_file_dataflow()
+    #     new_url = url.format(fileName)
+    #     response = requests.post(url=new_url, headers=headers, data=data)
+    #     print(response.text, response.status_code)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    # elif case_detail == '注册过滤器':
+    #     fileName = upload_jar_file_filter()
+    #     new_url = url.format(fileName)
+    #     response = requests.post(url=new_url, headers=headers, data=data)
+    #     print(response.text, response.status_code)
+    #     clean_vaule(table_sheet_name, row, column)
+    #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+    #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     elif case_detail == '数据标准导入文件':
         dir2 = ab_dir('sex.xls')
         files = {"file": open(dir2, 'rb')}
@@ -892,7 +899,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         elif case_detail == '根据statement id,获取预览colsplit-Dataset的结果数据':
             print('开始执行：', case_detail)
             res_statementId = statementId_flow_output_use(host, data)
-            new_url = url.format(res_statementId)
+            new_url = url.format(data, res_statementId)
+            print("new_url: ", new_url)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)
             count_num = 0
@@ -908,7 +916,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         elif case_detail == '根据statement id,获取预览unpovit3-Dataset的结果数据':
             print('开始执行：', case_detail)
             res_statementId = statementId_flow_output_use(host, data)
-            new_url = url.format(res_statementId)
+            new_url = url.format(data, res_statementId)
+            print("new_url: ", new_url)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)
             count_num = 0
@@ -925,7 +934,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         elif case_detail == '根据statement id,获取预览pivot-Dataset的结果数据':
             print('开始执行：', case_detail)
             res_statementId = statementId_flow_output_use(host, data)
-            new_url = url.format(res_statementId)
+            new_url = url.format(data, res_statementId)
+            print("new_url: ", new_url)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)
             count_num = 0
@@ -941,7 +951,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         elif case_detail == '根据statement id,获取预览explode-Dataset的结果数据':
             print('开始执行：', case_detail)
             res_statementId = statementId_flow_output_use(host, data)
-            new_url = url.format(res_statementId)
+            new_url = url.format(data, res_statementId)
+            print("new_url: ", new_url)
             response = requests.get(url=new_url, headers=headers)
             print(response.text, response.status_code)
             count_num = 0

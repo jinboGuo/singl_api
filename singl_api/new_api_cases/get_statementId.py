@@ -71,7 +71,7 @@ def statementId_flow_use(host, datasetId, tenant):
         return statementId
 
 def statementId_flow_output_use(host, datasetId):
-    url = '%s/api/datasets/%s/previewinit??tenant=db09f359-1e4d-4b3c-872e-7775bd8eed8b&rows=50' % (host, datasetId)
+    url = '%s/api/datasets/%s/previewinit?rows=50' % (host, datasetId)
     res = requests.get(url=url, headers=get_headers(host))
     try:
         res_statementId = dict_res(res.text)
