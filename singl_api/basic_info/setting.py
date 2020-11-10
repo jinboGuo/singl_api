@@ -167,11 +167,11 @@ tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
 # dsp customer账户登录信息
 MY_LOGIN_INFO_dsp_customer = {
  "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic Y3VzdG9tZXI6MTIzNDU2', "Accept": "application/json"},
- "URL": "http://192.168.1.82:8008/api/auth/oauth/token",
+ "URL": "%s/api/auth/oauth/token" % dsp_host,
  "DATA": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'},
  "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
              'grant_type': 'customer_password'},
- "HOST": "http://192.168.1.82:8008"
+ "HOST": "%s" % dsp_host
 }
 
 # dsp admin账户登录信息
