@@ -177,10 +177,10 @@ MY_LOGIN_INFO_dsp_customer = {
 # dsp admin账户登录信息
 MY_LOGIN_INFO_dsp_admin = {
  "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
- "URL": "http://192.168.1.82:8008/api/auth/oauth/token",
+ "URL": "%s/api/auth/oauth/token" % dsp_host,
  "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
  "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
- "HOST": "http://192.168.1.82:8008"
+ "HOST": "%s" % dsp_host
 }
 
 MY_LOGIN_INFO = {
