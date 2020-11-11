@@ -8,17 +8,13 @@ from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import MY_LOGIN_INFO_dsp_admin, Dsp_MySQL_CONFIG
+from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pull_data, corn_application_oracle, \
-    cust_data_source, \
-    appconfig_data, resource_data, resource_data_push_once_hdfs_csv, resource_data_push_once_mysql, \
-    resource_data_push_event_hdfs_txt, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
-    pull_Aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_Aggs_sql, resource_data_save, \
-    resource_data_dss
+from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pull_data, cust_data_source, appconfig_data, resource_data, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
+    pull_Aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_Aggs_sql, resource_data_save,resource_data_dss, resource_data_push
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -146,7 +142,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     elif case_detail == '数据资源订阅-once_hdfs_csv':
         print('开始执行：', case_detail)
         print("request   url:", url)
-        new_data = resource_data_push_once_hdfs_csv(data)
+        new_data = resource_data_push(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
         print("response data:", response.status_code, response.text)
@@ -156,7 +152,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     elif case_detail == '数据资源订阅-once_mysql':
         print('开始执行：', case_detail)
         print("request   url:", url)
-        new_data = resource_data_push_once_mysql(data)
+        new_data = resource_data_push(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
         print("response data:", response.status_code, response.text)
@@ -166,7 +162,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     elif case_detail == '数据资源订阅-event_hdfs_txt':
         print('开始执行：', case_detail)
         print("request   url:", url)
-        new_data = resource_data_push_event_hdfs_txt(data)
+        new_data = resource_data_push(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
         print("response data:", response.status_code, response.text)
@@ -176,7 +172,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     elif case_detail == '数据资源订阅-cron':
         print('开始执行：', case_detail)
         print("request   url:", url)
-        new_data = corn_application_oracle(data)
+        new_data = resource_data_push(data)
         new_data = json.dumps(new_data, separators=(',', ':'))
         response = requests.post(url=url, headers=headers, data=new_data)
         print("response data:", response.status_code, response.text)
@@ -359,69 +355,69 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         new_headers = {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic ZHNwOjEyMzQ1Ng==', "Accept": "application/json"}
         if case_detail == '管理员登录':
             data = {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password'}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers= new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '消费者登录':
             data = {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '密码错误的账户登录':
             data = {'username': 'customer3', 'password': '1234567', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '不存在的账户登录':
             data = {'username': 'adminer', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'manager_password'}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '没有权限的账户登录':
             data = {'name': encrypt_rf('user_without_pression'), 'password': encrypt_rf('123456'),
                     'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '有权限，密码过期的账户登录':
             data = {'name': encrypt_rf('user_pwd_expired'), 'password': encrypt_rf('123456'),
                     'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '有权限，用户有效期过期的账户登录':
             data = {'name': encrypt_rf('user_time_expired'), 'password': encrypt_rf('123456'),
                     'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '有权限，密码和用户有效期均过期的账户登录':
             data = {'name': encrypt_rf('user_expired'), 'password': encrypt_rf('123456'),
                     'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-            #print("request   url:", url)
+            print("request   url:", url)
             response = requests.post(url=url, headers=new_headers, data=data)
-            #print("response data:", response.status_code, response.text)
+            print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
