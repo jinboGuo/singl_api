@@ -18,10 +18,10 @@ ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 def resource_data_push(data):
     try:
         data = data.split("&")
-        sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
+        sql = "select name,id from dsp_data_resource where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
         print('resource_id-name:', resource_info[0]["id"], resource_info[0]["name"])
-        dss_sql = "select name,id from dsp_cust_data_source where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
+        dss_sql = "select name,id from dsp_cust_data_source where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         dss_info = ms.ExecuQuery(dss_sql.encode('utf-8'))
         print('cust_data_source_id-name:', dss_info[0]["id"], dss_info[0]["name"])
     except:

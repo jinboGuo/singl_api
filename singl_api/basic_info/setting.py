@@ -89,26 +89,26 @@ email_to = {
 # }
 # # -------dsp环境使用-------
 # # # HOST
-dsp_host = "http://192.168.1.82:8008"
-# # # # # 数据库连接信息
-Dsp_MySQL_CONFIG = {
-     'HOST': '192.168.1.82',
-     "PORT": 3306,
-     "USER": 'merce',
-     "PASSWORD": 'merce',
-     "DB": 'merce_83'
- }
-
-# # # HOST
-# dsp_host = "http://192.168.1.199:8008"
+# dsp_host = "http://192.168.1.82:8008"
 # # # # # # 数据库连接信息
 # Dsp_MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce_199'
-# }
+#      'HOST': '192.168.1.82',
+#      "PORT": 3306,
+#      "USER": 'merce',
+#      "PASSWORD": 'merce',
+#      "DB": 'merce_83'
+#  }
+
+# # # HOST
+dsp_host = "http://192.168.1.199:8008"
+# # # # # 数据库连接信息
+Dsp_MySQL_CONFIG = {
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_199'
+}
 
 # # -------dw环境使用-------
 # # # HOST
