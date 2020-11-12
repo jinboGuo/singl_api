@@ -19,7 +19,7 @@ from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pul
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('dsp_199')
+case_table_sheet = case_table.get_sheet_by_name('dsp')
 all_rows = case_table_sheet.max_row
 
 
