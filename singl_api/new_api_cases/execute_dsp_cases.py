@@ -38,7 +38,7 @@ def deal_request_method():
         # 请求方法转大写
         if request_method:
             request_method_upper = request_method.upper()
-            if api_name == 'admin':  # 租户的用例需要使用admin用户登录后操作
+            if api_name == 'admin':  # 用例需要使用admin用户登录后操作
                 # 根据不同的请求方法，进行分发
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
@@ -1023,13 +1023,3 @@ class CheckResult(unittest.TestCase):
             else:
                 print('请确认status code或response.text对比结果')
         case_table.save(ab_dir('api_cases.xlsx'))
-
-
-
-# 调试
-# 执行用例
-# deal_request_method()
-# # # # 对比用例结果
-# g = CheckResult()
-# g.deal_result()
-

@@ -56,17 +56,17 @@ email_to = {
 #     "DB": 'merce',
 #     'case_db': 'test'}
 
-# # -------57环境使用-------
+# # -------comapss环境使用-------
 # # HOST
-# host = "http://192.168.1.57:8515"
+compass_host = "http://192.168.1.55:8020"
 # # # # # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.57',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce'
-# }
+Compass_MySQL_CONFIG = {
+    'HOST': '192.168.1.85',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'compass'
+}
 
 # MySQL_CONFIG = {
 #     'HOST': '192.168.1.82',
@@ -163,6 +163,15 @@ tenant_id_83 = "fc75a4d5-72af-486b-9a48-c35aeaefedca"
 tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
 tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b' #yulijiang
 tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
+
+# compass admin账户登录信息
+MY_LOGIN_INFO_compass = {
+    "HEADERS": {"Content-Type": "application/json;charset=UTF-8", "Accept": "application/json"},
+    "URL": "%s/compass/auth/login" % compass_host,
+    "DATA": {'username': 'admin', 'password': 'AES(3cde4fd05c58aee9937bfb2db12c9a91)'},
+    "DATA_ERROR_NAME": {'username': 'adminn', 'password': 'AES(3cde4fd05c58aee9937bfb2db12c9a91)', 'remember': 'true'},
+    "HOST": "%s" % compass_host
+}
 
 # dsp customer账户登录信息
 MY_LOGIN_INFO_dsp_customer = {

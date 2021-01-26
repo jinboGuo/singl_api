@@ -1,6 +1,7 @@
 import base64
 import json
 import gzip
+import aes
 
 class MyEncoder(json.JSONEncoder):
     def my_encoder(self, obj):
@@ -49,3 +50,5 @@ def parameter_ungzip(parameters):
 #     print('OK')
 # else:
 #     print('N')
+#if __name__=='__main__':
+ #  print(encrypt_rf('123456'))

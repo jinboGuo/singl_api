@@ -1,14 +1,12 @@
 # coding:utf-8
 import os
-import time
 import requests
-from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
+from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dw_deal_parameters import deal_random
 from util.format_res import dict_res
 from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.setting import host
-import random
 
 from util.timestamp_13 import get_now, get_tomorrow, data_now
 

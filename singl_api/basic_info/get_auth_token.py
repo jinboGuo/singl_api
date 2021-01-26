@@ -1,6 +1,7 @@
 # coding:utf-8
 import requests
-from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root,MY_LOGIN_INFO_dam,MY_LOGIN_INFO_dsp_admin,MY_LOGIN_INFO_dsp_customer
+from basic_info.setting import MY_LOGIN_INFO2, MY_LOGIN_INFO_root, MY_LOGIN_INFO_dam, MY_LOGIN_INFO_dsp_admin, \
+    MY_LOGIN_INFO_dsp_customer, MY_LOGIN_INFO_compass
 from util.format_res import dict_res
 # admin账户登录，普通请求
 # 获取登录后返回的X-AUTH-TOKEN
@@ -15,7 +16,6 @@ def get_auth_token(HOST):
         dict_headers = dict_res(res.text)
         token = dict_headers['content']["accessToken"]
         return 'Bearer ' + token
-
 
 # 组装headers， 接口请求时调用
 def get_headers(HOST):
@@ -99,3 +99,28 @@ def get_headers_customer(HOST):
     Authorization = get_auth_token_customer(HOST)
     headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
     return headers
+
+# compass获取登录后返回的X-AUTH-TOKEN
+def get_auth_token_compass(HOST):
+    if '57' in HOST:
+        res = requests.post(url=MY_LOGIN_INFO_compass["URL"], headers=MY_LOGIN_INFO_compass["HEADERS"],
+                            data=MY_LOGIN_INFO_compass["DATA"])
+        dict_headers = dict(res.headers)
+        token = dict_headers['Authorization']
+        return token
+    else:
+        #print("url-heads-data", MY_LOGIN_INFO_compass["URL"], MY_LOGIN_INFO_compass["HEADERS"], MY_LOGIN_INFO_compass["DATA"])
+        res = requests.post(url=MY_LOGIN_INFO_compass["URL"], headers=MY_LOGIN_INFO_compass["HEADERS"], json=MY_LOGIN_INFO_compass["DATA"])
+        #print("res: ", res)
+        dict_headers = dict_res(res.text)
+        token = dict_headers['content']["accessToken"]
+        return token
+
+# 组装headers， 接口请求时调用
+def get_headers_compass(HOST):
+    x_auth_token = get_auth_token_compass(HOST)
+    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
+    return headers
+
+#HOST='http://192.168.1.55:8020'
+#print(get_auth_token_compass(HOST))

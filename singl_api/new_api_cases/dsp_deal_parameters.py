@@ -1,7 +1,5 @@
 import random
-from util.timestamp_13 import *
 from basic_info.setting import Dsp_MySQL_CONFIG
-import os
 from util.Open_DB import MYSQL
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
@@ -11,19 +9,6 @@ def deal_parameters(data):
         if '随机数' in data:
             # print(data)
             data = data.replace('随机数', str(random.randint(0, 999999999999999)))
-            return deal_parameters(data)
-        if '6天前时间戳' in data:
-            data = data.replace('6天前时间戳', get_timestamp(6))
-            return deal_parameters(data)
-        if '当前时间戳' in data:
-            data = data.replace('当前时间戳', get_timestamp(0))
-            return deal_parameters(data)
-        if '监控开始时间' in data:
-            data = data.replace('监控开始时间', get_now_time()[0])
-            return deal_parameters(data)
-        if '监控结束时间' in data:
-            data = data.replace('监控结束时间', get_now_time()[1])
-            # print(data)
             return deal_parameters(data)
         if 'select id from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
