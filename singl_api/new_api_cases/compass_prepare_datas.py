@@ -1,10 +1,7 @@
 # coding:utf-8
 import os
-import requests
-from basic_info.get_auth_token import get_headers_compass
 from new_api_cases.compass_deal_parameters import deal_random
-from util.format_res import dict_res
-from basic_info.setting import Compass_MySQL_CONFIG, compass_host
+from basic_info.setting import Compass_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from util.timestamp_13 import data_now
 
@@ -77,26 +74,155 @@ def add_job(data):
     except :
         return
 
-dir1 = ab_dir('woven-common-3.0.jar')
-
-
-
-def upload_jar_file_workflow():
-    url = "%s/api/processconfigs/uploadjar/workflow selector" % compass_host
-    print(url)
-    # files = {"file": open('./new_api_cases/woven-common-3.0.jar', 'rb')}
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers_compass(compass_host)
-    headers.pop('Content-Type')
+def add_jobSingle(data):
     try:
-        response = requests.post(url, files=files, headers=headers)
-        print(response.text)
-        workflow_fileName = dict_res(response.text)["fileName"]
-        print(workflow_fileName)
+        sql = "select job_oid,job_name,slice_type from s_c_job where job_name = '%s' order by create_time desc limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        job_oid, job_name, slice_type = str(job_info[0]["job_oid"]), job_info[0]["job_name"], job_info[0]["slice_type"]
+        print('job_oid,job_name,slice_type :', job_oid, job_name, slice_type)
+
+        if 'gdemo' == data:
+            new_data = {"jobOid": job_oid, "sliceType": slice_type, "sliceTime": data_now(), "singleType": 0, "jobLevel": "1", "taskName": job_name}
+            deal_random(new_data)
+            return new_data
+        elif 'gdemo_add_supp' == data:
+            new_data = {"jobOid": job_oid, "sliceType": slice_type, "sliceTime": data_now(), "singleType": 1, "jobLevel": "1", "taskName": job_name}
+            deal_random(new_data)
+            return new_data
+        elif 'gdemo_total_supp' == data:
+            new_data = {"jobOid": job_oid, "sliceType": slice_type, "sliceTime": data_now(), "singleType": 2, "jobLevel": "1", "taskName": job_name}
+            deal_random(new_data)
+            return new_data
+        elif 'test_cover' == data:
+            new_data = {"jobOid": job_oid, "sliceType": slice_type, "sliceTime": data_now(), "singleType": 3, "jobLevel": "1", "taskName": job_name}
+            deal_random(new_data)
+            return new_data
+        else:
+            return
+    except:
+       return
+
+def update_jobSingle(data):
+
+    try:
+        sql = "select single_oid,job_oid,slice_time,create_time,status,single_type,task_name from s_r_job_single where task_name like '%s%%%%' order by create_time desc limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        single_oid, job_oid, slice_time, create_time, status, single_type = str(job_info[0]["single_oid"]), str(job_info[0]["job_oid"]), str(job_info[0]["slice_time"]), str(job_info[0]["create_time"]), job_info[0]["status"], job_info[0]["single_type"]
+        print('single_oid,job_oid,slice_time,create_time,status,single_type :', single_oid, job_oid, slice_time, create_time, status, single_type)
+    except :
+        return
+    new_data = {"id": single_oid, "jobOid": job_oid, "jobLevel": 1, "sliceTime": slice_time, "createTime": create_time, "status": status , "singleType": single_type,"taskName": "gdemo随机数", "sliceType":"H"}
+    deal_random(new_data)
+    return new_data
+
+
+def add_jobMap(data):
+    try:
+        sql = "select job_oid,cluster_name from s_c_job where job_name like '%s%%%%' order by create_time desc limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        job_oid, cluster_name = str(job_info[0]["job_oid"]), job_info[0]["cluster_name"]
+        print('job_oid,cluster_name :', job_oid, cluster_name)
+        if 'autotest' == data:
+            new_data = {"jobDataOid":"","jobOid": job_oid, "clusterName": cluster_name, "dataformatName": "test_supp1211","sliceTimeRegType":1,"sliceTimeReg":"","mustLevel":3,"mustType":1,"mustPars":"100","mustLine":"","mustOuttime":""}
+            return new_data
+        else:
+            return
     except:
         return
-    else:
-        return workflow_fileName
 
-#data='default&carpo&supp&default&com.nokia.bighead.scheduler.task.JobTaskRunThreadCdo'
-#print(add_job(data))
+def update_jobMap(data):
+
+    try:
+        sql = "select job_map_oid ,job_oid,dataformat_Name,cluster_name,job_name from s_c_job_map where job_name like '%s%%%%' limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        job_map_oid, job_oid, dataformat_Name,cluster_name, job_name = str(job_info[0]["job_map_oid"]), str(job_info[0]["job_oid"]), job_info[0]["dataformat_Name"], job_info[0]["cluster_name"], job_info[0]["job_name"]
+        print('job_map_oid,job_oid,dataformat_Name,cluster_name,job_name :', job_map_oid, job_oid, dataformat_Name,cluster_name, job_name)
+    except :
+        return
+    new_data = {"jobDataOid": "", "jobOid": job_oid, "clusterName": cluster_name, "dataformatName": dataformat_Name,"sliceTimeRegType":1,"sliceTimeReg":"","mustLevel":3,"mustType":1,"mustPars":"100","mustLine":"","mustOuttime":"", "id": job_map_oid,"jobName": job_name, "jobType": "2"}
+    return new_data
+
+def update_re(data):
+
+    try:
+        sql = "select re_oid from s_c_re where re_name like  '%s%%%%' limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_oid = str(job_info[0]["re_oid"])
+        print('re_oid :', re_oid)
+    except :
+        return
+    new_data = {"id": re_oid, "reName": "autotest随机数", "queueName": "default", "status": 1, "clusterName": "83"}
+    deal_random(new_data)
+    return new_data
+
+def query_reth(data):
+
+    try:
+        re_oid = []
+        sql = "select re_oid from s_c_re where re_name like  '%s%%%%' limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_oid.append(str(job_info[0]["re_oid"]))
+        print('re_oid :', re_oid)
+    except :
+        return
+    new_data = {"fieldGroup": {"fields": [{"andOr": "AND", "name": "reOid", "oper": "EQUAL", "value": re_oid}]},"ordSort":[],"pageable":{"pageNum":0,"pageSize":8,"pageable":"true"}}
+    return new_data
+
+def add_reth(data):
+
+    try:
+        sql = "select re_oid from s_c_re where re_name like  '%s%%%%' limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_oid = str(job_info[0]["re_oid"])
+        print('re_oid :', re_oid)
+    except :
+        return
+    new_data = {"reOid": re_oid, "minValue": "", "maxValue": "10000", "exeMem": "2G", "exeNum": "2", "driverMem": "2G"}
+    return new_data
+
+def update_reth(data):
+    try:
+        sql = "select re_th_oid, re_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like '%s%%%%' limit 1) as t)" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_th_oid, re_oid = str(job_info[0]["re_th_oid"]), str(job_info[0]["re_oid"])
+        print('re_th_oid, re_oid  :', re_th_oid, re_oid)
+    except :
+        return
+    new_data = {"id": re_th_oid, "reOid": re_oid, "minValue": "", "maxValue": "10000", "exeMem": "2G", "exeNum": "2", "driverMem": "2G"}
+    return new_data
+
+def query_rethExt(data):
+
+    try:
+        re_th_oid = []
+        sql = "select re_th_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like '%s%%%%' limit 1) as t)" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_th_oid.append(str(job_info[0]["re_th_oid"]))
+        print('re_th_oid :', re_th_oid)
+    except :
+        return
+    new_data = {"fieldGroup": {"fields": [{"andOr": "AND", "name": "reThOid", "oper": "EQUAL", "value": re_th_oid}]}, "ordSort": [], "pageable": {"pageNum": 0, "pageSize": 8, "pageable": "true"}}
+    return new_data
+
+def add_rethExt(data):
+
+    try:
+        sql = "select re_th_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like '%s%%%%' limit 1) as t)" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_th_oid = str(job_info[0]["re_th_oid"])
+        print('re_th_oid :', re_th_oid)
+    except :
+        return
+    new_data = {"reThOid": re_th_oid, "extKey": "spark.executor.cores", "extValue": "4"}
+    return new_data
+
+def update_rethExt(data):
+    try:
+        sql = "select re_th_ext_oid ,re_th_oid from s_c_re_th_ext where re_th_oid in(select t.re_th_oid from s_c_re_th as t where re_oid in(select s.re_oid from (select * from s_c_re where re_name like '%s%%%%' limit 1) as s))" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        re_th_ext_oid, re_th_oid = str(job_info[0]["re_th_ext_oid"]), str(job_info[0]["re_th_oid"])
+        print('re_th_ext_oid, re_th_oid  :', re_th_ext_oid, re_th_oid)
+    except :
+        return
+    new_data = {"id": re_th_ext_oid, "reThOid": re_th_oid, "extKey": "spark.executor.cores", "extValue": "4"}
+    return new_data

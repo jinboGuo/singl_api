@@ -12,7 +12,8 @@ from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_compass
 from new_api_cases.compass_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add_job
+from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add_job, add_jobSingle, update_jobSingle, \
+    add_jobMap, update_jobMap, update_re, query_reth, add_reth, update_reth, query_rethExt, update_rethExt, add_rethExt
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -95,6 +96,75 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         new_data = json.dumps(new_data, separators=(',', ':'))
         print("new_data ", new_data)
         response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '新增任务类型' in case_detail:
+        print('开始执行：', case_detail)
+        new_data = add_jobSingle(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '新增数据流程依赖关系' == case_detail:
+        print('开始执行：', case_detail)
+        new_data = add_jobMap(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '查询资源参数名称' == case_detail:
+        print('开始执行：', case_detail)
+        new_data = query_reth(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '新增数据资源参数' == case_detail:
+        print('开始执行：', case_detail)
+        new_data = add_reth(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '查询资源参数附加值名称' == case_detail:
+        print('开始执行：', case_detail)
+        new_data = query_rethExt(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif '新增数据资源参数附加值' == case_detail:
+        print('开始执行：', case_detail)
+        new_data = add_rethExt(data)
+        new_data = json.dumps(new_data, separators=(',', ':'))
+        print("new_data ", new_data)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response data:", response.status_code, response.text)
+        clean_vaule(table_sheet_name, row, column)
+        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    elif case_detail == '导入调度任务':
+        print('开始执行：', case_detail)
+        files = {"file": open(jar_dir, 'rb')}
+        headers.pop('Content-Type')
+        response = requests.post(url=url, files=files, headers=headers)
         print("response data:", response.status_code, response.text)
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -226,11 +296,15 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 elif len(parameters) == 2:
                     url_new = url.format(parameters[0], parameters[1])
                     print("request   url:", url_new)
+                    headers.pop("Content-Type")
+                    headers.pop("Accept")
+                    headers["Accept"] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+                    headers["Upgrade-Insecure-Requests"] = '1'
                     response = requests.get(url=url_new, headers=headers)
-                    print("response data:", response.status_code, response.text)
+                    print("response data:", response.status_code, response.text.encode("ascii",errors="ignore"))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text.encode("ascii",errors="ignore"))
                 elif len(parameters) == 3:
                     url_new = url.format(parameters[0], parameters[1], parameters[2])
                     print("request url:", url_new)
@@ -242,6 +316,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 else:
                     print('请确认第%d行parameters' % row)
             else:  # 参数中不包含&，只有一个参数
+#                for new_data in data:
                 url_new = url.format(data)
                 print("request   url:", url_new)
                 response = requests.get(url=url_new, headers=headers)
@@ -317,6 +392,51 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
             elif case_detail == '编辑调度任务':
                 print('开始执行：', case_detail)
                 new_data = update_job(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '编辑立即执行任务':
+                print('开始执行：', case_detail)
+                new_data = update_jobSingle(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '编辑数据流程依赖关系':
+                print('开始执行：', case_detail)
+                new_data = update_jobMap(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '编辑资源名称':
+                print('开始执行：', case_detail)
+                new_data = update_re(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '编辑资源参数名称':
+                print('开始执行：', case_detail)
+                new_data = update_reth(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '编辑资源参数附加值名称':
+                print('开始执行：', case_detail)
+                new_data = update_rethExt(data)
                 new_data = json.dumps(new_data, separators=(',', ':'))
                 response = requests.put(url=url, headers=headers, data=new_data)
                 print("response data:", response.status_code, response.text)
