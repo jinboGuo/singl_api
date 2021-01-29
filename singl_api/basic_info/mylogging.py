@@ -1,6 +1,8 @@
 import logging
 import logging.handlers
 import os
+import threading
+import time
 
 
 def logger_info(msg):
@@ -20,7 +22,7 @@ def logger_info(msg):
         os.mkdir(logs_dir)
 
     # define a rotating file handler
-    rotatingFileHandler = logging.handlers.RotatingFileHandler(filename="./logs/log.txt",
+    rotatingFileHandler = logging.handlers.RotatingFileHandler(filename="logs/outlog.txt",
 
                                                                maxBytes=1024 * 1024 * 50,
 
@@ -54,11 +56,61 @@ def logger_info(msg):
     logger = logging.getLogger("")
     logger.setLevel(logging.NOTSET)
 
+PATH = lambda p:  os.path.abspath(
+    os.path.join(os.path.dirname(__file__), p))
+
+class Log:
+    def __init__(self):
+        global resultPath, log_path
+        print(PATH)
+        resultPath = PATH("../basic_info/logs")
+        # create result file if it doesn't exist
+        if not os.path.exists(resultPath):
+            os.mkdir(resultPath)
+        # defined test result file name by localtime
+        log_path = resultPath + '/'+ time.strftime('%Y%m%d_%H%M%S', time.localtime())
+        # create test result file if it doesn't exist
+        if not os.path.exists(log_path):
+            os.mkdir(log_path)
+        # defined logger
+        self.logger = logging.getLogger()
+        # defined log level
+        self.logger.setLevel(logging.INFO)
+        handler = logging.FileHandler(log_path+"/output.log", encoding='utf-8')
+        # defined formatter
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        # defined formatter
+        handler.setFormatter(formatter)
+        # add handler
+        self.logger.addHandler(handler)
 
 
-import logging
-logger = logging.getLogger(__name__)
+
+class myLog:
+    """
+    This class is used to get log
+    """
+
+    log = None
+    mutex = threading.Lock()
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def getLog():
+        if myLog.log is None:
+            myLog.mutex.acquire()
+            myLog.log = Log()
+            myLog.mutex.release()
+
+        return myLog.log
+
+
+#
+# import logging
+# logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     msg = "this is just a test"
-    logger_info(msg)
+    myLog().getLog().logger.info(msg)
