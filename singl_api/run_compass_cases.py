@@ -1,5 +1,6 @@
 # coding:utf-8
-from util.send_mail import dw_main3
+from basic_info.setting import compass_host, receivers_list
+from util.send_mail import compass_main3
 import datetime
 from new_api_cases.execute_compass_cases import deal_request_method
 from new_api_cases.execute_compass_cases import CheckResult
@@ -16,7 +17,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-#dw_main3(dw_host, receivers_list)
+compass_main3(compass_host, receivers_list)
 
 
 

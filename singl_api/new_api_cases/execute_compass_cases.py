@@ -18,7 +18,7 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('842')
+case_table_sheet = case_table.get_sheet_by_name('compass')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('Scheduler_import.xlsx')
 
