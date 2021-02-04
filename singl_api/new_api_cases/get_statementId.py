@@ -1,5 +1,6 @@
 import requests, json
 from basic_info.get_auth_token import get_headers
+from basic_info.mylogging import myLog
 from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
     tenant_id_84, tenant_id_199
 from new_api_cases.prepare_datas_for_cases import dataset_data
@@ -114,7 +115,8 @@ def statementId_no_dataset(host, param):
         statementId = res_statementId['statementId']
         print('statement_id: ', statementId)
         return statementId, new_data
-    except KeyError:
+    except KeyError as e:
+        myLog().getLog().logger.error("datasetId不存在{}".format(e))
         return
 
 
