@@ -369,7 +369,6 @@ sh = "sh createdata2.sh"
 mv = "mv [demo]* gdemo/"
 
 def run_all():
-    log.debug("开始执行脚本")
     host.connect()
     host.send(cd)  # 发送一个命令
     host.send('sh createdata2.sh')
@@ -382,5 +381,4 @@ def run_all():
     check_s_l_result_task(s_l_result_task)
     check_s_l_result_detail(s_l_result_detail)
     check_s_l_result_output(s_l_result_output)
-    log.debug("完成脚本执行")
 run_all()
