@@ -48,7 +48,7 @@ Compass_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'compass'
+    "DB": 'compass-app'
 }
 
 # MySQL_CONFIG = {

@@ -82,15 +82,15 @@ class Linux(object):
 
 
 # 连接正常的情况
-if __name__ == '__main__':
-    host = Linux('192.168.1.55', 'root', 'Inf0refiner') # 传入Ip，用户名，密码
-    host.connect()
-    host.send('cd /data/input/demo/') # 发送一个查看ip的命令
-    host.send('sh createdata2.sh')
-    sleep(5)
-    host.send('cd /data/input/demo/')
-    sleep(2)
-    host.send('mv [demo]* gdemo/')
+# if __name__ == '__main__':
+#     host = Linux('192.168.1.55', 'root', 'Inf0refiner') # 传入Ip，用户名，密码
+#     host.connect()
+#     host.send('cd /data/input/demo/') # 发送一个查看ip的命令
+#     host.send('sh createdata2.sh')
+#     sleep(5)
+#     host.send('cd /data/input/demo/')
+#     sleep(2)
+#     host.send('mv [demo]* gdemo/')
     #os.system('mv [demo]* gdemo/')
     # def input_cmd(str):
     #     return input(str)

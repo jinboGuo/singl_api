@@ -34,7 +34,6 @@ def check_s_l_message(data):
             print("----s_l_message----没有任务数据！", "line: ", str(sys._getframe().f_lineno),\
                   "in ", sys._getframe().f_code.co_name)
             sleep(5)
-
 # 监控日志任务调度
 def check_s_r_task(data):
     print("----开始监控日志任务调度消息----", "line: ", str(sys._getframe().f_lineno), "in ", sys._getframe().f_code.co_name)
