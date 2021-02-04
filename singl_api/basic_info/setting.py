@@ -21,18 +21,11 @@ email_to = {
 ws_url = "ws://192.168.1.55:8020/compass/shell/executor"  # 远程执行脚本url
 # 远程执行脚本发送data
 exec_data = {"operation": "execute", "shellCommand":{"path":"/app/ruifan/baymax-commander/commander-scheduler","fileName":"createDataflow.sh","password":"Inf0refiner","serverIp":"192.168.1.55","username":"root"}}
-# ------83环境使用--------
-# #  HOST
-# host = "http://192.168.1.83:8515"
-# # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.189',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'wac',
-#     'case_db': 'test'
-# }
+Compass_scheduler = {
+    'HOST': '192.168.1.55',
+    "USER": 'root',
+    "PASSWORD": 'Inf0refiner'
+}
 
 # # -------189环境使用-------
 # HOST
