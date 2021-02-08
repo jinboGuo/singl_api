@@ -88,7 +88,7 @@ def deal_request_method():
 
 # POST请求
 def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):
-    # if isinstance(data, str):
+ try:
     case_detail = case_table_sheet.cell(row=row, column=2).value
     if '新增调度任务' in case_detail:
         print('开始执行：', case_detail)
@@ -228,10 +228,13 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+ except Exception as e:
+   print("异常信息：",e)
 
 
 # GET请求
 def get_request_result_check(url, headers, host, data, table_sheet_name, row, column):
+ try:
     case_detail = case_table_sheet.cell(row=row, column=2).value
     # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
     if data:
@@ -333,10 +336,13 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+ except Exception as e:
+     print("异常信息：",e)
 
 
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
+ try:
     case_detail = case_table_sheet.cell(row=row, column=2).value
     if data and isinstance(data, str):
     #if data:
@@ -453,8 +459,12 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                 write_result(table_sheet_name, row, column + 4, response.text)
     else:
         print('第%s行的参数为空或格式异常' % row)
+ except Exception as e:
+     print("异常信息：",e)
+
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
+ try:
     case_detail = case_table_sheet.cell(row=row, column=2).value
     if isinstance(data, str):
         print('开始执行：', case_detail)
@@ -508,8 +518,8 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # print(data)
-        # print(type(data))
+ except Exception as e:
+     print("异常信息：",e)
 
 
 #  写入返回结果

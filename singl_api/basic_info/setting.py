@@ -41,7 +41,7 @@ Compass_scheduler = {
 
 # # -------comapss环境使用-------
 # # HOST
-compass_host = "http://192.168.1.55:8020"
+compass_host = "http://192.168.1.55:8023"
 # # # # # 数据库连接信息
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.85',

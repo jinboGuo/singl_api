@@ -20,7 +20,7 @@ class Linux(object):
         while True:
             # 连接过程中可能会抛出异常，比如网络不通、链接超时
             try:
-                print('---开始连接服务器---')
+                print('\033[35m----开始连接服务器----\033[0m')
                 self.t = paramiko.Transport(sock=(self.ip, 22))
                 self.t.connect(username=self.username, password=self.password)
                 self.chan = self.t.open_session()
@@ -28,7 +28,7 @@ class Linux(object):
                 self.chan.get_pty()
                 self.chan.invoke_shell()
                 # 如果没有抛出异常说明连接成功，直接返回
-                print('连接%s成功' % self.ip)
+                print('\033[35m连接%s成功\033[0m ' % self.ip)
                 # 接收到的网络数据解码为str
                 print(self.chan.recv(65535).decode('utf-8'))
                 return
@@ -43,7 +43,7 @@ class Linux(object):
 
     # 断开连接
     def close(self):
-        print('---关闭服务器连接---')
+        print('\033[35m----关闭服务器连接----\033[0m')
         self.chan.close()
         self.t.close()
 
@@ -52,7 +52,7 @@ class Linux(object):
         cmd += '\r'
         result = ''
         # 发送要执行的命令
-        print('开始执行命令: ', cmd)
+        print('\033[35m开始执行命令: \033[0m', cmd)
         self.chan.send(cmd)
         # 回显很长的命令可能执行较久，通过循环分批次取回回显,执行成功返回true,失败返回false
         while True:
