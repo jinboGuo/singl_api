@@ -474,7 +474,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else: #data为空
-                print("\033[35m开始执行：\033[0m", case_detail)
                 print("request   url:", url)
                 response = requests.post(url=url, headers=headers, data=data)
                 print("response data:", response.status_code, response.text)
