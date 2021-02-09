@@ -87,766 +87,778 @@ def deal_request_method():
 
 # POST请求
 def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):
-    # if isinstance(data, str):
-    case_detail = case_table_sheet.cell(row=row, column=2).value
-    if '数据资源关联' in case_detail:
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_save(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据源关联':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_dss(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '订阅数据资源发布':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = push_resource_data_open(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '申请数据资源发布':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = pull_resource_data_open(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源申请':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_pull_es(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源订阅-once_hdfs_csv':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_push(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源订阅-once_mysql':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_push(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源订阅-event_hdfs_txt':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_push(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源订阅-cron':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data_push(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif '数据订阅记录审批' in case_detail:
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = application_push_approval(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据申请记录审批':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = application_pull_approval(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '修改数据源-HDFS-CSV':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = cust_data_source(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '修改接入配置':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = appconfig_data(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '数据资源变更':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        new_data = resource_data(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '启用消费者':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        response = requests.post(url=url, headers=headers, json=data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '停用消费者':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        response = requests.post(url=url, headers=headers, json=data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '待部署服务启用':
-        print('开始执行：', case_detail)
-        print("request   url:", data)
-        response = requests.post(url=url, headers=headers, json=data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '已停用服务启用':
-        print('开始执行：', case_detail)
-        print("request   data:", data)
-        response = requests.post(url=url, headers=headers, json=data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif '服务停用' in case_detail:
-        print('开始执行：', case_detail)
-        print("request   data:", data)
-        response = requests.post(url=url, headers=headers, json=data)
-        print("response data:", response.status_code, response.text)
-        time.sleep(20)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '管理员查看订阅服务执行列表':
-        print('开始执行：', case_detail)
-        new_data = {"fieldGroup": {"fields": []}, "ordSort": [{"name": "lastModifiedTime", "order": "DESC"}], "pageable":{"pageNum": 0, "pageSize": 10, "pageable": 'true'}}
-        fow_id = admin_flow_id(data)
-        new_url = url.format(fow_id)
-        print("request   url:", new_url)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=new_url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '消费者查看订阅服务执行列表':
-        print('开始执行：', case_detail)
-        new_data = {"fieldGroup": {"fields": []}, "ordSort": [{"name": "lastModifiedTime", "order": "DESC"}], "pageable":{"pageNum": 0, "pageSize": 10, "pageable": 'true'}}
-        fow_id = customer_flow_id(data)
-        new_url = url.format(fow_id)
-        print("request   url:", new_url)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=new_url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '申请服务数据拉取':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
-        new_data = pull_data(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        print(new_data)
-        response = requests.post(url=url, headers=header, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '申请服务数据拉取sql':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
-        new_data = pull_data_sql(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        print(new_data)
-        response = requests.post(url=url, headers=header, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '申请服务数据聚合sql':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
-        new_data = pull_Aggs_sql(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        print(new_data)
-        response = requests.post(url=url, headers=header, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '申请服务数据聚合':
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
-        new_data = pull_Aggs(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=url, headers=header, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif case_detail == '执行关联表结果预览sql':
-        print('开始执行：', case_detail)
-        new_data = {"pageable":{"pageNum":1,"pageSize":10,"pageable":"true"},"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}
-        new_url = url.format(data)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        response = requests.post(url=new_url, headers=headers, data=new_data)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    elif '登录' in case_detail:
-        new_headers = {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic ZHNwOjEyMzQ1Ng==', "Accept": "application/json"}
-        if case_detail == '管理员登录':
-            data = {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password'}
+    try:
+        case_detail = case_table_sheet.cell(row=row, column=2).value
+        if '数据资源关联' in case_detail:
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers= new_headers, data=data)
+            new_data = resource_data_save(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '消费者登录':
-            data = {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
+        elif case_detail == '数据源关联':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = resource_data_dss(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '密码错误的账户登录':
-            data = {'username': 'customer3', 'password': '1234567', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
+        elif case_detail == '订阅数据资源发布':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = push_resource_data_open(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '不存在的账户登录':
-            data = {'username': 'adminer', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'manager_password'}
+        elif case_detail == '申请数据资源发布':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = pull_resource_data_open(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '没有权限的账户登录':
-            data = {'name': encrypt_rf('user_without_pression'), 'password': encrypt_rf('123456'),
-                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+        elif case_detail == '数据资源申请':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = resource_data_pull_es(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '有权限，密码过期的账户登录':
-            data = {'name': encrypt_rf('user_pwd_expired'), 'password': encrypt_rf('123456'),
-                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+        elif case_detail == '数据资源订阅-once_hdfs_csv':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = resource_data_push(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '有权限，用户有效期过期的账户登录':
-            data = {'name': encrypt_rf('user_time_expired'), 'password': encrypt_rf('123456'),
-                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+        elif case_detail == '数据资源订阅-once_mysql':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = resource_data_push(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '有权限，密码和用户有效期均过期的账户登录':
-            data = {'name': encrypt_rf('user_expired'), 'password': encrypt_rf('123456'),
-                    'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+        elif case_detail == '数据资源订阅-event_hdfs_txt':
+            print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", url)
-            response = requests.post(url=url, headers=new_headers, data=data)
+            new_data = resource_data_push(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    else:
-        print('开始执行：', case_detail)
-        if data:
-            data = str(data)
-            # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
-            if data.startswith('{') and data.endswith('}'):
-                # print('data startswith {:', data)
-                data_dict = dict_res(data)
+        elif case_detail == '数据资源订阅-cron':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = resource_data_push(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '数据订阅记录审批' in case_detail:
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = application_push_approval(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '数据申请记录审批':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = application_pull_approval(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改数据源-HDFS-CSV':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = cust_data_source(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改接入配置':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = appconfig_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '数据资源变更':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = resource_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '启用消费者':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            response = requests.post(url=url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '停用消费者':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            response = requests.post(url=url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '待部署服务启用':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", data)
+            response = requests.post(url=url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '已停用服务启用':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   data:", data)
+            response = requests.post(url=url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '服务停用' in case_detail:
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   data:", data)
+            response = requests.post(url=url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            time.sleep(20)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '管理员查看订阅服务执行列表':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            new_data = {"fieldGroup": {"fields": []}, "ordSort": [{"name": "lastModifiedTime", "order": "DESC"}], "pageable":{"pageNum": 0, "pageSize": 10, "pageable": 'true'}}
+            fow_id = admin_flow_id(data)
+            new_url = url.format(fow_id)
+            print("request   url:", new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '消费者查看订阅服务执行列表':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            new_data = {"fieldGroup": {"fields": []}, "ordSort": [{"name": "lastModifiedTime", "order": "DESC"}], "pageable":{"pageNum": 0, "pageSize": 10, "pageable": 'true'}}
+            fow_id = customer_flow_id(data)
+            new_url = url.format(fow_id)
+            print("request   url:", new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '申请服务数据拉取':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
+            new_data = pull_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print(new_data)
+            response = requests.post(url=url, headers=header, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '申请服务数据拉取sql':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
+            new_data = pull_data_sql(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print(new_data)
+            response = requests.post(url=url, headers=header, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '申请服务数据聚合sql':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
+            new_data = pull_Aggs_sql(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print(new_data)
+            response = requests.post(url=url, headers=header, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '申请服务数据聚合':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
+            new_data = pull_Aggs(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=header, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '执行关联表结果预览sql':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            new_data = {"pageable":{"pageNum":1,"pageSize":10,"pageable":"true"},"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}
+            new_url = url.format(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '登录' in case_detail:
+            new_headers = {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic ZHNwOjEyMzQ1Ng==', "Accept": "application/json"}
+            if case_detail == '管理员登录':
+                data = {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password'}
                 print("request   url:", url)
-                response = requests.post(url=url, headers=headers, json=data_dict)
+                response = requests.post(url=url, headers= new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            # 列表作为参数， 如["9d3639f0-02bc-44cd-ac71-9a6d0f572632"]
-            elif data.startswith('[') and data.endswith(']'):
-                if "'" in data:
-                    data = data.replace("'", '"')
-                    print(data)
-                    print("request   url:", url)
-                    response = requests.post(url=url, headers=headers, data=data)
-                    print("response data:", response.status_code, response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                else:
-                    print(data)
-                    print("request   url:", url)
-                    response = requests.post(url=url, headers=headers, data=data)
-                    print("response data:", response.status_code, response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            else:  # 处理参数是一个字符串id的情况,按照接口格式，放入list中处理
-                new_data = []
-                new_data.append(data)
-                new_data = str(new_data)
-                if "'" in new_data:
-                    new_data = new_data.replace("'", '"')
-                    print("request   url:", url)
-                    response = requests.post(url=url, headers=headers, data=new_data)
-                    print("response data:", response.status_code, response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                else:
-                    print("request   url:", url)
-                    response = requests.post(url=url, headers=headers, data=new_data)
-                    print("response data:", response.status_code, response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '消费者登录':
+                data = {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '密码错误的账户登录':
+                data = {'username': 'customer3', 'password': '1234567', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '不存在的账户登录':
+                data = {'username': 'adminer', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'manager_password'}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '没有权限的账户登录':
+                data = {'name': encrypt_rf('user_without_pression'), 'password': encrypt_rf('123456'),
+                        'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '有权限，密码过期的账户登录':
+                data = {'name': encrypt_rf('user_pwd_expired'), 'password': encrypt_rf('123456'),
+                        'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '有权限，用户有效期过期的账户登录':
+                data = {'name': encrypt_rf('user_time_expired'), 'password': encrypt_rf('123456'),
+                        'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '有权限，密码和用户有效期均过期的账户登录':
+                data = {'name': encrypt_rf('user_expired'), 'password': encrypt_rf('123456'),
+                        'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
+                print("request   url:", url)
+                response = requests.post(url=url, headers=new_headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            print("request   url:", url)
-            response = requests.post(url=url, headers=headers, data=data)
-            print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
-    # else:
-    #     print('请确认第%d行的data形式' % row)
+            print("\033[35m开始执行：\033[0m", case_detail)
+            if data:
+                data = str(data)
+                # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
+                if data.startswith('{') and data.endswith('}'):
+                    # print('data startswith {:', data)
+                    data_dict = dict_res(data)
+                    print("request   url:", url)
+                    response = requests.post(url=url, headers=headers, json=data_dict)
+                    print("response data:", response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                # 列表作为参数， 如["9d3639f0-02bc-44cd-ac71-9a6d0f572632"]
+                elif data.startswith('[') and data.endswith(']'):
+                    if "'" in data:
+                        data = data.replace("'", '"')
+                        print(data)
+                        print("request   url:", url)
+                        response = requests.post(url=url, headers=headers, data=data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    else:
+                        print(data)
+                        print("request   url:", url)
+                        response = requests.post(url=url, headers=headers, data=data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                else:  # 处理参数是一个字符串id的情况,按照接口格式，放入list中处理
+                    new_data = []
+                    new_data.append(data)
+                    new_data = str(new_data)
+                    if "'" in new_data:
+                        new_data = new_data.replace("'", '"')
+                        print("request   url:", url)
+                        response = requests.post(url=url, headers=headers, data=new_data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    else:
+                        print("request   url:", url)
+                        response = requests.post(url=url, headers=headers, data=new_data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            else: #data为空
+                print("\033[35m开始执行：\033[0m", case_detail)
+                print("request   url:", url)
+                response = requests.post(url=url, headers=headers, data=data)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    except Exception as e:
+        print("\033[31m异常信息：\033[0m",e)
 
 
 # GET请求
 def get_request_result_check(url, headers, host, data, table_sheet_name, row, column):
-    case_detail = case_table_sheet.cell(row=row, column=2).value
-    # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
-    if data:
-        if '删除申请记录' in case_detail:
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除消费者' in case_detail:
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询接入配置' in case_detail:
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '获取申请服务秘钥' in case_detail:
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '审批申请记录' in case_detail:
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('管理员查询订阅服务'):  # 取消SQL analyse接口
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            print("response data:", response.status_code, response.text)
-            count_num = 0
-            while '"executedTimes":0'in response.text:
-                print('再次查询前', response.status_code, response.text)
+    try:
+        case_detail = case_table_sheet.cell(row=row, column=2).value
+        # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
+        if data:
+            if '删除申请记录' in case_detail:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
                 response = requests.get(url=new_url, headers=headers)
-                time.sleep(5)
-                count_num += 1
-                if count_num == 80:
-                    return
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '服务删除':  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('删除启用状态用户'):  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询数据资源' in case_detail:  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '按照id查询申请记录' in case_detail:  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '根据id查询数据集' in case_detail:  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除数据源' in case_detail:  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除接入配置' in case_detail:  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('消费者查询订阅服务'):  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            count_num = 0
-            while '"executedTimes":0' in response.text:
-                #print('再次查询前', response.status_code, response.text)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '删除消费者' in case_detail:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
                 response = requests.get(url=new_url, headers=headers)
-                time.sleep(5)
-                count_num += 1
-                if count_num == 80:
-                    return
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('管理员查询申请服务'):  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            count_num = 0
-            while'"isRunning":0'in response.text or '"isRunning":1' in response.text:
-                print('再次查询前', response.status_code, response.text)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '查询接入配置' in case_detail:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
                 response = requests.get(url=new_url, headers=headers)
-                time.sleep(5)
-                count_num += 1
-                if count_num == 180:
-                    return
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == ('消费者查询申请服务'):  #
-            print('开始执行：', case_detail)
-            new_url = url.format(data)
-            #print("request   url:", new_url)
-            response = requests.get(url=new_url, headers=headers)
-            #print("response data:", response.status_code, response.text)
-            count_num = 0
-            while'"isRunning":0'in response.text or '"isRunning":1' in response.text:
-                print('再次查询前', response.status_code, response.text)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '获取申请服务秘钥' in case_detail:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
                 response = requests.get(url=new_url, headers=headers)
-                time.sleep(5)
-                count_num += 1
-                if count_num == 180:
-                    return
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:
-            print('开始执行：', case_detail)
-            #print(data)
-            if '&' in str(data):  # 包含多个参数并以&分割
-                parameters = data.split('&')
-                # print('parameters:', parameters)
-                # 处理存在select语句中的参数，并重新赋值
-                for i in range(len(parameters)):
-                    if parameters[i].startswith('select id from'):
-                        # select_result = ms.ExecuQuery(parameters[i])
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '审批申请记录' in case_detail:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == ('管理员查询订阅服务'):  # 取消SQL analyse接口
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                count_num = 0
+                while '"executedTimes":0'in response.text:
+                    print('再次查询前', response.status_code, response.text)
+                    response = requests.get(url=new_url, headers=headers)
+                    time.sleep(5)
+                    count_num += 1
+                    if count_num == 80:
+                        return
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '服务删除':  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == ('删除启用状态用户'):  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '查询数据资源' in case_detail:  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '按照id查询申请记录' in case_detail:  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '根据id查询数据集' in case_detail:  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '删除数据源' in case_detail:  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '删除接入配置' in case_detail:  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                print("response data:", response.status_code, response.text)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == ('消费者查询订阅服务'):  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                #print("response data:", response.status_code, response.text)
+                count_num = 0
+                while '"executedTimes":0' in response.text:
+                    #print('再次查询前', response.status_code, response.text)
+                    response = requests.get(url=new_url, headers=headers)
+                    time.sleep(5)
+                    count_num += 1
+                    if count_num == 80:
+                        return
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == ('管理员查询申请服务'):  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                #print("response data:", response.status_code, response.text)
+                count_num = 0
+                while'"isRunning":0'in response.text or '"isRunning":1' in response.text:
+                    print('再次查询前', response.status_code, response.text)
+                    response = requests.get(url=new_url, headers=headers)
+                    time.sleep(5)
+                    count_num += 1
+                    if count_num == 180:
+                        return
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == ('消费者查询申请服务'):  #
+                print("\033[35m开始执行：\033[0m", case_detail)
+                new_url = url.format(data)
+                #print("request   url:", new_url)
+                response = requests.get(url=new_url, headers=headers)
+                #print("response data:", response.status_code, response.text)
+                count_num = 0
+                while'"isRunning":0'in response.text or '"isRunning":1' in response.text:
+                    print('再次查询前', response.status_code, response.text)
+                    response = requests.get(url=new_url, headers=headers)
+                    time.sleep(5)
+                    count_num += 1
+                    if count_num == 180:
+                        return
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            else:
+                print("\033[35m开始执行：\033[0m", case_detail)
+                #print(data)
+                if '&' in str(data):  # 包含多个参数并以&分割
+                    parameters = data.split('&')
+                    # print('parameters:', parameters)
+                    # 处理存在select语句中的参数，并重新赋值
+                    for i in range(len(parameters)):
+                        if parameters[i].startswith('select id from'):
+                            # select_result = ms.ExecuQuery(parameters[i])
+                            try:
+                                select_result = ms.ExecuQuery(parameters[i])
+                                parameters[i] = select_result[0]["id"]
+                            except:
+                                print('第%s行参数没有返回结果' % row)
+    
+                        elif parameters[i].startswith('select name from'):
+                            try:
+                                select_result = ms.ExecuQuery(parameters[i])
+                                parameters[i] = select_result[0]["name"]
+                            except:
+                                print('第%s行参数没有返回结果' % row)
+                        elif parameters[i].startswith('select execution_id from'):
+                            try:
+                                select_result = ms.ExecuQuery(parameters[i])
+                                parameters[i] = select_result[0]["execution_id"]
+                            except:
+                                print('第%s行参数没有返回结果' % row)
+                    # 判断URL中需要的参数个数，并比较和data中的参数个数是否相等
+                    if len(parameters) == 1:
                         try:
-                            select_result = ms.ExecuQuery(parameters[i])
-                            parameters[i] = select_result[0]["id"]
-                        except:
-                            print('第%s行参数没有返回结果' % row)
-
-                    elif parameters[i].startswith('select name from'):
-                        try:
-                            select_result = ms.ExecuQuery(parameters[i])
-                            parameters[i] = select_result[0]["name"]
-                        except:
-                            print('第%s行参数没有返回结果' % row)
-                    elif parameters[i].startswith('select execution_id from'):
-                        try:
-                            select_result = ms.ExecuQuery(parameters[i])
-                            parameters[i] = select_result[0]["execution_id"]
-                        except:
-                            print('第%s行参数没有返回结果' % row)
-                # 判断URL中需要的参数个数，并比较和data中的参数个数是否相等
-                if len(parameters) == 1:
-                    try:
-                        url_new = url.format(parameters[0])
+                            url_new = url.format(parameters[0])
+                            print("request   url:", url_new)
+                            response = requests.get(url=url_new, headers=headers)
+                            print("response data:", response.status_code, response.text)
+                        except Exception:
+                            return
+                        print(response.url, response.status_code,response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    elif len(parameters) == 2:
+                        url_new = url.format(parameters[0], parameters[1])
                         print("request   url:", url_new)
                         response = requests.get(url=url_new, headers=headers)
                         print("response data:", response.status_code, response.text)
-                    except Exception:
-                        return
-                    print(response.url, response.status_code,response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif len(parameters) == 2:
-                    url_new = url.format(parameters[0], parameters[1])
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    elif len(parameters) == 3:
+                        url_new = url.format(parameters[0], parameters[1], parameters[2])
+                        print("request url:", url_new)
+                        response = requests.get(url=url_new, headers=headers)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    else:
+                        print('请确认第%d行parameters' % row)
+                else:  # 参数中不包含&，只有一个参数
+                    url_new = url.format(data)
                     print("request   url:", url_new)
                     response = requests.get(url=url_new, headers=headers)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif len(parameters) == 3:
-                    url_new = url.format(parameters[0], parameters[1], parameters[2])
-                    print("request url:", url_new)
-                    response = requests.get(url=url_new, headers=headers)
-                    print("response data:", response.status_code, response.text)
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                else:
-                    print('请确认第%d行parameters' % row)
-            else:  # 参数中不包含&，只有一个参数
-                url_new = url.format(data)
-                print("request   url:", url_new)
-                response = requests.get(url=url_new, headers=headers)
-                print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    # GET 请求参数写在URL中，直接发送请求
-    else:
-        print('开始执行：', case_detail)
-        print("request   url:", url)
-        response = requests.get(url=url, headers=headers)
-        print("response data:", response.status_code, response.text)
-        clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
+        # GET 请求参数写在URL中，直接发送请求
+        else:
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            response = requests.get(url=url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    except Exception as e:
+        print("\033[31m异常信息：\033[0m",e)
 
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
-    if data and isinstance(data, str):
-        if '&' in str(data):
-            # 分隔参数
-            parameters = data.split('&')
-            # 拼接URL
-            new_url = url.format(parameters[0])
-            #print("request   url:", url)
-            # print(parameters)
-            # 发送的参数体
-            parameters_data = parameters[-1]
-            if parameters_data.startswith('{'):
-                response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
-                #print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column+4, response.text)
+    try:
+        if data and isinstance(data, str):
+            if '&' in str(data):
+                # 分隔参数
+                parameters = data.split('&')
+                # 拼接URL
+                new_url = url.format(parameters[0])
+                print("request   url:", new_url)
+                # print(parameters)
+                # 发送的参数体
+                parameters_data = parameters[-1]
+                if parameters_data.startswith('{'):
+                    response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
+                    print("response data:", response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(table_sheet_name, row, column, response.status_code)
+                    write_result(table_sheet_name, row, column+4, response.text)
+                else:
+                    print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
             else:
-                print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
-        else:
-            if data.startswith('select id'):
-                result = ms.ExecuQuery(data)
-                new_data = result[0]["id"]
-                #print(new_data, type(new_data))
-                new_url = url.format(new_data)
-                #print("request   url:",  new_url)
-                response = requests.put(url=new_url, headers=headers)
-                #print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            elif data.startswith('{') and data.endswith('}'):
-                print(data)
-                #print("request   url:", url)
-                response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
-                #print("response data:", response.status_code, response.text)
-                #print(response.url, response.content)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            elif data.startswith('[') and data.endswith(']'):
-                pass
-            else:
-                new_url = url.format(data)
-                #print("request   url:",  new_url)
-                response = requests.put(url=new_url, headers=headers)
-                #print("response data:", response.status_code, response.text)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-    else:
-        print('第%s行的参数为空或格式异常' % row)
-
+                if data.startswith('select id'):
+                    result = ms.ExecuQuery(data)
+                    new_data = result[0]["id"]
+                    new_url = url.format(new_data)
+                    print("request   url:",  new_url)
+                    response = requests.put(url=new_url, headers=headers)
+                    print("response data:", response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(table_sheet_name, row, column, response.status_code)
+                    write_result(table_sheet_name, row, column + 4, response.text)
+                elif data.startswith('{') and data.endswith('}'):
+                    print("request   url:", url)
+                    response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
+                    print("response data:", response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(table_sheet_name, row, column, response.status_code)
+                    write_result(table_sheet_name, row, column + 4, response.text)
+                elif data.startswith('[') and data.endswith(']'):
+                    pass
+                else:
+                    new_url = url.format(data)
+                    print("request   url:",  new_url)
+                    response = requests.put(url=new_url, headers=headers)
+                    print("response data:", response.status_code, response.text)
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(table_sheet_name, row, column, response.status_code)
+                    write_result(table_sheet_name, row, column + 4, response.text)
+        else: #data为空
+            print("\033[35m开始执行：\033[0m", case_detail)
+            response = requests.put(url=new_url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column + 4, response.text)
+    except Exception as e:
+        print("\033[31m异常信息：\033[0m",e)
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
-    case_detail = case_table_sheet.cell(row=row, column=2).value
-    if isinstance(data, str):
-        if case_detail == '':
-            pass
-        else:
-            if data.startswith('select id'):  # sql语句的查询结果当做参数
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                #print(data_select_result)
-                #print(type(data_select_result))
-                datas = []
-                if data_select_result:
-                    try:
-                        for i in range(len(data_select_result)):
-                            datas.append(data_select_result[i]["id"])
-                    except:
-                        print('请确认第%d行SQL语句' % row)
-                    else:
-                        if len(datas) == 1:
-                            #print(datas)
-                            new_url = url.format(datas[0])
-                            #print("request   url:", new_url)
-                            response = requests.delete(url=new_url, headers=headers)
-                            #print("response data:", response.status_code, response.text)
-                            # 将返回的status_code和response.text分别写入第10列和第14列
-                            clean_vaule(table_sheet_name, row, column)
-                            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                        else:
-                            print('请确认 select 语句查询返回值是不是只有一个')
-                else:
-                    print('第%d行参数查询无结果' % row)
-                # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
-
+    try:
+        case_detail = case_table_sheet.cell(row=row, column=2).value
+        if isinstance(data, str):
+            if case_detail == '':
+                pass
             else:
-                new_url = url.format(data)
-                #print("request   url:", new_url)
-                response = requests.delete(url=new_url, headers=headers)
-                #print("response data:", response.status_code, response.text)
-                # 将返回的status_code和response.text分别写入第10列和第14列
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-    else:
-        # print(data)
-        # print(type(data))
-        print('请确认第%d行的data形式' % row)
-
+                if data.startswith('select id'):  # sql语句的查询结果当做参数
+                    data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                    #print(data_select_result)
+                    #print(type(data_select_result))
+                    datas = []
+                    if data_select_result:
+                        try:
+                            for i in range(len(data_select_result)):
+                                datas.append(data_select_result[i]["id"])
+                        except:
+                            print('请确认第%d行SQL语句' % row)
+                        else:
+                            if len(datas) == 1:
+                                #print(datas)
+                                new_url = url.format(datas[0])
+                                #print("request   url:", new_url)
+                                response = requests.delete(url=new_url, headers=headers)
+                                #print("response data:", response.status_code, response.text)
+                                # 将返回的status_code和response.text分别写入第10列和第14列
+                                clean_vaule(table_sheet_name, row, column)
+                                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                            else:
+                                print('请确认 select 语句查询返回值是不是只有一个')
+                    else:
+                        print('第%d行参数查询无结果' % row)
+                    # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
+    
+                else:
+                    new_url = url.format(data)
+                    print("request   url:", new_url)
+                    response = requests.delete(url=new_url, headers=headers)
+                    print("response data:", response.status_code, response.text)
+                    # 将返回的status_code和response.text分别写入第10列和第14列
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        else: #data为空
+            print("\033[35m开始执行：\033[0m", case_detail)
+            response = requests.delete(url=url, headers=headers)
+            print("response data:", response.status_code, response.text)
+            # 将返回的status_code和response.text分别写入第10列和第14列
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    except Exception as e:
+        print("\033[31m异常信息：\033[0m",e)
 
 #  写入返回结果
 def write_result(sheet, row, column, value):
