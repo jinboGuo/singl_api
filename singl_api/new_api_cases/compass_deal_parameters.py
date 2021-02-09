@@ -90,16 +90,13 @@ def deal_parameters(data):
                         print("new_data: ", datas)
                         return datas
                     else:
-                        try:
-                            job_oid.append(str(data_select_result[0]['job_oid']))
-                            job_name.append(str(data_select_result[0]['job_name']))
-                            job_oid = ','.join([str(i) for i in job_oid])
-                            job_name = ','.join([str(i) for i in job_name])
-                            datas = str(job_oid)+'&'+str(job_name)
-                            print("new_data: ", datas)
-                            return datas
-                        except:
-                            print('请确认第%d行SQL语句')
+                        job_oid.append(str(data_select_result[0]['job_oid']))
+                        job_name.append(data_select_result[0]['job_name'])
+                        job_oid = ','.join([str(i) for i in job_oid])
+                        job_name = ','.join([str(i) for i in job_name])
+                        datas = str(job_oid)+'&'+str(job_name)
+                        print("new_data: ", datas)
+                        return datas
 
             elif 'select dataflow_oid' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))

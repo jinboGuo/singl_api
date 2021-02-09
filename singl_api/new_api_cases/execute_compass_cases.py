@@ -286,10 +286,10 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     headers["Accept"] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
                     headers["Upgrade-Insecure-Requests"] = '1'
                     response = requests.get(url=url_new, headers=headers)
-                    print("response data:", response.status_code, response.text.encode("ascii",errors="ignore"))
+                    print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text.encode("ascii",errors="ignore"))
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif len(parameters) == 3:
                     url_new = url.format(parameters[0], parameters[1], parameters[2])
                     print("request url:", url_new)
