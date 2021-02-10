@@ -56,42 +56,42 @@ def deal_parameters(data):
                         if data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 1:  # 正在运行服务，停止
                             status = "2"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         if data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 0:  # 正在运行服务，停止
                             status = "2"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         elif data_select_result[0]["status"] == 0 and data_select_result[0]["is_running"] == 0:  # 待部署服务，启用
                             status = "1"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         elif data_select_result[0]["is_running"] == 2:  # 失败服务，停用
                             status = "2"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         elif data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 3:  # 已成功服务，停用
                             status = "2"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         elif data_select_result[0]["status"] == 2 and data_select_result[0]["is_running"] == 5:  # 已停止服务，启用
                             status = "1"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                         else:   # 停止服务 ，启用
                             status = "1"
                             id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id}
+                            new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                     except:
-                        return {'status': '3', 'id': '725070733486587904'}
+                        return {'status': '3', 'id': '725070733486587904',"expiredTime":""}
                 else:
-                    return {'status': '2', 'id': '725070733486587904'}
+                    return {'status': '2', 'id': '725070733486587904',"expiredTime":""}
             if 'select access_key' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
