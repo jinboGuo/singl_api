@@ -303,7 +303,7 @@ def pull_data(data):
             new_data = {"sourceType": "DATASOURCE","accessKey": config_info[0]["access_key"], "severName": service_info[0]["name"], "dataServiceId": service_info[0]["id"], "encrypted":"false","query":{"pageable":{"pageNum":1,"pageSize":10,"pageable":"true"},"parameters":[{"name":"age","value":"18","defaultValue":"","content":""}],"sqlTemplate":""},"timestamp":1601014752}
             return new_data
         elif 'api_mysqldataset' in data:
-            new_data = {"sourceType": "DATASET", "accessKey": config_info[0]["access_key"], "severName": service_info[0]["name"], "dataServiceId": service_info[0]["id"], "encrypted": "false", "query":{"fieldGroup":{"fields":[{"andOr":"AND","name":"id","oper":"NOT_EQUAL","value":["11"]}],"fieldGroups":[]},"ordSort":[{"name":"id","order":"ASC"}],"pageable":{"pageSize":10,"pageNum":1},"selectProperties":["id","user_id","number","createtime","note","dt"]},"timestamp":1602677876}
+            new_data = {"sourceType":"DATASET","accessKey":config_info[0]["access_key"],"severName": service_info[0]["name"],"dataServiceId":service_info[0]["id"],"encrypted":"false","query":{"fieldGroup":{"fields":[],"fieldGroups":[]},"pageable":{"pageSize":10,"pageNum":1},"selectProperties":["id","user_id","number","createtime","note","dt"]},"timestamp":1613705505}
             return new_data
         else:
             return

@@ -89,9 +89,9 @@ def deal_parameters(data):
                             new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                     except:
-                        return {'status': '3', 'id': '725070733486587904',"expiredTime":""}
+                        return {'status': '1', 'id': '809026386315444224',"expiredTime":""}
                 else:
-                    return {'status': '2', 'id': '725070733486587904',"expiredTime":""}
+                    return {'status': '1', 'id': '809026386315444224',"expiredTime":""}
             if 'select access_key' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
