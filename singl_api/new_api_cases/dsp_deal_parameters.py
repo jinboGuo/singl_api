@@ -41,11 +41,11 @@ def deal_parameters(data):
                 if len(data_select_result):
                     try:
                         if data_select_result[0]["enabled"] == 1:
-                            data_select_result[0]["enabled"] = 0
+                            new_data = [{'enabled': 0, 'id': data_select_result[0]["id"]}]
+                            return new_data
                         else:
-                            data_select_result[0]["enabled"] = 1
-                            print(data_select_result)
-                        return data_select_result
+                            new_data = [{'enabled': 1, 'id': data_select_result[0]["id"]}]
+                            return new_data
                     except:
                         print('请确认第%d行SQL语句')
             if 'select status,id,is_running from' in data:
@@ -89,9 +89,9 @@ def deal_parameters(data):
                             new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                     except:
-                        return {'status': '1', 'id': '809026386315444224',"expiredTime":""}
+                        return {'status': '1', 'id': '725070733486587904',"expiredTime":""}
                 else:
-                    return {'status': '1', 'id': '809026386315444224',"expiredTime":""}
+                    return {'status': '1', 'id': '725070733486587904',"expiredTime":""}
             if 'select access_key' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:

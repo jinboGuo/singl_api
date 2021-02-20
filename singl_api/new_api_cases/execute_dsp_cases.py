@@ -14,7 +14,7 @@ from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
 import unittest
 from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pull_data, cust_data_source, appconfig_data, resource_data, push_resource_data_open, resource_data_pull_es, pull_resource_data_open, \
-    pull_Aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_Aggs_sql, resource_data_save,resource_data_dss, resource_data_push
+    pull_Aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_Aggs_sql, resource_data_save,resource_data_dss, resource_data_push, update_customer, update_user
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -245,6 +245,26 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '编辑消费者':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = update_customer(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '编辑用户':
+            print("\033[35m开始执行：\033[0m", case_detail)
+            print("request   url:", url)
+            new_data = update_user(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '待部署服务启用':
             print("\033[35m开始执行：\033[0m", case_detail)
             print("request   url:", data)
@@ -455,20 +475,22 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:  # 处理参数是一个字符串id的情况,按照接口格式，放入list中处理
-                    new_data = []
-                    new_data.append(data)
-                    new_data = str(new_data)
-                    if "'" in new_data:
+                    if "'" in data:
+                        new_data = []
                         new_data = new_data.replace("'", '"')
                         print("request   url:", url)
+                        new_data.append(data)
+                        new_data = str(new_data)
+                        print("request   data:", new_data)
                         response = requests.post(url=url, headers=headers, data=new_data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     else:
-                        print("request   url:", url)
-                        response = requests.post(url=url, headers=headers, data=new_data)
+                        new_url = url.format(data)
+                        print("request   url:", new_url)
+                        response = requests.post(url=new_url, headers=headers, data=data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

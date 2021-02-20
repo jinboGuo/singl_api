@@ -580,3 +580,31 @@ def application_push_approval(data):
             return
     except Exception as e:
         print("\033[31m异常：\033[0m",e)
+
+def update_customer(data):
+    try:
+        sql = "select id,owner,tenant_id,username from dsp_customer where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
+        customer_info = ms.ExecuQuery(sql.encode('utf-8'))
+        #print('customer_id-name:', customer_info[0]["id"], customer_info[0]["name"])
+        if 'gjb_test009_' in data:
+            new_data = {"username":customer_info[0]["username"],"name":"gjb_test009_随机数","password":"e10adc3949ba59abbe56e057f20f883e","checkPassword":"e10adc3949ba59abbe56e057f20f883e","enabled":0,"tenantId":customer_info[0]["tenant_id"],"owner":customer_info[0]["owner"],"creator":"admin","createTime":"2020-11-03 16:18:04","lastModifier":"admin","lastModifiedTime":"2021-02-20 18:16:37","id":customer_info[0]["id"],"expiredPeriod":"0"}
+            deal_random(new_data)
+            return new_data
+        else:
+            return
+    except Exception as e:
+        print("\033[31m异常：\033[0m",e)
+
+def update_user(data):
+    try:
+        sql = "select id,owner,tenant_id,login_id from merce_user where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
+        user_info = ms.ExecuQuery(sql.encode('utf-8'))
+        #print('user_info-name:', user_info[0]["id"], user_info[0]["name"])
+        if 'autotest_dsp_' in data:
+            new_data = {"confirmPassword":"","email":"11@11.com","loginId":user_info[0]["login_id"],"name":"autotest_dsp_随机数","password":"AES(aa920aacdab0d8f75bc3d04b3d84586d9825e2b2b2842d7a480a3e06c888c2d848d1144f4813e55d5c0807dae20acd80)","phone":"13111111111","resourceQueues":["default"],"enabled":0,"tenantId":user_info[0]["tenant_id"],"owner":user_info[0]["owner"],"creator":"admin","createTime":"2021-02-15 00:20:49","lastModifier":"admin","lastModifiedTime":"2021-02-20 19:03:42","id":user_info[0]["id"],"pwdExpiredTime":"2022-05-15","accountExpiredTime":"2022-08-15","hdfsSpaceQuota":"0","admin":0,"clientIds":"dsp","roles":[],"expiredPeriod":"0"}
+            deal_random(new_data)
+            return new_data
+        else:
+            return
+    except Exception as e:
+        print("\033[31m异常：\033[0m",e)
