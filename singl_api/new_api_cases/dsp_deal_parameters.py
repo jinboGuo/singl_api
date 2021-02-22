@@ -27,7 +27,7 @@ def deal_parameters(data):
                             return dat
                     else:
                         try:
-                            if "select id from dsp_data_resource where name like 'test_hdfs_student%' order by create_time limit 1" in data:
+                            if "select id from dsp_data_resource " in data:
                                 new_data.append(str(data_select_result[0]['id']))
                                 return new_data
                             else:
