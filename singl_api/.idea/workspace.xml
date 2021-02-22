@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f49178f-7a3e-4093-87e3-100384954789" name="Default" comment="新增任务调度脚本">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/conn_linux.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/conn_linux.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
     </list>
     <ignored path="singl_api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,21 +38,60 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+        <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="35" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
+            <state relative-caret-position="193">
+              <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
+              <folding>
+                <element signature="e#15#51#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="254" column="13" lean-forward="true" selection-start-line="254" selection-start-column="13" selection-end-line="254" selection-end-column="13" />
+              <folding>
+                <element signature="e#15#24#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="93" column="35" lean-forward="true" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
+            <state relative-caret-position="265">
+              <caret line="29" column="153" selection-start-line="29" selection-start-column="153" selection-end-line="29" selection-end-column="153" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="482">
+              <caret line="30" column="75" selection-start-line="30" selection-start-column="75" selection-end-line="30" selection-end-column="75" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
+              <folding>
+                <element signature="e#15#74#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,7 +100,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/new_api_cases/execute_compass_cases.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
+            <state relative-caret-position="142">
               <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
               <folding>
                 <element signature="e#15#26#0" expanded="true" />
@@ -73,36 +110,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+            <state relative-caret-position="78">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
               <folding>
-                <element signature="e#0#22#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2033">
-              <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
-              <folding>
-                <element signature="e#15#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/util/send_mail.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="431" column="22" lean-forward="true" selection-start-line="431" selection-start-column="22" selection-end-line="431" selection-end-column="22" />
-              <folding>
-                <element signature="e#15#29#0" expanded="true" />
+                <element signature="e#15#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -119,22 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>创建dataset</find>
-      <find>新Dataset预览接口,得到statement  id(datasetId存在)</find>
-      <find>创建数据</find>
-      <find>datasetId不存在</find>
-      <find>根据statement id,获取Sql Analyze结果(获取输出字段)</find>
-      <find>根据质量分析结果path预览dataset</find>
-      <find>创建schema</find>
-      <find>创建flow</find>
-      <find>更新</find>
-      <find>注册工作流选择器</find>
-      <find>提交colSplit-pivot-unpivot-Explode-dataflow</find>
-      <find>查找executions-colSplit-pivot-unpivot-Explode-dataflow</find>
-      <find>get_executions_data</find>
-      <find>查询executionOutputs-executions-colSplit-pivot-unpivot-ExplodeStep-dataflow</find>
-      <find>根据statement id,获取预览colsplit-Dataset的结果数据</find>
-      <find>提交es-upsert-dataflow</find>
       <find>label</find>
       <find>showDetails</find>
       <find>fraction</find>
@@ -142,13 +139,29 @@
       <find>factSheetField</find>
       <find>创建</find>
       <find>申请服务数据拉取sql</find>
-      <find>数据资源订阅</find>
       <find>申请服务数据拉取</find>
       <find>创建数据源</find>
       <find>根据statement id,获取预览Dataset的结果数据(datasetId存在)</find>
       <find>HDFS数据集数据资源关联</find>
       <find>数据资源关联</find>
       <find>jar_dir</find>
+      <find>32m</find>
+      <find>异常</find>
+      <find>&quot;异常：&quot;</find>
+      <find>&quot;异常信息：&quot;</find>
+      <find>&quot;\033[35m开始执行：\033[0m&quot;</find>
+      <find>&quot;开始执行：&quot;</find>
+      <find>'开始执行：'</find>
+      <find>登录</find>
+      <find>待部署</find>
+      <find>数据资源</find>
+      <find>修改消费</find>
+      <find>编辑</find>
+      <find>数据资源订阅</find>
+      <find>停止发布</find>
+      <find>订阅</find>
+      <find>数据申请记录审批</find>
+      <find>申请服务</find>
     </findStrings>
     <replaceStrings>
       <replace>print(response.status_code, response.text)</replace>
@@ -158,6 +171,16 @@
       <replace>get_headers_root</replace>
       <replace>get_tenant(dw_host)</replace>
       <replace>compass_host</replace>
+      <replace>35m</replace>
+      <replace>异常</replace>
+      <replace>&quot;\033[31m异常：&quot;</replace>
+      <replace>&quot;\033[31m异常：\033[0m&quot;</replace>
+      <replace>&quot;异常信息：&quot;</replace>
+      <replace>&quot;\033[31m异常信息：&quot;</replace>
+      <replace>&quot;开始执行：&quot;</replace>
+      <replace>&quot;\033[31m第%s行的参数为空或格式异常\033[0m&quot;</replace>
+      <replace>gjb_ttest_hdfs_student</replace>
+      <replace>&quot;\033[35m开始执行：\033[0m&quot;</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -213,16 +236,13 @@
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py" />
         <option value="$PROJECT_DIR$/run_dw_cases.py" />
         <option value="$PROJECT_DIR$/util/get_tenant.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" />
         <option value="$PROJECT_DIR$/util/timestamp_13.py" />
         <option value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/get_statementId.py" />
         <option value="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" />
-        <option value="$PROJECT_DIR$/run_api_cases.py" />
         <option value="$USER_HOME$/Downloads/dsp相关文档/step.js" />
         <option value="F:/h - 副本.txt" />
-        <option value="$PROJECT_DIR$/run_dsp_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/1.csv" />
         <option value="$PROJECT_DIR$/new_api_cases/testkafka.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_cases.py" />
@@ -230,29 +250,32 @@
         <option value="$PROJECT_DIR$/new_api_cases/test.py" />
         <option value="$PROJECT_DIR$/util/encrypt.py" />
         <option value="$PROJECT_DIR$/basic_info/get_auth_token.py" />
-        <option value="$PROJECT_DIR$/run_compass_cases.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/util/websocket.py" />
+        <option value="$PROJECT_DIR$/util/ws.py" />
+        <option value="$PROJECT_DIR$/util/send_mail.py" />
+        <option value="$PROJECT_DIR$/util/conn_linux.py" />
+        <option value="$PROJECT_DIR$/basic_info/setting.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" />
         <option value="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" />
         <option value="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" />
+        <option value="$PROJECT_DIR$/run_api_cases.py" />
+        <option value="$PROJECT_DIR$/run_compass_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" />
-        <option value="$PROJECT_DIR$/util/websocket.py" />
-        <option value="$PROJECT_DIR$/util/ws.py" />
-        <option value="$PROJECT_DIR$/basic_info/setting.py" />
         <option value="$PROJECT_DIR$/new_api_cases/compass_schedule.py" />
-        <option value="$PROJECT_DIR$/util/conn_linux.py" />
-        <option value="$PROJECT_DIR$/util/send_mail.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
+        <option value="$PROJECT_DIR$/run_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="48" />
-    <option name="y" value="41" />
-    <option name="width" value="1744" />
-    <option name="height" value="967" />
+    <option name="x" value="85" />
+    <option name="y" value="8" />
+    <option name="width" value="1848" />
+    <option name="height" value="1042" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -275,11 +298,6 @@
               <item name="singl_api" type="462c0819:PsiDirectoryNode" />
               <item name="new_api_cases" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -290,7 +308,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/new_api_cases" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
@@ -313,7 +331,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.compass_schedule">
+  <component name="RunManager" selected="Python.run_dsp_cases">
     <configuration name="compass_schedule" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -336,7 +354,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="get_auth_token" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="dsp_prepare_datas" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -344,12 +362,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/basic_info" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_api_cases" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/basic_info/get_auth_token.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -380,7 +398,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="websocket" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="run_dsp_cases" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -388,12 +406,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="E:\Download\singl_api\util\ws.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_dsp_cases.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -402,35 +420,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ws" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Unittests in execute_compass_cases.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_api_cases" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/ws.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/new_api_cases/execute_compass_cases.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.compass_schedule" />
-        <item itemvalue="Python.ws" />
-        <item itemvalue="Python.websocket" />
+        <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.run_compass_cases" />
-        <item itemvalue="Python.get_auth_token" />
+        <item itemvalue="Python.compass_schedule" />
+        <item itemvalue="Python.dsp_prepare_datas" />
+        <item itemvalue="Python tests.Unittests in execute_compass_cases.py" />
       </list>
     </recent_temporary>
   </component>
@@ -500,104 +511,8 @@
       <workItem from="1610963204018" duration="69449000" />
       <workItem from="1611644113035" duration="68639000" />
       <workItem from="1612403926687" duration="8449000" />
-    </task>
-    <task id="LOCAL-00051" summary="更新">
-      <created>1601274065858</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1601274065858</updated>
-    </task>
-    <task id="LOCAL-00052" summary="更新">
-      <created>1601274351227</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1601274351227</updated>
-    </task>
-    <task id="LOCAL-00053" summary="更新">
-      <created>1601274888074</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1601274888074</updated>
-    </task>
-    <task id="LOCAL-00054" summary="更新">
-      <created>1601291160959</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1601291160959</updated>
-    </task>
-    <task id="LOCAL-00055" summary="更新">
-      <created>1601346955608</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1601346955608</updated>
-    </task>
-    <task id="LOCAL-00056" summary="更新">
-      <created>1602472978877</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1602472978878</updated>
-    </task>
-    <task id="LOCAL-00057" summary="更新">
-      <created>1602486330071</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1602486330071</updated>
-    </task>
-    <task id="LOCAL-00058" summary="更新">
-      <created>1602730895602</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1602730895602</updated>
-    </task>
-    <task id="LOCAL-00059" summary="更新">
-      <created>1602744736447</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1602744736447</updated>
-    </task>
-    <task id="LOCAL-00060" summary="更新">
-      <created>1602749281475</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1602749281475</updated>
-    </task>
-    <task id="LOCAL-00061" summary="更新">
-      <created>1602850256123</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1602850256123</updated>
-    </task>
-    <task id="LOCAL-00062" summary="更新">
-      <created>1602850273668</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1602850273668</updated>
-    </task>
-    <task id="LOCAL-00063" summary="更新">
-      <created>1603194782737</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1603194782737</updated>
-    </task>
-    <task id="LOCAL-00064" summary="更新">
-      <created>1603195578809</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1603195578809</updated>
+      <workItem from="1612495987983" duration="67902000" />
+      <workItem from="1613693926023" duration="45807000" />
     </task>
     <task id="LOCAL-00065" summary="更新">
       <created>1603250412742</created>
@@ -844,7 +759,105 @@
       <option name="project" value="LOCAL" />
       <updated>1612408447282</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="修改任务调度脚本">
+      <created>1612779226139</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1612779226139</updated>
+    </task>
+    <task id="LOCAL-00101" summary="修改任务调度脚本">
+      <created>1612843288297</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1612843288297</updated>
+    </task>
+    <task id="LOCAL-00102" summary="修改脚本">
+      <created>1612856746308</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1612856746308</updated>
+    </task>
+    <task id="LOCAL-00103" summary="修改任务调度脚本">
+      <created>1612857945480</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1612857945480</updated>
+    </task>
+    <task id="LOCAL-00104" summary="新增任务调度脚本">
+      <created>1612860502962</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1612860502962</updated>
+    </task>
+    <task id="LOCAL-00105" summary="新增任务调度脚本">
+      <created>1612861469743</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1612861469743</updated>
+    </task>
+    <task id="LOCAL-00106" summary="dsp邮件">
+      <created>1612865804149</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1612865804149</updated>
+    </task>
+    <task id="LOCAL-00107" summary="修改dsp脚本">
+      <created>1613719078806</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1613719078808</updated>
+    </task>
+    <task id="LOCAL-00108" summary="修改任务调度脚本">
+      <created>1613807370177</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1613807370177</updated>
+    </task>
+    <task id="LOCAL-00109" summary="新增任务调度脚本">
+      <created>1613809005502</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1613809005502</updated>
+    </task>
+    <task id="LOCAL-00110" summary="新增user和customer脚本">
+      <created>1613820930923</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1613820930923</updated>
+    </task>
+    <task id="LOCAL-00111" summary="修改dsp脚本">
+      <created>1613974768495</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1613974768495</updated>
+    </task>
+    <task id="LOCAL-00112" summary="新增dsp用户批量删除脚本">
+      <created>1613976053295</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1613976053296</updated>
+    </task>
+    <task id="LOCAL-00113" summary="修改dsp脚本">
+      <created>1613989060158</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1613989060158</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -854,9 +867,12 @@
     <history-entry file="Unittests_in_execute_cases_py - 2020.09.21 at 14h 10m 31s.xml">
       <configuration name="Unittests in execute_cases.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_execute_compass_cases_py - 2021.02.08 at 16h 58m 54s.xml">
+      <configuration name="Unittests in execute_compass_cases.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="916574000" />
+    <option name="totallyTimeSpent" value="1030283000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -868,28 +884,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="48" y="41" width="1744" height="967" extended-state="0" />
+    <frame x="85" y="8" width="1848" height="1042" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42003232" visible="true" weight="0.22921616" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42003232" visible="true" weight="0.15715884" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5799677" side_tool="true" weight="0.2510661" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.77790976" visible="true" weight="0.46338534" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.397351" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7774049" visible="true" weight="0.52753305" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39537445" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.76021314" weight="0.362545" />
+      <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.7729306" weight="0.2074074" />
       <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49946696" weight="0.32901555" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32901555" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.22209026" side_tool="true" weight="0.6002401" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.22259508" side_tool="true" weight="0.62814814" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="TODO" order="12" weight="0.3258278" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.32995737" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32941833" />
       <window_info anchor="right" id="SciView" order="4" weight="0.32978094" />
     </layout>
     <layout-to-restore>
@@ -979,9 +995,14 @@
     <MESSAGE value="新增任务调度脚本，删除无用的excel" />
     <MESSAGE value="新增远程执行任务脚本" />
     <MESSAGE value="新增远程执行脚本url和data" />
-    <MESSAGE value="新增任务调度脚本" />
+    <MESSAGE value="修改脚本" />
+    <MESSAGE value="dsp邮件" />
     <MESSAGE value="修改任务调度脚本" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改任务调度脚本" />
+    <MESSAGE value="新增任务调度脚本" />
+    <MESSAGE value="新增user和customer脚本" />
+    <MESSAGE value="新增dsp用户批量删除脚本" />
+    <MESSAGE value="修改dsp脚本" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改dsp脚本" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -996,7 +1017,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/singl_api$get_tenant.coverage" NAME="get_tenant Coverage Results" MODIFIED="1601197791795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
-    <SUITE FILE_PATH="coverage/singl_api$run_dsp_cases.coverage" NAME="run_dsp_cases Coverage Results" MODIFIED="1605170994101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/singl_api$run_dsp_cases.coverage" NAME="run_dsp_cases Coverage Results" MODIFIED="1613988690897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$get_auth_token.coverage" NAME="get_auth_token Coverage Results" MODIFIED="1611541090962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/basic_info" />
     <SUITE FILE_PATH="coverage/singl_api$get_statementId.coverage" NAME="get_statementId Coverage Results" MODIFIED="1600668058603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$prepare_datas_for_cases.coverage" NAME="prepare_datas_for_cases Coverage Results" MODIFIED="1592447910514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
@@ -1007,56 +1028,29 @@
     <SUITE FILE_PATH="coverage/singl_api$ws.coverage" NAME="ws Coverage Results" MODIFIED="1611906749549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$timestamp_13.coverage" NAME="timestamp_13 Coverage Results" MODIFIED="1601207236415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$compass_prepare_datas.coverage" NAME="compass_prepare_datas Coverage Results" MODIFIED="1611574227527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
+    <SUITE FILE_PATH="coverage/singl_api$dsp_prepare_datas.coverage" NAME="dsp_prepare_datas Coverage Results" MODIFIED="1613715048991" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$run_api_cases.coverage" NAME="run_api_cases Coverage Results" MODIFIED="1609829593498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$testkafka.coverage" NAME="testkafka Coverage Results" MODIFIED="1605496734133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$conn_linux.coverage" NAME="conn_linux Coverage Results" MODIFIED="1611887148924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
+    <SUITE FILE_PATH="coverage/singl_api$conn_linux.coverage" NAME="conn_linux Coverage Results" MODIFIED="1612757491810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$send_mail.coverage" NAME="send_mail Coverage Results" MODIFIED="1599651151754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
-    <SUITE FILE_PATH="coverage/singl_api$run_compass_cases.coverage" NAME="run_compass_cases Coverage Results" MODIFIED="1611832579472" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/singl_api$run_compass_cases.coverage" NAME="run_compass_cases Coverage Results" MODIFIED="1613807130911" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$deal_parameters.coverage" NAME="deal_parameters Coverage Results" MODIFIED="1592308252246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_cases_py.coverage" NAME="Unittests in execute_cases.py Coverage Results" MODIFIED="1600668628899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$compass_schedule.coverage" NAME="compass_schedule Coverage Results" MODIFIED="1612412040244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
+    <SUITE FILE_PATH="coverage/singl_api$compass_schedule.coverage" NAME="compass_schedule Coverage Results" MODIFIED="1613791557755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$conection_linux.coverage" NAME="conection_linux Coverage Results" MODIFIED="1611027481185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$websocket.coverage" NAME="websocket Coverage Results" MODIFIED="1611902859394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
+    <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_compass_cases_py.coverage" NAME="Unittests in execute_compass_cases.py Coverage Results" MODIFIED="1612774730196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$ready_dataflow_data.coverage" NAME="ready_dataflow_data Coverage Results" MODIFIED="1600832411478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/basic_info" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_dsp_cases_py.coverage" NAME="Unittests in execute_dsp_cases.py Coverage Results" MODIFIED="1592450249285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$test.coverage" NAME="test Coverage Results" MODIFIED="1605492514092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://E:/python3.7/Lib/site-packages/kafka/producer/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/get_statementId.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="40" column="36" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6118">
           <caret line="334" column="4" selection-start-line="334" selection-start-column="4" selection-end-line="334" selection-end-column="4" />
           <folding>
             <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-38">
-          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-          <folding>
-            <element signature="e#15#79#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1125,16 +1119,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dw_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/encrypt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="447">
@@ -1162,68 +1146,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="18" column="37" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="9" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="46" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="32" column="12" lean-forward="true" selection-start-line="32" selection-start-column="12" selection-end-line="32" selection-end-column="12" />
-          <folding>
-            <element signature="e#15#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://E:/python3.7/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
           <caret line="309" selection-start-line="309" selection-end-line="309" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/python3.7/Lib/site-packages/requests/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -1258,13 +1184,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="4751" column="66" selection-start-line="4751" selection-start-column="60" selection-end-line="4751" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/timestamp_13.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
@@ -1279,26 +1198,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-431">
           <caret line="183" column="47" selection-start-line="183" selection-start-column="47" selection-end-line="183" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3838">
-          <caret line="206" column="15" selection-start-line="206" selection-start-column="4" selection-end-line="206" selection-end-column="15" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1342,16 +1241,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/ws.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic_info/url_info.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1378,36 +1267,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="93" column="35" lean-forward="true" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2033">
-          <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2166">
@@ -1418,9 +1277,154 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://E:/python3.7/Lib/site-packages/requests/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="118" selection-start-line="118" selection-end-line="118" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="45" column="22" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2356">
+          <caret line="127" column="41" lean-forward="true" selection-start-line="127" selection-start-column="41" selection-end-line="127" selection-end-column="41" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dw_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-474">
+          <caret line="455" column="8" selection-start-line="455" selection-start-column="8" selection-end-line="455" selection-end-column="8" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
+          <folding>
+            <element signature="e#15#79#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/ws.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://E:/python3.7/Lib/site-packages/openpyxl/workbook/workbook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="239" column="8" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-957">
+          <caret line="443" column="15" selection-start-line="443" selection-start-column="4" selection-end-line="443" selection-end-column="15" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="3628" column="8" selection-start-line="3628" selection-start-column="8" selection-end-line="3628" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2579">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="30" column="75" selection-start-line="30" selection-start-column="75" selection-end-line="30" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="86" column="12" selection-start-line="86" selection-start-column="12" selection-end-line="86" selection-end-column="33" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="61" column="4" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
+          <folding>
+            <element signature="e#15#74#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/new_api_cases/execute_compass_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
+        <state relative-caret-position="142">
           <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
           <folding>
             <element signature="e#15#26#0" expanded="true" />
@@ -1428,19 +1432,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="35" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
+        <state relative-caret-position="265">
+          <caret line="29" column="153" selection-start-line="29" selection-start-column="153" selection-end-line="29" selection-end-column="153" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+    <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="431" column="22" lean-forward="true" selection-start-line="431" selection-start-column="22" selection-end-line="431" selection-end-column="22" />
+        <state relative-caret-position="193">
+          <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
           <folding>
-            <element signature="e#15#29#0" expanded="true" />
+            <element signature="e#15#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="254" column="13" lean-forward="true" selection-start-line="254" selection-start-column="13" selection-end-line="254" selection-end-column="13" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
