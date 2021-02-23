@@ -5,6 +5,7 @@ from urllib import parse
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
 from basic_info.mylogging import myLog
+from new_api_cases.compass_deal_parameters import deal_random
 from util.format_res import dict_res
 from basic_info.setting import MySQL_CONFIG
 from util.Open_DB import MYSQL
@@ -228,6 +229,13 @@ def dss_data(data):
         return new_data
     elif 'datasource_query' in data:
         new_data = {"fieldList": [{"fieldName":"parentId","fieldValue": flow_info[0]["id"], "comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject": {"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        return new_data
+    elif "lq_for_all_type_localfs_datasource_test" in data:
+        new_data={"id":"","name":"lq_for_all_type_localfs_datasource_test_随机数","type":"LOCALFS","description":"","attributes":{"encoder":"UTF-8","path":"test"},"resource": {"id": flow_info[0]["id"]}}
+        deal_random(new_data)
+        return new_data
+    elif '%test_Mysql%' in data:
+        new_data={"fieldList":[{"fieldName":"name","fieldValue":"%test_Mysql%","comparatorOperator":"LIKE","logicalOperator":"AND"},{"fieldName":"parentId","fieldValue":flow_info[0]["id"],"comparatorOperator":"EQUAL","logicalOperator":"AND"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
         return new_data
     else:
         return
@@ -479,4 +487,27 @@ def flow_dataset_data(data):
             return dataset_id, dataset_name
     except Exception as e:
         myLog().getLog().logger.error("flow_dataset_data出错{}".format(e))
+        return
+
+def filesets_data(data):
+    try:
+        sql="select id from merce_resource_dir where creator='admin' and name='Filesets' and parent_id is null"
+        fileset_info = ms.ExecuQuery(sql)
+        fileset_id=fileset_info[0]["id"]
+        cluster_id=cluster_data()
+    except Exception as e:
+        myLog().getLog().logger.error("filesets_data出错{}".format(e))
+        return
+    if "lq_fileset_test" in data:
+        new_data={"name":"lq_fileset_随机数","storage":"HDFS","storageConfigurations":{"fileType":"DIRECTORY","path":"/tmp/lisatest/0104_1","clusterId":cluster_id,"cluster":"cluster1","host":"","port":"","username":"","password":""},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+
+def cluster_data():
+    try:
+        sql="select id from merce_cluster_info where name='cluster1'"
+        cluster_id=ms.ExecuQuery(sql)[0]["id"]
+        return cluster_id
+    except Exception as e:
+        myLog().getLog().logger.error("cluster_data出错{}".format(e))
         return

@@ -47,6 +47,9 @@ def deal_parameters(data):
                 elif "select id from merce_schema where name like 'gtest_mysql_0428_training_%'" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
+                elif "select id from  merce_flow_execution where flow_name like 'auto_api%'"in data:
+                    new_data.append(data_select_result[0]["id"])
+                    return new_data
                 elif "select id from merce_resource_dir" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
