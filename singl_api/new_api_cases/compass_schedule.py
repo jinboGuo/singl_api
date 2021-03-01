@@ -7,6 +7,28 @@ from util.conn_linux import Linux
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 host = Linux(Compass_scheduler["HOST"], Compass_scheduler["USER"], Compass_scheduler["PASSWORD"])
 
+from pykafka import KafkaClient
+import json
+
+class operateKafka:
+    def __init__(self):
+        myhosts = "192.168.1.55:9092"
+        client = KafkaClient(hosts=myhosts)                         # 可接受多个Client这是重点
+        self.topic = client.topics['CARPO_XDR']    # 选择一个topic
+
+    def sendMessage(self, data):
+        with self.topic.get_sync_producer() as producer:
+                python_to_json = data.replace('" ', ' ')
+                print( python_to_json)
+                producer.produce(python_to_json.encode())
+
+
+data ="<root><ip>500</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////demo-2021022414-da308d3792e0.csv</fullName><fileName>demo</fileName><sliceType>H</sliceType><sliceTime>2021-02-24 14:00:00</sliceTime><createTime>2021-02-24 14:22:45</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17543</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>"
+Kafka = operateKafka()
+#Kafka.sendMessage(data)
+
+
+
 # 监控kafka消息
 def check_s_l_message(data):
     try:
@@ -290,10 +312,11 @@ mv = "mv [demo]* gdemo/"
 def run_all():
     host.connect()
     host.send(cd)  # 发送一个命令
-    host.send('sh createdata2.sh')
-    sleep(7)
     host.send(sh)
-    sleep(3)
+    sleep(9)
+    host.send(cd)
+    sleep(6)
+    host.send(mv)
     host.send(mv)
     check_s_l_message(s_l_message)
     check_s_r_task(s_r_task)
