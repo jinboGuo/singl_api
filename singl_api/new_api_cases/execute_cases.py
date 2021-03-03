@@ -2,7 +2,11 @@
 import json
 import os
 import re
+import threading
 import time
+from datetime import datetime
+import jsonpath
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
 from basic_info.mylogging import myLog
 from util import get_host
@@ -24,12 +28,12 @@ from new_api_cases.get_statementId import statementId, statementId_no_dataset, g
 from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, get_applicationId, \
     get_woven_qaoutput_dataset_path, upload_jar_file_workflow, upload_jar_file_dataflow, upload_jar_file_filter, \
     dss_data, upddss_data, dataset_data, upddataset_data, create_schema_data, updschema_data, create_flow_data, \
-    update_flow_data
+    update_flow_data, filesets_data
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('199')
+case_table_sheet = case_table.get_sheet_by_name('32')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 
@@ -89,11 +93,39 @@ def deal_request_method():
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(url=request_url, host=host, data=request_data,table_sheet_name=case_table_sheet,row=i,column=8, headers=get_headers(host))
 
+                elif request_method_upper == 'TEST':
+                    t1=threading.Thread(target=test1, args=(request_url, request_data, host, case_table_sheet, i,8, get_headers(host)))
+                    t1.start()
+
                 else:
                     print('请求方法%s不在处理范围内' % request_method)
         else:
             print('第 %d 行请求方法为空' % i)
     #  执行结束后保存表格
+    case_table.save(ab_dir("api_cases.xlsx"))
+
+def test1(url, data, host, table_sheet_name,row, column,headers):
+    global response
+    count = 0
+    new_data={"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":'%'+data+'%'},{"logicalOperator":"AND","fieldName":"flowType","comparatorOperator":"EQUAL","fieldValue":"dataflow"},{"logicalOperator":"AND","fieldName":"flowId","comparatorOperator":"EQUAL","fieldValue":"9b2b25fe-29e1-4874-abf6-d7741c091848"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+    new_data=json.dumps(new_data)
+    print(new_data)
+    while count <=10:
+        print(url,new_data,headers)
+        response = requests.post(url=url, headers=headers, data=new_data)
+        print("response",response)
+        print("response.text",response.text)
+        response_new=json.loads(response.text)
+        print("response_new",response_new)
+        if response_new["content"]==[]:
+            print("sleep",datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            time.sleep(60)
+            break
+        count+=1
+    print("开始写文件",response.text)
+    clean_vaule(table_sheet_name, row, column)
+    write_result(sheet=table_sheet_name, row=row, column=column, value= response.status_code)
+    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     case_table.save(ab_dir("api_cases.xlsx"))
 
 
@@ -120,6 +152,18 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '创建数据源' in case_detail:
             # 先获取statementId,然后格式化URL，再发送请求
+            print('开始执行：', case_detail)
+            new_data = dss_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_data:", new_data)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print(response.text, response.status_code)
+            # print(response.url)
+            # 将返回的status_code和response.text分别写入第10列和第14列
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '根据name查询数据源' in case_detail:
             print('开始执行：', case_detail)
             new_data = dss_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -426,26 +470,28 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '批量删除execution':
             print('开始执行：', case_detail)
             # 需要先查询指定flow下的所有execution，从中取出execution id，拼装成list，传递给删除接口
-            query_execution_url = '%s/api/executions/query' % host
-            all_exectuions = requests.post(url=query_execution_url, headers=headers, data=data)
-            executions_dict = dict_res(all_exectuions.text)
-            try:
-                executions_content = executions_dict['content']
-                all_ids = [] # 该list用来存储所有的execution id
-                for item in executions_content:
-                    executions_content_id = item['id']
-                    all_ids.append(executions_content_id)
-            except Exception as e:
-                print(e)
-            else:  # 取出一个id放入一个新的list，作为传递给removeLIst接口的参数
-                removelist_data = []
-                removelist_data.append(all_ids[-1])
-                # 执行删除操作
-                removeList_result = requests.post(url=url, headers=headers, json=removelist_data)
-                print(removeList_result.text, removeList_result.status_code)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=removeList_result.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=removeList_result.text)
+            # query_execution_url = '%s/api/executions/query' % host
+            # all_exectuions = requests.post(url=query_execution_url, headers=headers, data=data)
+            # executions_dict = dict_res(all_exectuions.text)
+            # try:
+            #     executions_content = executions_dict['content']
+            #     all_ids = [] # 该list用来存储所有的execution id
+            #     for item in executions_content:
+            #         executions_content_id = item['id']
+            #         all_ids.append(executions_content_id)
+            # except Exception as e:
+            #     print(e)
+            # else:  # 取出一个id放入一个新的list，作为传递给removeLIst接口的参数
+            #     removelist_data = []
+            #     removelist_data.append(all_ids[-1])
+            #     # 执行删除操作
+            #     removeList_result = requests.post(url=url, headers=headers, json=removelist_data)
+            #     print(removeList_result.text, removeList_result.status_code)
+            data=json.dumps(data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
         elif case_detail == '停止一个采集器任务的执行':
             print('开始执行：', case_detail)
@@ -663,6 +709,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '创建非结构化文件集合' in case_detail:
+            new_data=filesets_data(data)
+            # new_data = json.dumps(new_data, separators=(',', ':'))
+            response=requests.post(url=url, headers=headers, json=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            
         else:
             print('开始执行：', case_detail)
             if data:
@@ -1008,6 +1063,15 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail=="下载ES索引文件":
+                headers=get_headers(host)["X-AUTH-TOKEN"]
+                ids='7aa99535897a017397519cb9dc996f2c'
+                new_url=url.format(headers,ids)
+                response = requests.get(url=new_url)
+                print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
             else:
                 # print('开始执行：', case_detail)
                 myLog().getLog().logger.info("开始执行{}".format(case_detail))
@@ -1117,7 +1181,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value='500')
+        write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
 
 
@@ -1232,7 +1296,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(table_sheet_name, row, column, '500')
+        write_result(table_sheet_name, row, column, '-1')
         write_result(table_sheet_name, row, column+4,  value='{"id":"-1"}')
     #else:
         #print('第%s行的参数为空或格式异常' % row)
@@ -1281,9 +1345,15 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:
+        elif case_detail=='删除非结构化文件集合':
+            print(data)
+            response = requests.delete(url=url, headers=headers,json=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             # print(data)
             # print(type(data))
+        else:
             print('请确认第%d行的data形式' % row)
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
@@ -1417,7 +1487,15 @@ class CheckResult(unittest.TestCase):
 
                 else:
                     try:
-                        self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
+                        if expect_text.find("createTime")>=0:
+                            json_obj_exp = json.loads(expect_text)
+                            results_exp = jsonpath.jsonpath(json_obj_exp,"$.[*].id")
+                            print("results",results_exp)
+                            json_obj_res = json.loads(response_text)
+                            results_res = jsonpath.jsonpath(json_obj_res,"$.[*].id")
+                            self.assertEqual(results_exp, results_res, '第%s行results_exp和results_res不相等' % row)
+                        else:
+                            self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
                     except:
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
