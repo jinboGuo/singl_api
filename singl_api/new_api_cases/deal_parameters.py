@@ -50,10 +50,14 @@ def deal_parameters(data):
                 elif "select id from  merce_flow_execution where flow_name like 'auto_api%'"in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
-                elif "select id from merce_resource_dir" in data:
+                elif "'select id from merce_resource_dir where name like 'api_test%' ORDER BY create_time desc limit 1;'" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
                 elif "select id from merce_user" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    print(new_data)
+                    return new_data
+                elif "select id from merce_fileset order by create_time limit 1" in data:
                     new_data.append(data_select_result[0]["id"])
                     print(new_data)
                     return new_data

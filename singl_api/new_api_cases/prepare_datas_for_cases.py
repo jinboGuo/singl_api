@@ -491,15 +491,43 @@ def flow_dataset_data(data):
 
 def filesets_data(data):
     try:
-        sql="select id from merce_resource_dir where creator='admin' and name='Filesets' and parent_id is null"
+        sql="select id from merce_resource_dir where creator='admin' and name='Filesets' and parent_id is null and path='Filesets;'"
         fileset_info = ms.ExecuQuery(sql)
         fileset_id=fileset_info[0]["id"]
         cluster_id=cluster_data()
     except Exception as e:
         myLog().getLog().logger.error("filesets_data出错{}".format(e))
         return
-    if "lq_fileset_test" in data:
+    if "lq_fileset_hdfs_directory" in data:
         new_data={"name":"lq_fileset_随机数","storage":"HDFS","storageConfigurations":{"fileType":"DIRECTORY","path":"/tmp/lisatest/0104_1","clusterId":cluster_id,"cluster":"cluster1","host":"","port":"","username":"","password":""},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_hdfs_file" in data:
+        new_data={"name":"lq_fileset_hdfs_file_随机数","storage":"HDFS","storageConfigurations":{"fileType":"FILE","path":"/tmp/lisatest/hdfs_click/hdfs_source.txt","clusterId":cluster_id,"cluster":"cluster1","host":"","port":22,"username":"admin","password":"123456"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_hdfs_recursive_dir" in data:
+        new_data={"name":"lq_fileset_hdfs_recursive_dir_随机数","storage":"HDFS","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/tmp/lisatest/filesets","clusterId":cluster_id,"cluster":"cluster1","host":"","port":22,"username":"admin","password":"123456"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_sftp_directory" in data:
+        new_data={"name":"lq_fileset_sftp_directory_随机数","storage":"SFTP","storageConfigurations":{"fileType":"DIRECTORY","path":"sftp://info4/home/europa/ftp_617/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_sftp_file" in data:
+        new_data={"name":"lq_fileset_sftp_file_随机数","storage":"SFTP","storageConfigurations":{"fileType":"FILE","path":"sftp://info4/home/europa/ftp_617/test_docx/fileset compress.docx","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_sftp_recursive_dir" in data:
+        new_data={"name":"lq_fileset_sftp_recursive_dir_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"sftp://info4/home/europa/ftp_617/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_ftp_recursive_dir" in data:
+        new_data={"name":"lq_fileset_ftp_recursive_dir_随机数","storage":"FTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"ftp://info4/home/europa/20200528","clusterId":"","cluster":"","host":"192.168.1.84","port":21,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        deal_random(new_data)
+        return new_data
+    if "lq_fileset_local_file" in data:
+        new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/app/merce/test0219.csv","clusterId":"","cluster":"","host":"192.168.1.82","port":22,"username":"merce","password":"merce@82"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
 

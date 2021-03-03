@@ -6,6 +6,7 @@ import threading
 import time
 from datetime import datetime
 import jsonpath
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
 from basic_info.mylogging import myLog
 from util import get_host
@@ -708,9 +709,10 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '创建文件' in case_detail:
+        elif '创建非结构化文件集合' in case_detail:
             new_data=filesets_data(data)
-            response=requests.post(url=url, headers=headers, data=new_data)
+            # new_data = json.dumps(new_data, separators=(',', ':'))
+            response=requests.post(url=url, headers=headers, json=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1061,6 +1063,15 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail=="下载ES索引文件":
+                headers=get_headers(host)["X-AUTH-TOKEN"]
+                ids='7aa99535897a017397519cb9dc996f2c'
+                new_url=url.format(headers,ids)
+                response = requests.get(url=new_url)
+                print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
             else:
                 # print('开始执行：', case_detail)
                 myLog().getLog().logger.info("开始执行{}".format(case_detail))
@@ -1170,7 +1181,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value='500')
+        write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
 
 
@@ -1285,7 +1296,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(table_sheet_name, row, column, '500')
+        write_result(table_sheet_name, row, column, '-1')
         write_result(table_sheet_name, row, column+4,  value='{"id":"-1"}')
     #else:
         #print('第%s行的参数为空或格式异常' % row)
@@ -1334,9 +1345,15 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:
+        elif case_detail=='删除非结构化文件集合':
+            print(data)
+            response = requests.delete(url=url, headers=headers,json=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             # print(data)
             # print(type(data))
+        else:
             print('请确认第%d行的data形式' % row)
     except Exception as e:
         myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
