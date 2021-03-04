@@ -511,23 +511,23 @@ def filesets_data(data):
         deal_random(new_data)
         return new_data
     if "lq_fileset_sftp_directory" in data:
-        new_data={"name":"lq_fileset_sftp_directory_随机数","storage":"SFTP","storageConfigurations":{"fileType":"DIRECTORY","path":"sftp://info4/home/europa/ftp_617/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_sftp_directory_随机数","storage":"SFTP","storageConfigurations":{"fileType":"DIRECTORY","path":"/home/europa/lq_sftp/sftp_sub","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     if "lq_fileset_sftp_file" in data:
-        new_data={"name":"lq_fileset_sftp_file_随机数","storage":"SFTP","storageConfigurations":{"fileType":"FILE","path":"sftp://info4/home/europa/ftp_617/test_docx/fileset compress.docx","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_sftp_file_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/home/europa/lq_sftp/sftp_sub1/sftp.sql","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
-    if "lq_fileset_sftp_recursive_dir" in data:
-        new_data={"name":"lq_fileset_sftp_recursive_dir_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"sftp://info4/home/europa/ftp_617/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+    if "lq_fileset_ftp_file" in data:
+        new_data={"name":"lq_fileset_sftp_file_随机数","storage":"SFTP","storageConfigurations":{"fileType":"FILE","path":"/home/europa/lq_ftp/testpptx.pptx","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     if "lq_fileset_ftp_recursive_dir" in data:
-        new_data={"name":"lq_fileset_ftp_recursive_dir_随机数","storage":"FTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"ftp://info4/home/europa/20200528","clusterId":"","cluster":"","host":"192.168.1.84","port":21,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_ftp_recursive_dir_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/home/europa/lq_ftp/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     if "lq_fileset_local_file" in data:
-        new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/app/merce/test0219.csv","clusterId":"","cluster":"","host":"192.168.1.82","port":22,"username":"merce","password":"merce@82"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/app/merce/test_file_search/filesearch.txt","clusterId":"","cluster":"","host":"192.168.1.32","port":22,"username":"merce","password":"Inf0refiner"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
 
