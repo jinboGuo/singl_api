@@ -28,14 +28,14 @@ from new_api_cases.get_statementId import statementId, statementId_no_dataset, g
 from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, get_applicationId, \
     get_woven_qaoutput_dataset_path, upload_jar_file_workflow, upload_jar_file_dataflow, upload_jar_file_filter, \
     dss_data, upddss_data, dataset_data, upddataset_data, create_schema_data, updschema_data, create_flow_data, \
-    update_flow_data, filesets_data
+    update_flow_data, filesets_data, get_old_id_name
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('32')
 all_rows = case_table_sheet.max_row
-jar_dir = ab_dir('woven-common-3.0.jar')
+jar_dir=os.path.join(os.path.abspath('.'),'attachment\woven-common-3.0.jar')
 
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
@@ -717,6 +717,14 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail.startswith('提交partition-dataflow'):
+            new_data=get_old_id_name(data)
+            # new_data = json.dumps(new_data, separators=(',', ':'))
+            response=requests.post(url=url, headers=headers, json=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             
         else:
             print('开始执行：', case_detail)
@@ -1072,6 +1080,24 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            elif case_detail=="判断partition-dataflow运行成功":
+                new_url=url.format(data)
+                response = requests.get(url=new_url,headers=headers)
+                count = 0
+                while count<=10:
+                    status=json.loads(response.text)["statusType"]
+                    if status == "WAITTING" or status =="RUNNING" or status =="READY":
+                       response = requests.get(url=new_url,headers=headers)
+                       time.sleep(10)
+                    elif status == "SUCCEEDED":
+                        break
+                    else:
+                        print("执行出错")
+                        return
+                    count+=1
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 # print('开始执行：', case_detail)
                 myLog().getLog().logger.info("开始执行{}".format(case_detail))
