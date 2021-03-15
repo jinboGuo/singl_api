@@ -539,3 +539,18 @@ def cluster_data():
     except Exception as e:
         myLog().getLog().logger.error("cluster_data出错{}".format(e))
         return
+
+def get_old_id_name(data):
+    try:
+        sql='SELECT id,name from merce_flow where name like "partition-dataflow_%" order by create_time desc limit 1'
+        flow_id=ms.ExecuQuery(sql)[0]["id"]
+        old_name=ms.ExecuQuery(sql)[0]["name"]
+        data=dict_res(data)
+        data["flowId"]=flow_id
+        data["oldName"]=old_name
+        print("get_old_id_name",data)
+        return data
+    except Exception as e:
+        myLog().getLog().logger.error("get_old_name执行出错{}".format(e))
+        return
+
