@@ -717,7 +717,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail.startswith('提交partition-dataflow'):
+        elif '提交flow' in case_detail:
             new_data=get_old_id_name(data)
             # new_data = json.dumps(new_data, separators=(',', ':'))
             response=requests.post(url=url, headers=headers, json=new_data)
@@ -1080,7 +1080,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-            elif case_detail=="判断partition-dataflow运行成功":
+            elif "运行成功" in case_detail:
                 new_url=url.format(data)
                 response = requests.get(url=new_url,headers=headers)
                 count = 0
