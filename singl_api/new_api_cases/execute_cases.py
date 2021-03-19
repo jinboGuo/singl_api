@@ -1084,7 +1084,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 new_url=url.format(data)
                 response = requests.get(url=new_url,headers=headers)
                 count = 0
-                while count<=10:
+                while count<=30:
                     status=json.loads(response.text)["statusType"]
                     if status == "WAITTING" or status =="RUNNING" or status =="READY":
                        response = requests.get(url=new_url,headers=headers)
@@ -1092,7 +1092,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     elif status == "SUCCEEDED":
                         break
                     else:
-                        print("执行出错")
+                        print("flow执行状态出错")
                         return
                     count+=1
                 clean_vaule(table_sheet_name, row, column)
