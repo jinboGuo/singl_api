@@ -77,6 +77,7 @@ def delete_autotest_datas():
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
     try:
         flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%'"
+        flow_execution_sql = "delete from merce_flow_execution where name like 'lq%'"
         dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%' or name like 'lq%'"
         schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%' or name like 'lq%'"
         tenant_sql = "delete from merce_tenant where name like 'api_tenants%' order by create_time desc limit 1"
@@ -84,6 +85,8 @@ def delete_autotest_datas():
         filesets_dir ="DELETE FROM merce_resource_dir where name like 'lq_fileset%'"
         print("删除flow表测试数据 ", flow_sql)
         ms.ExecuNoQuery(flow_sql.encode('utf-8'))
+        print("删除flow_execution表测试数据 ", flow_execution_sql)
+        ms.ExecuNoQuery(flow_execution_sql.encode('utf-8'))
         print("删除dataset表测试数据 ", dataset_sql)
         ms.ExecuNoQuery(dataset_sql.encode('utf-8'))
         print("删除schema表测试数据 ", schema_sql)
