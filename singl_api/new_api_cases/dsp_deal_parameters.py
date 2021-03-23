@@ -1,6 +1,7 @@
 import random
 from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
+from util.logs import Logger
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 
@@ -8,7 +9,6 @@ def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
-                # print(data)
                 data = data.replace('随机数', str(random.randint(0, 999999999999999)))
                 return deal_parameters(data)
             if 'select id from' in data:
@@ -33,11 +33,10 @@ def deal_parameters(data):
                             else:
                                 data = data_select_result[0]["id"]
                                 return data
-                        except:
-                            print('请确认第%d行SQL语句')
+                        except Exception as e:
+                            Logger().get_log().info("异常信息：%s " %e)
             if 'select enabled,id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                print(data_select_result)
                 if len(data_select_result):
                     try:
                         if data_select_result[0]["enabled"] == 1:
@@ -46,11 +45,10 @@ def deal_parameters(data):
                         else:
                             new_data = [{'enabled': 1, 'id': data_select_result[0]["id"]}]
                             return new_data
-                    except:
-                        print('请确认第%d行SQL语句')
+                    except Exception as e:
+                        Logger().get_log().info("异常信息：%s " %e)
             if 'select status,id,is_running from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                print("data_select_result1:", data_select_result)
                 if data_select_result:
                     try:
                         if data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 1:  # 正在运行服务，停止
@@ -88,8 +86,8 @@ def deal_parameters(data):
                             id = str(data_select_result[0]["id"])
                             new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
-                    except:
-                        return {'status': '1', 'id': '725070733486587904',"expiredTime":""}
+                    except Exception as e:
+                        Logger().get_log().info("异常信息：%s " %e)
                 else:
                     return {'status': '1', 'id': '725070733486587904',"expiredTime":""}
             if 'select access_key' in data:
@@ -97,13 +95,12 @@ def deal_parameters(data):
                 if data_select_result:
                     try:
                         data = data_select_result[0]["access_key"]
-                        print(data)
                         return data
                     except Exception as e:
-                        print('\033[31m请确认第%d行SQL语句\033[0m',e)
+                        Logger().get_log().info("请确认SQL语句,异常信息：%s " %e)
             else:
                 return data
         else:
             return data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+       Logger().get_log().info("异常信息：%s " %e)
