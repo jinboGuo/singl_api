@@ -76,10 +76,12 @@ def delete_autotest_datas():
     print("------开始删除测试数据-------")
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
     try:
-        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%'"
-        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%'  "
-        schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%'"
+        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%'"
+        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%' or name like 'lq%'"
+        schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%' or name like 'lq%'"
         tenant_sql = "delete from merce_tenant where name like 'api_tenants%' order by create_time desc limit 1"
+        filesets_sql="DELETE from merce_fileset"
+        filesets_dir ="DELETE FROM merce_resource_dir where name like 'lq_fileset%'"
         print("删除flow表测试数据 ", flow_sql)
         ms.ExecuNoQuery(flow_sql.encode('utf-8'))
         print("删除dataset表测试数据 ", dataset_sql)
@@ -88,6 +90,10 @@ def delete_autotest_datas():
         ms.ExecuNoQuery(schema_sql.encode('utf-8'))
         print("删除tenant表测试数据 ", tenant_sql)
         ms.ExecuNoQuery(tenant_sql.encode('utf-8'))
+        print("删除filesets表测试数据 ", filesets_sql)
+        ms.ExecuNoQuery(filesets_sql.encode('utf-8'))
+        print("删除filesets_dir表测试数据 ", filesets_dir)
+        ms.ExecuNoQuery(filesets_dir.encode('utf-8'))
     except:
        return
 

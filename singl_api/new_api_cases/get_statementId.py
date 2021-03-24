@@ -136,7 +136,7 @@ def get_sql_analyse_statement_id(host, param):
 def get_sql_analyse_dataset_info(host, params):
     sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
     # print(sql_analyse_statement_id)
-    url = ' %s/api/datasets/sql/analyzeresult?statementId=%s' % (host, sql_analyse_statement_id)
+    url = ' %s/api/datasets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
     res = requests.get(url=url, headers=get_headers(host))
     count_num = 0
     while ("waiting") in res.text or ("running") in res.text:
@@ -199,7 +199,7 @@ def steps_sql_analyzeinit_statementId(HOST, params):
         return
 
 def get_step_output_init_statementId(HOST,params):
-    url = '%s/api/steps/output/fields/init' % HOST
+    url = '%s/api/steps/output/fields/init?branch=output' % HOST
     try:
         res = requests.post(url=url, headers=get_headers(HOST), data=params)
         print(res.status_code, res.text)

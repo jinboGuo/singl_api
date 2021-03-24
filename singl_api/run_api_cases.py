@@ -27,7 +27,7 @@ from basic_info.setting import receivers_list
 # fp.close()
 
 #清除测试数据
-#delete_autotest_datas()
+delete_autotest_datas()
 print('------开始执行用例-------')
 start_time = datetime.datetime.now()
 print('开始时间：', start_time)
