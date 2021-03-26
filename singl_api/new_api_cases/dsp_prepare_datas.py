@@ -35,7 +35,7 @@ def resource_data_push(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def push_resource_data_open(data):
     try:
@@ -44,7 +44,7 @@ def push_resource_data_open(data):
         new_data = {"name": resource_info[0]["name"], "id": resource_info[0]["id"], "isPull":0,"isPush":1,"pullServiceMode":[],"pushServiceMode":["1","0"],"expiredTime":"","openStatus":1,"description":""}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def pull_resource_data_open(data):
     try:
@@ -65,7 +65,7 @@ def pull_resource_data_open(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def resource_data_pull_es(data):
     try:
@@ -89,7 +89,7 @@ def resource_data_pull_es(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def resource_data(data):
     try:
@@ -100,7 +100,7 @@ def resource_data(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def resource_data_save(data):
     from new_api_cases.dw_deal_parameters import deal_random
@@ -126,7 +126,7 @@ def resource_data_save(data):
         else:
            return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def resource_data_dss(data):
     from new_api_cases.dw_deal_parameters import deal_random
@@ -140,7 +140,7 @@ def resource_data_dss(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def appconfig_data(data):
     try:
@@ -150,7 +150,7 @@ def appconfig_data(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def cust_data_source(data):
     try:
@@ -160,7 +160,7 @@ def cust_data_source(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def admin_flow_id(data):
     try:
@@ -169,7 +169,7 @@ def admin_flow_id(data):
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def customer_flow_id(data):
     try:
@@ -178,7 +178,7 @@ def customer_flow_id(data):
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def pull_data(data):
     try:
@@ -202,7 +202,7 @@ def pull_data(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def pull_data_sql(data):
     try:
@@ -217,7 +217,7 @@ def pull_data_sql(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def pull_Aggs_sql(data):
     try:
@@ -232,7 +232,7 @@ def pull_Aggs_sql(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def pull_Aggs(data):
     try:
@@ -422,7 +422,7 @@ def pull_Aggs(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def application_pull_approval(data):
     try:
@@ -443,7 +443,7 @@ def application_pull_approval(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def application_push_approval(data):
     try:
@@ -464,7 +464,7 @@ def application_push_approval(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_customer(data):
     try:
@@ -477,7 +477,7 @@ def update_customer(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_user(data):
     try:
@@ -490,4 +490,4 @@ def update_user(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)

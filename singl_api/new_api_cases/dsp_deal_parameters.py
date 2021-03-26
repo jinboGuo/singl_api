@@ -34,7 +34,7 @@ def deal_parameters(data):
                                 data = data_select_result[0]["id"]
                                 return data
                         except Exception as e:
-                            Logger().get_log().info("异常信息：%s " %e)
+                            Logger().get_log().error("异常信息：%s" %e)
             if 'select enabled,id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if len(data_select_result):
@@ -46,7 +46,7 @@ def deal_parameters(data):
                             new_data = [{'enabled': 1, 'id': data_select_result[0]["id"]}]
                             return new_data
                     except Exception as e:
-                        Logger().get_log().info("异常信息：%s " %e)
+                        Logger().get_log().error("异常信息：%s" %e)
             if 'select status,id,is_running from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
@@ -87,7 +87,7 @@ def deal_parameters(data):
                             new_data = {'status': status, 'id': id,"expiredTime":""}
                             return new_data
                     except Exception as e:
-                        Logger().get_log().info("异常信息：%s " %e)
+                        Logger().get_log().error("异常信息：%s" %e)
                 else:
                     return {'status': '1', 'id': '725070733486587904',"expiredTime":""}
             if 'select access_key' in data:
@@ -103,4 +103,4 @@ def deal_parameters(data):
         else:
             return data
     except Exception as e:
-       Logger().get_log().info("异常信息：%s " %e)
+       Logger().get_log().error("异常信息：%s" %e)

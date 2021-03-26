@@ -239,7 +239,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 
 # GET请求
@@ -340,7 +340,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
@@ -432,7 +432,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
             write_result(table_sheet_name, row, column, response.status_code)
             write_result(table_sheet_name, row, column + 4, response.text)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
         
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
     try:
@@ -487,7 +487,7 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)          
+        Logger().get_log().error("异常信息：%s" %e)          
 
 
 #  写入返回结果

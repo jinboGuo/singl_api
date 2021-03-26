@@ -18,7 +18,7 @@ def update_job_pool(data):
         new_data = {"id": job_pool_oid, "poolName": "autotest", "poolSize": 10, "jobFilterClass": "com.nokia.bighead.scheduler.function.job.JobFilter", "flowVer": "2", "rePoolSize": 10}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_job(data):
     try:
@@ -28,7 +28,7 @@ def update_job(data):
         new_data = {"id":job_oid,"jobName":job_name,"jobType":2,"sliceType":"H","status":1,"msgOid":"","jsonOid":"","strategyOid":"2","delayTime":"60","configStr":"1","taskType":1,"taskLevel":5,"jobPoolOid":job_pool_oid,"timeoutTime":"","eqTimeRun":"","reOid":re_oid,"cdoFilterClass":"","isTrigger":"N","handleOid":handle_oid,"filterConf":"1","flowName":flow_name,"flowId":flow_id,"flowVer":"0","againType":"1","againReOid":again_re_oid,"maxRun":1,"flowConf":"","clusterName":cluster_name,"runTime":"","timeOrder":"1","userExe":"","otherPars":"","jobDesc":"1","createTime":data_now(),"planId":"","delayType":1,"clusterExeName":""}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_job(data):
     data = data.split('&')
@@ -64,7 +64,7 @@ def add_job(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_jobSingle(data):
     try:
@@ -90,7 +90,7 @@ def add_jobSingle(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_jobSingle(data):
     try:
@@ -101,7 +101,7 @@ def update_jobSingle(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_jobMap(data):
     try:
@@ -114,7 +114,7 @@ def add_jobMap(data):
         else:
             return
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_jobMap(data):
 
@@ -125,7 +125,7 @@ def update_jobMap(data):
         new_data = {"jobDataOid": "", "jobOid": job_oid, "clusterName": cluster_name, "dataformatName": dataformat_Name,"sliceTimeRegType":1,"sliceTimeReg":"","mustLevel":3,"mustType":1,"mustPars":"100","mustLine":"","mustOuttime":"", "id": job_map_oid,"jobName": job_name, "jobType": "2"}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_re(data):
     try:
@@ -136,7 +136,7 @@ def update_re(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def query_reth(data):
     try:
@@ -147,7 +147,7 @@ def query_reth(data):
         new_data = {"fieldGroup": {"fields": [{"andOr": "AND", "name": "reOid", "oper": "EQUAL", "value": re_oid}]},"ordSort":[],"pageable":{"pageNum":0,"pageSize":8,"pageable":"true"}}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_reth(data):
     try:
@@ -157,7 +157,7 @@ def add_reth(data):
         new_data = {"reOid": re_oid, "minValue": "", "maxValue": "10000", "exeMem": "2G", "exeNum": "2", "driverMem": "2G"}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_reth(data):
     try:
@@ -167,7 +167,7 @@ def update_reth(data):
         new_data = {"id": re_th_oid, "reOid": re_oid, "minValue": "", "maxValue": "10000", "exeMem": "2G", "exeNum": "2", "driverMem": "2G"}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def query_rethExt(data):
     try:
@@ -178,7 +178,7 @@ def query_rethExt(data):
         new_data = {"fieldGroup": {"fields": [{"andOr": "AND", "name": "reThOid", "oper": "EQUAL", "value": re_th_oid}]}, "ordSort": [], "pageable": {"pageNum": 0, "pageSize": 8, "pageable": "true"}}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_rethExt(data):
     try:
@@ -188,7 +188,7 @@ def add_rethExt(data):
         new_data = {"reThOid": re_th_oid, "extKey": "spark.executor.cores", "extValue": "4"}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_rethExt(data):
     try:
@@ -198,4 +198,4 @@ def update_rethExt(data):
         new_data = {"id": re_th_ext_oid, "reThOid": re_th_oid, "extKey": "spark.executor.cores", "extValue": "4"}
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
