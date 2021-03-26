@@ -32,7 +32,7 @@ def check_s_l_message(data):
                 Logger().get_log().info("----s_l_message----没有任务数据！")
                 sleep(5)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s" %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 # 监控日志调度任务
 def check_s_r_task(data):
@@ -103,7 +103,7 @@ def check_s_r_task(data):
                 Logger().get_log().info("----s_r_task----没有日志调度任务数据！")
                 sleep(5)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s" %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 # 监控调度任务执行
 def check_s_l_result_task(data):
@@ -167,7 +167,7 @@ def check_s_l_result_task(data):
                 Logger().get_log().info("----s_l_result_task----没有调度任务数据！")
                 sleep(5)
     except Exception as e:
-        Logger().get_log().info("异常信息：%s" %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 # 监控调度任务执行输入结果
 def check_s_l_result_detail(data):
@@ -221,7 +221,7 @@ def check_s_l_result_detail(data):
                 if n == 5:
                     break
     except Exception as e:
-        Logger().get_log().info("异常信息：%s" %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 # 监控调度任务执行输出结果
 def check_s_l_result_output(data):
@@ -276,7 +276,7 @@ def check_s_l_result_output(data):
                 if n == 5:
                     break
     except Exception as e:
-        Logger().get_log().info("异常信息：%s" %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 s_l_message="select job_data_oid,full_name,status,slice_type ,slice_time,create_time,row_number from s_l_message order by create_time desc limit 1"
 s_r_task = "select task_oid,job_oid,status,slice_type ,slice_time ,create_time,row_number,cdo_name, dataformat_name from s_r_task order by create_time desc limit 1"

@@ -36,10 +36,10 @@ class Linux(object):
             # 这里不对可能的异常如socket.error, socket.timeout细化，直接一网打尽
             except Exception as e1:
                 if self.try_times != 0:
-                    Logger().get_log().info("连接%s失败，进行重试" % self.ip)
+                    Logger().get_log().error("连接%s失败，进行重试" % self.ip)
                     self.try_times -= 1
                 else:
-                    Logger().get_log().info("重试3次失败，结束程序")
+                    Logger().get_log().error("重试3次失败，结束程序")
                     exit(1)
 
     # 断开连接
@@ -76,7 +76,7 @@ class Linux(object):
             result=sftp.put(upload_files, upload_path)
             return True if result else False
         except Exception as ex:
-            print(ex)
+            Logger().get_log().error("异常信息：%s " %ex)
             tran.close()
         finally:
             tran.close()

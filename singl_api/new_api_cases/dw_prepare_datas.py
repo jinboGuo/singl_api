@@ -16,7 +16,7 @@ def query_subject_data(data):
         new_data = {"params": {"pageable": {"pageNum": 0, "pageSize": 8, "pageable": "true"}}}
         return new_data, business_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_business_data(data):
     try:
@@ -27,7 +27,7 @@ def update_business_data(data):
         deal_random(new_data)
         return new_data, business_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_subject_data(data):
     try:
@@ -38,7 +38,7 @@ def add_subject_data(data):
         deal_random(new_data)
         return new_data, business_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_subject_data(data):
     try:
@@ -49,7 +49,7 @@ def update_subject_data(data):
         deal_random(new_data)
         return new_data, subject_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_projects_data(data):
     try:
@@ -60,7 +60,7 @@ def add_projects_data(data):
         deal_random(new_data)
         return new_data, business_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_projects_data(data):
     try:
@@ -71,7 +71,7 @@ def update_projects_data(data):
         deal_random(new_data)
         return new_data, project_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_tag_data(data):
     try:
@@ -82,7 +82,7 @@ def update_tag_data(data):
         deal_random(new_data)
         return new_data, tag_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def add_taggroup_data(data):
     try:
@@ -93,7 +93,7 @@ def add_taggroup_data(data):
         deal_random(new_data)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_taggroup_data(data):
     try:
@@ -104,7 +104,7 @@ def update_taggroup_data(data):
         deal_random(new_data)
         return new_data, taggroup_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def update_namerule_data(data):
     try:
@@ -115,4 +115,4 @@ def update_namerule_data(data):
         deal_random(new_data)
         return new_data, namerule_id
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " % e)
+        Logger().get_log().error("异常信息：%s" %e)

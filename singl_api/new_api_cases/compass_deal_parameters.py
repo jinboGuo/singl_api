@@ -46,7 +46,7 @@ def deal_parameters(data):
                         data = data_select_result[0]["cluster_name"]
                         return deal_parameters(data)
                     except Exception as e:
-                        Logger().get_log().info("异常信息：%s " %e)
+                        Logger().get_log().error("异常信息：%s" %e)
                 else:
                     return
             elif 'select oid' in data:
@@ -103,7 +103,7 @@ def deal_parameters(data):
                         data = data_select_result[0]["dataflow_oid"]
                         return deal_parameters(str(data))
                     except Exception as e:
-                        Logger().get_log().info("异常信息：%s " %e)
+                        Logger().get_log().error("异常信息：%s" %e)
                 else:
                     return
             elif 'select single_oid' in data:
@@ -194,7 +194,7 @@ def deal_parameters(data):
         else:
             return data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
 
 def deal_random(new_data):
     try:
@@ -205,4 +205,4 @@ def deal_random(new_data):
                 new_data[key] = str(i)
         return new_data
     except Exception as e:
-        Logger().get_log().info("异常信息：%s " %e)
+        Logger().get_log().error("异常信息：%s" %e)
