@@ -9,6 +9,7 @@ from util.logs import Logger
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+log = Logger().get_log()
 
 def deal_parameters(data):
     try:
@@ -46,7 +47,7 @@ def deal_parameters(data):
                         data = data_select_result[0]["cluster_name"]
                         return deal_parameters(data)
                     except Exception as e:
-                        Logger().get_log().error("异常信息：%s" %e)
+                        log.error("异常信息：%s" %e)
                 else:
                     return
             elif 'select oid' in data:
@@ -103,7 +104,7 @@ def deal_parameters(data):
                         data = data_select_result[0]["dataflow_oid"]
                         return deal_parameters(str(data))
                     except Exception as e:
-                        Logger().get_log().error("异常信息：%s" %e)
+                        log.error("异常信息：%s" %e)
                 else:
                     return
             elif 'select single_oid' in data:
@@ -194,7 +195,7 @@ def deal_parameters(data):
         else:
             return data
     except Exception as e:
-        Logger().get_log().error("异常信息：%s" %e)
+        log.error("异常信息：%s" %e)
 
 def deal_random(new_data):
     try:
@@ -205,4 +206,4 @@ def deal_random(new_data):
                 new_data[key] = str(i)
         return new_data
     except Exception as e:
-        Logger().get_log().error("异常信息：%s" %e)
+        log.error("异常信息：%s" %e)
