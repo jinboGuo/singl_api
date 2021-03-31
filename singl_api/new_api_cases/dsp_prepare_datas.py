@@ -7,21 +7,20 @@ from util.format_res import dict_res
 from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from basic_info.setting import host
-
+from util.logs import Logger
 from util.timestamp_13 import get_now, get_tomorrow, data_now
 
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+log = Logger().get_log()
 
 def resource_data_push(data):
     try:
         data = data.split("&")
         sql = "select name,id from dsp_data_resource where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', resource_info[0]["id"], resource_info[0]["name"])
         dss_sql = "select name,id from dsp_cust_data_source where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         dss_info = ms.ExecuQuery(dss_sql.encode('utf-8'))
-        print('cust_data_source_id-name:', dss_info[0]["id"], dss_info[0]["name"])
         if 'test_hdfs_csv' in data:
             new_data = {"name": "test_once_hdfs_csv","description":"","dataResId": resource_info[0]["id"],"dataResName":resource_info[0]["name"], "serviceMode":1,"transferType":1,"custTableName":"", "custDataSourceId": dss_info[0]["id"],"custDataSourceName":dss_info[0]["name"], "otherConfiguration": {"scheduleType": "once","cron":"0 * * * * ? ","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}]}
             return new_data
@@ -37,23 +36,21 @@ def resource_data_push(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def push_resource_data_open(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', resource_info[0]["id"], resource_info[0]["name"])
         new_data = {"name": resource_info[0]["name"], "id": resource_info[0]["id"], "isPull":0,"isPush":1,"pullServiceMode":[],"pushServiceMode":["1","0"],"expiredTime":"","openStatus":1,"description":""}
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def pull_resource_data_open(data):
     try:
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', resource_info[0]["id"], resource_info[0]["name"])
         if 'gjb_sink_es' in data:
             new_data = {"name": resource_info[0]["name"], "id": resource_info[0]["id"],"isPull": 1, "isPush": 0, "pullServiceMode": ["2"], "pushServiceMode": [], "expiredTime":"","openStatus":1,"description":""}
             return new_data
@@ -69,17 +66,15 @@ def pull_resource_data_open(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def resource_data_pull_es(data):
     try:
         data = data.split("&")
         sql = "select name,id from dsp_data_resource where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('resource_id-name:', resource_info[0]["id"], resource_info[0]["name"])
         app_sql = "select name,id from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         appconfig_info = ms.ExecuQuery(app_sql.encode('utf-8'))
-        print('appconfig_info_id-name:', appconfig_info[0]["id"], appconfig_info[0]["name"])
         if 'gjb_sink_es' in data:
             new_data = {"custAppId": appconfig_info[0]["id"], "custAppName":appconfig_info[0]["name"],"name":"gjb_sink_es", "description": "", "serviceMode": 2, "transferType": 0, "dataResId": resource_info[0]["id"], "dataResName":resource_info[0]["name"], "fieldMappings": [{"index": 0, "sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""}}]}
             return new_data
@@ -95,28 +90,24 @@ def resource_data_pull_es(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def resource_data(data):
     try:
         sql = "select id ,dataset_id, dataset_name from dsp_data_resource where name like '%s%%%%' ORDER BY create_time limit 1" % data
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
-        print('resource_id:', resource_info[0]["id"], resource_info[0]["dataset_id"], resource_info[0]["dataset_name"])
         new_data = {"name": "gjb_test_hdfs_student2020随机数", "datasetName": resource_info[0]["dataset_name"],"storage":"HDFS","encoder":"UTF-8","incrementField":"age","openStatus":1,"categoryId":"0","datasetId": resource_info[0]["dataset_id"], "expiredTime":0,"type":0,"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""}},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""}}],"id":resource_info[0]["id"]}
         from new_api_cases.dw_deal_parameters import deal_random
         deal_random(new_data)
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def resource_data_save(data):
     from new_api_cases.dw_deal_parameters import deal_random
     try:
         sql = "select id,name from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data
         dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
-        print('dataset_id-name:', dataset_info[0]["id"], dataset_info[0]["name"])
         if 'gjb_ttest_hdfs_student2020' in data:
             new_data = {"name": "gjb_ttest_hdfs_student_随机数", "sourceType": "DATASET", "datasetName": dataset_info[0]["name"],"datasetId":dataset_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings":[{"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","index":0,"transformRule":{"type":"","expression":""}},{"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","index":0,"transformRule":{"type":"","expression":""}},{"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","index":0,"transformRule":{"type":"","expression":""}},{"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","index":0,"transformRule":{"type":"","expression":""}},{"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","index":0,"transformRule":{"type":"","expression":""}}],"openStatus":0,"type":0,"isIncrementField":"true","incrementField":"age","encoder":"UTF-8","timeStamp":"","storage":"HDFS","dataset":"","query":{"parameters":[],"sqlTemplate":""}}
             deal_random(new_data)
@@ -136,15 +127,13 @@ def resource_data_save(data):
         else:
            return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def resource_data_dss(data):
     from new_api_cases.dw_deal_parameters import deal_random
     try:
         sql = "select id,name from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data
         dss_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print(sql)
-        print('dss_id-name:', dss_info[0]["id"], dss_info[0]["name"])
         if 'autotest_mysql' in data:
             new_data = {"name": "api_datasource随机数", "sourceType": "DATASOURCE", "datasetName": dss_info[0]["name"], "datasetId":dss_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings": [], "openStatus":0,"type":0,"isIncrementField":"false","incrementField":"","encoder":"UTF-8","timeStamp":"","storage":"DB","dataset":"","query":{"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}}
             deal_random(new_data)
@@ -152,60 +141,53 @@ def resource_data_dss(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def appconfig_data(data):
     try:
         sql = "select id ,tenant_id, owner, access_key ,cust_id ,cust_name,public_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         config_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_dc_appconfig: ', config_info[0]["id"], config_info[0]["tenant_id"], config_info[0]["owner"],
-              config_info[0]["access_key"], config_info[0]["cust_id"], config_info[0]["cust_name"] ,config_info[0]["public_key"])
         new_data = {"accessIp":["192.168.2.142"], "name": "autotest_appconfig_随机数", "enabled":1,"tenantId": config_info[0]["tenant_id"], "owner": config_info[0]["owner"],"creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now(),"description":"","id": config_info[0]["id"],"custId":config_info[0]["cust_id"],"custName":config_info[0]["cust_name"],"accessKey": config_info[0]["access_key"],"publicKey": config_info[0]["public_key"]}
         deal_random(new_data)
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def cust_data_source(data):
     try:
         sql = "select id,owner,tenant_id from dsp_cust_data_source where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         source_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_cust_data_source:', source_info[0]["id"], source_info[0]["owner"], source_info[0]["tenant_id"])
         new_data = {"id":source_info[0]["id"],"name":"autotest_hdfs_csv_随机数","type":"HDFS","description":"autotest_hdfs_csv_随机数","attributes":{"quoteChar":"\"","escapeChar":"\\","path":"/auto_test/out89","format":"csv","chineseName":"autotest_hdfs_csv","header":"false","separator":",","properties":[{"name":"","value":""}],"ignoreRow":0},"owner":source_info[0]["owner"],"enabled":1,"tenantId":source_info[0]["tenant_id"],"creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now()}
         deal_random(new_data)
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def admin_flow_id(data):
     try:
         url = '%s/api/dsp/platform/service/infoById?id=%s' % (host, data)
         response = requests.get(url=url, headers=get_headers_admin(host))
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
-        print(flow_id)
         return flow_id
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def customer_flow_id(data):
     try:
         url = '%s/api/dsp/consumer/service/infoById?id=%s' % (host, data)
         response = requests.get(url=url, headers=get_headers_customer(host))
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
-        print(flow_id)
         return flow_id
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def pull_data(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         service_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('service_id-name: ', service_info[0]["id"], service_info[0]["name"])
         config_sql = "select access_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         config_info = ms.ExecuQuery(config_sql.encode('utf-8'))
-        print('config_access_key: ', config_info[0]["access_key"])
         if 'snow_dataset_dsp' in data:
             new_data = {"sourceType":"DATASET","accessKey":config_info[0]["access_key"],"severName":service_info[0]["name"],"dataServiceId":service_info[0]["id"],"encrypted":"false","query":{"fieldGroup":{"fields":[],"fieldGroups":[]},"pageable":{"pageSize":10,"pageNum":1},"selectProperties":["Div5AirportID","OriginAirportSeqID","Div1AirportID","CRSElapsedTime","DestCityMarketID","Div4TailNum","Div3WheelsOff","TotalAddGTime","DestState","OriginCityName","DestStateFips","Div5TailNum","WheelsOn","FirstDepTime","Div4WheelsOn","Div3WheelsOn","Diverted","ArrDelay","OriginAirportID","TailNum","CRSDepTime","FlightDate","LateAircraftDelay","Div1LongestGTime","Div2AirportID","DayOfWeek","NASDelay","Div4AirportID","Div2WheelsOff","DestCityName","OriginStateFips","Div3AirportSeqID","Div4WheelsOff","LongestAddGTime","TaxiOut","ActualElapsedTime","DepDelay","Div4AirportSeqID","Month","DepartureDelayGroups","Div5TotalGTime","Div4Airport","OriginWac","DistanceGroup","OriginCityMarketID","ArrTimeBlk","CancellationCode","Div2TailNum","DepTime","ArrTime","WeatherDelay","Div5LongestGTime","DepDel15","Div2Airport","OriginState","Div1WheelsOff","Div3AirportID","Div1TotalGTime","DivActualElapsedTime","ArrDelayMinutes","Div4TotalGTime","DivArrDelay","DivReachedDest","Div1Airport","CarrierDelay","Carrier","DepTimeBlk","Dest","Div2AirportSeqID","TaxiIn","DivAirportLandings","DivDistance","DestAirportSeqID","OriginStateName","Distance","Year","Div5WheelsOff","CRSArrTime","DepDelayMinutes","Div2WheelsOn","DestWac","Div1WheelsOn","Div4LongestGTime","ArrivalDelayGroups","Div3TotalGTime","Div2LongestGTime","UniqueCarrier","FlightNum","Flights","DayOfMonth","ArrDel15","Div5AirportSeqID","Div1TailNum","Div5Airport","Div5WheelsOn","AirlineID","AirTime","DestAirportID","WheelsOff","Cancelled","Div2TotalGTime","DestStateName","Origin","Div3Airport","Div3LongestGTime","Quarter","Div1AirportSeqID","SecurityDelay","Div3TailNum"]},"timestamp":1613987662}
             return new_data
@@ -221,51 +203,45 @@ def pull_data(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def pull_data_sql(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         service_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('service_id-name:', service_info[0]["id"], service_info[0]["name"])
         config_sql = "select access_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         config_info = ms.ExecuQuery(config_sql.encode('utf-8'))
-        print('config_access_key: ', config_info[0]["access_key"])
         if 'api_mysqldataset' in data:
             new_data = {"sourceType":"DATASET","accessKey":config_info[0]["access_key"],"severName":service_info[0]["name"],"dataServiceId":service_info[0]["id"],"encrypted":"false","query":{"fieldGroup":{"fields":[],"fieldGroups":[]},"pageable":{"pageSize":10,"pageNum":1},"selectProperties":["id","user_id","number","createtime","note","dt"]},"timestamp":1613987662}
             return new_data
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def pull_Aggs_sql(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         service_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('service_id-name:', service_info[0]["id"], service_info[0]["name"])
         config_sql = "select access_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         config_info = ms.ExecuQuery(config_sql.encode('utf-8'))
-        print('config_access_key: ', config_info[0]["access_key"])
         if 'api_mysqldataset' in data:
             new_data = {"sourceType":"DATASET","accessKey": config_info[0]["access_key"],"severName":service_info[0]["name"],"dataServiceId":service_info[0]["id"],"encrypted":"false","query":{"groupFields":["createtime"],"aggFields":[{"name":"number","alias":"number_sum","aggType":"SUM","distinct":"false"},{"name":"number","alias":"number_max","aggType":"MAX","distinct":"false"},{"name":"number","alias":"number_min","aggType":"MIN","distinct":"false"},{"name":"number","alias":"number_avg","aggType":"AVG","distinct":"false"}],"havingFieldGroup":{"fields":[{"andOr":"AND","name":"number_min","oper":"NOT_EQUAL","value":["33"]}],"fieldGroups":[]},"fieldGroup":{"fields":[{"andOr":"AND","name":"id","oper":"NOT_EQUAL","value":["22"]}],"fieldGroups":[]},"ordSort":[{"name":"number_sum","order":"ASC"}],"pageable":{"pageSize":10,"pageNum":1}},"timestamp":1602677876}
             return new_data
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def pull_Aggs(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[0]
         service_info = ms.ExecuQuery(sql.encode('utf-8'))
-        print('service_id-name:', service_info[0]["id"], service_info[0]["name"])
         config_sql = "select access_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[1]
         config_info = ms.ExecuQuery(config_sql.encode('utf-8'))
-        print('config_access_key: ', config_info[0]["access_key"])
         if 'gjb_sink_es' in data:
             new_data = {
                 "accessKey": config_info[0]["access_key"],
@@ -447,13 +423,12 @@ def pull_Aggs(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def application_pull_approval(data):
     try:
         sql = "select id,name,owner,tenant_id,data_res_name,data_res_id,cust_app_id ,cust_app_name from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         application = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_data_application:', application[0]["id"])
         if 'gjb_sink_es' in data:
             new_data = {"applicationId":application[0]["id"],"name":application[0]["name"],"dataResName":application[0]["data_res_name"],"lastModifier":"admin","custDataSourceName":"","otherConfiguration":"","fieldMappings":[{"index":0,"sourceField":"SALARY","sourceType":"bigint","targetField":"SALARY","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"GENDER","sourceType":"string","targetField":"GENDER","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"TIME","sourceType":"date","targetField":"TIME","targetType":"date","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"JOB","sourceType":"string","targetField":"JOB","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"NAME","sourceType":"string","targetField":"NAME","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"AGE","sourceType":"bigint","targetField":"AGE","targetType":"bigint","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]}],"transferType":0,"auditMind":"yyy","enabled":1,"tenantId":application[0]["tenant_id"],"owner":application[0]["owner"],"creator":"customer3","createTime":"2021-02-22 16:06:52","lastModifiedTime":"2021-02-22 16:06:52","description":"","id":application[0]["id"],"dataResId":application[0]["data_res_id"],"custDataSourceId":"","custTableName":"","custAppId":application[0]["cust_app_id"],"custAppName":application[0]["cust_app_name"],"serviceMode":2,"expiredTime":"0","status":0,"sourceType":"DATASET","type":0}
             return new_data
@@ -469,13 +444,12 @@ def application_pull_approval(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def application_push_approval(data):
     try:
         sql = "select id,name,owner,tenant_id,data_res_name,cust_data_source_name,data_res_id,cust_data_source_id ,cust_table_name from dsp_data_application where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         application = ms.ExecuQuery(sql.encode('utf-8'))
-        print('dsp_data_application:', application[0]["id"])
         if 'test_once_hdfs_csv' in data:
             new_data = {"applicationId":application[0]["id"],"name":application[0]["name"],"dataResName":application[0]["data_res_name"],"lastModifier":"admin","custDataSourceName":application[0]["cust_data_source_name"],"otherConfiguration":{"cron":"0 * * * * ? ","scheduleType":"once","startTime":"","endTime":""},"fieldMappings":[{"index":0,"sourceField":"sId","sourceType":"string","targetField":"sId","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"sName","sourceType":"string","targetField":"sName","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"sex","sourceType":"string","targetField":"sex","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"age","sourceType":"int","targetField":"age","targetType":"int","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]},{"index":0,"sourceField":"class","sourceType":"string","targetField":"class","targetType":"string","encrypt":"","transformRule":{"type":"","expression":""},"supportAggs":[]}],"transferType":1,"auditMind":"yyy","enabled":1,"tenantId":application[0]["tenant_id"],"owner":application[0]["owner"],"creator":"customer3","createTime":"2021-02-22 11:43:31","lastModifiedTime":"2021-02-22 11:43:32","description":"","id":application[0]["id"],"dataResId":application[0]["data_res_id"],"custDataSourceId":application[0]["cust_data_source_id"],"custTableName":"","custAppId":"","custAppName":"","serviceMode":1,"expiredTime":"0","status":0,"sourceType":"DATASET","type":1}
             return new_data
@@ -491,13 +465,12 @@ def application_push_approval(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def update_customer(data):
     try:
         sql = "select id,owner,tenant_id,username from dsp_customer where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
         customer_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print('customer_id-name:', customer_info[0]["id"], customer_info[0]["name"])
         if 'gjb_test009_' in data:
             new_data = {"username":customer_info[0]["username"],"name":"gjb_test009_随机数","password":"e10adc3949ba59abbe56e057f20f883e","checkPassword":"e10adc3949ba59abbe56e057f20f883e","enabled":0,"tenantId":customer_info[0]["tenant_id"],"owner":customer_info[0]["owner"],"creator":"admin","createTime":"2020-11-03 16:18:04","lastModifier":"admin","lastModifiedTime":"2021-02-20 18:16:37","id":customer_info[0]["id"],"expiredPeriod":"0"}
             deal_random(new_data)
@@ -505,13 +478,12 @@ def update_customer(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def update_user(data):
     try:
         sql = "select id,owner,tenant_id,login_id from merce_user where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
         user_info = ms.ExecuQuery(sql.encode('utf-8'))
-        #print('user_info-name:', user_info[0]["id"], user_info[0]["name"])
         if 'autotest_dsp_' in data:
             new_data = {"confirmPassword":"","email":"11@11.com","loginId":user_info[0]["login_id"],"name":"autotest_dsp_随机数","password":"AES(aa920aacdab0d8f75bc3d04b3d84586d9825e2b2b2842d7a480a3e06c888c2d848d1144f4813e55d5c0807dae20acd80)","phone":"13111111111","resourceQueues":["default"],"enabled":0,"tenantId":user_info[0]["tenant_id"],"owner":user_info[0]["owner"],"creator":"admin","createTime":"2021-02-15 00:20:49","lastModifier":"admin","lastModifiedTime":"2021-02-20 19:03:42","id":user_info[0]["id"],"pwdExpiredTime":"2022-05-15","accountExpiredTime":"2022-08-15","hdfsSpaceQuota":"0","admin":0,"clientIds":"dsp","roles":[],"expiredPeriod":"0"}
             deal_random(new_data)
@@ -519,4 +491,4 @@ def update_user(data):
         else:
             return
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)

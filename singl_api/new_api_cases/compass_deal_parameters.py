@@ -5,15 +5,16 @@ from util.timestamp_13 import *
 from basic_info.setting import Compass_MySQL_CONFIG
 import os
 from util.Open_DB import MYSQL
+from util.logs import Logger
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+log = Logger().get_log()
 
 def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
-                # print(data)
                 data = data.replace('随机数', str(random.randint(0, 999999999999999)))
                 return deal_parameters(data)
             elif '监控开始时间' in data:
@@ -45,8 +46,8 @@ def deal_parameters(data):
                     try:
                         data = data_select_result[0]["cluster_name"]
                         return deal_parameters(data)
-                    except:
-                        print('请确认第%d行SQL语句')
+                    except Exception as e:
+                        log.error("异常信息：%s" %e)
                 else:
                     return
             elif 'select oid' in data:
@@ -87,7 +88,6 @@ def deal_parameters(data):
                         job_oids = ','.join([str(i) for i in job_oid])
                         job_names = ','.join([str(i) for i in job_name])
                         datas = str(job_oids)+'&'+str(job_names)
-                        print("new_data: ", datas)
                         return datas
                     else:
                         job_oid.append(str(data_select_result[0]['job_oid']))
@@ -95,7 +95,6 @@ def deal_parameters(data):
                         job_oid = ','.join([str(i) for i in job_oid])
                         job_name = ','.join([str(i) for i in job_name])
                         datas = str(job_oid)+'&'+str(job_name)
-                        print("new_data: ", datas)
                         return datas
 
             elif 'select dataflow_oid' in data:
@@ -104,8 +103,8 @@ def deal_parameters(data):
                     try:
                         data = data_select_result[0]["dataflow_oid"]
                         return deal_parameters(str(data))
-                    except:
-                        print('请确认第%d行SQL语句')
+                    except Exception as e:
+                        log.error("异常信息：%s" %e)
                 else:
                     return
             elif 'select single_oid' in data:
@@ -153,11 +152,9 @@ def deal_parameters(data):
                     else:
                         if data == "select re_th_ext_oid from s_c_re_th_ext where re_th_oid in(select t.re_th_oid from s_c_re_th as t where re_oid in(select s.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as s))":
                             re_th_ext_oid = str(data_select_result[0]["re_th_ext_oid"])
-                            print("re_th_ext_oid ", re_th_ext_oid)
                             return deal_parameters(re_th_ext_oid)
                         else:
                             new_data.append(str(data_select_result[0]["re_th_ext_oid"]))
-                            print("new_data ", new_data)
                             return new_data
                 else:
                     return 1
@@ -198,7 +195,7 @@ def deal_parameters(data):
         else:
             return data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
 
 def deal_random(new_data):
     try:
@@ -207,7 +204,6 @@ def deal_random(new_data):
             if '随机数' in str(value):
                 i = value.replace('随机数', str(random.randint(0, 999)))
                 new_data[key] = str(i)
-        print(new_data)
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
+        log.error("异常信息：%s" %e)
