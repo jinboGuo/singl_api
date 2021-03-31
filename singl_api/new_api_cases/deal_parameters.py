@@ -29,7 +29,16 @@ def deal_parameters(data):
             # print(data)
             return deal_parameters(data)
         if 'select id from' in data:
+            myLog().getLog().logger.info("开始执行语句{}".format(data))
+            count=10
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            while count>0:
+                if data_select_result==():
+                    time.sleep(5)
+                    data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                else:
+                    break
+                count-=1
             # print(data_select_result)
             myLog().getLog().logger.info("{}查询结果为{}".format(data,data_select_result))
             new_data = []

@@ -11,10 +11,12 @@ def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
+                # print(data)
                 data = data.replace('随机数', str(random.randint(0, 999999999999999)))
                 return deal_parameters(data)
             if 'select id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                #print("999999", data_select_result)
                 new_data = []
                 if data_select_result:
                     if len(data_select_result) > 1:
@@ -61,10 +63,31 @@ def deal_parameters(data):
 def deal_random(new_data):
     try:
         dict_res(new_data)
-        for key, value in new_data.items():
-            if '随机数' in str(value):
-                i = value.replace('随机数', str(random.randint(0, 999)))
-                new_data[key] = str(i)
+        get_targe_value(new_data)
+        print(new_data)
         return new_data
     except Exception as e:
-        log.error("异常信息：%s" %e)
+        print("\033[31m异常：\033[0m",e)
+
+def get_targe_value(new_data):
+    # 循环字典，获取键、值
+    for key, values in new_data.items():
+        # 判断值的type类型，如果是list,调用get_list() 函数，
+        if type(values) == list:
+            get_list(values)
+        # 如果是字典，调用自身
+        elif type(values) == dict:
+            get_targe_value(values)
+        # 如果值不是list且是需要被替换的，就替换掉
+        elif type(values) != list and type(values) == str and '随机数' in values:
+            i = values.replace('随机数', str(random.randint(0, 999)))
+            new_data[key] = str(i)
+        else:
+            pass
+
+def get_list(values):
+    rustle = values[0]
+    if type(rustle) == list:
+        get_list(values)
+    else:
+        get_targe_value(rustle)
