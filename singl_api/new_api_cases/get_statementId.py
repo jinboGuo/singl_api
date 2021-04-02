@@ -6,6 +6,7 @@ from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
 
+log=myLog().getLog().logger
 
 # 根据host信息返回tenant信息
 def get_tenant(host):
@@ -116,7 +117,7 @@ def statementId_no_dataset(host, param):
         print('statement_id: ', statementId)
         return statementId, new_data
     except KeyError as e:
-        myLog().getLog().logger.error("datasetId不存在{}".format(e))
+        log.error("datasetId不存在{}".format(e))
         return
 
 

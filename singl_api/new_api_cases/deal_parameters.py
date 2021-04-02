@@ -8,6 +8,7 @@ from util.Open_DB import MYSQL
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+log=myLog().getLog().logger
 
 def deal_parameters(data):
     if data:
@@ -29,7 +30,7 @@ def deal_parameters(data):
             # print(data)
             return deal_parameters(data)
         if 'select id from' in data:
-            myLog().getLog().logger.info("开始执行语句{}".format(data))
+            log.info("开始执行语句{}".format(data))
             count=10
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             while count>0:
@@ -40,7 +41,7 @@ def deal_parameters(data):
                     break
                 count-=1
             # print(data_select_result)
-            myLog().getLog().logger.info("{}查询结果为{}".format(data,data_select_result))
+            log.info("{}查询结果为{}".format(data,data_select_result))
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
@@ -75,7 +76,7 @@ def deal_parameters(data):
                         data = data_select_result[0]["id"]
                         return data
                     except:
-                        myLog().getLog().logger.error("请确认第%d行SQL语句")
+                        log.error("请确认第%d行SQL语句")
         if 'select output_data_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
@@ -83,7 +84,7 @@ def deal_parameters(data):
                     data = data_select_result[0]["output_data_id"]
                     return deal_parameters(data)
                 except:
-                    myLog().getLog().logger.error("请确认第%d行SQL语句")
+                    log.error("请确认第%d行SQL语句")
         if 'SELECT enabled, id FROM' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if len(data_select_result) > 1:
@@ -94,7 +95,7 @@ def deal_parameters(data):
                         else:
                             data_select_result[i]["enabled"] = 1
                  except:
-                     myLog().getLog().logger.error("请确认第%d行SQL语句")
+                     log.error("请确认第%d行SQL语句")
                 print(data_select_result)
                 return data_select_result
             else:
@@ -108,7 +109,7 @@ def deal_parameters(data):
                     return data_select_result
                 except:
                     # print('请确认第%d行SQL语句')
-                    myLog().getLog().logger.error("请确认第%d行SQL语句")
+                    log.error("请确认第%d行SQL语句")
 
         if 'select name' in data:
             # print(data)
@@ -119,7 +120,7 @@ def deal_parameters(data):
                     return deal_parameters(data)
                 except:
                     # print('请确认第%d行SQL语句')
-                    myLog().getLog().logger.error("请确认第%d行SQL语句")
+                    log.error("请确认第%d行SQL语句")
         if 'select execution_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
@@ -127,7 +128,7 @@ def deal_parameters(data):
                     data = data_select_result[0]["execution_id"]
                     return deal_parameters(data)
                 except:
-                    myLog().getLog().logger.error("请确认第%d行SQL语句")
+                    log.error("请确认第%d行SQL语句")
             else:
                 return
         else:

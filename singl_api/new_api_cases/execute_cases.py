@@ -36,7 +36,7 @@ case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('32')
 all_rows = case_table_sheet.max_row
 jar_dir=os.path.join(os.path.abspath('.'),'attachment\woven-common-3.0.jar')
-
+log=myLog().getLog().logger
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
@@ -809,7 +809,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        myLog().getLog().logger.error("测试用例{}执行过程中出错{}".format(case_detail,e))
+        log.error("测试用例{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
@@ -1100,7 +1100,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 # print('开始执行：', case_detail)
-                myLog().getLog().logger.info("开始执行{}".format(case_detail))
+                log.info("开始执行{}".format(case_detail))
                 if '&' in str(data):  # 包含多个参数并以&分割
                     parameters = data.split('&')
                     # 处理存在select语句中的参数，并重新赋值
@@ -1205,7 +1205,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
@@ -1320,7 +1320,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                 write_result(table_sheet_name, row, column, response.status_code)
                 write_result(table_sheet_name, row, column + 4, response.text)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(table_sheet_name, row, column, '-1')
         write_result(table_sheet_name, row, column+4,  value='{"id":"-1"}')
@@ -1382,7 +1382,7 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
         else:
             print('请确认第%d行的data形式' % row)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
