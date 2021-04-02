@@ -18,7 +18,7 @@ from util.timestamp_13 import get_now, get_tomorrow
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-log=myLog().getLog()
+log=myLog().getLog().logger
 
 def get_job_tasks_id(job_id):
     url = '%s/api/woven/collectors/%s/tasks' % (host, job_id)
@@ -201,7 +201,7 @@ def dss_data(data):
         print(sql)
         print('resource_id-owner:', flow_info[0]["id"], flow_info[0]["owner"])
     except Exception as e:
-        log.logger.error("dss_data查询出错{}".format(e))
+        log.error("dss_data查询出错{}".format(e))
         return
     if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
         new_data = {"id":"","name":"gjb_api_for_all_type_JDBC_datasource_test_随机数","type":"DB","description":"","attributes":{"jarPath":"mysql-connector-java-5.1.48.jar","DBType":"Mysql","host":"192.168.1.75","port":3306,"database":"merce","user":"merce","password":"AES(cad2fb721d282f6e5151605a1874ffe4)","driver":"com.mysql.jdbc.Driver","properties":[{"name":"","value":""}],"url":"jdbc:mysql://192.168.1.75:3306/merce","chineseName":"","dateToTimestamp":"false","catalog":"","schema":"","batchsize":10000,"name":"mysql"},"resource":{"id": flow_info[0]["id"]}}
@@ -248,7 +248,7 @@ def upddss_data(data):
         dss_id = dss_info[0]["id"]
         print('dss_id-owner-name:', dss_info[0]["id"], dss_info[0]["owner"], dss_info[0]["name"])
     except Exception as e:
-        log.logger.error("upddss_data查询出错{}".format(e))
+        log.error("upddss_data查询出错{}".format(e))
         return
     if 'test_Mysql' in data:
         print("dss_id-name:",dss_id, dss_info[0]["name"])
@@ -266,7 +266,7 @@ def dataset_data(data):
         print('resource_id-owner-tenant_id:', dataset_info[0]["id"], dataset_info[0]["owner"], dataset_info[0]["tenant_id"])
         schema_id, schema_resourceid,schema_name = schema_data(data)
     except Exception as e:
-        log.logger.error("dataset_data查询出错{}".format(e))
+        log.error("dataset_data查询出错{}".format(e))
         return
     if 'gjb_test_ftp_dataset' in data:
         new_data = {"id":"","name":"gjb_test_ftp_dataset_随机数","schema":{"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM", "name": schema_name, "creator": "admin", "createTime": 1587370296000, "lastModifier":"admin","lastModifiedTime":1587370296000, "version": 1, "enabled": 1, "description":"gjb_ttest_mysql0420_training","resourceId": schema_resourceid,"fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"oid": schema_id, "newest":1,"isHide":0,"expiredPeriod":0},"storage":"FTP","expiredPeriod":0,"storageConfigurations":{"user":"europa","password":"AES(11b5a9d816c0a4fd8f99ef1e7de42d32)","format":"csv","path":"ftp://info4/home/europa/gbj_ftp/demo.csv","relativePath":"ftp://info4/home/europa/gbj_ftp/demo.csv","header":"false","ignoreRow":0,"separator":",","quoteChar":"\"","escapeChar":"\\","csv":"csv"},"sliceTime":"","sliceType":"H","schemaVersion":1,"clusterId":"","resource":{"id": dataset_info[0]["id"]},"description":"gjb_ttest_mysql0420_training","schemaId": schema_id}
@@ -355,7 +355,7 @@ def upddataset_data(data):
         print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["owner"], dataset_info[0]["name"])
         schema_id, schema_resourceid,schema_name = schema_data(data)
     except Exception as e:
-        log.logger.error("upddataset_data查询出错{}".format(e))
+        log.error("upddataset_data查询出错{}".format(e))
         return
     if 'gjb_ttest_hdfs' in data:
         print("dataset_id-name:",dataset_info, dataset_info[0]["name"])
@@ -384,7 +384,7 @@ def get_dataset_data(data):
             print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
             return dataset_id, dataset_name
     except Exception as e:
-        log.logger.error("get_dataset_data查询出错{}".format(e))
+        log.error("get_dataset_data查询出错{}".format(e))
         return
 
 def schema_data(data):
@@ -403,7 +403,7 @@ def schema_data(data):
             print('schema_id-resource_id-name:', schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"])
             return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
     except Exception as e:
-        log.logger.error("schema_data查询出错{}".format(e))
+        log.error("schema_data查询出错{}".format(e))
         return
 def schema_data_sink(data):
     try:
@@ -421,7 +421,7 @@ def schema_data_sink(data):
             print('schema_id-resource_id-name:', schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"])
             return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
     except Exception as e:
-        log.logger.error("schema_data查询出错{}".format(e))
+        log.error("schema_data查询出错{}".format(e))
         return
 
 def create_schema_data(data):
@@ -432,7 +432,7 @@ def create_schema_data(data):
         print(sql)
         print('resource_id-tenant_id:', resource_info[0]["id"], resource_info[0]["tenant_id"])
     except Exception as e:
-        log.logger.error("create_schema_data查询出错{}".format(e))
+        log.error("create_schema_data查询出错{}".format(e))
         return
     if 'gtest_mysql_0428_training' in data:
         new_data = {"id": "", "name": "gtest_mysql_0428_training_随机数", "alias": "", "description":"gtest_mysql_0428_training_随机数","fields": [{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"owner":"","tenantId":resource_info[0]["tenant_id"],"creator":"admin","lastModifier":"admin","version":1,"enabled":1,"resourceId": resource_info[0]["id"],"oid":"","newest":1,"isHide":0,"expiredPeriod":0,"resource":{"id": resource_info[0]["id"]}}
@@ -473,7 +473,7 @@ def updschema_data(data):
         schema_id = schema_info[0]["id"]
         print('schema_id-owner-tenant_id:', schema_info[0]["id"], schema_info[0]["owner"], schema_info[0]["tenant_id"])
     except Exception as e:
-        log.logger.error("updschema_data查询出错{}".format(e))
+        log.error("updschema_data查询出错{}".format(e))
         return
     if 'gtest_mysql_0428_training' in data:
         new_data = {"id": schema_info[0]["id"], "name":"gtest_mysql_0428_training_随机数","alias":"","description":"gtest_mysql_0428_training","fields":[{"name":"id","type":"int","alias":"","description":""},{"name":"ts","type":"timestamp","alias":"","description":""},{"name":"code","type":"string","alias":"","description":""},{"name":"total","type":"float","alias":"","description":""},{"name":"forward_total","type":"float","alias":"","description":""},{"name":"reverse_total","type":"float","alias":"","description":""},{"name":"sum_flow","type":"float","alias":"","description":""}],"owner": schema_info[0]["owner"], "tenantId": schema_info[0]["tenant_id"],"creator":"admin","createTime":1587370296000,"lastModifier":"admin","lastModifiedTime":1603140944000, "version": 1, "enabled": 1, "resourceId": schema_info[0]["resource_id"], "oid": schema_info[0]["id"],"newest":1,"isHide":0,"expiredPeriod":0}
@@ -495,7 +495,7 @@ def create_flow_data(data):
         schema_id_sink, schema_resourceid_sink,schema_name_sink = schema_data_sink(data)
         dataset_id_sink, dataset_name_sink = flow_dataset_data_sink(data)
     except Exception as e:
-        log.logger.error("create_flow_data出错{}".format(e))
+        log.error("create_flow_data出错{}".format(e))
         return
     if 'gjb_api_create_flow_dataflow' in data:
         new_data = {"name": "gjb_api_create_flow_dataflow_随机数", "flowType": "dataflow", "resource": {"id": resource_info[0]["id"]}, "steps": [{"id":"source_1","name":"source_1","type":"source","otherConfigurations":{"schema": "schema_name","dataset-paths":"","schemaId": schema_id, "sessionCache":"","interceptor":"","dataset":[{"rule":"set_1","dataset":dataset_name,"ignoreMissingPath":"false","datasetId":dataset_id,"storage":"HDFS"}]},"outputConfigurations":{"output":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"x":355,"y":113,"uiConfigurations":{"output":["output"]}},{"id":"sink_1","name":"sink_1","type":"sink","otherConfigurations":{"schema":"test_pivot","description":"","outputMode":"","type":"HDFS","autoSchema":"true","nullValue":"","mode":"append","path":"/auto_test/gjb/pivot/","isDisable":"false","countWrittenRecord":"false","datasetId":"","dataResource":"","schedulerUnit":"","quoteChar":"\"","escapeChar":"\\","schemaResource":"","schemaVersion":"1","expiredTemp":"","sliceTimeColumn":"","format":"csv","trigger":"","maxFileSize":"","maxFileNumber":"","separator":",","expiredTime":"","schedulerVal":"","checkpointLocation":"","schemaId":schema_id,"time":"s","dataset":"test_pivot","sliceType":"H","idColumn":""},"inputConfigurations":{"input":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"outputConfigurations":{},"x":916,"y":135,"uiConfigurations":{"input":["input"]}}],"links":[{"name":"","source":"source_1","sourceOutput":"output","target":"sink_1","targetInput":"input","input":"input"}],"oid":"$null","creator":"admin","createTime":1603187474000,"lastModifier":"admin","lastModifiedTime":1603189710000,"owner":resource_info[0]["owner"],"version":1,"enabled":1,"tenantId":resource_info[0]["tenant_id"],"resourceId": resource_info[0]["id"],"isHide":0,"parameters":[],"expiredPeriod":0}
@@ -556,7 +556,7 @@ def flow_data(data):
             print('flow_id-name:', flow_info[0]["id"], flow_info[0]["name"])
             return flow_info[0]["id"], flow_info[0]["name"]
     except Exception as e:
-        log.logger.error("flow_data出错{}".format(e))
+        log.error("flow_data出错{}".format(e))
         return
 
 def update_flow_data(data):
@@ -570,7 +570,7 @@ def update_flow_data(data):
         flow_id, flow_name = flow_data(data)
         dataset_id, dataset_name = flow_dataset_data(data)
     except Exception as e:
-        log.logger.error("update_flow_data出错{}".format(e))
+        log.error("update_flow_data出错{}".format(e))
         return
     if 'gjb_api_create_flow_dataflow' in data:
         new_data = {"steps":[{"id":"source_1","name":"source_1","type":"source","otherConfigurations":{"schema":"pivot","dataset-paths":"","schemaId": schema_id,"sessionCache":"","interceptor":"","dataset":[{"rule":"set_1","dataset":dataset_name,"ignoreMissingPath":"false","datasetId":dataset_id,"storage":"HDFS"}]},"outputConfigurations":{"output":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"x":355,"y":113,"uiConfigurations":{"output":["output"]}},{"id":"sink_1","name":"sink_1","type":"sink","otherConfigurations":{"schema":"test_pivot","description":"","outputMode":"","type":"HDFS","autoSchema":"true","nullValue":"","mode":"append","path":"/auto_test/gjb/pivot/","isDisable":"false","countWrittenRecord":"false","datasetId":"","dataResource":"","schedulerUnit":"","quoteChar":"\"","escapeChar":"\\","schemaResource":"","schemaVersion":"1","expiredTemp":"","sliceTimeColumn":"","format":"csv","trigger":"","maxFileSize":"","maxFileNumber":"","separator":",","expiredTime":"","schedulerVal":"","checkpointLocation":"","schemaId":schema_id,"time":"s","dataset":"test_pivot","sliceType":"H","idColumn":""},"inputConfigurations":{"input":[{"name":"Name","alias":""},{"name":"name01","alias":""}]},"outputConfigurations":{},"x":916,"y":135,"uiConfigurations":{"input":["input"]}}],"links":[{"target":"sink_1","source":"source_1","sourceOutput":"output","targetInput":"input","linkStrategy":""}], "id": flow_id, "name": flow_name,"flowType":"dataflow","oid":"$null","creator":"admin","createTime":1603187474000,"lastModifier":"admin","lastModifiedTime":1603189710000,"owner":resource_info[0]["owner"],"version":1,"enabled":1,"tenantId":resource_info[0]["tenant_id"],"resourceId":resource_info[0]["id"],"isHide":0,"parameters":[],"expiredPeriod":0}
@@ -599,7 +599,7 @@ def flow_dataset_data(data):
             print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
             return dataset_id, dataset_name
     except Exception as e:
-        log.logger.error("flow_dataset_data出错{}".format(e))
+        log.error("flow_dataset_data出错{}".format(e))
         return
 
 def flow_dataset_data_sink(data):
@@ -622,7 +622,7 @@ def flow_dataset_data_sink(data):
             print('dataset_id-owner-name:', dataset_info[0]["id"], dataset_info[0]["name"])
             return dataset_id, dataset_name
     except Exception as e:
-        log.logger.error("flow_dataset_data出错{}".format(e))
+        log.error("flow_dataset_data出错{}".format(e))
         return
 
 def filesets_data(data):
@@ -632,7 +632,7 @@ def filesets_data(data):
         fileset_id=fileset_info[0]["id"]
         cluster_id=cluster_data()
     except Exception as e:
-        log.logger.error("filesets_data出错{}".format(e))
+        log.error("filesets_data出错{}".format(e))
         return
     if "lq_fileset_hdfs_directory" in data:
         new_data={"name":"lq_fileset_随机数","storage":"HDFS","storageConfigurations":{"fileType":"DIRECTORY","path":"/tmp/lisatest/0104_1","clusterId":cluster_id,"cluster":"cluster1","host":"","port":"","username":"","password":""},"resource":{"id":fileset_id},"isShowButton":'false'}
@@ -673,7 +673,7 @@ def cluster_data():
         cluster_id=ms.ExecuQuery(sql)[0]["id"]
         return cluster_id
     except Exception as e:
-        log.logger.error("cluster_data出错{}".format(e))
+        log.error("cluster_data出错{}".format(e))
         return
 
 def get_old_id_name(data):
@@ -682,7 +682,7 @@ def get_old_id_name(data):
         flow_id=ms.ExecuQuery(sql)[0]["id"]
         old_name=ms.ExecuQuery(sql)[0]["name"]
     except Exception as e:
-        log.logger.error("get_old_name执行出错{}".format(e))
+        log.error("get_old_name执行出错{}".format(e))
         return
     if 'lq_hdfs_sink_hdfs' in data:
         new_data={"configurations":{"startTime":"当前时间戳","arguments":[],"dependencies":[],"extraConfigurations":{},"properties":[{"name":"all.debug","value":"false","input":"false"},{"name":"all.dataset-nullable","value":"false","input":"false"},{"name":"all.optimized.enable","value":"true","input":"true"},{"name":"all.lineage.enable","value":"false","input":"false"},{"name":"all.debug-rows","value":"20","input":"20"},{"name":"all.runtime.cluster-id","value":"cluster1","input":["cluster1"]},{"name":"dataflow.master","value":"yarn","input":"yarn"},{"name":"dataflow.deploy-mode","value":"client","input":["client","cluster"]},{"name":"dataflow.queue","value":"default","input":["default"]},{"name":"dataflow.num-executors","value":"2","input":"2"},{"name":"dataflow.driver-memory","value":"512M","input":"512M"},{"name":"dataflow.executor-memory","value":"1G","input":"1G"},{"name":"dataflow.executor-cores","value":"2","input":"2"},{"name":"dataflow.verbose","value":"true","input":"true"},{"name":"dataflow.local-dirs","value":"","input":""},{"name":"dataflow.sink.concat-files","value":"true","input":"true"},{"name":"dataflow.tempDirectory","value":"/tmp/dataflow/spark","input":"/tmp/dataflow/spark"}],"retry":{"enable":False,"limit":1,"timeInterval":1,"intervalUnit":"MINUTES"}},"schedulerId":"once","ource":"rhinos","version":0,"flowId":flow_id,"flowType":"dataflow","name":"lq_hdfs_sink_hdfs_随机数","creator":"admin","oldName":old_name}
