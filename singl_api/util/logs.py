@@ -24,7 +24,9 @@ class Logger(object):
         if not os.path.exists(resultPath):
             os.mkdir(resultPath)
 
+
     def get_log(self):
+        self.delDir(resultPath)
         fmt='%(asctime)s - %(funcName)s[line:%(lineno)d] - %(levelname)s: %(message)s'
         filename = os.path.join(resultPath, log)
         logger = logging.getLogger(filename)
@@ -46,3 +48,29 @@ class Logger(object):
             logger.addHandler(sh) #把对象加到logger里
             logger.addHandler(th)
         return  logger
+
+    @staticmethod
+    def delDir(resultPath,t=24*60*60*2):
+    #获取文件夹下所有文件和文件夹
+        files = os.listdir(resultPath)
+        for file in files:
+            filePath = resultPath + "/" + file
+            #判断是否是文件
+            if os.path.isfile(filePath):
+                #最后一次修改的时间
+                last = int(os.stat(filePath).st_mtime)
+                #上一次访问的时间
+                #last = int(os.stat(filePath).st_atime)
+                #当前时间
+                now = int(time.time())
+                #删除过期文件
+                if (now - last >= t):
+                    os.remove(filePath)
+                    Logger().get_log().info(" %s was removed!" % filePath)
+            elif os.path.isdir(filePath):
+                #如果是文件夹，继续遍历删除
+                resultPath.delDir(filePath, t)
+                #如果是空文件夹，删除空文件夹
+                if not os.listdir(filePath):
+                    os.rmdir(filePath)
+                    Logger().get_log().info(" %s was removed!" % filePath)

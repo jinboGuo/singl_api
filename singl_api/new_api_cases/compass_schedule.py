@@ -1,5 +1,4 @@
 from time import sleep
-import sys
 from basic_info.setting import Compass_MySQL_CONFIG, Compass_scheduler
 from util.Open_DB import MYSQL
 from util.conn_linux import Linux
@@ -307,5 +306,5 @@ n = 0
 while 1:
  run_all()
  n += 1
- if n == 30:
+ if n == 50:
      break

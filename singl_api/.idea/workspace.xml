@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0f49178f-7a3e-4093-87e3-100384954789" name="Default" comment="新增任务调度脚本">
-      <change afterPath="$PROJECT_DIR$/attachment/woven-common-3.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/mylogging.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/mylogging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/get_statementId.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/get_statementId.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
+    <list default="true" id="0f49178f-7a3e-4093-87e3-100384954789" name="Default" comment="merge compass to master">
+<<<<<<< Updated upstream
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/Log/AutoTest_20210323.log" beforeDir="false" />
+=======
+>>>>>>> Stashed changes
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" afterDir="false" />
+<<<<<<< Updated upstream
+      <change beforePath="$PROJECT_DIR$/util/conn_linux.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/conn_linux.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/run_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_compass_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dsp_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dw_cases.py" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <ignored path="singl_api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,25 +56,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
+<<<<<<< Updated upstream
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
-              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="171">
+              <caret line="171" column="14" lean-forward="true" selection-start-line="171" selection-start-column="14" selection-end-line="171" selection-end-column="14" />
               <folding>
-                <element signature="e#15#51#0" expanded="true" />
+                <element signature="e#0#22#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_api_cases.py">
+        <entry file="file://$PROJECT_DIR$/util/logs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
+            <state relative-caret-position="88">
+              <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
               <folding>
-                <element signature="e#15#79#0" expanded="true" />
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/util/clean_test_data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#42#0" expanded="true" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="437">
+              <caret line="23" column="75" selection-start-line="23" selection-start-column="75" selection-end-line="23" selection-end-column="75" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+>>>>>>> Stashed changes
               </folding>
             </state>
           </provider>
@@ -80,10 +113,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>label</find>
-      <find>showDetails</find>
-      <find>fraction</find>
+<<<<<<< Updated upstream
       <find>supplement</find>
+=======
+>>>>>>> Stashed changes
       <find>factSheetField</find>
       <find>创建</find>
       <find>申请服务数据拉取sql</find>
@@ -110,6 +143,13 @@
       <find>订阅</find>
       <find>数据申请记录审批</find>
       <find>申请服务</find>
+      <find>Logger().get_log().info(&quot;异常信息：%s &quot; %e)</find>
+      <find>Logger().get_log().info(&quot;异常信息：%s&quot; %e)</find>
+      <find>Logger().get_log().info(&quot;异常信息：%s &quot; % e)</find>
+<<<<<<< Updated upstream
+=======
+      <find>Logger().get_log()</find>
+>>>>>>> Stashed changes
     </findStrings>
     <replaceStrings>
       <replace>print(response.status_code, response.text)</replace>
@@ -129,6 +169,11 @@
       <replace>&quot;\033[31m第%s行的参数为空或格式异常\033[0m&quot;</replace>
       <replace>gjb_ttest_hdfs_student</replace>
       <replace>&quot;\033[35m开始执行：\033[0m&quot;</replace>
+      <replace>Logger().get_log().error(&quot;异常信息：%s&quot; %e)</replace>
+<<<<<<< Updated upstream
+=======
+      <replace>log</replace>
+>>>>>>> Stashed changes
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -182,7 +227,6 @@
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_weird_dataflow.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_dataset_api.py" />
         <option value="$PROJECT_DIR$/api_test_cases/cases_for_flow_api.py" />
-        <option value="$PROJECT_DIR$/run_dw_cases.py" />
         <option value="$PROJECT_DIR$/util/get_tenant.py" />
         <option value="$PROJECT_DIR$/util/timestamp_13.py" />
         <option value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
@@ -201,21 +245,38 @@
         <option value="$PROJECT_DIR$/util/websocket.py" />
         <option value="$PROJECT_DIR$/util/ws.py" />
         <option value="$PROJECT_DIR$/util/send_mail.py" />
-        <option value="$PROJECT_DIR$/util/conn_linux.py" />
         <option value="$PROJECT_DIR$/basic_info/setting.py" />
+        <option value="$PROJECT_DIR$/run_api_cases.py" />
+<<<<<<< Updated upstream
+        <option value="$PROJECT_DIR$/run_compass_cases.py" />
+        <option value="$PROJECT_DIR$/run_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/compass_schedule.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
         <option value="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" />
         <option value="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" />
-        <option value="$PROJECT_DIR$/run_api_cases.py" />
-        <option value="$PROJECT_DIR$/run_compass_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/compass_schedule.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
-        <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
-        <option value="$PROJECT_DIR$/run_dsp_cases.py" />
         <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" />
+        <option value="$PROJECT_DIR$/util/conn_linux.py" />
+=======
+        <option value="$PROJECT_DIR$/util/conn_linux.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/compass_schedule.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/run_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/run_compass_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/run_dw_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" />
+        <option value="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" />
+>>>>>>> Stashed changes
       </list>
     </option>
   </component>
@@ -246,6 +307,25 @@
               <item name="singl_api" type="462c0819:PsiDirectoryNode" />
               <item name="new_api_cases" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="Log" type="462c0819:PsiDirectoryNode" />
+            </path>
+<<<<<<< Updated upstream
+            <path>
+              <item name="singl_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="singl_api" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+=======
+>>>>>>> Stashed changes
           </expand>
           <select />
         </subPane>
@@ -256,7 +336,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/new_api_cases" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="PyDebuggerOptionsProvider">
     <option name="mySupportQtDebugging" value="false" />
@@ -279,7 +359,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.run_dsp_cases">
+  <component name="RunManager" selected="Python.compass_schedule">
     <configuration name="compass_schedule" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="singl_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -385,9 +465,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.compass_schedule" />
         <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.run_compass_cases" />
-        <item itemvalue="Python.compass_schedule" />
         <item itemvalue="Python.dsp_prepare_datas" />
         <item itemvalue="Python tests.Unittests in execute_compass_cases.py" />
       </list>
@@ -461,14 +541,11 @@
       <workItem from="1612403926687" duration="8449000" />
       <workItem from="1612495987983" duration="67902000" />
       <workItem from="1613693926023" duration="45807000" />
-      <workItem from="1616572808406" duration="1192000" />
-    </task>
-    <task id="LOCAL-00065" summary="更新">
-      <created>1603250412742</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1603250412742</updated>
+      <workItem from="1616572808406" duration="9329000" />
+<<<<<<< Updated upstream
+=======
+      <workItem from="1616741533279" duration="6281000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00066" summary="更新">
       <created>1603254226724</created>
@@ -806,7 +883,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613989060158</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="merge compass to master">
+      <created>1616574991525</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1616574991525</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -821,7 +905,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1031475000" />
+<<<<<<< Updated upstream
+    <option name="totallyTimeSpent" value="1039612000" />
+=======
+    <option name="totallyTimeSpent" value="1045893000" />
+>>>>>>> Stashed changes
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -835,19 +923,19 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42003232" visible="true" weight="0.15884861" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42003232" visible="true" weight="0.16044776" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5799677" side_tool="true" weight="0.2510661" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7774049" visible="true" weight="0.52753305" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7774049" visible="true" weight="0.3557484" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39537445" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.7729306" visible="true" weight="0.06616052" />
+      <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.77558637" weight="0.23210412" />
       <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49946696" weight="0.32901555" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32901555" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.22259508" side_tool="true" weight="0.6279827" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.22334754" side_tool="true" weight="0.527115" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="TODO" order="12" weight="0.3258278" />
@@ -951,7 +1039,8 @@
     <MESSAGE value="新增user和customer脚本" />
     <MESSAGE value="新增dsp用户批量删除脚本" />
     <MESSAGE value="修改dsp脚本" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改dsp脚本" />
+    <MESSAGE value="merge compass to master" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge compass to master" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -985,7 +1074,11 @@
     <SUITE FILE_PATH="coverage/singl_api$run_compass_cases.coverage" NAME="run_compass_cases Coverage Results" MODIFIED="1613807130911" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/singl_api$deal_parameters.coverage" NAME="deal_parameters Coverage Results" MODIFIED="1592308252246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_cases_py.coverage" NAME="Unittests in execute_cases.py Coverage Results" MODIFIED="1600668628899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$compass_schedule.coverage" NAME="compass_schedule Coverage Results" MODIFIED="1613791557755" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
+<<<<<<< Updated upstream
+    <SUITE FILE_PATH="coverage/singl_api$compass_schedule.coverage" NAME="compass_schedule Coverage Results" MODIFIED="1616724129870" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
+=======
+    <SUITE FILE_PATH="coverage/singl_api$compass_schedule.coverage" NAME="compass_schedule Coverage Results" MODIFIED="1617094901746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
+>>>>>>> Stashed changes
     <SUITE FILE_PATH="coverage/singl_api$conection_linux.coverage" NAME="conection_linux Coverage Results" MODIFIED="1611027481185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$websocket.coverage" NAME="websocket Coverage Results" MODIFIED="1611902859394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
     <SUITE FILE_PATH="coverage/singl_api$Unittests_in_execute_compass_cases_py.coverage" NAME="Unittests in execute_compass_cases.py Coverage Results" MODIFIED="1612774730196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
@@ -994,54 +1087,7 @@
     <SUITE FILE_PATH="coverage/singl_api$test.coverage" NAME="test Coverage Results" MODIFIED="1605492514092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/util/Open_DB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/python3.7/Lib/site-packages/paramiko/channel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="1225" selection-start-line="1225" selection-end-line="1225" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/use_excel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="123" selection-start-line="123" selection-end-line="124" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="131" column="26" lean-forward="true" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/time.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="163" column="4" selection-start-line="163" selection-start-column="4" selection-end-line="163" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/nt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="542" column="4" selection-start-line="542" selection-start-column="4" selection-end-line="542" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+<<<<<<< Updated upstream
     <entry file="file://E:/python3.7/Lib/site-packages/aes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2688" />
@@ -1074,6 +1120,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> Stashed changes
     <entry file="file://E:/python3.7/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
@@ -1159,16 +1207,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/clean_test_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic_info/url_info.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1212,47 +1250,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="45" column="22" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2356">
-          <caret line="127" column="41" lean-forward="true" selection-start-line="127" selection-start-column="41" selection-end-line="127" selection-end-column="41" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dw_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-474">
-          <caret line="455" column="8" selection-start-line="455" selection-start-column="8" selection-end-line="455" selection-end-column="8" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic_info/ready_dataflow_data.py">
+<<<<<<< Updated upstream
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/ws.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -1273,70 +1275,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-957">
-          <caret line="443" column="15" selection-start-line="443" selection-start-column="4" selection-end-line="443" selection-end-column="15" />
-          <folding>
-            <element signature="e#15#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
           <caret line="3628" column="8" selection-start-line="3628" selection-start-column="8" selection-end-line="3628" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2579">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="86" column="12" selection-start-line="86" selection-start-column="12" selection-end-line="86" selection-end-column="33" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="61" column="4" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="30" column="75" selection-start-line="30" selection-start-column="75" selection-end-line="30" selection-end-column="75" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="250" column="30" selection-start-line="250" selection-start-column="30" selection-end-line="250" selection-end-column="30" />
-          <folding>
-            <element signature="e#15#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1347,73 +1289,425 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
           <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+=======
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_info/setting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#15#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210324.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-218192" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/run_api_cases.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="29" column="153" selection-start-line="29" selection-start-column="153" selection-end-line="29" selection-end-column="153" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+=======
+    <entry file="file://E:/python3.7/Lib/site-packages/openpyxl/workbook/workbook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="239" column="8" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/-1221349943/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
-          <folding>
-            <element signature="e#15#74#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="157">
+          <caret line="3628" column="8" selection-start-line="3628" selection-start-column="8" selection-end-line="3628" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_compass_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#15#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/run_flow_cases.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/run_api_cases.py">
       <provider selected="true" editor-type-id="text-editor">
+>>>>>>> Stashed changes
         <state relative-caret-position="269">
-          <caret line="29" column="1" lean-forward="true" selection-start-line="29" selection-start-column="1" selection-end-line="29" selection-end-column="1" />
+          <caret line="29" column="2" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
           <folding>
             <element signature="e#15#79#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
           <caret line="32" selection-start-line="32" selection-end-line="32" />
           <folding>
             <element signature="e#15#51#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8417">
+          <caret line="443" column="15" selection-start-line="443" selection-start-column="15" selection-end-line="443" selection-end-column="15" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/util/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8417">
+          <caret line="443" column="15" selection-start-line="443" selection-start-column="15" selection-end-line="443" selection-end-column="15" />
+          <folding>
+            <element signature="e#15#29#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210323.log" />
+    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-741">
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210323.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+          <folding>
+            <element signature="e#15#74#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210324.log" />
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210325.log" />
+    <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="779">
+          <caret line="41" column="33" lean-forward="true" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://E:/python3.7/Lib/logging/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="1396" column="8" selection-start-line="1396" selection-start-column="8" selection-end-line="1396" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5343">
+          <caret line="479" column="46" selection-start-line="479" selection-start-column="46" selection-end-line="479" selection-end-column="46" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/util/ws.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="3" column="28" lean-forward="true" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210326.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="-252459" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210327.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="-652998" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210329.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="-482207" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210330.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210328.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://E:/python3.7/Lib/logging/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="474">
+          <caret line="1396" column="8" selection-start-line="1396" selection-start-column="8" selection-end-line="1396" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/clean_test_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-741">
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/util/logs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="722">
+          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1174">
+          <caret line="89" column="62" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="62" />
+=======
+    <entry file="file://$PROJECT_DIR$/run_compass_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#15#74#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_dw_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="-213">
+          <caret line="89" column="13" lean-forward="true" selection-start-line="89" selection-start-column="13" selection-end-line="89" selection-end-column="13" />
+=======
+        <state relative-caret-position="323">
+          <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#15#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3074">
+          <caret line="196" column="46" selection-start-line="196" selection-start-column="46" selection-end-line="196" selection-end-column="46" />
+=======
+    <entry file="file://$PROJECT_DIR$/run_dsp_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#15#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dw_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="492" column="9" lean-forward="true" selection-start-line="492" selection-start-column="9" selection-end-line="492" selection-end-column="9" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_compass_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5175">
+          <caret line="496" column="46" selection-start-line="496" selection-start-column="46" selection-end-line="496" selection-end-column="46" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2418">
+          <caret line="876" column="46" selection-start-line="876" selection-start-column="46" selection-end-line="876" selection-end-column="46" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_compass_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11483">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="e#15#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="279">
+          <caret line="107" selection-start-line="107" selection-end-line="107" />
+=======
+        <state relative-caret-position="152">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="171" column="14" lean-forward="true" selection-start-line="171" selection-start-column="14" selection-end-line="171" selection-end-column="14" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/execute_dw_cases.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11502">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210324.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210325.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reports/Log/AutoTest_20210326.log">
+      <provider selected="true" editor-type-id="LogFileEditorProvider" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/conn_linux.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="779">
+          <caret line="41" column="33" lean-forward="true" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
+=======
+        <state relative-caret-position="-19064">
+          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/util/logs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="24" lean-forward="true" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
+          <folding>
+            <element signature="e#15#24#0" expanded="true" />
+>>>>>>> Stashed changes
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/util/ws.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="3" column="28" lean-forward="true" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/clean_test_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/new_api_cases/compass_schedule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="75" selection-start-line="23" selection-start-column="75" selection-end-line="23" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
