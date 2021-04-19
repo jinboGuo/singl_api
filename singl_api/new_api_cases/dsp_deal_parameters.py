@@ -99,6 +99,34 @@ def deal_parameters(data):
                         return data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select cust_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        cust_id,id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
+                        new_data.append(cust_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select b.id as cust_id,a.id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        cust_id,id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
+                        new_data.append(cust_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
             else:
                 return data
         else:
