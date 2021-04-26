@@ -714,3 +714,22 @@ def get_old_id_name(data):
         return new_data
 
 
+
+def get_collector_data(data):
+    try:
+        sql= "select name from sync_job where name like 'collector_ftp%s' order by create_time desc limit 1"
+        name=ms.ExecuQuery(sql)[0]["name"]
+    except Exception as e:
+        log.error("get_collector_data执行出错{}".format(e))
+        return
+    if 'collector_ftp' in data:
+        new_data={"id":"","name":name,"dataSource":{"id":"570f7cab-ccbe-4798-8854-dfe427062b14","name":"collector_ftp","schemaName":"collector_schema","url":"","dbType":"","tableExt":"","fetchSize":0,"queryTimeout":0,"collection":"","condition":"","filename":".*","regex":"","table":"","referenceName":"ftp_source","type":"FTP","properties":{},"column":[{"name":"userId","type":"int","alias":"","description":""},{"name":"username","type":"string","alias":"","description":""},{"name":"url","type":"string","alias":"","description":""},{"name":"clickTime","type":"string","alias":"","description":""}],"host":"192.168.1.84","port":21,"username":"europa","password":"AES(11b5a9d816c0a4fd8f99ef1e7de42d32)","fieldsSeparator":",","dir":"shiy/flink/data","schemaId":"be3d5b05-5928-4fe7-8d60-41d11100f798","recursive":True,"secure":False,"skipHeader":False,"object":"shiy/flink/data","readerName":"ftp"},"dimensions":[{"type":"REDIS","id":"be90a847-4005-467e-87eb-0ce985ca73a7","name":"sink_rediss","referenceName":"REDIS_LOOKUP","column":[{"name":"userId","type":"int","alias":"","description":""},{"name":"username","type":"string","alias":"","description":""},{"name":"url","type":"string","alias":"","description":""},{"name":"clickTime","type":"string","alias":"","description":""}],"url":"info4:6379","table":"sink_redis423","keyColumn":"userId","password":"","database":0,"timeout":2000,"maxTotal":8,"maxIdle":8,"minIdle":0,"maxRedirections":5,"readerName":"redis"}],"schemaId":"be3d5b05-5928-4fe7-8d60-41d11100f798","dataStores":[{"type":"HDFS","id":"b8bbd172-0235-467a-a637-f685f58bf547","name":"collector_sink","referenceName":"test","column":[{"name":"userId","type":"int","alias":"","description":""},{"name":"username","type":"string","alias":"","description":""},{"name":"url","type":"string","alias":"","description":""},{"name":"clickTime","type":"string","alias":"","description":""}],"encryptKey":"","encryptColumns":"","path":"/tmp/lisatest/collector_sink","format":"csv","separator":",","mode":"overwrite","sliceFormat":"","clusterId":""}],"transform":{"sql":"select t1.userId,t1.username,t1.url,t1.username || '#' || t1.url as col1, SUBSTRING(t1.username, 3) as col2,t2.userId as t2_userId,t2.username as t2_username,t2.url as t2_url,t2.clickTime as t2_clickTime from ftp_source t1, LATERAL TABLE(REDIS_LOOKUP(CAST(userId as varchar))) as t2(userId,username,url,clickTime)"},"type":"SyncDataTask","parallelism":1,"trigger":"","cursorCol":"","errorNumber":0,"partitionKey":"","stopOnSchemaChanged":false,"partitionPattern":"","opts":"-Xss256k -Xms1G -Xmx1G -Xmn512M","collecterId":"WOVEN-SERVER","bufferSize":5000,"flushPaddingTime":30000,"restore":False,"restoreColumn":"","checkpointPath":"","mode":"","setCron":"","testText":"","createTime":0,"status":0,"taskType":"SYNC_DATA","async":False,"exclusive":False,"syncType":"data","serviceType":"DTS"}
+        return new_data
+def get_collector_datasourceId():
+    try:
+        sql= "select id from merce_dss where name = 'Mysql' order by create_time desc limit 1"
+        id=ms.ExecuQuery(sql)[0]["id"]
+    except:
+        return
+    else:
+        return id
