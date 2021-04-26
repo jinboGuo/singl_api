@@ -1,6 +1,8 @@
+import json
 import random
 
 from basic_info.mylogging import myLog
+from new_api_cases.prepare_datas_for_cases import get_collector_datasourceId
 from util.timestamp_13 import *
 from basic_info.setting import MySQL_CONFIG
 import os
@@ -29,6 +31,10 @@ def deal_parameters(data):
             data = data.replace('监控结束时间', get_now_time()[1])
             # print(data)
             return deal_parameters(data)
+        if "采集器数据源id" in data:
+            datasourceId = get_collector_datasourceId()
+            data = data.replace("采集器数据源id", datasourceId)
+            return data
         if 'select id from' in data:
             log.info("开始执行语句{}".format(data))
             count=10
@@ -68,6 +74,17 @@ def deal_parameters(data):
                     print(new_data)
                     return new_data
                 elif "select id from merce_fileset order by create_time limit 1" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    print(new_data)
+                    return new_data
+                elif "select id from sync_job where name like 'collector_ftp%' order by create_time desc limit 1" in data:
+                    new_data = data_select_result[0]["id"]
+                    return new_data
+                elif "select id from sync_job where collecter_id = 'c1' ORDER BY last_modified_time desc limit 1" in data:
+                    new_data = data_select_result[0]["id"]
+                    print(new_data)
+                    return new_data
+                elif "select id from sync_job" in data:
                     new_data.append(data_select_result[0]["id"])
                     print(new_data)
                     return new_data
