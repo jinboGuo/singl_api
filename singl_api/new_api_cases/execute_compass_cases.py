@@ -88,8 +88,8 @@ def deal_request_method():
 def post_request_result_check(row, column, url, headers, data, table_sheet_name):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s" % case_detail)
         if '新增调度任务' in case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = add_job(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -99,7 +99,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '新增任务类型' in case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = add_jobSingle(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -109,7 +108,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '新增数据流程依赖关系' == case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = add_jobMap(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -119,7 +117,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '查询资源参数名称' == case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = query_reth(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -129,7 +126,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '新增数据资源参数' == case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = add_reth(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -139,7 +135,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '查询资源参数附加值名称' == case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = query_rethExt(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -149,7 +144,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '新增数据资源参数附加值' == case_detail:
-            log.info("开始执行：%s"%case_detail)
             new_data = add_rethExt(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s"%new_data)
@@ -159,7 +153,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '导入调度任务':
-            log.info("开始执行：%s"%case_detail)
             files = {"file": open(jar_dir, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
@@ -168,7 +161,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            log.info("开始执行：%s"%case_detail)
             if data:
                 data = str(data)
                 # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"Datasource_create_0301_1_0688","creator":"admin"}
@@ -231,9 +223,9 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
 def get_request_result_check(url, headers, data, table_sheet_name, row, column):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s"%case_detail)
         # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
         if data:
-            log.info("开始执行：%s"%case_detail)
             if '&' in str(data):  # 包含多个参数并以&分割
                 parameters = data.split('&')
                 # 处理存在select语句中的参数，并重新赋值
@@ -302,7 +294,6 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         # GET 请求参数写在URL中，直接发送请求
         else:#data为空
-            log.info("开始执行：%s"%case_detail)
             log.info("request   url：%s" %url)
             response = requests.get(url=url, headers=headers)
             log.info("response data：%s %s"%(response.status_code, response.text))
@@ -317,6 +308,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
 def put_request_result_check(url, row, data, table_sheet_name, column, headers):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s"%case_detail)
         #if data and isinstance(data, str):
         if data:
             if '&' in str(data):
@@ -347,7 +339,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
                 elif data.startswith('{') and data.endswith('}'):
-                    log.info("开始执行：%s"%case_detail)
                     log.info("request   url：%s" %url)
                     response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
                     log.info("response data：%s %s"%(response.status_code, response.text))
@@ -357,7 +348,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                 elif data.startswith('[') and data.endswith(']'):
                     pass
                 elif case_detail == '编辑任务池':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_job_pool(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -366,7 +356,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑调度任务':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_job(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -375,7 +364,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑立即执行任务':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_jobSingle(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -384,7 +372,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑数据流程依赖关系':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_jobMap(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -393,7 +380,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑资源名称':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_re(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -402,7 +388,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑资源参数名称':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_reth(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -411,7 +396,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑资源参数附加值名称':
-                    log.info("开始执行：%s"%case_detail)
                     new_data = update_rethExt(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
@@ -428,7 +412,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
         else: #data为空
-            log.info("开始执行：%s"%case_detail)
             log.info("request   url：%s" %url)
             response = requests.put(url=url, headers=headers)
             log.info("response data：%s %s"%(response.status_code, response.text))
@@ -442,8 +425,8 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
 def delete_request_result_check(url, data, table_sheet_name, row, column, headers):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s"%case_detail)
         if isinstance(data, str):
-            log.info("开始执行：%s"%case_detail)
             if case_detail == '':
                 pass
             else:
@@ -482,7 +465,6 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            log.info("开始执行：%s"%case_detail)
             new_url = url.format(data)
             log.info("request   url：%s" %new_url)
             response = requests.delete(url=new_url, headers=headers)
@@ -527,7 +509,7 @@ class CheckResult(unittest.TestCase):
                 else:
                     case_table_sheet.cell(row=row, column=9, value='fail') # code不等时，用例结果直接判断为失败
                     case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
-                                                                (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
+                                                                    (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
                 log.info("第 %d 行 status_code为空" %row)
         case_table.save(ab_dir('api_cases.xlsx'))
@@ -636,16 +618,14 @@ class CheckResult(unittest.TestCase):
                 else:
                     case_table_sheet.cell(row=row, column=column, value='pass')
             else:
-                log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relatrion')
+                log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
+                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relation')
         else:
             log.info("请确认第 %d 行 的key_word" % row)
         case_table.save(ab_dir('api_cases.xlsx'))
 
     # 对比case最终的结果
     def deal_result(self):
-        # 执行测试用例
-        # deal_request_method()
         # 对比code
         self.compare_code_result()
         # 对比text
@@ -658,21 +638,16 @@ class CheckResult(unittest.TestCase):
                 log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='pass')
                 case_table_sheet.cell(row=row, column=15, value='')
-            elif status_code_result == 'fail' and response_text_result == 'pass':
+            elif status_code_result == 'fail' or response_text_result in ('fail',''):
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s'\
+                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s' \
                                                                 % (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             elif status_code_result == 'pass' and response_text_result == 'fail':
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
                 case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败,预期为%s,实际为%s' %
                                                                 (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
-            elif status_code_result == 'fail' and response_text_result == 'fail':
-                log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
-                case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code和返回文本对比均失败，请查看附件<api_cases.xlsx>确认具体失败原因'
-                                                                % (case_table_sheet.cell(row=row, column=2).value))
             else:
                 log.info("请确认status code或response.text对比结果")
         case_table.save(ab_dir('api_cases.xlsx'))

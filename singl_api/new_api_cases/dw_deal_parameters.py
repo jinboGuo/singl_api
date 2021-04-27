@@ -11,7 +11,7 @@ def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
-                data = data.replace('随机数', str(random.randint(0, 999999999999999)))
+                data = data.replace('随机数', str(random.randint(0, 999)))
                 return deal_parameters(data)
             if 'select id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -33,6 +33,8 @@ def deal_parameters(data):
                                 return data
                         except Exception as e:
                             log.error("异常信息：%s" %e)
+                else:
+                    log.info("查询结果为空！")
             if 'select name' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
@@ -41,6 +43,8 @@ def deal_parameters(data):
                         return deal_parameters(data)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
+                else:
+                    log.info("查询结果为空！")
             if 'select execution_id' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
@@ -50,7 +54,57 @@ def deal_parameters(data):
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
-                    return
+                    log.info("查询结果为空！")
+            if 'select business_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        business_id,id = data_select_result[0]["business_id"],data_select_result[0]["id"]
+                        new_data.append(business_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select dataset_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        dataset_id,id = data_select_result[0]["dataset_id"],data_select_result[0]["id"]
+                        new_data.append(dataset_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select project_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        data = data_select_result[0]["project_id"]
+                        return data
+                    except Exception as e:
+                        log.error("异常信息：%s" %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select metadata_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        metadata_id,id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
+                        new_data.append(metadata_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
             else:
                 return data
         else:

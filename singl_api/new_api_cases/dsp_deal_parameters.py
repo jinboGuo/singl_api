@@ -10,7 +10,7 @@ def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
-                data = data.replace('随机数', str(random.randint(0, 999999999999999)))
+                data = data.replace('随机数', str(random.randint(0, 999)))
                 return deal_parameters(data)
             if 'select id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))

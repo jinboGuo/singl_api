@@ -2,41 +2,42 @@
 import json
 import os
 import re
-import time
-from util import get_host
 from openpyxl import load_workbook
 import requests
-from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import Dw_MySQL_CONFIG
+from basic_info.setting import Dw_MySQL_CONFIG, dw_host
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers, get_headers_root
 from new_api_cases.dw_deal_parameters import deal_parameters
 import unittest
 from util.logs import Logger
-from new_api_cases.dw_prepare_datas import pull_data, update_business_data, \
+from new_api_cases.dw_prepare_datas import update_business_data, \
     add_subject_data, update_subject_data, query_subject_data, add_projects_data, update_projects_data, update_tag_data, \
-    add_taggroup_data, update_taggroup_data, update_namerule_data
+    add_taggroup_data, update_taggroup_data, update_namerule_data, rel_product_taggroup, update_model_category, add_child_model_category, add_model_category, add_standard_category, \
+    add_child_standard_category, update_standard_category, rel_physical_dataset, update_physical_dataset, query_physical_dataset, query_physical_dataset_by_name, \
+    query_physical_dataset_by_subject, add_model_metadata, update_model_metadata, query_model_metadata, query_model_metadata_by_name, query_model_metadata_by_subject, \
+    save_model_metadata_info, query_timedim, query_timedim_by_name, query_timedim_by_subject, add_primary, update_primary, add_physical, query_physical, query_physical_by_name, \
+    update_physical
 
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('dw')
+case_table_sheet = case_table.get_sheet_by_name('842')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 log = Logger().get_log()
+host = dw_host
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
     for i in range(2, all_rows+1):
         request_method = case_table_sheet.cell(row=i, column=4).value
         old_request_url = case_table_sheet.cell(row=i, column=5).value
+        old_request_url = host + old_request_url
         request_url = deal_parameters(old_request_url)
-        host = get_host.get_host(request_url)
         old_data = case_table_sheet.cell(row=i, column=6).value
         request_data = deal_parameters(old_data)
-        log.info("request   data：%s " %request_data)
-        key_word = case_table_sheet.cell(row=i, column=3).value
+        log.info("request  data：%s" %request_data)
         api_name = case_table_sheet.cell(row=i, column=1).value
         # 请求方法转大写
         if request_method:
@@ -45,40 +46,34 @@ def deal_request_method():
                 # 根据不同的请求方法，进行分发
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
-                    post_request_result_check(row=i, column=8, url=request_url, host=host, headers=get_headers_root(host),
-                                              data=request_data, table_sheet_name=case_table_sheet)
+                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(host), data=request_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
-                    get_request_result_check(url=request_url, host=host, headers=get_headers_root(host), data=request_data,
-                                             table_sheet_name=case_table_sheet, row=i, column=8)
+                    get_request_result_check(url=request_url, headers=get_headers_root(host), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
 
                 elif request_method_upper == 'PUT':
-                    put_request_result_check(url=request_url, host=host, row=i, data=request_data,
-                                             table_sheet_name=case_table_sheet, column=8, headers=get_headers_root(host))
+                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root(host))
 
                 elif request_method_upper == 'DELETE':
-                    delete_request_result_check(request_url, request_data, host=host, table_sheet_name=case_table_sheet, row=i,
-                                                column=8, headers=get_headers_root(host))
+                    delete_request_result_check(request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root(host))
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
             else:
                 # 根据不同的请求方法，进行分发
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
-                    post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                              data=request_data, table_sheet_name=case_table_sheet)
+                    post_request_result_check(row=i,  column=8, url=request_url, headers=get_headers(host), data=request_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
-                    get_request_result_check(url=request_url, host=host, headers=get_headers(host), data=request_data,
-                                             table_sheet_name=case_table_sheet, row=i, column=8)
+                    get_request_result_check(url=request_url, headers=get_headers(host), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
 
                 elif request_method_upper == 'PUT':
-                    put_request_result_check(url=request_url, host=host, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers(host))
+                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers(host))
 
                 elif request_method_upper == 'DELETE':
-                    delete_request_result_check(url=request_url, host=host, data=request_data,table_sheet_name=case_table_sheet,row=i,column=8, headers=get_headers(host))
+                    delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers(host))
 
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
@@ -89,12 +84,12 @@ def deal_request_method():
 
 
 # POST请求
-def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):
+def post_request_result_check(row, column, url, headers, data, table_sheet_name):
     try:
     # if isinstance(data, str):
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s " %case_detail)
         if case_detail == '根据id查询主题域':
-            log.info("开始执行：%s " %case_detail)
             new_data, business_id = query_subject_data(data)
             new_url = url.format(business_id)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -104,10 +99,9 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改业务模块':
-            log.info("开始执行：%s " %case_detail)
-            log.info("request   url：%s " %url)
             new_data,business = update_business_data(data)
             new_url = url.format(business)
+            log.info("request   url：%s " %new_url)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=new_url, headers=headers, data=new_data)
             log.info("response data：%s %s" %(response.status_code, response.text))
@@ -115,7 +109,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改主题域':
-            log.info("开始执行：%s " %case_detail)
             new_data, subject_id = update_subject_data(data)
             new_url = url.format(subject_id)
             log.info("request   url：%s " %new_url)
@@ -126,7 +119,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改项目':
-            log.info("开始执行：%s " %case_detail)
             new_data, protect_id = update_projects_data(data)
             new_url = url.format(protect_id)
             log.info("request   url：%s " %new_url)
@@ -137,7 +129,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改标签':
-            log.info("开始执行：%s " %case_detail)
             new_data, tag_id = update_tag_data(data)
             new_url = url.format(tag_id)
             log.info("request   url：%s " %new_url)
@@ -148,7 +139,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改标签组':
-            log.info("开始执行：%s " %case_detail)
             new_data, taggroup_id = update_taggroup_data(data)
             new_url = url.format(taggroup_id)
             log.info("request   url：%s " %new_url)
@@ -159,7 +149,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改已绑定标签组的标签':
-            log.info("开始执行：%s " %case_detail)
             new_data, tag_id = update_tag_data(data)
             new_url = url.format(tag_id)
             log.info("request   url：%s " %new_url)
@@ -170,7 +159,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改命名规则':
-            log.info("开始执行：%s " %case_detail)
             new_data, namerule_id = update_namerule_data(data)
             new_url = url.format(namerule_id)
             log.info("request   url：%s " %new_url)
@@ -180,8 +168,456 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据业务模块查询数据地图':
+            new_data = {"pageable":{"pageNum":1,"pageSize":8,"pageable":"true"}}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询数据地图':
+            new_data = {"pageable":{"pageNum":1,"pageSize":8,"pageable":"true"}}
+            new_url = url.format(data[0],data[1])
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询模型字段详情':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据字段名称查询字段详情':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[{"andOr":"OR","name":"alias","oper":"LIKE","value":["%id%"]}]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改模型目录':
+            new_data, model_category_id = update_model_category(data)
+            new_url = url.format(model_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改子模型目录':
+            new_data, model_category_id = update_model_category(data)
+            new_url = url.format(model_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改标准目录':
+            new_data, standard_category_id = update_standard_category(data)
+            new_url = url.format(standard_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改子标准目录':
+            new_data, standard_category_id = update_standard_category(data)
+            new_url = url.format(standard_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改资源配置物理表':
+            new_data, ref_dataset_id = update_physical_dataset(data)
+            new_url = url.format(ref_dataset_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询资源配置物理表':
+            new_data, ref_project_id ,ref_category_id = query_physical_dataset(data)
+            new_url = url.format(ref_project_id ,ref_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '按照名称查询资源配置物理表':
+            new_data, ref_project_id ,ref_category_id = query_physical_dataset_by_name(data)
+            new_url = url.format(ref_project_id ,ref_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '按照主题域查询资源配置物理表':
+            new_data, ref_project_id ,ref_category_id = query_physical_dataset_by_subject(data)
+            new_url = url.format(ref_project_id ,ref_category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改逻辑模型transaction':
+            new_data,metadata_id = update_model_metadata(data)
+            new_url = url.format(metadata_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询逻辑模型transaction':
+            new_data, project_id = query_model_metadata(data)
+            new_url = url.format(project_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '按照名称查询逻辑模型transaction':
+            new_data, project_id = query_model_metadata_by_name(data)
+            new_url = url.format(project_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '按照主题域查询逻辑模型transaction':
+            new_data, project_id = query_model_metadata_by_subject(data)
+            new_url = url.format(project_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '保存逻辑模型transaction信息':
+            new_data,metadata_id,subject_id = save_model_metadata_info(data)
+            new_url = url.format(metadata_id,subject_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改时间维度':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询时间维度':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询时间维度':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询时间维度':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改主键':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询主键':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询主键':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询主键':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改属性':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询属性':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询属性':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询属性':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改度量':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询度量':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询度量':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询度量':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询指标':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询指标':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询指标':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询维度':
+            new_data,project_id,category_id = query_timedim(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询维度':
+            new_data,project_id,category_id = query_timedim_by_name(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询维度':
+            new_data,project_id,category_id = query_timedim_by_subject(data)
+            new_url = url.format(project_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改指标':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改维度':
+            new_data,field_defined_id = update_primary(data)
+            new_url = url.format(field_defined_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询物化配置':
+            new_data,metadata_id = query_physical(data)
+            new_url = url.format(metadata_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询物化配置':
+            new_data,metadata_id = query_physical_by_name(data)
+            new_url = url.format(metadata_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '修改物化配置':
+            new_data,metadata_id,physical_id = update_physical(data)
+            new_url = url.format(metadata_id,physical_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询物化记录':
+            new_url = url.format(data[0],data[1])
+            log.info("request   url：%s " %new_url)
+            new_data = {"pageable":{"pageNum":0,"pageSize":10,"pageable":"true"}}
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            log.info("开始执行：%s " %case_detail)
             if data:
                 data = str(data)
                 # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
@@ -243,13 +679,13 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
 
 
 # GET请求
-def get_request_result_check(url, headers, host, data, table_sheet_name, row, column):
+def get_request_result_check(url, headers, data, table_sheet_name, row, column):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s " %case_detail)
         # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
         if data:
             if '根据id查询项目' in case_detail:
-                log.info("开始执行：%s " %case_detail)
                 new_url = url.format(data)
                 log.info("request   url：%s " %new_url)
                 response = requests.get(url=new_url, headers=headers)
@@ -258,7 +694,22 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif '查询标签组关联标签' in case_detail:
-                log.info("开始执行：%s " %case_detail)
+                new_url = url.format(data)
+                log.info("request   url：%s " %new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" %(response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '查询资源配置物理表字段' == case_detail:
+                new_url = url.format(data[0],data[1])
+                log.info("request   url：%s " %new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" %(response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '查询资源配置物理表字段实体' == case_detail:
                 new_url = url.format(data)
                 log.info("request   url：%s " %new_url)
                 response = requests.get(url=new_url, headers=headers)
@@ -267,7 +718,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
-                log.info("开始执行：%s " %case_detail)
                 if '&' in str(data):  # 包含多个参数并以&分割
                     parameters = data.split('&')
                     # 处理存在select语句中的参数，并重新赋值
@@ -332,7 +782,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         # GET 请求参数写在URL中，直接发送请求
         else:
-            log.info("开始执行：%s " %case_detail)
             log.info("request   url：%s " %url)
             response = requests.get(url=url, headers=headers)
             log.info("response data：%s %s" %(response.status_code, response.text))
@@ -343,10 +792,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
         log.error("异常信息：%s" %e)
 
 # PUT请求
-def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
+def put_request_result_check(url, row, data, table_sheet_name, column, headers):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
-        if data and isinstance(data, str):
+        log.info("开始执行：%s " %case_detail)
+        #if data and isinstance(data, str):
+        if data :
             if '&' in str(data):
                 # 分隔参数
                 parameters = data.split('&')
@@ -375,7 +826,6 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
                 elif data.startswith('{') and data.endswith('}'):
-                    log.info("开始执行：%s " %case_detail)
                     log.info("request   url：%s " %url)
                     response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
                     log.info("response data：%s %s" %(response.status_code, response.text))
@@ -385,7 +835,6 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                 elif data.startswith('[') and data.endswith(']'):
                     pass
                 elif case_detail == '新增主题域':
-                    log.info("开始执行：%s " %case_detail)
                     new_data, business_id = add_subject_data(data)
                     new_url = url.format(business_id)
                     log.info("request   url：%s " %new_url)
@@ -396,7 +845,6 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增项目':
-                    log.info("开始执行：%s " %case_detail)
                     new_data, business_id = add_projects_data(data)
                     new_url = url.format(business_id)
                     log.info("request   url：%s " %new_url)
@@ -407,10 +855,141 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增标签组':
-                    log.info("开始执行：%s " %case_detail)
                     new_data = add_taggroup_data(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '项目关联标签组规则':
+                    new_data = rel_product_taggroup(data)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增模型目录':
+                    new_data=add_model_category(data)
+                    new_data=json.dumps(new_data, separators=(',', ':'))
+                    response=requests.put(url=url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增子模型目录':
+                    new_data,model_category_id = add_child_model_category(data)
+                    new_url = url.format(model_category_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增标准目录':
+                    new_data=add_standard_category(data)
+                    new_data=json.dumps(new_data, separators=(',', ':'))
+                    response=requests.put(url=url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增子标准目录':
+                    new_data,standard_category_id = add_child_standard_category(data)
+                    new_url = url.format(standard_category_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增资源配置物理表':
+                    new_data=rel_physical_dataset(data)
+                    new_data=json.dumps(new_data, separators=(',', ':'))
+                    response=requests.put(url=url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增逻辑模型transaction':
+                    new_data,project_id,subject_id = add_model_metadata(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增时间维度':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增主键':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增属性':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增度量':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增指标':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增维度':
+                    new_data,project_id,subject_id = add_primary(data)
+                    new_url = url.format(project_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '新增物化配置':
+                    new_data,metadata_id = add_physical(data)
+                    new_url = url.format(metadata_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
                     log.info("response data：%s %s" %(response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -423,8 +1002,8 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                     clean_vaule(table_sheet_name, row, column)
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
+
         else:
-            log.info("开始执行：%s " %case_detail)
             log.info("request   url：%s " %url)
             response = requests.put(url=url, headers=headers)
             log.info("response data：%s %s" %(response.status_code, response.text))
@@ -434,11 +1013,11 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
     except Exception as e:
         log.error("异常信息：%s" %e)
         
-def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
+def delete_request_result_check(url, data, table_sheet_name, row, column, headers):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s " %case_detail)
         if isinstance(data, str):
-            log.info("开始执行：%s " %case_detail)
             if case_detail == '':
                 pass
             else:
@@ -477,7 +1056,6 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            log.info("开始执行：%s " %case_detail)
             new_url = url.format(data)
             log.info("request   url：%s " %new_url)
             response = requests.delete(url=new_url, headers=headers)
@@ -521,9 +1099,10 @@ class CheckResult(unittest.TestCase):
                     case_table_sheet.cell(row=row, column=9, value='pass')
                 else:
                     case_table_sheet.cell(row=row, column=9, value='fail') # code不等时，用例结果直接判断为失败
-                    log.info("预期结果：%s, 实际结果：%s " % (ex_status_code, ac_status_code))
+                    case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
+                                                                    (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
-                log.info("第 %d 行 status_code为空" % row)
+                log.info("第 %d 行 status_code为空" %row)
         case_table.save(ab_dir('api_cases.xlsx'))
 
     # 对比预期response和实际返回的response.text，根据预期和实际结果的关系进行处理
@@ -541,14 +1120,15 @@ class CheckResult(unittest.TestCase):
                 if key_word in ('create', 'query', 'update', 'delete'):
                     self.assert_deal(key_word, relation, expect_text, response_text, response_text_dict, row, 13)
                 else:
-                    log.info("请确认第%d行的key_word" % row)
+                    log.info("请确认第%d行的key_word" %row)
             elif code_result == 'fail':
                 # case 结果列
                 case_table_sheet.cell(row=row, column=14, value='fail')
                 # case失败原因
-                case_table_sheet.cell(row=row, column=15, value='status_code对比结果为%s' % code_result)
+                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
+                                                                (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
-                log.info("请确认第 %d 行 status_code对比结果" % row)
+                log.info("请确认第 %d 行 status_code对比结果" %row)
 
         case_table.save(ab_dir('api_cases.xlsx'))
 
@@ -562,7 +1142,7 @@ class CheckResult(unittest.TestCase):
                         try:
                             self.assertEqual(expect_text, len(response_text_dict['id']), '第%d行的response_text长度和预期不一致' % row)
                         except:
-                            log.info("第 %d 行 response_text返回的id和预期id长度不一致" % row)
+                            log.info("第 %d 行 response_text返回的id和预期id长度不一致" %row)
                             case_table_sheet.cell(row=row, column=column, value='fail')
                         else:
                             case_table_sheet.cell(row=row, column=column, value='pass')
@@ -570,7 +1150,7 @@ class CheckResult(unittest.TestCase):
                         try:
                             self.assertEqual(expect_text, response_text, '第%d行的response_text长度和预期不一致' % row)
                         except:
-                            log.info("第 %d 行 response_text和预期text不相等" % row)
+                            log.info("第 %d 行 response_text和预期text不相等" %row)
                             case_table_sheet.cell(row=row, column=column, value='fail')
                         else:
                             case_table_sheet.cell(row=row, column=column, value='pass')
@@ -578,7 +1158,7 @@ class CheckResult(unittest.TestCase):
                     try:
                         self.assertEqual(expect_text, len(response_text), '第%d行的response_text长度和预期不一致' % row)
                     except:
-                        log.info("第 %d 行 response_text和预期text不相等" % row)
+                        log.info("第 %d 行 response_text和预期text不相等" %row)
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
                         case_table_sheet.cell(row=row, column=column, value='pass')
@@ -588,12 +1168,12 @@ class CheckResult(unittest.TestCase):
                     # self.assertIsNotNone(response_text_dict.get("id"), '第 %d 行 response_text没有返回id' % row)
                     self.assertIn(expect_text, response_text, '第 %d 行 expect_text没有包含在接口返回的response_text中' % row)
                 except:
-                    log.info("第 %d 行 expect_text没有包含在response_text中， 结果对比失败" % row)
+                    log.info("第 %d 行 expect_text没有包含在response_text中， 结果对比失败" %row)
                     case_table_sheet.cell(row=row, column=column, value='fail')
                 else:
                     case_table_sheet.cell(row=row, column=column, value='pass')
             else:
-                log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" % row)
+                log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" %row)
                 case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relatrion')
         elif key_word in ('query', 'update', 'delete'):
             if relation == '=':
@@ -629,15 +1209,14 @@ class CheckResult(unittest.TestCase):
                 else:
                     case_table_sheet.cell(row=row, column=column, value='pass')
             else:
-                log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relatrion')
+                log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
+                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relation')
         else:
             log.info("请确认第 %d 行 的key_word" % row)
         case_table.save(ab_dir('api_cases.xlsx'))
+
     # 对比case最终的结果
     def deal_result(self):
-        # 执行测试用例
-        # deal_request_method()
         # 对比code
         self.compare_code_result()
         # 对比text
@@ -650,18 +1229,16 @@ class CheckResult(unittest.TestCase):
                 log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='pass')
                 case_table_sheet.cell(row=row, column=15, value='')
-            elif status_code_result == 'fail' and response_text_result == 'pass':
+            elif status_code_result == 'fail' or response_text_result in ('fail',''):
+                log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s'
+                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s' \
                                                                 % (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             elif status_code_result == 'pass' and response_text_result == 'fail':
+                log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败' %
-                                                                (case_table_sheet.cell(row=row, column=2).value))
-            elif status_code_result == 'fail' and response_text_result == 'fail':
-                case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code和返回文本对比均失败，请查看附件<api_cases.xlsx>确认具体失败原因'
-                                                                % (case_table_sheet.cell(row=row, column=2).value))
+                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败,预期为%s,实际为%s' %
+                                                                (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
             else:
                 log.info("请确认status code或response.text对比结果")
         case_table.save(ab_dir('api_cases.xlsx'))

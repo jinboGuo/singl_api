@@ -102,7 +102,7 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_83'
+    "DB": 'merce-scheduler'
 }
 # -------83环境使用-------
 # HOST
@@ -142,7 +142,7 @@ tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶
 tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
 tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
 tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
-tenant_id_83 = "fc75a4d5-72af-486b-9a48-c35aeaefedca"
+tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
 tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b' #yulijiang
 tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
