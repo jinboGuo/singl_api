@@ -650,8 +650,8 @@ def filesets_data(data):
         new_data={"name":"lq_fileset_sftp_directory_随机数","storage":"SFTP","storageConfigurations":{"fileType":"DIRECTORY","path":"/home/europa/lq_sftp/sftp_sub","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
-    if "lq_fileset_sftp_file" in data:
-        new_data={"name":"lq_fileset_sftp_file_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/home/europa/lq_sftp/sftp_sub1/sftp.sql","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
+    if "lq_fileset_sftp_recursive_dir" in data:
+        new_data={"name":"lq_fileset_sftp_recursive_dir_随机数","storage":"SFTP","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/home/europa/lq_sftp/sftp_sub1/","clusterId":"","cluster":"","host":"192.168.1.84","port":22,"username":"europa","password":"europa"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     if "lq_fileset_ftp_file" in data:
@@ -666,6 +666,16 @@ def filesets_data(data):
         new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/app/merce/test_file_search/filesearch.txt","clusterId":"","cluster":"","host":"192.168.1.32","port":22,"username":"merce","password":"Inf0refiner"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
+    elif "lq_fileset_ozone_recursive_dir" in data:
+        new_data={"name":"lq_ozone_recursive_dir_随机数","storage":"OZONE","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/file/","clusterId":"","cluster":"","host":"","port":22,"username":"","password":""},"resource":{"id":fileset_id},"isShowButton":False}
+        deal_random(new_data)
+        return new_data
+    elif "lq_fileset_minio_recursive_dir" in data:
+        new_data={"name":"lq_fileset_minio_recursive_dir_随机数","storage":"MINIO","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"test","clusterId":"","cluster":"","host":"192.168.1.81","port":9000,"username":"minio","password":"inforefiner"},"resource":{"id":fileset_id},"isShowButton":False}
+        deal_random(new_data)
+        return new_data
+    else:
+        return
 
 def cluster_data():
     try:
