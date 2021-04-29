@@ -13,6 +13,7 @@ from util import get_host
 from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
+from util.elasticsearch import get_es_data
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
@@ -744,6 +745,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_url=url.format(data)
             data={"fieldList":[],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
             response = requests.post(url=new_url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column+4, response.text)
+        elif ('分页查询文件内容') in case_detail:
+            para=data.split('&')
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_data={"content":"test","offset":0,"limit":8,"ids":es_id}
+            response = requests.post(url=url, headers=headers, json=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)
