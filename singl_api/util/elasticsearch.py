@@ -23,7 +23,6 @@ es = Elasticsearch(
 
 def get_es_data(index=None,doc_type=None,value=None,name_list=None):
     query = {"from":0,"size":50,"query":{"bool":{"must":[{"term":{"storage":{"value":value,"boost":1.0}}}],"adjust_pure_negative":True,"boost":1.0}},"_source":{"includes":["filesetId","host","storage","format","directory","name","owner","recordTime","modifyTime","size","tags"],"excludes":["content"]},"sort":[{"recordTime":{"order":"desc"}},{"name":{"order":"asc"}}]}
-    # query={"from":0,"size":8,"query":{"bool":{"must":[{"ids":{"values":["93c3505153368edaab2bb64562787d3e","0a18b6c6b69bbfb14474011e756d807d"],"boost":1.0}},{"term":{"content":{"value":"test","boost":1.0}}}],"adjust_pure_negative":True,"boost":1.0}},"_source":{"includes":["filesetId","host","storage","format","directory","name","owner","recordTime","modifyTime","size"],"excludes":["content"]},"sort":[{"recordTime":{"order":"desc"}},{"name":{"order":"asc"}}],"highlight":{"pre_tags":["<span style = 'color:red'>"],"post_tags":["</span>"],"fields":{"content":{}}}}
     log.info("开始查询es数据")
     try:
         ret = es.search(index=index, doc_type=doc_type, body=query)
@@ -46,5 +45,5 @@ def get_es_data(index=None,doc_type=None,value=None,name_list=None):
                 return result_list
 
 if __name__=="__main__":
-    a=get_es_data("index_file_32","_doc","SFTP",["sftp.sql","different_students_info.csv"])
+    a=get_es_data("index_file_32","_doc","MINIO",["avi/截图.avi"])
     print(a)

@@ -752,12 +752,70 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif ('分页查询文件内容') in case_detail:
             para=data.split('&')
             es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
-            new_data={"content":"test","offset":0,"limit":8,"ids":es_id}
+            content=para[4]
+            new_data={"content":content,"offset":0,"limit":8,"ids":es_id}
             response = requests.post(url=url, headers=headers, json=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)
             write_result(table_sheet_name, row, column+4, response.text)
+        elif "下载ES索引文件" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_data=json.dumps(es_id)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("新建标签" or "更新标签") in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            data={"ids":es_id,"tags":eval(para[4])}
+            # new_data=json.dumps(es_id)
+            response = requests.post(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("清空标签") in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            data={"ids":es_id}
+            # new_data=json.dumps(es_id)
+            response = requests.post(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif case_detail=="下载文件":
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_data=json.dumps(es_id)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "预览缩略图" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_url=url.format(es_id[0])
+            # new_data=json.dumps(es_id)
+            response = requests.post(url=new_url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("删除标签") in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            data={para[4]:es_id}
+            response = requests.post(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
 
 
 
@@ -1106,15 +1164,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail=="下载ES索引文件":
-                headers=get_headers(host)["X-AUTH-TOKEN"]
-                ids='7aa99535897a017397519cb9dc996f2c'
-                new_url=url.format(headers,ids)
-                response = requests.get(url=new_url)
-                print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
             elif "运行成功" in case_detail:
                 new_url=url.format(data)
                 response = requests.get(url=new_url,headers=headers)
