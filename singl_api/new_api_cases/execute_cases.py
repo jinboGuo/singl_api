@@ -13,7 +13,7 @@ from util import get_host
 from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
-from util.elasticsearch import get_es_data
+from util.elasticsearch import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
@@ -37,6 +37,7 @@ case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('32')
 all_rows = case_table_sheet.max_row
 jar_dir=os.path.join(os.path.abspath('.'),'attachment\woven-common-3.0.jar')
+fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
 log=myLog().getLog().logger
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
@@ -807,6 +808,18 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "编辑图片" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_url=url.format(es_id[0])
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            headers["Accept"]='*/*'
+            response = requests.post(url=new_url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif ("删除标签") in case_detail:
             para=data.split("&")
             es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
@@ -816,7 +829,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-
+        elif ("缩略图和列表") in case_detail:
+            para=data.split("&")
+            es_ids=get_es_data_for_thumbnailMode(para[0],para[1],para[2])
+            es_ids=json.dumps(es_ids)
+            response = requests.post(url=url, headers=headers, data=es_ids)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
 
 
         else:
