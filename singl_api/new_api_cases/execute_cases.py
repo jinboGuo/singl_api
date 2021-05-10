@@ -39,6 +39,7 @@ all_rows = case_table_sheet.max_row
 jar_dir=os.path.join(os.path.abspath('.'),'attachment\woven-common-3.0.jar')
 fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
 log=myLog().getLog().logger
+minio_data=[]
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
@@ -820,15 +821,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif ("删除标签") in case_detail:
-            para=data.split("&")
-            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
-            data={para[4]:es_id}
-            response = requests.post(url=url, headers=headers, json=data)
-            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif ("缩略图和列表") in case_detail:
             para=data.split("&")
             es_ids=get_es_data_for_thumbnailMode(para[0],para[1],para[2])
@@ -838,6 +830,36 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("服务器创建新目录") in case_detail:
+            new_url=url.format(data)
+            minio_data.append(data)
+            if "MINIO" in case_detail:
+                data={"password":"inforefiner","port":"9000","host":"192.168.1.81","region":"","username":"minio"}
+            elif "OZONE" in case_detail:
+                data= {}
+            response = requests.post(url=new_url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "上传图片_MINIO" in case_detail:
+            new_url=url.format('/'+minio_data[0])
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            response = requests.post(url=new_url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "上传图片_OZONE" in case_detail:
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+
 
 
         else:
@@ -1189,7 +1211,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 new_url=url.format(data)
                 response = requests.get(url=new_url,headers=headers)
                 count = 0
-                while count<=30:
+                while count<=50:
                     status=json.loads(response.text)["statusType"]
                     if status == "WAITTING" or status =="RUNNING" or status =="READY":
                        response = requests.get(url=new_url,headers=headers)
@@ -1439,6 +1461,15 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
         if isinstance(data, str):
             if case_detail == '':
                 pass
+            elif ("删除标签") in case_detail:
+                para=data.split("&")
+                es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+                data={para[4]:es_id}
+                response = requests.delete(url=url, headers=headers, json=data)
+                print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
             else:
                 if data.startswith('select id'):  # sql语句的查询结果当做参数
                     data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -1482,8 +1513,16 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            # print(data)
-            # print(type(data))
+        elif ("服务器删除新目录") in case_detail:
+            if "_MINIO" in case_detail:
+                data={"conf":{"password":"inforefiner","port":"9000","host":"192.168.1.81","region":"","username":"minio"},"name":minio_data}
+            elif "_OZONE" in case_detail:
+                data={"conf":{},"name":minio_data}
+            response = requests.delete(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         else:
             print('请确认第%d行的data形式' % row)
     except Exception as e:
