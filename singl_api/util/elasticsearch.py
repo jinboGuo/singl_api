@@ -1,6 +1,7 @@
 from elasticsearch5 import Elasticsearch
 
 from basic_info.mylogging import myLog
+from new_api_cases.prepare_datas_for_cases import filesets_id
 
 log=myLog().getLog().logger
 
@@ -44,6 +45,22 @@ def get_es_data(index=None,doc_type=None,value=None,name_list=None):
                         j+=1
                 return result_list
 
-if __name__=="__main__":
-    a=get_es_data("index_file_32","_doc","MINIO",["avi/截图.avi"])
-    print(a)
+
+def get_es_data_for_thumbnailMode(index,doc_type,data):
+    filesetId=[]
+    filesetId.append(filesets_id(data))
+    query={"from":0,"size":8,"query":{"bool":{"must":[{"terms":{"storage":["MINIO","OZONE"],"boost":1.0}},{"terms":{"filesetId":filesetId,"boost":1.0}}],"adjust_pure_negative":True,"boost":1.0}},"_source":{"includes":["filesetId","host","storage","format","directory","name","owner","recordTime","modifyTime","size","tags"],"excludes":["content"]},"sort":[{"recordTime":{"order":"desc"}},{"name":{"order":"asc"}}]}
+    try:
+        ret = es.search(index=index, doc_type=doc_type, body=query)
+        a=[]
+        for i in ret['hits']['hits']:
+            a.append(i["_id"])
+        return a
+    except Exception as e:
+        log.error("es查询异常",e)
+        return
+
+#
+# if __name__=="__main__":
+#     a=get_es_data_for_thumbnailMode("index_file_32","_doc")
+#     print(a)
