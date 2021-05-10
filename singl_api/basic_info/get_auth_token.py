@@ -20,7 +20,7 @@ def get_auth_token(HOST):
 # 组装headers， 接口请求时调用
 def get_headers(HOST):
     x_auth_token = get_auth_token(HOST)
-    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
+    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "*/*"}
     return headers
 
 

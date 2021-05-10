@@ -635,7 +635,7 @@ def filesets_data(data):
         log.error("filesets_data出错{}".format(e))
         return
     if "lq_fileset_hdfs_directory" in data:
-        new_data={"name":"lq_fileset_随机数","storage":"HDFS","storageConfigurations":{"fileType":"DIRECTORY","path":"/tmp/lisatest/collector_sink","clusterId":cluster_id,"cluster":"cluster1","host":"","port":"","username":"","password":""},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_hdfs_directory_随机数","storage":"HDFS","storageConfigurations":{"fileType":"DIRECTORY","path":"/tmp/lisatest/collector_sink","clusterId":cluster_id,"cluster":"cluster1","host":"","port":"","username":"","password":""},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     if "lq_fileset_hdfs_file" in data:
@@ -667,7 +667,7 @@ def filesets_data(data):
         deal_random(new_data)
         return new_data
     elif "lq_fileset_ozone_recursive_dir" in data:
-        new_data={"name":"lq_ozone_recursive_dir_随机数","storage":"OZONE","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/file/","clusterId":"","cluster":"","host":"","port":22,"username":"","password":""},"resource":{"id":fileset_id},"isShowButton":False}
+        new_data={"name":"lq_fileset_ozone_recursive_dir_随机数","storage":"OZONE","storageConfigurations":{"fileType":"RECURSIVE_DIR","path":"/file/","clusterId":"","cluster":"","host":"","port":22,"username":"","password":""},"resource":{"id":fileset_id},"isShowButton":False}
         deal_random(new_data)
         return new_data
     elif "lq_fileset_minio_recursive_dir" in data:
@@ -675,6 +675,16 @@ def filesets_data(data):
         deal_random(new_data)
         return new_data
     else:
+        return
+def filesets_id(data):
+    try:
+        if '&' in data:
+            data = data.split("&")
+            sql="select id from merce_fileset where name like '%s%%' ORDER BY create_time desc limit 1 "% data[2]
+            fileset_info = ms.ExecuQuery(sql)
+            return fileset_info[0]["id"]
+    except Exception as e:
+        log.error("filesets_id出错{}".format(e))
         return
 
 def cluster_data():
