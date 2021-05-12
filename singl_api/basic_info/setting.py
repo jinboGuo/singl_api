@@ -131,11 +131,11 @@ MySQL_CONFIG1 = {
 #     "DB": 'demo18',
 #     'case_db': 'test'}
 MySQL_CONFIG = {
-    'HOST': '192.168.1.82',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_32',
+    'HOST': '192.168.1.149',
+    "PORT": 30306,
+    "USER": 'root',
+    "PASSWORD": 'root',
+    "DB": 'k8s_149',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
@@ -358,5 +358,5 @@ collector_id = 'c9'
 
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
-receivers_test = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com']
+receivers_list = ['289332729@qq.com']
+receivers_test = ['289332729@qq.com']

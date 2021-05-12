@@ -73,7 +73,7 @@ def main3(host,receivers):
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
     api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
-    cases_sheet = api_cases_table.get_sheet_by_name('32')
+    cases_sheet = api_cases_table.get_sheet_by_name('k8s_149')
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
     pass_cases = 0
