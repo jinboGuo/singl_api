@@ -17,7 +17,7 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     add_child_standard_category, update_standard_category, rel_physical_dataset, update_physical_dataset, query_physical_dataset, query_physical_dataset_by_name, \
     query_physical_dataset_by_subject, add_model_metadata, update_model_metadata, query_model_metadata, query_model_metadata_by_name, query_model_metadata_by_subject, \
     save_model_metadata_info, query_timedim, query_timedim_by_name, query_timedim_by_subject, add_primary, update_primary, add_physical, query_physical, query_physical_by_name, \
-    update_physical
+    update_physical, add_indicator, add_dimension, add_metadata_field, metadata_field, query_metadata_model_by_name, query_metadata_model, update_dimension
 
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -569,7 +569,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '修改维度':
-            new_data,field_defined_id = update_primary(data)
+            new_data,field_defined_id = update_dimension(data)
             new_url = url.format(field_defined_id)
             log.info("request   url：%s " %new_url)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -612,6 +612,97 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             new_url = url.format(data[0],data[1])
             log.info("request   url：%s " %new_url)
             new_data = {"pageable":{"pageNum":0,"pageSize":10,"pageable":"true"}}
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询逻辑模型字段':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询逻辑模型字段':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[{"andOr":"OR","name":"alias","oper":"LIKE","value":["%主%"]}]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询逻辑模型版本':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询逻辑模型版本':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[{"andOr":"OR","name":"alias","oper":"LIKE","value":["%a%"]}]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data)
+            log.info("request   url：%s " % new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '查询数据建模' in case_detail:
+            new_data,project_id,subject_id,category_id = query_metadata_model(data)
+            new_url = url.format(project_id,subject_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '根据名称查询数据建模' in case_detail:
+            new_data,project_id,subject_id,category_id = query_metadata_model_by_name(data)
+            new_url = url.format(project_id,subject_id,category_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询model信息':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[]},"pageable":{"pageNum":0,"pageSize":8,"pageable":"false"},"ordSort":[{"name":"createTime","order":"DESC"}]}
+            new_url = url.format(data[0],data[1])
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据名称查询model信息':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[{"andOr":"OR","name":"name","oper":"LIKE","value":["%o%"]}]},"ordSort":[{"name":"createTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":"true"}}
+            new_url = url.format(data[0],data[1])
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '根据主题域查询model信息':
+            new_data = {"fieldGroup":{"andOr":"AND","fields":[{"andOr":"OR","name":"name","oper":"LIKE","value":["%o%"]},{"andOr":"AND","name":"subjectId","oper":"EQUAL","value":["836179258303840256"]}]},"ordSort":[{"name":"createTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":"true"}}
+            new_url = url.format(data[0],data[1])
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=new_url, headers=headers, data=new_data)
             log.info("response data：%s %s" %(response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
@@ -772,6 +863,14 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     else:
                         log.info("请确认第%d行parameters" %row)
+                elif len(data) == 2:
+                    url_new = url.format(data[0], data[1])
+                    log.info("request   url：%s " %url_new)
+                    response = requests.get(url=url_new, headers=headers)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:  # 参数中不包含&，只有一个参数
                     url_new = url.format(data)
                     log.info("request   url：%s " %url_new)
@@ -924,6 +1023,17 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '保存逻辑模型新版本':
+                    new_data,metadata_id,subject_id = save_model_metadata_info(data)
+                    new_url = url.format(metadata_id,subject_id)
+                    log.info("request   url：%s " %new_url)
+                    log.info("request   data：%s " %new_data)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增时间维度':
                     new_data,project_id,subject_id = add_primary(data)
                     new_url = url.format(project_id,subject_id)
@@ -965,7 +1075,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增指标':
-                    new_data,project_id,subject_id = add_primary(data)
+                    new_data,project_id,subject_id = add_indicator(data)
                     new_url = url.format(project_id,subject_id)
                     log.info("request   url：%s " %new_url)
                     new_data = json.dumps(new_data, separators=(',', ':'))
@@ -975,7 +1085,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增维度':
-                    new_data,project_id,subject_id = add_primary(data)
+                    new_data,project_id,subject_id = add_dimension(data)
                     new_url = url.format(project_id,subject_id)
                     log.info("request   url：%s " %new_url)
                     new_data = json.dumps(new_data, separators=(',', ':'))
@@ -986,6 +1096,16 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '新增物化配置':
                     new_data,metadata_id = add_physical(data)
+                    new_url = url.format(metadata_id)
+                    log.info("request   url：%s " %new_url)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif '新增逻辑模型字段' in case_detail:
+                    new_data,metadata_id = add_metadata_field(data)
                     new_url = url.format(metadata_id)
                     log.info("request   url：%s " %new_url)
                     new_data = json.dumps(new_data, separators=(',', ':'))
@@ -1017,44 +1137,59 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s " %case_detail)
-        if isinstance(data, str):
-            if case_detail == '':
-                pass
-            else:
-                if data.startswith('select id'):  # sql语句的查询结果当做参数
-                    data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                    datas = []
-                    if data_select_result:
-                        try:
-                            for i in range(len(data_select_result)):
-                                datas.append(data_select_result[i]["id"])
-                        except:
-                            log.info("请确认第%d行SQL语句" %row)
-                        else:
-                            if len(datas) == 1:
-                                new_url = url.format(datas[0])
-                                log.info("request   url：%s " %new_url)
-                                response = requests.delete(url=new_url, headers=headers)
-                                log.info("response data：%s %s" %(response.status_code, response.text))
-                                # 将返回的status_code和response.text分别写入第10列和第14列
-                                clean_vaule(table_sheet_name, row, column)
-                                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                            else:
-                                log.info("请确认 select 语句查询返回值是不是只有一个")
+        #if isinstance(data, str):
+        if data:
+            if str(data).startswith('select id'):  # sql语句的查询结果当做参数
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                datas = []
+                if data_select_result:
+                    try:
+                        for i in range(len(data_select_result)):
+                            datas.append(data_select_result[i]["id"])
+                    except:
+                        log.info("请确认第%d行SQL语句" %row)
                     else:
-                        log.info("第%d行参数查询无结果" %row)
-                    # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
-    
+                        if len(datas) == 1:
+                            new_url = url.format(datas[0])
+                            log.info("request   url：%s " %new_url)
+                            response = requests.delete(url=new_url, headers=headers)
+                            log.info("response data：%s %s" %(response.status_code, response.text))
+                            # 将返回的status_code和response.text分别写入第10列和第14列
+                            clean_vaule(table_sheet_name, row, column)
+                            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                        else:
+                            log.info("请确认 select 语句查询返回值是不是只有一个")
                 else:
-                    new_url = url.format(data)
-                    log.info("request   url：%s " %new_url)
-                    response = requests.delete(url=new_url, headers=headers)
-                    log.info("response data：%s %s" %(response.status_code, response.text))
-                    # 将返回的status_code和response.text分别写入第10列和第14列
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                    log.info("第%d行参数查询无结果" %row)
+            elif "删除逻辑模型字段" in case_detail:
+                metadata_id,name = metadata_field(data)
+                new_url = url.format(metadata_id,name)
+                log.info("request   url：%s " %new_url)
+                response = requests.delete(url=new_url, headers=headers)
+                log.info("response data：%s %s" %(response.status_code, response.text))
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)# 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
+            elif len(data)==2:
+                new_url = url.format(data[0],data[1])
+                log.info("request   url：%s " %new_url)
+                response = requests.delete(url=new_url, headers=headers)
+                log.info("response data：%s %s" %(response.status_code, response.text))
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            else:
+                new_url = url.format(data)
+                log.info("request   url：%s " %new_url)
+                response = requests.delete(url=new_url, headers=headers)
+                log.info("response data：%s %s" %(response.status_code, response.text))
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             new_url = url.format(data)
             log.info("request   url：%s " %new_url)

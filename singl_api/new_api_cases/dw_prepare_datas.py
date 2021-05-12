@@ -448,3 +448,102 @@ def update_physical(data):
         return new_data,metadata_id,physical_id
     except Exception as e:
         log.error("异常信息：%s" %e)
+
+def add_indicator(data):
+    try:
+        data = data.split("#")
+        metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[6]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"fieldType":data[3],"sourceFieldName":data[4],"definition":"","description":"","categoryId":category_info[0]["id"],"aggrMethod":data[5],"sourceTableName":metadata_info[0]["alias"],"projectId":metadata_info[0]["project_id"],"length":"33"}
+        deal_random(new_data)
+        return new_data,project_id,subject_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def add_dimension(data):
+    try:
+        data = data.split("#")
+        metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[5]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"sourceTableName":metadata_info[0]["alias"],"sourceFieldId":"null","length":"30","categoryId":category_info[0]["id"],"sourceFieldName":data[4],"description":"","fieldType":data[3],"projectId":metadata_info[0]["project_id"]}
+        deal_random(new_data)
+        return new_data,project_id,subject_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def add_metadata_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select metadata_id,source_table_ids from dw_metadata_info where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["metadata_id"]
+        dw_field_defined = "select id,alias,field_spec,field_type,name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":"","associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","tableSourceId":metadata_info[0]["metadata_id"],"objectId":field_defined_info[0]["id"]}]
+        deal_random(new_data)
+        return new_data,metadata_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def metadata_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        name = field_defined_info[0]["name"]
+        return metadata_id,name
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def query_metadata_model(data):
+    try:
+        data = data.split("#")
+        category = "select id,project_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        subject_info = ms.ExecuQuery(subject.encode('utf-8'))
+        project_id,category_id,subject_id = category_info[0]["project_id"],category_info[0]["id"],subject_info[0]["id"]
+        new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"pageNum","comparatorOperator":"EQUAL","fieldValue":0},{"logicalOperator":"AND","fieldName":"pageSize","comparatorOperator":"EQUAL","fieldValue":10},{"logicalOperator":"AND","fieldName":"tableSpec","comparatorOperator":"EQUAL","fieldValue":data[2]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        deal_random(new_data)
+        return new_data,project_id,subject_id,category_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def query_metadata_model_by_name(data):
+    try:
+        data = data.split("#")
+        category = "select id,project_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        subject_info = ms.ExecuQuery(subject.encode('utf-8'))
+        project_id,category_id,subject_id = category_info[0]["project_id"],category_info[0]["id"],subject_info[0]["id"]
+        new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"pageNum","comparatorOperator":"EQUAL","fieldValue":0},{"logicalOperator":"AND","fieldName":"pageSize","comparatorOperator":"EQUAL","fieldValue":10},{"logicalOperator":"AND","fieldName":"alias","comparatorOperator":"LIKE","fieldValue":"%a%"},{"logicalOperator":"AND","fieldName":"tableSpec","comparatorOperator":"EQUAL","fieldValue":data[2]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        deal_random(new_data)
+        return new_data,project_id,subject_id,category_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def update_dimension(data):
+    try:
+        data = data.split("#")
+        field_defined = "select id,alias,business_id,project_id,subject_id,field_spec,category_id,source_table_id,source_table_name,source_field_name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        field_defined_info = ms.ExecuQuery(field_defined.encode('utf-8'))
+        field_defined_id = field_defined_info[0]["id"]
+        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":field_defined_info[0]["alias"],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableId":field_defined_info[0]["source_table_id"],"sourceTableName":field_defined_info[0]["source_table_name"],"sourceFieldName":field_defined_info[0]["source_field_name"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
+        deal_random(new_data)
+        return new_data,field_defined_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)

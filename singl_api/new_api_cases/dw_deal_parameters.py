@@ -30,12 +30,12 @@ def deal_parameters(data):
                     else:
                         try:
                                 data = data_select_result[0]["id"]
-                                return data
+                                return str(data)
                         except Exception as e:
                             log.error("异常信息：%s" %e)
                 else:
                     log.info("查询结果为空！")
-            if 'select name' in data:
+            if 'select name from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
                     try:
@@ -45,12 +45,12 @@ def deal_parameters(data):
                         log.error("异常信息：%s" %e)
                 else:
                     log.info("查询结果为空！")
-            if 'select execution_id' in data:
+            if 'select current_info_id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
                     try:
-                        data = data_select_result[0]["execution_id"]
-                        return deal_parameters(data)
+                        data = data_select_result[0]["current_info_id"]
+                        return str(data)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
@@ -87,7 +87,7 @@ def deal_parameters(data):
                 if data_select_result:
                     try:
                         data = data_select_result[0]["project_id"]
-                        return data
+                        return str(data)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
@@ -98,7 +98,46 @@ def deal_parameters(data):
                 if data_select_result:
                     try:
                         metadata_id,id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
-                        new_data.append(metadata_id)
+                        new_data.append(str(metadata_id))
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select id,current_info_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        metadata_id,current_info_id = data_select_result[0]["id"],data_select_result[0]["current_info_id"]
+                        new_data.append(str(metadata_id))
+                        new_data.append(str(current_info_id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select name,project_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        name,project_id = data_select_result[0]["name"],data_select_result[0]["project_id"]
+                        new_data.append(name)
+                        new_data.append(str(project_id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select project_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        project_id,id = data_select_result[0]["project_id"],data_select_result[0]["id"]
+                        new_data.append(str(project_id))
                         new_data.append(str(id))
                         return new_data
                     except Exception as e:

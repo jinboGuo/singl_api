@@ -3,10 +3,20 @@ from basic_info.setting import Compass_MySQL_CONFIG, Compass_scheduler
 from util.Open_DB import MYSQL
 from util.conn_linux import Linux
 from util.logs import Logger
+from new_api_cases.test import operateKafka
+
+kafka =operateKafka()
+fs_scheduler = {
+    'HOST': '192.168.1.81',
+    "USER": 'merce',
+    "PASSWORD": 'merce'
+}
 
 log = Logger().get_log()
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
 host = Linux(Compass_scheduler["HOST"], Compass_scheduler["USER"], Compass_scheduler["PASSWORD"])
+fs_host = Linux(fs_scheduler["HOST"], fs_scheduler["USER"], fs_scheduler["PASSWORD"])
+
 
 # 监控kafka消息
 def check_s_l_message(data):
@@ -284,18 +294,31 @@ s_r_task = "select task_oid,job_oid,status,slice_type ,slice_time ,create_time,r
 s_l_result_task = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_output,task_name, result_oid from s_l_result_task order by create_time desc limit 1"
 s_l_result_detail = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_detail order by create_time desc limit 1"
 s_l_result_output = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_output order by create_time desc limit 1"
-cd = "cd /data/input/demo/"
+# cd = "cd /data/input/demo/"
+# sh = "sh createdata2.sh"
+# mv = "mv [demo]* gdemo/"
+cd = "cd /app/data/"
 sh = "sh createdata2.sh"
-mv = "mv [demo]* gdemo/"
+dle = "rm -rf demo*"
+upload = "hdfs dfs -put [demo]* /tmp/gjt"
+msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////test4_2021024318_20210223185943_192.168.1.55_97.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>hour_now()</sliceTime><createTime>data_now()</createTime><rowNumber>370</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>13331</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
 
 def run_all():
-    host.connect()
-    host.send(cd)  # 发送一个命令
-    host.send(sh)
+    # host.connect()
+    # host.send(cd)  # 发送一个命令
+    # host.send(sh)
+    # sleep(7)
+    # host.send(cd)
+    # sleep(3)
+    # host.send(mv)
+    fs_host.connect()
+    fs_host.send(cd)
+    fs_host.send(sh)
     sleep(7)
-    host.send(cd)
+    fs_host.send(upload)
     sleep(3)
-    host.send(mv)
+    kafka.sendMessage(msg)
+    fs_host.send(dle)
     check_s_l_message(s_l_message)
     check_s_r_task(s_r_task)
     check_s_l_result_task(s_l_result_task)

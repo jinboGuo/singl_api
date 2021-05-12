@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from time import *
 import paramiko
 import os
@@ -62,6 +63,24 @@ class Linux(object):
             ret = ret.decode('utf-8')
             result += ret
             return result
+
+    def get_size(self,path):
+        file_list = os.listdir(path)
+        for filename in file_list:
+            pathTmp = os.path.join(path,filename)
+            if os.path.isdir(pathTmp):
+                self.get_size(pathTmp)
+            elif os.path.isfile(pathTmp):
+               list =[]
+               filesize = os.path.getsize(pathTmp)
+               print(pathTmp)
+               list.append(filesize)
+               count =len(open(pathTmp,"r+",encoding='gbk').readlines())
+               list.append(count)
+               list.append(filename)
+               return list
+
+
 
     '''
     发送文件
