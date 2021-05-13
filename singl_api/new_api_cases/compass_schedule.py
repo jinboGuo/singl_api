@@ -5,7 +5,7 @@ from util.conn_linux import Linux
 from util.logs import Logger
 
 log = Logger().get_log()
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"])
+ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"],Compass_MySQL_CONFIG["PORT"])
 host = Linux(Compass_scheduler["HOST"], Compass_scheduler["USER"], Compass_scheduler["PASSWORD"])
 
 # 监控kafka消息
