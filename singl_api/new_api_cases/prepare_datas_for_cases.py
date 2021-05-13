@@ -15,7 +15,7 @@ import random
 
 from util.timestamp_13 import get_now, get_tomorrow
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 log=myLog().getLog().logger
@@ -663,7 +663,7 @@ def filesets_data(data):
     #     deal_random(new_data)
     #     return new_data
     if "lq_fileset_local_file" in data:
-        new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/app/merce/test_file_search/filesearch.txt","clusterId":"","cluster":"","host":"192.168.1.32","port":22,"username":"merce","password":"Inf0refiner"},"resource":{"id":fileset_id},"isShowButton":'false'}
+        new_data={"name":"lq_fileset_local_file_随机数","storage":"LOCAL","storageConfigurations":{"fileType":"FILE","path":"/root/baymax/test/filesearch.txt","clusterId":"","cluster":"","host":"192.168.1.149","port":22,"username":"root","password":"Inf0refiner"},"resource":{"id":fileset_id},"isShowButton":'false'}
         deal_random(new_data)
         return new_data
     elif "lq_fileset_ozone_recursive_dir" in data:
