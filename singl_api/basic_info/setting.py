@@ -106,7 +106,7 @@ Dw_MySQL_CONFIG = {
 }
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.32:8515"
+host = "http://192.168.1.149:30000"
 #host = "http://192.168.21.123:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -329,7 +329,7 @@ preProcessFlowId = "aa5f83c6-aff0-4405-8473-8c09c0f167e4"
 preProcessFlowName = "students_int_flow_filter"
 processDataId = "students_dataset_copy_int"
 
-ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 # 查询最新创建的sql分析规则id
 # # sql_rule_id_sql = 'select id from merce_zrule where build_type = "Custom" and custom_type = "SQL" and ' \
 # #                   'name like "rule_for_SQL_students_copy%"  order by create_time desc limit 1  '
