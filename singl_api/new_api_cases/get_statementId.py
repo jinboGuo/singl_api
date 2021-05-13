@@ -45,7 +45,7 @@ def statementId(host, param):
     if new_data:
         url = '%s/api/datasets/%s/previewinit?rows=50' % (host, dataset_id)
         new_data = json.dumps(new_data, separators=(',', ':'))
-        res = requests.post(url=url, headers=get_headers(host), data=new_data)
+        res = requests.get(url=url, headers=get_headers(host), data=new_data)
         try:
             res_statementId = json.loads(res.text)
             print("ids:", res_statementId)
