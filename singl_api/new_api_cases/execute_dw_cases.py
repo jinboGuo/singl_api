@@ -17,7 +17,8 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     add_child_standard_category, update_standard_category, rel_physical_dataset, update_physical_dataset, query_physical_dataset, query_physical_dataset_by_name, \
     query_physical_dataset_by_subject, add_model_metadata, update_model_metadata, query_model_metadata, query_model_metadata_by_name, query_model_metadata_by_subject, \
     save_model_metadata_info, query_timedim, query_timedim_by_name, query_timedim_by_subject, add_primary, update_primary, add_physical, query_physical, query_physical_by_name, \
-    update_physical, add_indicator, add_dimension, add_metadata_field, metadata_field, query_metadata_model_by_name, query_metadata_model, update_dimension
+    update_physical, add_indicator, add_dimension, add_metadata_field, metadata_field, query_metadata_model_by_name, query_metadata_model, update_dimension, add_physical_field, \
+    del_physical_field
 
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -251,6 +252,26 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         elif case_detail == '修改资源配置物理表':
             new_data, ref_dataset_id = update_physical_dataset(data)
             new_url = url.format(ref_dataset_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '添加物理表属性字段':
+            new_data,metadata_id = add_physical_field(data)
+            new_url = url.format(metadata_id)
+            log.info("request   url：%s " %new_url)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '删除物理表属性字段':
+            new_data,metadata_id = del_physical_field(data)
+            new_url = url.format(metadata_id)
             log.info("request   url：%s " %new_url)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=new_url, headers=headers, data=new_data)
@@ -704,6 +725,14 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             log.info("request   url：%s " %new_url)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" %(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '获取数据建模目标逻辑表':
+            new_data,field_defined_id = update_primary(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" %(response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

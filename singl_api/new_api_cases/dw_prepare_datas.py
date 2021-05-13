@@ -230,6 +230,36 @@ def update_physical_dataset(data):
     except Exception as e:
         log.error("异常信息：%s" %e)
 
+
+def add_physical_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select id,alias,field_spec,field_type,name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":data[2],"associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","objectId":field_defined_info[0]["id"]}]
+        deal_random(new_data)
+        return new_data,metadata_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def del_physical_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = []
+        comp =field_defined_info[0]["name"]+","+data[2]
+        new_data.append(str(comp))
+        return new_data,metadata_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
 def query_physical_dataset(data):
     try:
         ref_dataset = "select project_id,category_id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data
@@ -386,7 +416,7 @@ def add_primary(data):
         subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
         subject_info = ms.ExecuQuery(subject.encode('utf-8'))
         project_id,subject_id = category_info[0]["project_id"],subject_info[0]["id"]
-        new_data = {"name":data[2],"alias":data[3],"subjectId":subject_info[0]["id"],"sourceTableId":"null","fieldType":data[4],"sourceFieldName":"","definition":"","description":"","categoryId":category_info[0]["id"],"length":"22","projectId":category_info[0]["project_id"],"fieldSpec":data[5]}
+        new_data = {"name":data[2],"alias":data[3],"subjectId":subject_info[0]["id"],"sourceTableId":"null","fieldType":data[4],"sourceFieldName":"","definition":"","description":"","fieldSource":data[6],"categoryId":category_info[0]["id"],"length":"22","projectId":category_info[0]["project_id"],"fieldSpec":data[5]}
         deal_random(new_data)
         return new_data,project_id,subject_id
     except Exception as e:
@@ -455,9 +485,11 @@ def add_indicator(data):
         metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
         metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
         project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
-        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[6]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[5]
         category_info = ms.ExecuQuery(category.encode('utf-8'))
-        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"fieldType":data[3],"sourceFieldName":data[4],"definition":"","description":"","categoryId":category_info[0]["id"],"aggrMethod":data[5],"sourceTableName":metadata_info[0]["alias"],"projectId":metadata_info[0]["project_id"],"length":"33"}
+        dw_field_defined = "select name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[3]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"fieldType":field_defined_info[0]["field_type"],"sourceFieldName":field_defined_info[0]["name"],"fieldSpec":"metric","definition":"","description":"","categoryId":category_info[0]["id"],"aggrMethod":data[4],"sourceTableName":metadata_info[0]["alias"],"projectId":metadata_info[0]["project_id"],"length":"33"}
         deal_random(new_data)
         return new_data,project_id,subject_id
     except Exception as e:
@@ -469,9 +501,11 @@ def add_dimension(data):
         metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
         metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
         project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
-        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[5]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[4]
         category_info = ms.ExecuQuery(category.encode('utf-8'))
-        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"sourceTableName":metadata_info[0]["alias"],"sourceFieldId":"null","length":"30","categoryId":category_info[0]["id"],"sourceFieldName":data[4],"description":"","fieldType":data[3],"projectId":metadata_info[0]["project_id"]}
+        dw_field_defined = "select name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[3]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"sourceTableName":metadata_info[0]["alias"],"sourceFieldId":"null","length":"30","categoryId":category_info[0]["id"],"sourceFieldName":field_defined_info[0]["name"],"fieldSpec":"dimension","description":"","fieldType":field_defined_info[0]["field_type"],"projectId":metadata_info[0]["project_id"]}
         deal_random(new_data)
         return new_data,project_id,subject_id
     except Exception as e:
@@ -486,7 +520,7 @@ def add_metadata_field(data):
         metadata_id = metadata_info[0]["metadata_id"]
         dw_field_defined = "select id,alias,field_spec,field_type,name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
         field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
-        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":"","associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","tableSourceId":metadata_info[0]["metadata_id"],"objectId":field_defined_info[0]["id"]}]
+        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":data[2],"associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","tableSourceId":metadata_info[0]["metadata_id"],"objectId":field_defined_info[0]["id"]}]
         deal_random(new_data)
         return new_data,metadata_id
     except Exception as e:
@@ -545,5 +579,20 @@ def update_dimension(data):
         new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":field_defined_info[0]["alias"],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableId":field_defined_info[0]["source_table_id"],"sourceTableName":field_defined_info[0]["source_table_name"],"sourceFieldName":field_defined_info[0]["source_field_name"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
         deal_random(new_data)
         return new_data,field_defined_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def get_target_metadata(data):
+    try:
+        data = data.split("#")
+        metadata = "select metadata_id,source_table_ids from dw_metadata_info where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["metadata_id"]
+        dw_field_defined = "select id,alias,field_spec,field_type,name from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = {"aggrFields":[{"metric":"最大商品数","alias":"maxitemsnum104","name":"itemsnum899","function":"max"}],"groupByFields":["dt580"],"sources":[{"data":{"fields":[{"name":"dt580","alias":"时间维度","abbr":"","fieldType":"string","length":22,"precision":"","unit":"","fieldSpec":"timedim","comment":"","createTime":datatime_now(),"objectId":"842104917337309184","associatedFieldName":"dt580","fieldSource":"dt","tableSourceId":"839893563532640256"},{"name":"itemsid999","alias":"商品名称","abbr":"","fieldType":"string","length":22,"precision":"","unit":"","fieldSpec":"attribute","comment":"","createTime":datatime_now(),"objectId":"842104921292537856","associatedFieldName":"itemsid999","fieldSource":"items_id","tableSourceId":"839893563532640256"},{"name":"id74","alias":"主键","abbr":"","fieldType":"string","length":22,"precision":"","unit":"","fieldSpec":"primary","comment":"","createTime":datatime_now(),"objectId":"842104919757422592","associatedFieldName":"id74","fieldSource":"id","tableSourceId":"839893563532640256"},{"name":"ordersid429","alias":"订单名称","abbr":"","fieldType":"string","length":22,"precision":"","unit":"","fieldSpec":"attribute","comment":"","createTime":datatime_now(),"objectId":"842104922638909440","associatedFieldName":"ordersid429","fieldSource":"orders_id","tableSourceId":"839893563532640256"},{"name":"itemsnum899","alias":"数量","abbr":"","fieldType":"double","length":20,"precision":"","unit":"","fieldSpec":"measure","comment":"","createTime":datatime_now(),"objectId":"842104924580872192","associatedFieldName":"itemsnum899","fieldSource":"items_num","tableSourceId":"839893563532640256"}],"currentInfoId":"839893564736405504","metadataId":"839893564728016896","name":"api_order__api_auto_s","id":"839893564736405504","tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"nodeId":"","alias":"api_order_transaction369","abbr":"api_order_transaction150","tableSpec":"transaction"},"id":"metadata_1","type":"metadata","x":220,"y":119,"name":"metadata_1"}],"target":{"data":{"fields":[],"metadataId":"","name":"","type":"metadata","alias":"api_aggr"},"id":"metadata_3","name":"metadata_3","type":"metadata","x":1052,"y":205},"type":"aggregate"}
+        deal_random(new_data)
+        return new_data
     except Exception as e:
         log.error("异常信息：%s" %e)
