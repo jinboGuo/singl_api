@@ -31,7 +31,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
     dss_data, upddss_data, dataset_data, upddataset_data, create_schema_data, updschema_data, create_flow_data, \
     update_flow_data, filesets_data, get_old_id_name, get_collector_data
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('k8s_149')
@@ -248,7 +248,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             #new_data = json.dumps(new_data, separators=(',', ':'))
             new_url = url.format(statement_id)
             print("new_url-new_data:", new_url, new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            response = requests.get(url=new_url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
@@ -315,7 +315,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_url = url.format(dataset_id)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            response = requests.get(url=new_url, headers=headers, data=new_data)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
@@ -328,7 +328,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_url = url.format(dataset_id, statement_id)
             print(new_url)
             print("new_data:", new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            response = requests.get(url=new_url, headers=headers, data=new_data)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
