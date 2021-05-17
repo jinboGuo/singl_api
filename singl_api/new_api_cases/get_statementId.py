@@ -109,7 +109,7 @@ def preview_result_flow_use(host, datasetId, tenant, statementID):
 def statementId_no_dataset(host, param):
     new_data = dataset_data(param)
     new_data = json.dumps(new_data, separators=(',', ':'))
-    url = '%s/api/datasets/new/previewinit?rows=50' % host
+    url = '%s/api/datasets/previewinit?rows=50' % host
     res = requests.post(url=url, headers=get_headers(host), data=new_data)
     try:
         res_statementId = json.loads(res.text)
