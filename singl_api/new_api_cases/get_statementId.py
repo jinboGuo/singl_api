@@ -110,7 +110,7 @@ def statementId_no_dataset(host, param):
     new_data = dataset_data(param)
     new_data = json.dumps(new_data, separators=(',', ':'))
     url = '%s/api/datasets/new/previewinit?rows=50' % host
-    res = requests.post(url=url, headers=get_headers(host), data=new_data)
+    res = requests.get(url=url, headers=get_headers(host))
     try:
         res_statementId = json.loads(res.text)
         statementId = res_statementId['statementId']

@@ -27,17 +27,6 @@ Compass_scheduler = {
     "PASSWORD": 'Inf0refiner'
 }
 
-# # -------189环境使用-------
-# HOST
-# host = "http://192.168.1.189:8515"
-# # 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce',
-#     'case_db': 'test'}
 
 # # -------comapss环境使用-------
 # # HOST
@@ -51,46 +40,15 @@ Compass_MySQL_CONFIG = {
     "DB": 'compass-app'
 }
 
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce_199',
-#     'case_db': 'test'
-# }
-# # -------81环境使用-------
-# # HOST
-# host = "http://192.168.1.81:8515"
-# # # # # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.57',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'database_81'
-# }
-# # -------dsp环境使用-------
 # # # HOST
-# dsp_host = "http://192.168.1.82:8008"
-# # # # # # 数据库连接信息
-# Dsp_MySQL_CONFIG = {
-#      'HOST': '192.168.1.82',
-#      "PORT": 3306,
-#      "USER": 'merce',
-#      "PASSWORD": 'merce',
-#      "DB": 'merce_83'
-#  }
-
-# # # HOST
-dsp_host = "http://192.168.1.199:8008"
+dsp_host = "http://192.168.1.145:30005"
 # # # # # 数据库连接信息
 Dsp_MySQL_CONFIG = {
-    'HOST': '192.168.1.82',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_199'
+    'HOST': '192.168.1.145',
+    "PORT": 30307,
+    "USER": 'root',
+    "PASSWORD": 'root',
+    "DB": 'k8s_149'
 }
 
 # # -------dw环境使用-------
@@ -104,18 +62,9 @@ Dw_MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'merce-scheduler'
 }
-# -------83环境使用-------
+# -------环境使用-------
 # HOST
-host = "http://192.168.1.149:30000"
-#host = "http://192.168.21.123:8515"
-# 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'wac666',
-#     'case_db': 'test'}
+host = "http://192.168.1.145:30000"
 MySQL_CONFIG1 = {
     'HOST': '192.168.1.75',
     "PORT": 3306,
@@ -123,16 +72,9 @@ MySQL_CONFIG1 = {
     "PASSWORD": 'merce',
     "DB": 'test_flow',
     'case_db': 'test'}
-# MySQL_CONFIG = {
-#     'HOST': '192.168.21.123',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'demo18',
-#     'case_db': 'test'}
 MySQL_CONFIG = {
-    'HOST': '192.168.1.149',
-    "PORT": 30306,
+    'HOST': '192.168.1.145',
+    "PORT": 30307,
     "USER": 'root',
     "PASSWORD": 'root',
     "DB": 'k8s_149',
@@ -219,23 +161,6 @@ MY_LOGIN_INFO_root_dam = {
  "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
  "HOST": "%s" % host
 }
-
-
-# # upload_file使用该用户
-# MY_LOGIN_INFO_upload_file_use = {
-#  "HEADERS": {'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqa6thIhrtfSBTQCH'},
-#  "URL": "%s/api/auth/login" % host,
-#  "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "HOST": "%s" % host
-# }
-
-
-
-
-
-
-
 
 
 
@@ -357,6 +282,12 @@ zmod_exectuion_id = "c462b867-db09-4adc-b49f-005c646960a6"
 collector_id = 'c9'
 
 
+
+# elasticsearch集群服务器的地址
+ES = [
+    'http://192.168.1.145:30301/'
+]
+
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['289332729@qq.com',"aaa"]
-receivers_test = ['289332729@qq.com']
+receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com']
+receivers_test = ['289332729@qq.com','jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com']

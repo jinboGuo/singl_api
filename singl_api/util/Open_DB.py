@@ -24,12 +24,14 @@ class MYSQL:
 
         # 执行查询
     def ExecuQuery(self, query):
-        cur = self._Getconnect()
-        cur.execute(query)
-        # 获取查询到的全部数据
-        res = cur.fetchall()
+        try:
+            cur = self._Getconnect()
+            cur.execute(query)
+            # 获取查询到的全部数据
+            res = cur.fetchall()
         # 关闭数据库连接并返回查询结果
-        self.conn.close()
+        finally:
+            self.conn.close()
         return res
 
     def ExecuNoQuery(self, sql):

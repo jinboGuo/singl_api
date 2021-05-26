@@ -1,14 +1,11 @@
 from elasticsearch5 import Elasticsearch
 
 from basic_info.mylogging import myLog
+from basic_info.setting import ES
 from new_api_cases.prepare_datas_for_cases import filesets_id
 
 log=myLog().getLog().logger
 
-# elasticsearch集群服务器的地址
-ES = [
-    '192.168.1.82:9206'
-]
 
 # 创建elasticsearch客户端
 es = Elasticsearch(

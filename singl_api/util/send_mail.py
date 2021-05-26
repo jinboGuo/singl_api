@@ -138,7 +138,7 @@ def main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = ",".join(receivers)  # 接收者的邮箱
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
