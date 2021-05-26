@@ -289,5 +289,5 @@ ES = [
 ]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com']
-receivers_test = ['289332729@qq.com','jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com']
+receivers_list = ['289332729@qq.com']
+receivers_test = ['289332729@qq.com']
