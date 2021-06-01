@@ -1,6 +1,7 @@
 # coding:utf-8
 from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1
+from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1, Dw_MySQL_CONFIG
+
 
 def get_dataflow_data(flow_name):
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
@@ -91,4 +92,42 @@ def delete_autotest_datas():
     except:
        return
 
-#delete_autotest_datas()
+def delete_autotest_dw():
+    print("------开始删除测试数据-------")
+    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+    try:
+        dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
+        dw_ref_dataset = "delete from dw_ref_dataset where name like 'api_order%'"
+        dw_metadata = "delete from dw_metadata where name like 'api_order%' or name like 'api_aggr%'"
+        dw_model = "delete from dw_model where name like 'api_aggr%' or name like 'api_order%'"
+        dw_category = "delete from dw_category where name like 'api_model%' or name like 'api_standard%'"
+        dw_name_rules = "delete from dw_name_rules where alias like 'api_auto_namerule%'"
+        dw_tagdef = "delete from dw_tagdef where name like 'api_auto_tag%'"
+        dw_taggroup = "delete from dw_taggroup where name like 'api_auto_taggroup%'"
+        dw_business = "delete from dw_business where name like 'api_auto_business%'"
+        dw_project = "delete from dw_project where name like 'api_auto_projects%'"
+        dw_subject = "delete from dw_subject where name like 'api_auto_subject%'"
+        print("删除dw_field_defined表测试数据 ", dw_field_defined)
+        ms.ExecuNoQuery(dw_field_defined.encode('utf-8'))
+        print("删除dw_ref_dataset表测试数据 ", dw_ref_dataset)
+        ms.ExecuNoQuery(dw_ref_dataset.encode('utf-8'))
+        print("删除dw_metadata表测试数据 ", dw_metadata)
+        ms.ExecuNoQuery(dw_metadata.encode('utf-8'))
+        print("删除dw_model表测试数据 ", dw_model)
+        ms.ExecuNoQuery(dw_model.encode('utf-8'))
+        print("删除dw_category表测试数据 ", dw_category)
+        ms.ExecuNoQuery(dw_category.encode('utf-8'))
+        print("删除dw_name_rules表测试数据 ", dw_name_rules)
+        ms.ExecuNoQuery(dw_name_rules.encode('utf-8'))
+        print("删除dw_tagdef表测试数据 ", dw_tagdef)
+        ms.ExecuNoQuery(dw_tagdef.encode('utf-8'))
+        print("删除dw_taggroup表测试数据 ", dw_taggroup)
+        ms.ExecuNoQuery(dw_taggroup.encode('utf-8'))
+        print("删除dw_business表测试数据 ", dw_business)
+        ms.ExecuNoQuery(dw_business.encode('utf-8'))
+        print("删除dw_project表测试数据 ", dw_project)
+        ms.ExecuNoQuery(dw_project.encode('utf-8'))
+        print("删除dw_subject表测试数据 ", dw_subject)
+        ms.ExecuNoQuery(dw_subject.encode('utf-8'))
+    except:
+        return
