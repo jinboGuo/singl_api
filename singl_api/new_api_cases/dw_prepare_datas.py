@@ -1,5 +1,7 @@
 # coding:utf-8
 import os
+import random
+
 from new_api_cases.dw_deal_parameters import deal_random
 from basic_info.setting import Dw_MySQL_CONFIG, dw_host
 from util.Open_DB import MYSQL
@@ -224,9 +226,38 @@ def update_physical_dataset(data):
         ref_dataset = "select id,business_id,project_id,subject_id,dataset_id,dataset_name,category_id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data
         ref_dataset_info = ms.ExecuQuery(ref_dataset.encode('utf-8'))
         ref_dataset_id = ref_dataset_info[0]["id"]
-        new_data = {"id":ref_dataset_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_order_physical随机数","alias":"订单明细","businessId":ref_dataset_info[0]["business_id"],"subjectId":ref_dataset_info[0]["subject_id"],"projectId":ref_dataset_info[0]["project_id"],"datasetId":ref_dataset_info[0]["dataset_id"],"description":"","datasetName":ref_dataset_info[0]["dataset_name"],"categoryId":ref_dataset_info[0]["category_id"],"fields":[{"name":"id","alias":"id","abbr":"","fieldType":"int","length":20,"precision":"","unit":"","comment":"","associatedFieldName":"","fieldSource":""},{"name":"orders_id","alias":"orders_id","abbr":"","fieldType":"int","length":20,"precision":"","unit":"","comment":"","associatedFieldName":"","fieldSource":""},{"name":"items_id","alias":"items_id","abbr":"","fieldType":"int","length":20,"precision":"","unit":"","comment":"","associatedFieldName":"","fieldSource":""},{"name":"items_num","alias":"items_num","abbr":"","fieldType":"int","length":20,"precision":"","unit":"","comment":"","associatedFieldName":"","fieldSource":""},{"name":"dt","alias":"dt","abbr":"","fieldType":"string","length":200,"precision":"","unit":"","comment":"","associatedFieldName":"","fieldSource":""}]}
+        new_data = {"id":ref_dataset_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_order_physical随机数","alias":"订单明细","businessId":ref_dataset_info[0]["business_id"],"subjectId":ref_dataset_info[0]["subject_id"],"projectId":ref_dataset_info[0]["project_id"],"datasetId":ref_dataset_info[0]["dataset_id"],"description":"","datasetName":ref_dataset_info[0]["dataset_name"],"categoryId":ref_dataset_info[0]["category_id"],"fields":[]}
         deal_random(new_data)
         return new_data, ref_dataset_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def add_physical_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select id,alias,field_type,name from dw_field_defined where name like '%s%%%%' and field_spec='%s' order by create_time desc limit 1" %(data[1],data[3])
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":data[3],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":data[2],"associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","objectId":field_defined_info[0]["id"]}]
+        return new_data,metadata_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def del_physical_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select name from dw_field_defined where name like '%s%%%%' and field_spec='%s' order by create_time desc limit 1" %(data[1],data[3])
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = []
+        comp =field_defined_info[0]["name"]+","+data[2]
+        new_data.append(str(comp))
+        return new_data,metadata_id
     except Exception as e:
         log.error("异常信息：%s" %e)
 
@@ -386,7 +417,7 @@ def add_primary(data):
         subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
         subject_info = ms.ExecuQuery(subject.encode('utf-8'))
         project_id,subject_id = category_info[0]["project_id"],subject_info[0]["id"]
-        new_data = {"name":data[2],"alias":data[3],"subjectId":subject_info[0]["id"],"sourceTableId":"null","fieldType":data[4],"sourceFieldName":"","definition":"","description":"","categoryId":category_info[0]["id"],"length":"22","projectId":category_info[0]["project_id"],"fieldSpec":data[5]}
+        new_data = {"name":data[2],"alias":data[3],"subjectId":subject_info[0]["id"],"sourceTableId":"null","fieldType":data[4],"sourceFieldName":"","definition":"","description":"","fieldSource":data[6],"categoryId":category_info[0]["id"],"length":"22","projectId":category_info[0]["project_id"],"fieldSpec":data[5]}
         deal_random(new_data)
         return new_data,project_id,subject_id
     except Exception as e:
@@ -446,5 +477,220 @@ def update_physical(data):
         new_data = {"id":physical_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":physical_info[0]["name"],"alias":physical_info[0]["alias"],"metadataId":physical_info[0]["metadata_id"],"datasetId":physical_info[0]["dataset_id"],"datasetName":physical_info[0]["dataset_name"],"flowId":physical_info[0]["flow_id"],"flowName":physical_info[0]["flow_name"],"relationId":physical_info[0]["relation_id"],"partitionGrain":"300","partitionField":"","storageEngine":"hdfs","physicalCycle":"M_5","description":"","enabled":0,"tableSpec":physical_info[0]["table_spec"]}
         deal_random(new_data)
         return new_data,metadata_id,physical_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def add_indicator(data):
+    try:
+        data = data.split("#")
+        metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[5]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        dw_field_defined = "select name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[3]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"fieldType":field_defined_info[0]["field_type"],"sourceFieldName":field_defined_info[0]["name"],"fieldSpec":"metric","definition":"","description":"","categoryId":category_info[0]["id"],"aggrMethod":data[4],"sourceTableName":metadata_info[0]["alias"],"projectId":metadata_info[0]["project_id"],"length":"33"}
+        deal_random(new_data)
+        return new_data,project_id,subject_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def add_dimension(data):
+    try:
+        data = data.split("#")
+        metadata = "select id,project_id,subject_id,alias from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        project_id,subject_id = metadata_info[0]["project_id"],metadata_info[0]["subject_id"]
+        category = "select id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[4]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        dw_field_defined = "select name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[3]
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = {"name":data[1],"alias":data[2],"subjectId":metadata_info[0]["subject_id"],"sourceTableId":metadata_info[0]["id"],"sourceTableName":metadata_info[0]["alias"],"sourceFieldId":"null","length":"30","categoryId":category_info[0]["id"],"sourceFieldName":field_defined_info[0]["name"],"fieldSpec":"dimension","description":"","fieldType":field_defined_info[0]["field_type"],"projectId":metadata_info[0]["project_id"]}
+        deal_random(new_data)
+        return new_data,project_id,subject_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def add_metadata_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select metadata_id,source_table_ids from dw_metadata_info where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["metadata_id"]
+        dw_field_defined = "select id,alias,field_type,name from dw_field_defined where name like '%s%%%%' and field_spec='%s' order by create_time desc limit 1" %(data[1],data[3])
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        new_data = [{"alias":field_defined_info[0]["alias"],"fieldSpec":data[3],"fieldType":field_defined_info[0]["field_type"],"length":22,"name":field_defined_info[0]["name"],"fieldSource":data[2],"associatedFieldName":field_defined_info[0]["alias"],"precision":"null","unit":"null","tableSourceId":metadata_info[0]["metadata_id"],"objectId":field_defined_info[0]["id"]}]
+        deal_random(new_data)
+        return new_data,metadata_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def metadata_field(data):
+    try:
+        data = data.split("#")
+        metadata = "select id from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_id = metadata_info[0]["id"]
+        dw_field_defined = "select name from dw_field_defined where name like '%s%%%%' and field_spec='%s' order by create_time desc limit 1" %(data[1],data[2])
+        field_defined_info = ms.ExecuQuery(dw_field_defined.encode('utf-8'))
+        name = field_defined_info[0]["name"]
+        return metadata_id,name
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def query_metadata_model(data):
+    try:
+        data = data.split("#")
+        category = "select id,project_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        subject_info = ms.ExecuQuery(subject.encode('utf-8'))
+        project_id,category_id,subject_id = category_info[0]["project_id"],category_info[0]["id"],subject_info[0]["id"]
+        new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"pageNum","comparatorOperator":"EQUAL","fieldValue":0},{"logicalOperator":"AND","fieldName":"pageSize","comparatorOperator":"EQUAL","fieldValue":10},{"logicalOperator":"AND","fieldName":"tableSpec","comparatorOperator":"EQUAL","fieldValue":data[2]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        deal_random(new_data)
+        return new_data,project_id,subject_id,category_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def query_metadata_model_by_name(data):
+    try:
+        data = data.split("#")
+        category = "select id,project_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        category_info = ms.ExecuQuery(category.encode('utf-8'))
+        subject = "select id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" %data[1]
+        subject_info = ms.ExecuQuery(subject.encode('utf-8'))
+        project_id,category_id,subject_id = category_info[0]["project_id"],category_info[0]["id"],subject_info[0]["id"]
+        new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"pageNum","comparatorOperator":"EQUAL","fieldValue":0},{"logicalOperator":"AND","fieldName":"pageSize","comparatorOperator":"EQUAL","fieldValue":10},{"logicalOperator":"AND","fieldName":"alias","comparatorOperator":"LIKE","fieldValue":"%a%"},{"logicalOperator":"AND","fieldName":"tableSpec","comparatorOperator":"EQUAL","fieldValue":data[2]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+        deal_random(new_data)
+        return new_data,project_id,subject_id,category_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def update_dimension(data):
+    try:
+        data = data.split("#")
+        field_defined = "select id,alias,business_id,project_id,subject_id,field_spec,category_id,source_table_id,source_table_name,source_field_name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[0]
+        field_defined_info = ms.ExecuQuery(field_defined.encode('utf-8'))
+        field_defined_id = field_defined_info[0]["id"]
+        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":field_defined_info[0]["alias"],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableId":field_defined_info[0]["source_table_id"],"sourceTableName":field_defined_info[0]["source_table_name"],"sourceFieldName":field_defined_info[0]["source_field_name"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
+        deal_random(new_data)
+        return new_data,field_defined_id
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def get_target_metadata(data):
+    try:
+        data = data.split("#")
+        metadata = "select abbr,alias,id,source_table_ids,metadata_id,name,owner,tenant_id from dw_metadata_info where name like '%s%%%%' and table_spec='transaction' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        count_items_id = "select name,aggr_method,alias,source_field_name from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[1]
+        count_items_info = ms.ExecuQuery(count_items_id.encode('utf-8'))
+        count_orders_id = "select name,aggr_method,alias,source_field_name from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[2]
+        count_orders_info = ms.ExecuQuery(count_orders_id.encode('utf-8'))
+        max_items_num = "select name,aggr_method,alias,source_field_name from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[3]
+        max_items_num_info = ms.ExecuQuery(max_items_num.encode('utf-8'))
+        avg_items_num = "select name,aggr_method,alias,source_field_name from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[4]
+        avg_items_num_info = ms.ExecuQuery(avg_items_num.encode('utf-8'))
+        time_dim = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='timedim' order by create_time desc limit 1" %data[5]
+        time_dim_info = ms.ExecuQuery(time_dim.encode('utf-8'))
+        items_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[6]
+        items_id_info = ms.ExecuQuery(items_id.encode('utf-8'))
+        primary = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='primary' order by create_time desc limit 1" %data[7]
+        primary_info = ms.ExecuQuery(primary.encode('utf-8'))
+        orders_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[8]
+        orders_id_info = ms.ExecuQuery(orders_id.encode('utf-8'))
+        measure = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='measure' order by create_time desc limit 1" %data[9]
+        measure_info = ms.ExecuQuery(measure.encode('utf-8'))
+        orders_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[10]
+        orders_id_dimension_info = ms.ExecuQuery(orders_id_dimension.encode('utf-8'))
+        items_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[11]
+        items_id_dimension_info = ms.ExecuQuery(items_id_dimension.encode('utf-8'))
+        group_name =[]
+        group_name.append(time_dim_info[0]["name"])
+        new_data = {"aggrFields":[{"alias":count_items_info[0]["name"],"function":count_items_info[0]["aggr_method"],"name":count_items_info[0]["source_field_name"],"metric":count_items_info[0]["alias"]},{"alias":count_orders_info[0]["name"],"function":count_orders_info[0]["aggr_method"],"name":count_orders_info[0]["source_field_name"],"metric":count_orders_info[0]["alias"]},{"alias":max_items_num_info[0]["name"],"function":max_items_num_info[0]["aggr_method"],"name":max_items_num_info[0]["source_field_name"],"metric":max_items_num_info[0]["alias"]},{"alias":avg_items_num_info[0]["name"],"function":avg_items_num_info[0]["aggr_method"],"name":avg_items_num_info[0]["source_field_name"],"metric":avg_items_num_info[0]["alias"]}],"groupByFields":group_name,"sources":[{"data":{"fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_info[0]["name"],"alias":items_id_info[0]["alias"],"abbr":"","fieldType":items_id_info[0]["field_type"],"length":items_id_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_info[0]["id"],"associatedFieldName":items_id_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":primary_info[0]["name"],"alias":primary_info[0]["alias"],"abbr":"","fieldType":primary_info[0]["field_type"],"length":primary_info[0]["length"],"precision":"","unit":"","fieldSpec":primary_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":primary_info[0]["id"],"associatedFieldName":primary_info[0]["name"],"fieldSource":data[14],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_info[0]["name"],"alias":orders_id_info[0]["alias"],"abbr":"","fieldType":orders_id_info[0]["field_type"],"length":orders_id_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_info[0]["id"],"associatedFieldName":orders_id_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":measure_info[0]["name"],"alias":measure_info[0]["alias"],"abbr":"","fieldType":measure_info[0]["field_type"],"length":measure_info[0]["length"],"precision":"","unit":"","fieldSpec":measure_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":measure_info[0]["id"],"associatedFieldName":measure_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_dimension_info[0]["name"],"alias":orders_id_dimension_info[0]["alias"],"abbr":"","fieldType":orders_id_dimension_info[0]["field_type"],"length":orders_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_dimension_info[0]["id"],"associatedFieldName":orders_id_dimension_info[0]["name"],"fieldSource":data[17],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_dimension_info[0]["name"],"alias":items_id_dimension_info[0]["alias"],"abbr":"","fieldType":items_id_dimension_info[0]["field_type"],"length":items_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_dimension_info[0]["id"],"associatedFieldName":items_id_dimension_info[0]["name"],"fieldSource":data[18],"tableSourceId":metadata_info[0]["source_table_ids"]}],"currentInfoId":metadata_info[0]["id"],"metadataId":metadata_info[0]["metadata_id"],"name":metadata_info[0]["name"],"id":metadata_info[0]["id"],"tenantId":metadata_info[0]["tenant_id"],"owner":metadata_info[0]["owner"],"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"modelId":"842418354869239808","nodeId":"metadata_3","alias":metadata_info[0]["alias"],"abbr":metadata_info[0]["abbr"],"tableSpec":"transaction"},"id":"metadata_1","type":"metadata","x":195,"y":50,"name":"metadata_1"}],"target":{"data":{"fields":[],"metadataId":"","name":"","type":"metadata"},"id":"metadata_2","name":"metadata_2","type":"metadata","x":1058,"y":129},"type":"aggregate"}
+        deal_random(new_data)
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def new_data_model(data):
+    try:
+        data = data.split("#")
+        metadata = "select abbr,alias,id,source_table_ids,metadata_id,name,owner,tenant_id from dw_metadata_info where name like '%s%%%%' and table_spec='transaction' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_model = "select subject_id,category_id,project_id from dw_metadata where name like '%s%%%%' and table_spec='transaction' order by create_time desc limit 1" %data[0]
+        metadata_model_info = ms.ExecuQuery(metadata_model.encode('utf-8'))
+        count_items_id = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[1]
+        count_items_info = ms.ExecuQuery(count_items_id.encode('utf-8'))
+        count_orders_id = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[2]
+        count_orders_info = ms.ExecuQuery(count_orders_id.encode('utf-8'))
+        max_items_num = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[3]
+        max_items_num_info = ms.ExecuQuery(max_items_num.encode('utf-8'))
+        avg_items_num = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[4]
+        avg_items_num_info = ms.ExecuQuery(avg_items_num.encode('utf-8'))
+        time_dim = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='timedim' order by create_time desc limit 1" %data[5]
+        time_dim_info = ms.ExecuQuery(time_dim.encode('utf-8'))
+        items_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[6]
+        items_id_info = ms.ExecuQuery(items_id.encode('utf-8'))
+        primary = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='primary' order by create_time desc limit 1" %data[7]
+        primary_info = ms.ExecuQuery(primary.encode('utf-8'))
+        orders_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[8]
+        orders_id_info = ms.ExecuQuery(orders_id.encode('utf-8'))
+        measure = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='measure' order by create_time desc limit 1" %data[9]
+        measure_info = ms.ExecuQuery(measure.encode('utf-8'))
+        orders_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[10]
+        orders_id_dimension_info = ms.ExecuQuery(orders_id_dimension.encode('utf-8'))
+        items_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[11]
+        items_id_dimension_info = ms.ExecuQuery(items_id_dimension.encode('utf-8'))
+        group_name =[]
+        group_name.append(time_dim_info[0]["name"])
+        new_data = {"name":"api_aggr随机数","description":"api_aggr","nodes":[{"data":{"fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_info[0]["name"],"alias":items_id_info[0]["alias"],"abbr":"","fieldType":items_id_info[0]["field_type"],"length":items_id_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_info[0]["id"],"associatedFieldName":items_id_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":primary_info[0]["name"],"alias":primary_info[0]["alias"],"abbr":"","fieldType":primary_info[0]["field_type"],"length":primary_info[0]["length"],"precision":"","unit":"","fieldSpec":primary_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":primary_info[0]["id"],"associatedFieldName":primary_info[0]["name"],"fieldSource":data[14],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_info[0]["name"],"alias":orders_id_info[0]["alias"],"abbr":"","fieldType":orders_id_info[0]["field_type"],"length":orders_id_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_info[0]["id"],"associatedFieldName":orders_id_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":measure_info[0]["name"],"alias":measure_info[0]["alias"],"abbr":"","fieldType":measure_info[0]["field_type"],"length":measure_info[0]["length"],"precision":"","unit":"","fieldSpec":measure_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":measure_info[0]["id"],"associatedFieldName":measure_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_dimension_info[0]["name"],"alias":orders_id_dimension_info[0]["alias"],"abbr":"","fieldType":orders_id_dimension_info[0]["field_type"],"length":orders_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_dimension_info[0]["id"],"associatedFieldName":orders_id_dimension_info[0]["name"],"fieldSource":data[17],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_dimension_info[0]["name"],"alias":items_id_dimension_info[0]["alias"],"abbr":"","fieldType":items_id_dimension_info[0]["field_type"],"length":items_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_dimension_info[0]["id"],"associatedFieldName":items_id_dimension_info[0]["name"],"fieldSource":data[18],"tableSourceId":metadata_info[0]["source_table_ids"]}],"currentInfoId":metadata_info[0]["id"],"metadataId":metadata_info[0]["metadata_id"],"name":metadata_info[0]["name"],"id":metadata_info[0]["id"],"tenantId":metadata_info[0]["tenant_id"],"owner":metadata_info[0]["owner"],"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"modelId":"842418354869239808","nodeId":"metadata_3","alias":metadata_info[0]["alias"],"abbr":metadata_info[0]["abbr"],"tableSpec":"transaction"},"id":"metadata_1","type":"metadata","x":362,"y":62,"name":"metadata_1"},{"data":{"aggrFields":[{"alias":count_items_info[0]["name"],"function":count_items_info[0]["aggr_method"],"name":count_items_info[0]["source_field_name"],"metric":count_items_info[0]["alias"]},{"alias":count_orders_info[0]["name"],"function":count_orders_info[0]["aggr_method"],"name":count_orders_info[0]["source_field_name"],"metric":count_orders_info[0]["alias"]},{"alias":max_items_num_info[0]["name"],"function":max_items_num_info[0]["aggr_method"],"name":max_items_num_info[0]["source_field_name"],"metric":max_items_num_info[0]["alias"]},{"alias":avg_items_num_info[0]["name"],"function":avg_items_num_info[0]["aggr_method"],"name":avg_items_num_info[0]["source_field_name"],"metric":avg_items_num_info[0]["alias"]}],"groupByFields":group_name,"sources":[{"data":{"fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_info[0]["name"],"alias":items_id_info[0]["alias"],"abbr":"","fieldType":items_id_info[0]["field_type"],"length":items_id_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_info[0]["id"],"associatedFieldName":items_id_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":primary_info[0]["name"],"alias":primary_info[0]["alias"],"abbr":"","fieldType":primary_info[0]["field_type"],"length":primary_info[0]["length"],"precision":"","unit":"","fieldSpec":primary_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":primary_info[0]["id"],"associatedFieldName":primary_info[0]["name"],"fieldSource":data[14],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_info[0]["name"],"alias":orders_id_info[0]["alias"],"abbr":"","fieldType":orders_id_info[0]["field_type"],"length":orders_id_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_info[0]["id"],"associatedFieldName":orders_id_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":measure_info[0]["name"],"alias":measure_info[0]["alias"],"abbr":"","fieldType":measure_info[0]["field_type"],"length":measure_info[0]["length"],"precision":"","unit":"","fieldSpec":measure_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":measure_info[0]["id"],"associatedFieldName":measure_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_dimension_info[0]["name"],"alias":orders_id_dimension_info[0]["alias"],"abbr":"","fieldType":orders_id_dimension_info[0]["field_type"],"length":orders_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_dimension_info[0]["id"],"associatedFieldName":orders_id_dimension_info[0]["name"],"fieldSource":data[17],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_dimension_info[0]["name"],"alias":items_id_dimension_info[0]["alias"],"abbr":"","fieldType":items_id_dimension_info[0]["field_type"],"length":items_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_dimension_info[0]["id"],"associatedFieldName":items_id_dimension_info[0]["name"],"fieldSource":data[18],"tableSourceId":metadata_info[0]["source_table_ids"]}],"currentInfoId":metadata_info[0]["id"],"metadataId":metadata_info[0]["metadata_id"],"name":metadata_info[0]["name"],"id":metadata_info[0]["id"],"tenantId":metadata_info[0]["tenant_id"],"owner":metadata_info[0]["owner"],"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"modelId":"842418354869239808","nodeId":"metadata_3","alias":metadata_info[0]["alias"],"abbr":metadata_info[0]["abbr"],"tableSpec":"transaction"},"id":"metadata_1","type":"metadata","x":362,"y":62,"name":"metadata_1"}],"target":{"data":{"tenantId":"","owner":"","creator":"","lastModifier":"","nodeId":"","name":"api_aggr"+ str(random.randint(0, 999)),"alias":"api_aggr"+ str(random.randint(0, 999)),"abbr":"","tableSpec":"aggregate","fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_items_info[0]["name"],"alias":count_items_info[0]["alias"],"abbr":"","fieldType":count_items_info[0]["field_type"],"length":count_items_info[0]["length"],"precision":"","unit":"","fieldSpec":count_items_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_items_info[0]["id"],"associatedFieldName":count_items_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_orders_info[0]["name"],"alias":count_orders_info[0]["alias"],"abbr":"","fieldType":count_orders_info[0]["field_type"],"length":count_orders_info[0]["length"],"precision":"","unit":"","fieldSpec":count_orders_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_orders_info[0]["id"],"associatedFieldName":count_orders_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":max_items_num_info[0]["name"],"alias":max_items_num_info[0]["alias"],"abbr":"","fieldType":max_items_num_info[0]["field_type"],"length":max_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":max_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":max_items_num_info[0]["id"],"associatedFieldName":max_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":avg_items_num_info[0]["name"],"alias":avg_items_num_info[0]["alias"],"abbr":"","fieldType":avg_items_num_info[0]["field_type"],"length":avg_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":avg_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":avg_items_num_info[0]["id"],"associatedFieldName":avg_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]}]},"id":"metadata_2","name":"metadata_2","type":"metadata","x":1219,"y":131},"type":"aggregate"},"id":"relation_1","name":"relation_1","type":"relation","x":859,"y":145},{"data":{"tenantId":"","owner":"","creator":"","lastModifier":"","nodeId":"","name":"api_aggr"+str(random.randint(0, 999)),"alias":"api_aggr"+str(random.randint(0, 999)),"abbr":"","tableSpec":"aggregate","fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_items_info[0]["name"],"alias":count_items_info[0]["alias"],"abbr":"","fieldType":count_items_info[0]["field_type"],"length":count_items_info[0]["length"],"precision":"","unit":"","fieldSpec":count_items_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_items_info[0]["id"],"associatedFieldName":count_items_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_orders_info[0]["name"],"alias":count_orders_info[0]["alias"],"abbr":"","fieldType":count_orders_info[0]["field_type"],"length":count_orders_info[0]["length"],"precision":"","unit":"","fieldSpec":count_orders_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_orders_info[0]["id"],"associatedFieldName":count_orders_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":max_items_num_info[0]["name"],"alias":max_items_num_info[0]["alias"],"abbr":"","fieldType":max_items_num_info[0]["field_type"],"length":max_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":max_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":max_items_num_info[0]["id"],"associatedFieldName":max_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":avg_items_num_info[0]["name"],"alias":avg_items_num_info[0]["alias"],"abbr":"","fieldType":avg_items_num_info[0]["field_type"],"length":avg_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":avg_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":avg_items_num_info[0]["id"],"associatedFieldName":avg_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]}]},"id":"metadata_2","name":"metadata_2","type":"metadata","x":1219,"y":131}],"links":[{"targetId":"relation_1","sourceId":"metadata_1"},{"targetId":"metadata_2","sourceId":"relation_1"}],"subjectId":metadata_model_info[0]["subject_id"]}
+        deal_random(new_data)
+        return new_data,metadata_model_info[0]["project_id"],metadata_model_info[0]["category_id"]
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+
+def publish_data_model(data):
+    try:
+        data = data.split("#")
+        metadata = "select abbr,alias,id,source_table_ids,metadata_id,name,owner,tenant_id from dw_metadata_info where name like '%s%%%%' and table_spec='transaction' order by create_time desc limit 1" %data[0]
+        metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
+        metadata_model = "select id,business_id,category_source,version,name,subject_id,category_id,project_id from dw_model where name like '%s%%%%' order by create_time desc limit 1" %data[19]
+        metadata_model_info = ms.ExecuQuery(metadata_model.encode('utf-8'))
+        count_items_id = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[1]
+        count_items_info = ms.ExecuQuery(count_items_id.encode('utf-8'))
+        count_orders_id = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[2]
+        count_orders_info = ms.ExecuQuery(count_orders_id.encode('utf-8'))
+        max_items_num = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[3]
+        max_items_num_info = ms.ExecuQuery(max_items_num.encode('utf-8'))
+        avg_items_num = "select name,aggr_method,alias,source_field_name,field_spec,field_type,id,length from dw_field_defined where name like '%s%%%%' and field_spec='metric' order by create_time desc limit 1" %data[4]
+        avg_items_num_info = ms.ExecuQuery(avg_items_num.encode('utf-8'))
+        time_dim = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='timedim' order by create_time desc limit 1" %data[5]
+        time_dim_info = ms.ExecuQuery(time_dim.encode('utf-8'))
+        items_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[6]
+        items_id_info = ms.ExecuQuery(items_id.encode('utf-8'))
+        primary = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='primary' order by create_time desc limit 1" %data[7]
+        primary_info = ms.ExecuQuery(primary.encode('utf-8'))
+        orders_id = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='attribute' order by create_time desc limit 1" %data[8]
+        orders_id_info = ms.ExecuQuery(orders_id.encode('utf-8'))
+        measure = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='measure' order by create_time desc limit 1" %data[9]
+        measure_info = ms.ExecuQuery(measure.encode('utf-8'))
+        orders_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[10]
+        orders_id_dimension_info = ms.ExecuQuery(orders_id_dimension.encode('utf-8'))
+        items_id_dimension = "select id,alias,field_spec,field_type,name,length from dw_field_defined where name like '%s%%%%' and field_spec='dimension' order by create_time desc limit 1" %data[11]
+        items_id_dimension_info = ms.ExecuQuery(items_id_dimension.encode('utf-8'))
+        group_name =[]
+        group_name.append(time_dim_info[0]["name"])
+        new_data = {"id":metadata_model_info[0]["id"],"tenantId":metadata_info[0]["tenant_id"],"owner":metadata_info[0]["owner"],"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":metadata_model_info[0]["name"],"businessId":metadata_model_info[0]["business_id"],"subjectId":metadata_model_info[0]["subject_id"],"projectId":metadata_model_info[0]["project_id"],"description":"api_aggr","version":metadata_model_info[0]["version"],"links":[{"sourceId":"metadata_1","targetId":"relation_1"},{"sourceId":"relation_1","targetId":"metadata_2"}],"nodes":[{"type":"metadata","id":"metadata_1","name":"metadata_1","x":362,"y":62,"data":{"id":metadata_info[0]["id"],"tenantId":metadata_info[0]["tenant_id"],"owner":metadata_info[0]["owner"],"creator":"admin","createTime":"2021-05-19T18:08:20.000+0000","lastModifier":"admin","lastModifiedTime":datatime_now(),"metadataId":metadata_info[0]["metadata_id"],"modelId":"842418354869239808","nodeId":"metadata_3","name":metadata_info[0]["name"],"alias":metadata_info[0]["alias"],"abbr":metadata_info[0]["abbr"],"tableSpec":"transaction","fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_info[0]["name"],"alias":items_id_info[0]["alias"],"abbr":"","fieldType":items_id_info[0]["field_type"],"length":items_id_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_info[0]["id"],"associatedFieldName":items_id_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":primary_info[0]["name"],"alias":primary_info[0]["alias"],"abbr":"","fieldType":primary_info[0]["field_type"],"length":primary_info[0]["length"],"precision":"","unit":"","fieldSpec":primary_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":primary_info[0]["id"],"associatedFieldName":primary_info[0]["name"],"fieldSource":data[14],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_info[0]["name"],"alias":orders_id_info[0]["alias"],"abbr":"","fieldType":orders_id_info[0]["field_type"],"length":orders_id_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_info[0]["id"],"associatedFieldName":orders_id_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":measure_info[0]["name"],"alias":measure_info[0]["alias"],"abbr":"","fieldType":measure_info[0]["field_type"],"length":measure_info[0]["length"],"precision":"","unit":"","fieldSpec":measure_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":measure_info[0]["id"],"associatedFieldName":measure_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":orders_id_dimension_info[0]["name"],"alias":orders_id_dimension_info[0]["alias"],"abbr":"","fieldType":orders_id_dimension_info[0]["field_type"],"length":orders_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":orders_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":orders_id_dimension_info[0]["id"],"associatedFieldName":orders_id_dimension_info[0]["name"],"fieldSource":data[17],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":items_id_dimension_info[0]["name"],"alias":items_id_dimension_info[0]["alias"],"abbr":"","fieldType":items_id_dimension_info[0]["field_type"],"length":items_id_dimension_info[0]["length"],"precision":"","unit":"","fieldSpec":items_id_dimension_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":items_id_dimension_info[0]["id"],"associatedFieldName":items_id_dimension_info[0]["name"],"fieldSource":data[18],"tableSourceId":metadata_info[0]["source_table_ids"]}]}},{"type":"relation","id":"relation_1","name":"relation_1","x":859,"y":145,"data":{"type":"aggregate","sources":[],"aggrFields":[{"alias":count_items_info[0]["name"],"function":count_items_info[0]["aggr_method"],"name":count_items_info[0]["source_field_name"],"metric":count_items_info[0]["alias"]},{"alias":count_orders_info[0]["name"],"function":count_orders_info[0]["aggr_method"],"name":count_orders_info[0]["source_field_name"],"metric":count_orders_info[0]["alias"]},{"alias":max_items_num_info[0]["name"],"function":max_items_num_info[0]["aggr_method"],"name":max_items_num_info[0]["source_field_name"],"metric":max_items_num_info[0]["alias"]},{"alias":avg_items_num_info[0]["name"],"function":avg_items_num_info[0]["aggr_method"],"name":avg_items_num_info[0]["source_field_name"],"metric":avg_items_num_info[0]["alias"]}],"groupByFields":group_name}},{"type":"metadata","id":"metadata_2","name":"metadata_2","x":1219,"y":131,"data":{"tenantId":"","owner":"","creator":"","lastModifier":"","nodeId":"","name":"api_aggr"+str(random.randint(0, 999)),"alias":"api_aggr"+str(random.randint(0, 999)),"abbr":"","tableSpec":"aggregate","fields":[{"name":time_dim_info[0]["name"],"alias":time_dim_info[0]["alias"],"abbr":"","fieldType":time_dim_info[0]["field_type"],"length":time_dim_info[0]["length"],"precision":"","unit":"","fieldSpec":time_dim_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":time_dim_info[0]["id"],"associatedFieldName":time_dim_info[0]["name"],"fieldSource":data[12],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_items_info[0]["name"],"alias":count_items_info[0]["alias"],"abbr":"","fieldType":count_items_info[0]["field_type"],"length":count_items_info[0]["length"],"precision":"","unit":"","fieldSpec":count_items_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_items_info[0]["id"],"associatedFieldName":count_items_info[0]["name"],"fieldSource":data[13],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":count_orders_info[0]["name"],"alias":count_orders_info[0]["alias"],"abbr":"","fieldType":count_orders_info[0]["field_type"],"length":count_orders_info[0]["length"],"precision":"","unit":"","fieldSpec":count_orders_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":count_orders_info[0]["id"],"associatedFieldName":count_orders_info[0]["name"],"fieldSource":data[15],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":max_items_num_info[0]["name"],"alias":max_items_num_info[0]["alias"],"abbr":"","fieldType":max_items_num_info[0]["field_type"],"length":max_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":max_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":max_items_num_info[0]["id"],"associatedFieldName":max_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]},{"name":avg_items_num_info[0]["name"],"alias":avg_items_num_info[0]["alias"],"abbr":"","fieldType":avg_items_num_info[0]["field_type"],"length":avg_items_num_info[0]["length"],"precision":"","unit":"","fieldSpec":avg_items_num_info[0]["field_spec"],"comment":"","createTime":datatime_now(),"objectId":avg_items_num_info[0]["id"],"associatedFieldName":avg_items_num_info[0]["name"],"fieldSource":data[16],"tableSourceId":metadata_info[0]["source_table_ids"]}]}}],"categoryId":metadata_model_info[0]["category_id"],"categorySource":metadata_model_info[0]["category_source"]}
+        deal_random(new_data)
+        return new_data
     except Exception as e:
         log.error("异常信息：%s" %e)

@@ -86,4 +86,18 @@ def data_now():
     now_time_nyr = now_time.strftime('%Y-%m-%d %H:%M:%S')
     print(now_time_nyr)
     return str(now_time_nyr)
-#data_now()
+
+def hour_slice():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y-%m-%d %H')+":00:00"
+    print(now_time_nyr)
+    return str(now_time_nyr)
+
+def hour_stamp():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y%m%d%H')
+    print(now_time_nyr)
+    return str(now_time_nyr)
+hour_stamp()
