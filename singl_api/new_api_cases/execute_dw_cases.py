@@ -4,6 +4,8 @@ import os
 import re
 from openpyxl import load_workbook
 import requests
+
+from basic_info.ready_dataflow_data import delete_autotest_dw
 from util.format_res import dict_res
 from basic_info.setting import Dw_MySQL_CONFIG, dw_host
 from util.Open_DB import MYSQL
@@ -963,6 +965,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                 elif data.startswith('[') and data.endswith(']'):
                     pass
                 elif case_detail == '新增主题域':
+                    delete_autotest_dw() #清理dw测试数据
                     new_data, business_id = add_subject_data(data)
                     new_url = url.format(business_id)
                     log.info("request   url：%s " %new_url)
