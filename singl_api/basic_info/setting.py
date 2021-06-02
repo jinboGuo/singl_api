@@ -119,7 +119,7 @@ Dw_MySQL_CONFIG = {
 
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.32:8515"
+host = "http://192.168.1.145:30000"
 #host = "http://192.168.21.123:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -136,19 +136,13 @@ MySQL_CONFIG1 = {
     "PASSWORD": 'merce',
     "DB": 'test_flow',
     'case_db': 'test'}
-# MySQL_CONFIG = {
-#     'HOST': '192.168.21.123',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'demo18',
-#     'case_db': 'test'}
+
 MySQL_CONFIG = {
-    'HOST': '192.168.1.82',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_32',
+    'HOST': '192.168.1.145',
+    "PORT": 30307,
+    "USER": 'root',
+    "PASSWORD": 'root',
+    "DB": 'k8s_149',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
@@ -369,6 +363,10 @@ zmod_exectuion_id = "c462b867-db09-4adc-b49f-005c646960a6"
 # API用例使用
 collector_id = 'c9'
 
+# elasticsearch集群服务器的地址
+ES = [
+    'http://192.168.1.145:30301/'
+]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
 receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
