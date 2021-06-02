@@ -93,7 +93,7 @@ def delete_autotest_datas():
        return
 
 def delete_autotest_dw():
-    print("------开始删除测试数据-------")
+    #print("------开始删除测试数据-------")
     ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
     try:
         dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
@@ -107,27 +107,27 @@ def delete_autotest_dw():
         dw_business = "delete from dw_business where name like 'api_auto_business%'"
         dw_project = "delete from dw_project where name like 'api_auto_projects%'"
         dw_subject = "delete from dw_subject where name like 'api_auto_subject%'"
-        print("删除dw_field_defined表测试数据 ", dw_field_defined)
+        #print("删除dw_field_defined表测试数据 ", dw_field_defined)
         ms.ExecuNoQuery(dw_field_defined.encode('utf-8'))
-        print("删除dw_ref_dataset表测试数据 ", dw_ref_dataset)
+        #print("删除dw_ref_dataset表测试数据 ", dw_ref_dataset)
         ms.ExecuNoQuery(dw_ref_dataset.encode('utf-8'))
-        print("删除dw_metadata表测试数据 ", dw_metadata)
+        #print("删除dw_metadata表测试数据 ", dw_metadata)
         ms.ExecuNoQuery(dw_metadata.encode('utf-8'))
-        print("删除dw_model表测试数据 ", dw_model)
+        #print("删除dw_model表测试数据 ", dw_model)
         ms.ExecuNoQuery(dw_model.encode('utf-8'))
-        print("删除dw_category表测试数据 ", dw_category)
+        #print("删除dw_category表测试数据 ", dw_category)
         ms.ExecuNoQuery(dw_category.encode('utf-8'))
-        print("删除dw_name_rules表测试数据 ", dw_name_rules)
+        #print("删除dw_name_rules表测试数据 ", dw_name_rules)
         ms.ExecuNoQuery(dw_name_rules.encode('utf-8'))
-        print("删除dw_tagdef表测试数据 ", dw_tagdef)
+        #print("删除dw_tagdef表测试数据 ", dw_tagdef)
         ms.ExecuNoQuery(dw_tagdef.encode('utf-8'))
-        print("删除dw_taggroup表测试数据 ", dw_taggroup)
+        #print("删除dw_taggroup表测试数据 ", dw_taggroup)
         ms.ExecuNoQuery(dw_taggroup.encode('utf-8'))
-        print("删除dw_business表测试数据 ", dw_business)
+        #print("删除dw_business表测试数据 ", dw_business)
         ms.ExecuNoQuery(dw_business.encode('utf-8'))
-        print("删除dw_project表测试数据 ", dw_project)
+        #print("删除dw_project表测试数据 ", dw_project)
         ms.ExecuNoQuery(dw_project.encode('utf-8'))
-        print("删除dw_subject表测试数据 ", dw_subject)
+        #print("删除dw_subject表测试数据 ", dw_subject)
         ms.ExecuNoQuery(dw_subject.encode('utf-8'))
     except:
         return
