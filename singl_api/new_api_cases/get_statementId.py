@@ -6,7 +6,6 @@ from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
 
-log=myLog().getLog().logger
 
 # 根据host信息返回tenant信息
 def get_tenant(host):
@@ -45,7 +44,7 @@ def statementId(host, param):
     if new_data:
         url = '%s/api/datasets/%s/previewinit?rows=50' % (host, dataset_id)
         new_data = json.dumps(new_data, separators=(',', ':'))
-        res = requests.get(url=url, headers=get_headers(host), data=new_data)
+        res = requests.post(url=url, headers=get_headers(host), data=new_data)
         try:
             res_statementId = json.loads(res.text)
             print("ids:", res_statementId)
@@ -110,14 +109,14 @@ def statementId_no_dataset(host, param):
     new_data = dataset_data(param)
     new_data = json.dumps(new_data, separators=(',', ':'))
     url = '%s/api/datasets/new/previewinit?rows=50' % host
-    res = requests.get(url=url, headers=get_headers(host))
+    res = requests.post(url=url, headers=get_headers(host), data=new_data)
     try:
         res_statementId = json.loads(res.text)
         statementId = res_statementId['statementId']
         print('statement_id: ', statementId)
         return statementId, new_data
     except KeyError as e:
-        log.error("datasetId不存在{}".format(e))
+        myLog().getLog().logger.error("datasetId不存在{}".format(e))
         return
 
 
@@ -137,7 +136,7 @@ def get_sql_analyse_statement_id(host, param):
 def get_sql_analyse_dataset_info(host, params):
     sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
     # print(sql_analyse_statement_id)
-    url = ' %s/api/datasets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
+    url = ' %s/api/datasets/sql/analyzeresult?statementId=%s' % (host, sql_analyse_statement_id)
     res = requests.get(url=url, headers=get_headers(host))
     count_num = 0
     while ("waiting") in res.text or ("running") in res.text:
@@ -200,7 +199,7 @@ def steps_sql_analyzeinit_statementId(HOST, params):
         return
 
 def get_step_output_init_statementId(HOST,params):
-    url = '%s/api/steps/output/fields/init?branch=output' % HOST
+    url = '%s/api/steps/output/fields/init' % HOST
     try:
         res = requests.post(url=url, headers=get_headers(HOST), data=params)
         print(res.status_code, res.text)

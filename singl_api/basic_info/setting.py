@@ -93,7 +93,7 @@ Dsp_MySQL_CONFIG = {
     "DB": 'merce_199'
 }
 
-# -------dw环境使用-------
+# # -------dw环境使用-------
 # # # # HOST
 # dw_host = "http://192.168.1.83:8515"
 # # # # # # 数据库连接信息
@@ -119,7 +119,7 @@ Dw_MySQL_CONFIG = {
 
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.145:30000"
+host = "http://192.168.1.199:8515"
 #host = "http://192.168.21.123:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -136,13 +136,19 @@ MySQL_CONFIG1 = {
     "PASSWORD": 'merce',
     "DB": 'test_flow',
     'case_db': 'test'}
-
+# MySQL_CONFIG = {
+#     'HOST': '192.168.21.123',
+#     "PORT": 3306,
+#     "USER": 'merce',
+#     "PASSWORD": 'merce',
+#     "DB": 'demo18',
+#     'case_db': 'test'}
 MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 30307,
-    "USER": 'root',
-    "PASSWORD": 'root',
-    "DB": 'k8s_149',
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_199',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
@@ -226,20 +232,6 @@ MY_LOGIN_INFO_root_dam = {
  "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
  "HOST": "%s" % host
 }
-
-
-# # upload_file使用该用户
-# MY_LOGIN_INFO_upload_file_use = {
-#  "HEADERS": {'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqa6thIhrtfSBTQCH'},
-#  "URL": "%s/api/auth/login" % host,
-#  "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "HOST": "%s" % host
-# }
-
-
-
-
 
 
 
@@ -336,26 +328,6 @@ preProcessFlowId = "aa5f83c6-aff0-4405-8473-8c09c0f167e4"
 preProcessFlowName = "students_int_flow_filter"
 processDataId = "students_dataset_copy_int"
 
-#ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-# 查询最新创建的sql分析规则id
-# # sql_rule_id_sql = 'select id from merce_zrule where build_type = "Custom" and custom_type = "SQL" and ' \
-# #                   'name like "rule_for_SQL_students_copy%"  order by create_time desc limit 1  '
-# # sql_rule_id_list = ms.ExecuQuery(sql_rule_id_sql)
-# # sql_rule_id = [item[key] for item in sql_rule_id_list for key in item]
-# sql_rule_id = cases_for_analysis_model.CasesForRule().test_create_rule_SQL()
-# print(sql_rule_id)
-
-# 查询最新创建的分析规则id
-# rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
-# rule_id_list = ms.ExecuQuery(rule_id_sql)
-#
-# try:
-#     rule_id = rule_id_list[0]["id"]
-# except IndexError:
-#     print('没有查询到最新的分析规则，返回空')
-
-# print(rule_id_list)
-
 # 创建分析任务使用的分析模板
 zmod_id = ["e2dbfd88-0e2d-4fa2-b145-75c1a13ab455"]
 # 分析任务执行信息execution
@@ -363,11 +335,7 @@ zmod_exectuion_id = "c462b867-db09-4adc-b49f-005c646960a6"
 # API用例使用
 collector_id = 'c9'
 
-# elasticsearch集群服务器的地址
-ES = [
-    'http://192.168.1.145:30301/'
-]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
-receivers_test = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com','zhiming.wang@inforefiner.com']
+receivers_list = ['jinbo.guo@inforefiner.com', '289332729@qq.com', 'qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
+receivers_test = ['jinbo.guo@inforefiner.com', 'guojinbo2006@126.com', '289332729@qq.com', 'qian.feng@inforefiner.com']

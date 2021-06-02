@@ -25,7 +25,7 @@ class GetCheckoutDataSet(object):
 
     def __init__(self):
         """初始化数据库连接"""
-        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
+        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
         self.host = host
         self.table = "flow_dataset_info.xlsx"
         self.table_sheet = 'flow_info-57'

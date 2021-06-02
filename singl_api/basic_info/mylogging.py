@@ -63,12 +63,12 @@ class Log:
     def __init__(self):
         global resultPath, log_path
         print(PATH)
-        resultPath = PATH("logs")
+        resultPath = PATH("../basic_info/logs")
         # create result file if it doesn't exist
         if not os.path.exists(resultPath):
             os.mkdir(resultPath)
         # defined test result file name by localtime
-        log_path = resultPath + '\\'+ time.strftime('%Y%m%d_%H%M%S', time.localtime())
+        log_path = resultPath + '/'+ time.strftime('%Y%m%d_%H%M%S', time.localtime())
         # create test result file if it doesn't exist
         if not os.path.exists(log_path):
             os.mkdir(log_path)

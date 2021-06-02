@@ -8,7 +8,7 @@ from basic_info.get_auth_token import get_headers
 from util.format_res import get_time, dict_res
 import random
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],)
 
 
 # 获取schema基本信息和tenant_id, 作为参数传递给get_tenant()
