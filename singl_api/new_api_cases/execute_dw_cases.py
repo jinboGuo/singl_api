@@ -4,6 +4,8 @@ import os
 import re
 from openpyxl import load_workbook
 import requests
+
+from basic_info.ready_dataflow_data import delete_autotest_dw
 from util.format_res import dict_res
 from basic_info.setting import Dw_MySQL_CONFIG, dw_host
 from util.Open_DB import MYSQL
@@ -953,6 +955,15 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     clean_vaule(table_sheet_name, row, column)
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
+                elif data.startswith('[') and data.endswith(']'):
+                    pass
+                elif case_detail == '新增业务模块':
+                    delete_autotest_dw() #清理dw测试数据
+                    response = requests.put(url=url, headers=headers, data=data)
+                    log.info("response data：%s %s" %(response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(table_sheet_name, row, column + 4, response.text)
                 elif data.startswith('{') and data.endswith('}'):
                     log.info("request   url：%s " %url)
                     response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
@@ -960,8 +971,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     clean_vaule(table_sheet_name, row, column)
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
-                elif data.startswith('[') and data.endswith(']'):
-                    pass
                 elif case_detail == '新增主题域':
                     new_data, business_id = add_subject_data(data)
                     new_url = url.format(business_id)
