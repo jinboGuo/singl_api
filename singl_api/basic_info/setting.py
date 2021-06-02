@@ -93,7 +93,7 @@ Dsp_MySQL_CONFIG = {
     "DB": 'merce_199'
 }
 
-# # -------dw环境使用-------
+# -------dw环境使用-------
 # # # # HOST
 # dw_host = "http://192.168.1.83:8515"
 # # # # # # 数据库连接信息
@@ -336,7 +336,7 @@ preProcessFlowId = "aa5f83c6-aff0-4405-8473-8c09c0f167e4"
 preProcessFlowName = "students_int_flow_filter"
 processDataId = "students_dataset_copy_int"
 
-ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+#ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 # 查询最新创建的sql分析规则id
 # # sql_rule_id_sql = 'select id from merce_zrule where build_type = "Custom" and custom_type = "SQL" and ' \
 # #                   'name like "rule_for_SQL_students_copy%"  order by create_time desc limit 1  '
@@ -346,13 +346,13 @@ ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PAS
 # print(sql_rule_id)
 
 # 查询最新创建的分析规则id
-rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
-rule_id_list = ms.ExecuQuery(rule_id_sql)
-
-try:
-    rule_id = rule_id_list[0]["id"]
-except IndexError:
-    print('没有查询到最新的分析规则，返回空')
+# rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
+# rule_id_list = ms.ExecuQuery(rule_id_sql)
+#
+# try:
+#     rule_id = rule_id_list[0]["id"]
+# except IndexError:
+#     print('没有查询到最新的分析规则，返回空')
 
 # print(rule_id_list)
 
