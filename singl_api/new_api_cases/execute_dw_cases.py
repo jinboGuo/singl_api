@@ -22,7 +22,7 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     update_physical, add_indicator, add_dimension, add_metadata_field, metadata_field, query_metadata_model_by_name, query_metadata_model, update_dimension, add_physical_field, \
     del_physical_field, get_target_metadata, new_data_model, publish_data_model
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"],Dw_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('dw')

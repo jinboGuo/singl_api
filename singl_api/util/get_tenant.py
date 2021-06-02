@@ -40,7 +40,7 @@ def get_tenant(host):
         print("目前只处理189,81,82,83,84环境tenant，若不包含在内，请添加")
 
 def get_owner():
-    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"],Dw_MySQL_CONFIG["PORT"])
     try:
       osql = "select id from merce_user where creator='SYSTEM' and last_modifier='admin' and name='admin' "
       owners = ms.ExecuQuery(osql)

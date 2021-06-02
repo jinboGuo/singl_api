@@ -4,7 +4,7 @@ from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1, Dw_MySQL_CONFIG
 
 
 def get_dataflow_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id, name,flow_type from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -22,7 +22,7 @@ def get_dataflow_data(flow_name):
         return
 
 def query_dataflow_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -33,7 +33,7 @@ def query_dataflow_data(flow_name):
     return data
 
 def get_executions_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id from merce_flow_execution where flow_name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -46,7 +46,7 @@ def get_executions_data(flow_name):
 
 def set_upsert_data():
     print("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
     try:
       sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
       ms.ExecuNoQuery(sql.encode('utf-8'))
@@ -59,7 +59,7 @@ def set_upsert_data():
 
 def set_upsert_datas():
     print("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
     try:
         count=1
         sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
@@ -75,7 +75,7 @@ def set_upsert_datas():
 #删除测试数据
 def delete_autotest_datas():
     print("------开始删除测试数据-------")
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%'"
         flow_execution_sql = "delete from merce_flow_execution where name like 'lq%'"

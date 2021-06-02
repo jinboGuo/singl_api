@@ -5,7 +5,7 @@ from basic_info.setting import MySQL_CONFIG
 
 class CleanData(object):
     def __init__(self):
-        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 
     def clean_datasource_test_data(self):
         dss_sql = "delete from merce_dss where creator = 'admin'  and  name not like '%测试用%' "
