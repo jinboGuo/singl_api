@@ -1,0 +1,117 @@
+2021-06-02 12:21:51,474 - elasticsearch - INFO - GET http://192.168.1.145:30301/_nodes/_all/http [status:200 request:0.030s]
+2021-06-02 12:22:03,075 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - --------开始执行用例-------
+2021-06-02 12:22:03,075 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始时间：2021-06-02 12:22:03.075121
+2021-06-02 12:22:03,075 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - --------开始执行api case-------
+2021-06-02 12:22:03,075 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"name":"api_auto_business_606994050755681","alias":"api_business606994050755681","abbr":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","description":"api_auto_business"}
+2021-06-02 12:22:03,111 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增业务模块 
+2021-06-02 12:22:03,576 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607693188,"path":"/api/dw/business","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:03,577 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{}
+2021-06-02 12:22:03,597 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询业务模块 
+2021-06-02 12:22:03,597 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/business/query 
+2021-06-02 12:22:03,617 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607693241,"path":"/api/dw/business/query","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:03,617 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_business
+2021-06-02 12:22:03,651 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改业务模块 
+2021-06-02 12:22:03,675 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:03,675 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:03,675 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_business
+2021-06-02 12:22:03,691 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增主题域 
+2021-06-02 12:22:03,718 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:03,718 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:03,718 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_business
+2021-06-02 12:22:03,741 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：根据id查询主题域 
+2021-06-02 12:22:03,771 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:03,771 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:03,771 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_subject
+2021-06-02 12:22:03,791 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改主题域 
+2021-06-02 12:22:03,813 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:03,813 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:03,840 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_subject where name like 'api_auto_subject%' order by create_time desc limit 1
+2021-06-02 12:22:03,862 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除主题域 
+2021-06-02 12:22:03,883 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第8行参数查询无结果
+2021-06-02 12:22:03,883 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_business
+2021-06-02 12:22:03,905 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增项目 
+2021-06-02 12:22:03,932 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:03,932 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:03,961 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_business where name like 'api_auto_business%' order by create_time desc limit 1
+2021-06-02 12:22:03,981 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：根据id查询项目 
+2021-06-02 12:22:03,981 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/project/business/select id from dw_business where name like 'api_auto_business%' order by create_time desc limit 1/projects 
+2021-06-02 12:22:04,006 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607693627,"path":"/api/dw/project/business/select%20id%20from%20dw_business%20where%20name%20like%20'api_auto_business%25'%20order%20by%20create_time%20desc%20limit%201/projects","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,006 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_projects
+2021-06-02 12:22:04,024 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改项目 
+2021-06-02 12:22:04,047 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:04,047 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:04,074 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_project where name like 'api_auto_projects%' order by create_time desc limit 1
+2021-06-02 12:22:04,095 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询项目关联标签组 
+2021-06-02 12:22:04,095 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tagGroup/tagGroup/select id from dw_project where name like 'api_auto_projects%' order by create_time desc limit 1 
+2021-06-02 12:22:04,119 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607693742,"path":"/api/dw/tagGroup/tagGroup/select%20id%20from%20dw_project%20where%20name%20like%20'api_auto_projects%25'%20order%20by%20create_time%20desc%20limit%201","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,140 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_project where name like 'api_auto_projects%' order by create_time desc limit 1
+2021-06-02 12:22:04,171 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除项目 
+2021-06-02 12:22:04,198 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第13行参数查询无结果
+2021-06-02 12:22:04,224 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_business where name like 'api_auto_business%' order by create_time desc limit 1
+2021-06-02 12:22:04,243 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除业务模块 
+2021-06-02 12:22:04,288 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第14行参数查询无结果
+2021-06-02 12:22:04,288 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"alias":"api_tag378251417746202","description":"api_auto_tag","isSetName":1,"isMultipleSelection":1,"name":"api_auto_tag378251417746202","options":[{"name":"大","alias":"big"},{"name":"小","alias":"small"},{"name":"长","alias":"long"}]}
+2021-06-02 12:22:04,312 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增标签 
+2021-06-02 12:22:04,313 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tag 
+2021-06-02 12:22:04,340 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607693962,"path":"/api/dw/tag","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,341 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"pageable":{"pageNum":1,"pageSize":8,"pageable":true}}
+2021-06-02 12:22:04,384 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询标签 
+2021-06-02 12:22:04,384 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tag/query 
+2021-06-02 12:22:04,403 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694028,"path":"/api/dw/tag/query","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,403 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_tag
+2021-06-02 12:22:04,421 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改标签 
+2021-06-02 12:22:04,450 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:04,451 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:04,451 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_tag
+2021-06-02 12:22:04,478 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增标签组 
+2021-06-02 12:22:04,507 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:04,529 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694155,"path":"/api/dw/tagGroup/group","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,529 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"pageable":{"pageNum":1,"pageSize":8,"pageable":true}}
+2021-06-02 12:22:04,550 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询标签组 
+2021-06-02 12:22:04,550 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tagGroup/query 
+2021-06-02 12:22:04,585 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694209,"path":"/api/dw/tagGroup/query","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,585 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：None
+2021-06-02 12:22:04,615 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询标签组未关联标签 
+2021-06-02 12:22:04,615 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tagGroup/0/tags/not 
+2021-06-02 12:22:04,637 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694260,"path":"/api/dw/tagGroup/0/tags/not","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,668 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_taggroup where name like 'api_auto_taggroup%' order by create_time desc limit 1
+2021-06-02 12:22:04,684 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询标签组关联标签 
+2021-06-02 12:22:04,684 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/tagGroup/select id from dw_taggroup where name like 'api_auto_taggroup%' order by create_time desc limit 1/tags 
+2021-06-02 12:22:04,704 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694328,"path":"/api/dw/tagGroup/select%20id%20from%20dw_taggroup%20where%20name%20like%20'api_auto_taggroup%25'%20order%20by%20create_time%20desc%20limit%201/tags","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:04,705 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_taggroup
+2021-06-02 12:22:04,723 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改标签组 
+2021-06-02 12:22:04,742 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:04,743 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:04,743 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_tag
+2021-06-02 12:22:04,764 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改已绑定标签组的标签 
+2021-06-02 12:22:04,799 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:04,799 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:04,828 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_tagdef where name like 'api_auto_tag%' order by create_time desc limit 1
+2021-06-02 12:22:04,850 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除已绑定标签组的标签 
+2021-06-02 12:22:04,879 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第24行参数查询无结果
+2021-06-02 12:22:04,905 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_taggroup where name like 'api_auto_taggroup%' order by create_time desc limit 1
+2021-06-02 12:22:04,923 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除标签组 
+2021-06-02 12:22:04,950 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第25行参数查询无结果
+2021-06-02 12:22:04,981 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_tagdef where name like 'api_auto_tag%' order by create_time desc limit 1
+2021-06-02 12:22:05,003 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除标签 
+2021-06-02 12:22:05,033 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第26行参数查询无结果
+2021-06-02 12:22:05,033 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"alias":"api_auto_namerule190879627641441","name":"api_auto_namerule190879627641441","createTime":"","description":"","rules":"metadata,subject","abbr":""}
+2021-06-02 12:22:05,053 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：新增命名规则 
+2021-06-02 12:22:05,053 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/nameRules/nameRules 
+2021-06-02 12:22:05,077 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694701,"path":"/api/dw/nameRules/nameRules","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:05,078 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"pageable":{"pageNum":1,"pageSize":8,"pageable":true}}
+2021-06-02 12:22:05,102 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询命名规则 
+2021-06-02 12:22:05,103 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/nameRules/nameRules 
+2021-06-02 12:22:05,138 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694761,"path":"/api/dw/nameRules/nameRules","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:05,168 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_name_rules where alias like 'api_auto_namerule%' order by create_time desc limit 1
+2021-06-02 12:22:05,192 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：查询已关联规则的命名规则 
+2021-06-02 12:22:05,192 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request   url：http://192.168.1.145:30000/api/dw/nameRules/select id from dw_name_rules where alias like 'api_auto_namerule%' order by create_time desc limit 1/has 
+2021-06-02 12:22:05,215 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - response data：404 {"timestamp":1622607694838,"path":"/api/dw/nameRules/select%20id%20from%20dw_name_rules%20where%20alias%20like%20'api_auto_namerule%25'%20order%20by%20create_time%20desc%20limit%201/has","status":404,"error":"Not Found","message":null}
+2021-06-02 12:22:05,215 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：api_auto_namerule
+2021-06-02 12:22:05,233 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：修改命名规则 
+2021-06-02 12:22:05,267 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：tuple index out of range
+2021-06-02 12:22:05,267 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - ERROR - 异常信息：cannot unpack non-iterable NoneType object
+2021-06-02 12:22:05,311 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：select id from dw_name_rules where alias like 'api_auto_namerule%' order by create_time desc limit 1
+2021-06-02 12:22:05,332 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 开始执行：删除命名规则 
+2021-06-02 12:22:05,368 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - 第31行参数查询无结果
+2021-06-02 12:22:05,368 - E:\Download\singl_api\Reports\Log\AutoTest_20210602.log - INFO - request  data：{"pageable":{"pageNum":1,"pageSize":8,"pageable":true}}
