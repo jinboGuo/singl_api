@@ -9,7 +9,7 @@ from util.get_tenant import get_tenant, get_owner
 from util.timestamp_13 import datatime_now
 from util.logs import Logger
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
 log = Logger().get_log()
 
 def query_subject_data(data):

@@ -4,7 +4,7 @@ from basic_info.setting import Dw_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from util.logs import Logger
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
 log = Logger().get_log()
 
 def deal_parameters(data):

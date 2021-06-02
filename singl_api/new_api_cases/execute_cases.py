@@ -2,13 +2,19 @@
 import json
 import os
 import re
+import threading
 import time
+from datetime import datetime
+import jsonpath
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 
 from basic_info.mylogging import myLog
+from httpop.Httpop import Httpop
 from util import get_host
 from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
+from util.elasticsearch import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
@@ -24,15 +30,18 @@ from new_api_cases.get_statementId import statementId, statementId_no_dataset, g
 from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, get_applicationId, \
     get_woven_qaoutput_dataset_path, upload_jar_file_workflow, upload_jar_file_dataflow, upload_jar_file_filter, \
     dss_data, upddss_data, dataset_data, upddataset_data, create_schema_data, updschema_data, create_flow_data, \
-    update_flow_data
+    update_flow_data, filesets_data, get_old_id_name, get_collector_data
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('199')
+case_table_sheet = case_table.get_sheet_by_name('k8s_149')
 all_rows = case_table_sheet.max_row
-jar_dir = ab_dir('woven-common-3.0.jar')
-
+jar_dir=os.path.join(os.path.abspath('.'),'attachment\process-20210524164710.woven')
+fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
+log=myLog().getLog().logger
+minio_data=[]
+httpop=Httpop()
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
@@ -76,7 +85,7 @@ def deal_request_method():
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
                     post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                                    data=request_data, table_sheet_name=case_table_sheet)
+                                              data=request_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
@@ -89,6 +98,10 @@ def deal_request_method():
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(url=request_url, host=host, data=request_data,table_sheet_name=case_table_sheet,row=i,column=8, headers=get_headers(host))
 
+                elif request_method_upper == 'TEST':
+                    t1=threading.Thread(target=test1, args=(request_url, request_data, host, case_table_sheet, i,8, get_headers(host)))
+                    t1.start()
+
                 else:
                     print('请求方法%s不在处理范围内' % request_method)
         else:
@@ -96,10 +109,33 @@ def deal_request_method():
     #  执行结束后保存表格
     case_table.save(ab_dir("api_cases.xlsx"))
 
+def test1(url, data, host, table_sheet_name,row, column,headers):
+    global response
+    count = 0
+    new_data={"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":'%'+data+'%'},{"logicalOperator":"AND","fieldName":"flowType","comparatorOperator":"EQUAL","fieldValue":"dataflow"},{"logicalOperator":"AND","fieldName":"flowId","comparatorOperator":"EQUAL","fieldValue":"9b2b25fe-29e1-4874-abf6-d7741c091848"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+    new_data=json.dumps(new_data)
+    print(new_data)
+    while count <=10:
+        print(url,new_data,headers)
+        response = httpop.api_post(url=url, headers=headers, data=new_data)
+        print("response",response)
+        print("response.text",response.text)
+        response_new=json.loads(response.text)
+        print("response_new",response_new)
+        if response_new["content"]==[]:
+            print("sleep",datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            time.sleep(60)
+            break
+        count+=1
+    print("开始写文件",response.text)
+    clean_vaule(table_sheet_name, row, column)
+    write_result(sheet=table_sheet_name, row=row, column=column, value= response.status_code)
+    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+    case_table.save(ab_dir("api_cases.xlsx"))
+
 
 # POST请求
 def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):
-    # if isinstance(data, str):
     global case_detail
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
@@ -107,13 +143,10 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
             statement = statementId_no_dataset(host, dict_res(data))
-            #print("statementid:", statement)
             new_url = url.format(statement)
-            #print("new_url", new_url)
             data = data.encode('utf-8')
-            response = requests.post(url=new_url, headers=headers, data=data)
+            response=httpop.api_post(url=new_url, headers=headers, data=data)
             print(response.text, response.status_code)
-            # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -124,7 +157,20 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = dss_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            # response = httpop.api_post(url=url, headers=headers, data=new_data)
+            response=httpop.api_post(url=url, headers=headers, data=new_data)
+            print(response.text, response.status_code)
+            # print(response.url)
+            # 将返回的status_code和response.text分别写入第10列和第14列
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '根据name查询数据源' in case_detail:
+            print('开始执行：', case_detail)
+            new_data = dss_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_data:", new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
@@ -137,7 +183,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = create_schema_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
@@ -150,9 +196,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = create_flow_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
-            # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -163,9 +208,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = dss_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
-            # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -173,11 +217,9 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '测试JDBC数据库连接':
             print('开始执行：', case_detail)
             dss_id, new_data = upddss_data(data)
-            #new_url = url.format(dss_id)
-            #print(new_url)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print("response data:", response.status_code, response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)
@@ -188,79 +230,27 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = dataset_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_get(url=url, headers=headers)
             print(response.text, response.status_code)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '根据statementId取Dataset数据'in case_detail:
+
+        elif case_detail == '根据statementId取Dataset数据(no datasetId)':
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
-            statement_id, new_data = statementId_no_dataset(host, data)
-            #new_data = json.dumps(new_data, separators=(',', ':'))
-            new_url = url.format(statement_id)
-            print("new_url-new_data:", new_url, new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            statement = statementId_no_dataset(host, dict_res(data))
+            print("statementid:", statement)
+            new_url = url.format(statement)
+            data = data.encode('utf-8')
+            response = httpop.api_get(url=new_url, headers=headers)
             print(response.text, response.status_code)
+            # print(response.url)
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # elif case_detail == 'HDFS，根据statementId取结果数据(datasetId不存在)':
-        #     # 先获取statementId,然后格式化URL，再发送请求
-        #     print('开始执行：', case_detail)
-        #     statement = statementId_no_dataset(host, dict_res(data))
-        #     print("statementid:", statement)
-        #     new_url = url.format(statement)
-        #     #print("new_url", new_url)
-        #     data = data.encode('utf-8')
-        #     response = requests.post(url=new_url, headers=headers, data=data)
-        #     print(response.text, response.status_code)
-        #     # print(response.url)
-        #     # 将返回的status_code和response.text分别写入第10列和第14列
-        #     clean_vaule(table_sheet_name, row, column)
-        #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # elif case_detail == 'HIVE，根据statementId取Dataset数据(datasetId不存在)':
-        #     # 先获取statementId,然后格式化URL，再发送请求
-        #     print('开始执行：', case_detail)
-        #     statement = statementId_no_dataset(host, dict_res(data))
-        #     #print("statementid:", statement)
-        #     new_url = url.format(statement)
-        #     #print("new_url", new_url)
-        #     data = data.encode('utf-8')
-        #     response = requests.post(url=new_url, headers=headers, data=data)
-        #     print(response.text, response.status_code)
-        #     # print(response.url)
-        #     # 将返回的status_code和response.text分别写入第10列和第14列
-        #     clean_vaule(table_sheet_name, row, column)
-        #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # elif case_detail == 'KAFKA，根据statementId取Dataset数据(datasetId不存在)':
-        #     # 先获取statementId,然后格式化URL，再发送请求
-        #     print('开始执行：', case_detail)
-        #     statement = statementId_no_dataset(host, dict_res(data))
-        #     new_url = url.format(statement)
-        #     data = data.encode('utf-8')
-        #     response = requests.post(url=new_url, headers=headers, data=data)
-        #     print(response.text, response.status_code)
-        #     # 将返回的status_code和response.text分别写入第10列和第14列
-        #     clean_vaule(table_sheet_name, row, column)
-        #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # elif case_detail == 'FTP，根据statementId取Dataset数据(datasetId不存在)':
-        #     # 先获取statementId,然后格式化URL，再发送请求
-        #     print('开始执行：', case_detail)
-        #     statement = statementId_no_dataset(host, dict_res(data))
-        #     new_url = url.format(statement)
-        #     data = data.encode('utf-8')
-        #     response = requests.post(url=new_url, headers=headers, data=data)
-        #     print(response.text, response.status_code)
-        #     # 将返回的status_code和response.text分别写入第10列和第14列
-        #     clean_vaule(table_sheet_name, row, column)
-        #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-        #     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '新Dataset预览接口,得到statement  id(datasetId存在)':
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
@@ -268,7 +258,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_url = url.format(dataset_id)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            response = httpop.api_post(url=new_url, headers=headers, data=new_data)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
@@ -281,7 +271,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_url = url.format(dataset_id, statement_id)
             print(new_url)
             print("new_data:", new_data)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
+            response = httpop.api_post(url=new_url, headers=headers)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
@@ -294,11 +284,11 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             execte_use_params = json.dumps(execte_use_params, separators=(',', ':'))
             execte_statement_id = get_sql_execte_statement_id(host, data)  # statement id
             new_url = url.format(execte_statement_id)
-            response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+            response = httpop.api_post(url=new_url, headers=headers, data=execte_use_params)
             count_num = 0
             while ("waiting") in response.text or ("running") in response.text:
                 print('再次查询前', response.text)
-                response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+                response = httpop.api_post(url=new_url, headers=headers, data=execte_use_params)
                 count_num += 1
                 if count_num == 100:
                     return
@@ -312,7 +302,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = dataset_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -323,12 +313,12 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             set_upsert_data()
             new_data = get_dataflow_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=data)
+            response = httpop.api_post(url=url, headers=headers, data=data)
             print(response.text, response.status_code)
             count_num = 0
             while ("waiting") in response.text or ("running") in response.text:
                 print('再次查询前',response.text)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 count_num += 1
                 if count_num == 100:
                     return
@@ -339,12 +329,12 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             new_data = get_dataflow_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             count_num = 0
             while ("waiting") in response.text or ("RUNNING") in response.text:
                 print('再次查询前', response.text)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 time.sleep(5)
                 count_num += 1
                 if count_num == 100:
@@ -356,17 +346,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             new_data = query_dataflow_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             count_num = 0
             time.sleep(5)
             while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
                 print('再次查询前', response.text)
-                response = requests.post(url=url, headers=headers, data=new_data)
+                response = httpop.api_post(url=url, headers=headers, data=new_data)
                 time.sleep(5)
                 count_num += 1
-                #if ('"type":"SUCCEEDED"') in response.text or ("FAILED")in response.text or ("KILLED") in response.text:
-                    #return
                 if count_num == 150:
                     return
             clean_vaule(table_sheet_name, row, column)
@@ -376,12 +364,12 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             new_data = get_executions_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             count_num = 0
             while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
                 print('再次查询前', response.text)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 count_num += 1
                 if count_num == 10:
                     return
@@ -393,12 +381,12 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = query_dataflow_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("url:", url)
-            response = requests.post(url=url, headers=headers, data=data)
+            response = httpop.api_post(url=url, headers=headers, data=data)
             count_num = 0
             time.sleep(5)
             while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
                 #print('再次查询前', response.text)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 time.sleep(5)
                 count_num += 1
                 #if ('"type":"SUCCEEDED"') in response.text or ("FAILED")in response.text or ("KILLED") in response.text:
@@ -412,11 +400,11 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             new_data = get_executions_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             count_num = 0
             while ("waiting") in response.text or ("READY") in response.text or ("RUNNING") in response.text:
                 print('再次查询前', response.text)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 count_num += 1
                 if count_num == 10:
                     return
@@ -426,31 +414,33 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '批量删除execution':
             print('开始执行：', case_detail)
             # 需要先查询指定flow下的所有execution，从中取出execution id，拼装成list，传递给删除接口
-            query_execution_url = '%s/api/executions/query' % host
-            all_exectuions = requests.post(url=query_execution_url, headers=headers, data=data)
-            executions_dict = dict_res(all_exectuions.text)
-            try:
-                executions_content = executions_dict['content']
-                all_ids = [] # 该list用来存储所有的execution id
-                for item in executions_content:
-                    executions_content_id = item['id']
-                    all_ids.append(executions_content_id)
-            except Exception as e:
-                print(e)
-            else:  # 取出一个id放入一个新的list，作为传递给removeLIst接口的参数
-                removelist_data = []
-                removelist_data.append(all_ids[-1])
-                # 执行删除操作
-                removeList_result = requests.post(url=url, headers=headers, json=removelist_data)
-                print(removeList_result.text, removeList_result.status_code)
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=removeList_result.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=removeList_result.text)
+            # query_execution_url = '%s/api/executions/query' % host
+            # all_exectuions = httpop.api_post(url=query_execution_url, headers=headers, data=data)
+            # executions_dict = dict_res(all_exectuions.text)
+            # try:
+            #     executions_content = executions_dict['content']
+            #     all_ids = [] # 该list用来存储所有的execution id
+            #     for item in executions_content:
+            #         executions_content_id = item['id']
+            #         all_ids.append(executions_content_id)
+            # except Exception as e:
+            #     print(e)
+            # else:  # 取出一个id放入一个新的list，作为传递给removeLIst接口的参数
+            #     removelist_data = []
+            #     removelist_data.append(all_ids[-1])
+            #     # 执行删除操作
+            #     removeList_result = httpop.api_post(url=url, headers=headers, json=removelist_data)
+            #     print(removeList_result.text, removeList_result.status_code)
+            data=json.dumps(data, separators=(',', ':'))
+            response = httpop.api_post(url=url, headers=headers, data=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
 
         elif case_detail == '停止一个采集器任务的执行':
             print('开始执行：', case_detail)
             task_id = get_job_tasks_id(data)
-            response = requests.post(url=url, headers=headers, json=task_id)
+            response = httpop.api_post(url=url, headers=headers, json=task_id)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -459,7 +449,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             print("data:", data)
             new_data = json.dumps(data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -468,7 +458,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             print("data:", data)
             #new_data = json.dumps(data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=data)
+            response = httpop.api_post(url=url, headers=headers, data=data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -477,28 +467,28 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             print("data:", data)
             #new_data = json.dumps(data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=data)
+            response = httpop.api_post(url=url, headers=headers, data=data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '指定目录下创建子目录':
             print('开始执行：', case_detail)
-            response = requests.post(url=url, headers=headers, json=dict_res(data))
+            response = httpop.api_post(url=url, headers=headers, json=dict_res(data))
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '项目目录指定目录创建dataset':
             print('开始执行：', case_detail)
-            response = requests.post(url=url, headers=headers, data=data)
+            response = httpop.api_post(url=url, headers=headers, data=data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '数据源状态监控分析图数据':  # 查看当前时间至向前一周的数据源状态
             data = {"fieldList":[{"fieldName":"createTime","fieldValue":get_time(),"comparatorOperator":"GREATER_THAN","logicalOperator":"AND"},{"fieldName":"createTime","fieldValue":1555516800000,"comparatorOperator":"LESS_THAN"}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8,"groupBy":"testTime"}
-            response = requests.post(url=url,headers=headers, json=data)
+            response = httpop.api_post(url=url,headers=headers, json=data)
             print(response.status_code,response.text)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -507,7 +497,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             files = {"file": open(jar_dir, 'rb')}
             headers.pop('Content-Type')
-            response = requests.post(url=url, files=files, headers=headers)
+            response = httpop.api_post(url=url, files=files, headers=headers)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -516,7 +506,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print('开始执行：', case_detail)
             new_data = json.dumps(data, separators=(',', ':'))
             print(new_data)
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -526,12 +516,12 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             data[0], statementId1, data[1] = statementId(host, data)
             print("fh", data[0], statementId1, data[1])
             new_url = url.format(data[0], statementId1)
-            response = requests.post(url=new_url, headers=headers, data=data[1])
+            response = httpop.api_post(url=new_url, headers=headers, data=data[1])
             print(response.text, response.status_code)
             count_num = 0
             while "running" in response.text or "waiting" in response.text:
                 time.sleep(5)
-                response = requests.post(url=new_url, headers=headers, data=data[1])
+                response = httpop.api_post(url=new_url, headers=headers, data=data[1])
                 count_num += 1
                 if count_num == 100:
                     return
@@ -541,7 +531,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         # elif case_detail == '注册工作流选择器':
         #     fileName = upload_jar_file_workflow()
         #     new_url = url.format(fileName)
-        #     response = requests.post(url=new_url, headers=headers, data=data)
+        #     response = httpop.api_post(url=new_url, headers=headers, data=data)
         #     print(response.text, response.status_code)
         #     clean_vaule(table_sheet_name, row, column)
         #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -549,7 +539,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         # elif case_detail == '注册批处理选择器':
         #     fileName = upload_jar_file_dataflow()
         #     new_url = url.format(fileName)
-        #     response = requests.post(url=new_url, headers=headers, data=data)
+        #     response = httpop.api_post(url=new_url, headers=headers, data=data)
         #     print(response.text, response.status_code)
         #     clean_vaule(table_sheet_name, row, column)
         #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -557,7 +547,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         # elif case_detail == '注册过滤器':
         #     fileName = upload_jar_file_filter()
         #     new_url = url.format(fileName)
-        #     response = requests.post(url=new_url, headers=headers, data=data)
+        #     response = httpop.api_post(url=new_url, headers=headers, data=data)
         #     print(response.text, response.status_code)
         #     clean_vaule(table_sheet_name, row, column)
         #     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -567,7 +557,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             files = {"file": open(dir2, 'rb')}
             headers = get_headers(host)
             headers.pop('Content-Type')
-            response = requests.post(url, files=files, headers=headers)
+            response = httpop.api_post(url, files=files, headers=headers)
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -576,7 +566,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == "获取令牌":
             headers["Content-Type"] = "application/x-www-form-urlencoded"
             headers.pop('X-AUTH-TOKEN')
-            response = requests.post(url, headers=headers, data=dict_res(data))
+            response = httpop.api_post(url, headers=headers, data=dict_res(data))
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -587,9 +577,9 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 new_data = {"fieldList": [
                     {"fieldName": "executionId", "fieldValue": data, "comparatorOperator": "EQUAL",
                      "logicalOperator": "AND"}], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"},
-                            "offset": 0, "limit": 8}
+                    "offset": 0, "limit": 8}
                 print(new_data)
-                response = requests.post(url=url, headers=headers, json=new_data)
+                response = httpop.api_post(url=url, headers=headers, json=new_data)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -600,11 +590,11 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             # 停用所选id的user
             new_data = [{"id": data, "enabled": 0}]
             del_url = '%s/api/user/resetStatus' % host
-            res = requests.post(url=del_url, headers=headers, json=new_data)
+            res = httpop.api_post(url=del_url, headers=headers, json=new_data)
             # 删除指定id的user
             del_user_id = []
             del_user_id.append(data)
-            response = requests.post(url=url, headers=headers, json=del_user_id)
+            response = httpop.api_post(url=url, headers=headers, json=del_user_id)
             print('删除后：', response.status_code, response.content)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -613,20 +603,20 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
             if case_detail == '登录':
                 data = {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '密码错误的账户登录':
                 data = {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456555'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '不存在的账户登录':
                 data = {'name': encrypt_rf('admin12399999999999999'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -634,7 +624,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif case_detail == '没有权限的账户登录':
                 data = {'name': encrypt_rf('user_without_pression'), 'password': encrypt_rf('123456'),
                         'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -642,7 +632,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif case_detail == '有权限，密码过期的账户登录':
                 data = {'name': encrypt_rf('user_pwd_expired'), 'password': encrypt_rf('123456'),
                         'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -650,7 +640,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif case_detail == '有权限，用户有效期过期的账户登录':
                 data = {'name': encrypt_rf('user_time_expired'), 'password': encrypt_rf('123456'),
                         'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -658,46 +648,196 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             elif case_detail == '有权限，密码和用户有效期均过期的账户登录':
                 data = {'name': encrypt_rf('user_expired'), 'password': encrypt_rf('123456'),
                         'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')}
-                response = requests.post(url=url, headers=new_headers, data=data)
+                response = httpop.api_post(url=url, headers=new_headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '创建非结构化文件集合' in case_detail:
+            new_data=filesets_data(data)
+            # new_data = json.dumps(new_data, separators=(',', ':'))
+            response=httpop.api_post(url=url, headers=headers, json=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '提交flow' in case_detail:
+            new_data=get_old_id_name(data)
+            # new_data = json.dumps(new_data, separators=(',', ':'))
+            response=httpop.api_post(url=url, headers=headers, json=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '启用数据导入任务' in case_detail:
+            new_data=json.dumps(data)
+            response=httpop.api_post(url=url, headers=headers, data=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '编辑停用状态的数据导入任务' in case_detail:
+            new_url=url.format(data)
+            data=get_collector_data(data)
+            response = httpop.api_post(url=new_url, headers=headers, data=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column+4, response.text)
+        elif ('根据ID查询数据同步任务信息' or '查看指定job id的task') in case_detail:
+            new_url=url.format(data)
+            data={"fieldList":[],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            response = httpop.api_post(url=new_url, headers=headers, json=data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column+4, response.text)
+        elif ('分页查询文件内容') in case_detail:
+            para=data.split('&')
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            content=para[4]
+            new_data={"content":content,"offset":0,"limit":8,"ids":es_id}
+            response = httpop.api_post(url=url, headers=headers, json=new_data)
+            print("response data:", response.status_code, response.text)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(table_sheet_name, row, column, response.status_code)
+            write_result(table_sheet_name, row, column+4, response.text)
+        elif "下载ES索引文件" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_data=json.dumps(es_id)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("新建标签" or "更新标签") in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            data={"ids":es_id,"tags":eval(para[4])}
+            # new_data=json.dumps(es_id)
+            response = httpop.api_post(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("清空标签") in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            data={"ids":es_id}
+            # new_data=json.dumps(es_id)
+            response = httpop.api_post(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif case_detail=="下载文件":
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_data=json.dumps(es_id)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "预览缩略图" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_url=url.format(es_id[0])
+            # new_data=json.dumps(es_id)
+            response = httpop.api_post(url=new_url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "编辑图片" in case_detail:
+            para=data.split("&")
+            es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+            new_url=url.format(es_id[0])
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            headers["Accept"]='*/*'
+            response = httpop.api_post(url=new_url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("缩略图和列表") in case_detail:
+            para=data.split("&")
+            es_ids=get_es_data_for_thumbnailMode(para[0],para[1],para[2])
+            es_ids=json.dumps(es_ids)
+            response = httpop.api_post(url=url, headers=headers, data=es_ids)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif ("服务器创建新目录") in case_detail:
+            new_url=url.format(data)
+            minio_data.append(data)
+            if "MINIO" in case_detail:
+                data={"password":"inforefiner","port":"9000","host":"192.168.1.81","region":"","username":"minio"}
+            elif "OZONE" in case_detail:
+                data= {}
+            response = httpop.api_post(url=new_url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "上传图片_MINIO" in case_detail:
+            # new_url=url.format('/'+minio_data[0])
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            response = httpop.api_post(url=url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "上传图片_OZONE" in case_detail:
+            fs = {"file": open(fileset_dir, 'rb')}
+            headers.pop('Content-Type')
+            response = httpop.api_post(url=url, headers=headers, files=fs)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+
+
+
         else:
             print('开始执行：', case_detail)
             if data:
                 data = str(data)
                 # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
                 if '&' in data:
-                   # 分隔参数
-                   parameters = data.split('&')
-                   # 拼接URL
-                   new_url = url.format(parameters[0])
-                   # 发送的参数体
-                   parameters_data = parameters[-1]
-                   if parameters_data.startswith('{'):
-                      response = requests.post(url=new_url, headers=headers, json=dict_res(parameters_data))
-                      print("response data:", response.status_code, response.text)
-                      clean_vaule(table_sheet_name, row, column)
-                      write_result(table_sheet_name, row, column, response.status_code)
-                      write_result(table_sheet_name, row, column+4, response.text)
-                   else:
-                    print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
+                    # 分隔参数
+                    parameters = data.split('&')
+                    # 拼接URL
+                    new_url = url.format(parameters[0])
+                    # 发送的参数体
+                    parameters_data = parameters[-1]
+                    if parameters_data.startswith('{'):
+                        response = httpop.api_post(url=new_url, headers=headers, json=dict_res(parameters_data))
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column+4, response.text)
+                    else:
+                        print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
                 elif data.startswith('select id'):
-                     result = ms.ExecuQuery(data)
-                     if result:
-                       new_data = result[0]["id"]
-                       new_url = url.format(new_data)
-                       response = requests.post(url=url, headers=headers, data=new_data)
-                       print("response data:", response.status_code, response.text)
-                       clean_vaule(table_sheet_name, row, column)
-                       write_result(table_sheet_name, row, column, response.status_code)
-                       write_result(table_sheet_name, row, column + 4, response.text)
-                     else:
+                    result = ms.ExecuQuery(data)
+                    if result:
+                        new_data = result[0]["id"]
+                        new_url = url.format(new_data)
+                        response = httpop.api_post(url=url, headers=headers, data=new_data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column + 4, response.text)
+                    else:
                         print('请确认result:！', result)
                 elif data.startswith('{') and data.endswith('}'):
                     data_dict = dict_res(data)
-                    response = requests.post(url=url, headers=headers, json=data_dict)
+                    response = httpop.api_post(url=url, headers=headers, json=data_dict)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -707,14 +847,14 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                     if "'" in data:
                         data = data.replace("'", '"')
                         print(data)
-                        response = requests.post(url=url, headers=headers, data=data)
+                        response = httpop.api_post(url=url, headers=headers, data=data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     else:
                         print(data)
-                        response = requests.post(url=url, headers=headers, data=data)
+                        response = httpop.api_post(url=url, headers=headers, data=data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -726,27 +866,27 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                     if "'" in new_data:
                         print(data)
                         new_data = new_data.replace("'", '"')
-                        response = requests.post(url=url, headers=headers, data=new_data)
+                        response = httpop.api_post(url=url, headers=headers, data=new_data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     else:
                         print(data)
-                        response = requests.post(url=url, headers=headers, data=new_data)
+                        response = httpop.api_post(url=url, headers=headers, data=new_data)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 print(data)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = httpop.api_post(url=url, headers=headers, data=data)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        myLog().getLog().logger.error("测试用例{}执行过程中出错{}".format(case_detail,e))
+        log.error("测试用例{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
@@ -771,11 +911,11 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 parameter_list.append(data)
                 parameter_list.append(statement_id)
                 url_new = url.format(parameter_list[0], parameter_list[1])
-                response = requests.get(url=url_new, headers=headers)
+                response = httpop.api_get(url=url_new, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while response.text in ('{"statement":"waiting"}', '{"statement":"running"}'):
-                    response = requests.get(url=url_new, headers=headers)
+                    response = httpop.api_get(url=url_new, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -786,7 +926,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 sql_analyse_statement_id = get_sql_analyse_statement_id(host, data)
                 new_url = url.format(sql_analyse_statement_id)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -795,7 +935,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 cancel_statement_id = get_sql_analyse_statement_id(host, data)
                 new_url = url.format(cancel_statement_id)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name,
                             row, column)
@@ -807,11 +947,11 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 data = data.encode('utf-8')
                 datasetName_statementId = steps_sql_parseinit_statemenId(host, data)
                 new_url = url.format(datasetName_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while response.text in ('{"statement":"waiting"}', '{"statement":"running"}'):
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -822,11 +962,11 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 steps_sql_analyse_statementId = steps_sql_analyzeinit_statementId(host, data)
                 new_url = url.format(steps_sql_analyse_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "waiting" in response.text or "running"in response.text:
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -838,7 +978,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 data = data.encode('utf-8')
                 cancel_sql_parseinit_statementId = steps_sql_parseinit_statemenId(host, data)
                 new_url = url.format(cancel_sql_parseinit_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -850,7 +990,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 time.sleep(5)
                 new_url = url.format(task_id)
                 # time.sleep(2)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -859,7 +999,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 token = get_auth_token(host)
                 new_url = url.format(token)
-                response = requests.get(url=new_url,headers=headers)
+                response = httpop.api_get(url=new_url,headers=headers)
                 print(response.text, response.status_code)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -868,7 +1008,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 new_url = url.format(data)
                 print(new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -878,12 +1018,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 init_statementId = get_step_output_init_statementId(host, data)
                 # print(init_statementId)
                 new_url = url.format(init_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 1
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -894,12 +1034,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 ensure_statementId = get_step_output_ensure_statementId(host, data)
                 new_url = url.format(ensure_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -912,12 +1052,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 res_statementId = statementId_flow_output_use(host, data)
                 new_url = url.format(data, res_statementId)
                 print("new_url: ", new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -929,12 +1069,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 res_statementId = statementId_flow_output_use(host, data)
                 new_url = url.format(data, res_statementId)
                 print("new_url: ", new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -947,12 +1087,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 res_statementId = statementId_flow_output_use(host, data)
                 new_url = url.format(data, res_statementId)
                 print("new_url: ", new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -964,12 +1104,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 res_statementId = statementId_flow_output_use(host, data)
                 new_url = url.format(data, res_statementId)
                 print("new_url: ", new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -980,12 +1120,12 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 res_statementId = statementId_flow_output_use(host, data)
                 new_url = url.format(res_statementId)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     time.sleep(5)
-                    response = requests.get(url=new_url, headers=headers)
+                    response = httpop.api_get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
@@ -996,21 +1136,64 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print(host, data)
                 statement_id = statementId_flow_use(host, data,tenant_id_83)
                 url = url.format(data,statement_id)
-                response = requests.get(url=url,headers=headers)
+                response = httpop.api_get(url=url,headers=headers)
                 print(response.text, response.status_code)
                 count_num = 0
                 while ("waiting") in response.text or ("running") in response.text:
                     print('再次查询前',response.status_code, response.text)
-                    response = response = requests.get(url=url,headers=headers)
+                    response = response = httpop.api_get(url=url,headers=headers)
                     count_num += 1
                     if count_num == 100:
                         return
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif "运行成功" in case_detail:
+                new_url=url.format(data)
+                response = httpop.api_get(url=new_url,headers=headers)
+                count = 0
+                while count<=100:
+                    status=json.loads(response.text)["statusType"]
+                    if status == "WAITTING" or status =="RUNNING" or status =="READY":
+                        response = httpop.api_get(url=new_url,headers=headers)
+                        time.sleep(10)
+                    elif status == "SUCCEEDED":
+                        break
+                    else:
+                        print("flow执行状态出错")
+                        return
+                    count+=1
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif 'datasetId不存在'in case_detail:
+                # 先获取statementId,然后格式化URL，再发送请求
+                print('开始执行：', case_detail)
+                # new_data = dataset_data(data)
+                # new_data = json.dumps(new_data, separators=(',', ':'))
+                # print("new_data:", data)
+                response = httpop.api_get(url=url, headers=headers)
+                print(response.text, response.status_code)
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '根据statementId取Dataset数据'in case_detail:
+                # 先获取statementId,然后格式化URL，再发送请求
+                print('开始执行：', case_detail)
+                statement_id, new_data = statementId_no_dataset(host, data)
+                #new_data = json.dumps(new_data, separators=(',', ':'))
+                new_url = url.format(statement_id)
+                print("new_url-new_data:", new_url, new_data)
+                response = httpop.api_get(url=new_url, headers=headers)
+                print(response.text, response.status_code)
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 # print('开始执行：', case_detail)
-                myLog().getLog().logger.info("开始执行{}".format(case_detail))
+                log.info("开始执行{}".format(case_detail))
                 if '&' in str(data):  # 包含多个参数并以&分割
                     parameters = data.split('&')
                     # 处理存在select语句中的参数，并重新赋值
@@ -1039,7 +1222,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     if len(parameters) == 1:
                         try:
                             url_new = url.format(parameters[0])
-                            response = requests.get(url=url_new, headers=headers)
+                            response = httpop.api_get(url=url_new, headers=headers)
                             print(response.content, response.status_code, response.text)
                         except Exception:
                             return
@@ -1049,14 +1232,14 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     elif len(parameters) == 2:
                         url_new = url.format(parameters[0], parameters[1])
-                        response = requests.get(url=url_new, headers=headers)
+                        response = httpop.api_get(url=url_new, headers=headers)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     elif len(parameters) == 3:
                         url_new = url.format(parameters[0], parameters[1], parameters[2])
-                        response = requests.get(url=url_new, headers=headers)
+                        response = httpop.api_get(url=url_new, headers=headers)
                         print("response data:", response.status_code, response.text)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1067,7 +1250,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     parameters = data
                     url_new = url.format(data)
                     print(url_new)
-                    response = requests.get(url=url_new, headers=headers)
+                    response = httpop.api_get(url=url_new, headers=headers)
                     print("response data:", response.status_code, response.text)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1078,7 +1261,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 print('开始执行：', case_detail)
                 application_id = get_applicationId()
                 new_url = url.format(application_id)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print(response.status_code, response.text, type(response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1088,36 +1271,34 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 dataset_path = get_woven_qaoutput_dataset_path()[0]
                 new_url = url.format(dataset_path)
                 print(new_url)
-                response = requests.get(url=new_url, headers=headers)
+                response = httpop.api_get(url=new_url, headers=headers)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '刷新令牌':
-                res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"],
-                                    data=MY_LOGIN_INFO2["DATA"])
+                res = httpop.api_post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"],
+                                      data=MY_LOGIN_INFO2["DATA"])
                 login_info = dict_res(res.text)
                 token = login_info["content"]["accessToken"]
                 new_url = url.format(token)
                 print(new_url)
-                response = requests.get(url=new_url,headers=headers)
+                response = httpop.api_get(url=new_url,headers=headers)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
-
             else:
                 print('开始执行：', case_detail)
-                response = requests.get(url=url, headers=headers)
+                response = httpop.api_get(url=url, headers=headers)
                 print("response data:", response.status_code, response.text)
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(sheet=table_sheet_name, row=row, column=column, value='500')
+        write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
 
 
@@ -1230,12 +1411,12 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
                 write_result(table_sheet_name, row, column, response.status_code)
                 write_result(table_sheet_name, row, column + 4, response.text)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
-        write_result(table_sheet_name, row, column, '500')
+        write_result(table_sheet_name, row, column, '-1')
         write_result(table_sheet_name, row, column+4,  value='{"id":"-1"}')
     #else:
-        #print('第%s行的参数为空或格式异常' % row)
+    #print('第%s行的参数为空或格式异常' % row)
 
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
@@ -1244,6 +1425,15 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
         if isinstance(data, str):
             if case_detail == '':
                 pass
+            elif ("删除标签") in case_detail:
+                para=data.split("&")
+                es_id=get_es_data(para[0],para[1],para[2],eval(para[3]))
+                data={para[4]:es_id}
+                response = requests.delete(url=url, headers=headers, json=data)
+                print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
             else:
                 if data.startswith('select id'):  # sql语句的查询结果当做参数
                     data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -1281,12 +1471,26 @@ def delete_request_result_check(url, host, data, table_sheet_name, row, column, 
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail=='删除非结构化文件集合':
+            print(data)
+            response = requests.delete(url=url, headers=headers,json=data)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif ("服务器删除新目录") in case_detail:
+            if "_MINIO" in case_detail:
+                data={"conf":{"password":"inforefiner","port":"9000","host":"192.168.1.81","region":"","username":"minio"},"name":minio_data}
+            elif "_OZONE" in case_detail:
+                data={"conf":{},"name":minio_data}
+            response = requests.delete(url=url, headers=headers, json=data)
+            print(response.status_code, ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         else:
-            # print(data)
-            # print(type(data))
             print('请确认第%d行的data形式' % row)
     except Exception as e:
-        myLog().getLog().logger.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail,e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
@@ -1417,7 +1621,15 @@ class CheckResult(unittest.TestCase):
 
                 else:
                     try:
-                        self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
+                        if expect_text.find("createTime")>=0:
+                            json_obj_exp = json.loads(expect_text)
+                            results_exp = jsonpath.jsonpath(json_obj_exp,"$.[*].id")
+                            print("results",results_exp)
+                            json_obj_res = json.loads(response_text)
+                            results_res = jsonpath.jsonpath(json_obj_res,"$.[*].id")
+                            self.assertEqual(results_exp, results_res, '第%s行results_exp和results_res不相等' % row)
+                        else:
+                            self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
                     except:
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:

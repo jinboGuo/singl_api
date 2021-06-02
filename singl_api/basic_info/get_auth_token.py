@@ -6,21 +6,24 @@ from util.format_res import dict_res
 # admin账户登录，普通请求
 # 获取登录后返回的X-AUTH-TOKEN
 def get_auth_token(HOST):
-    if '57' in HOST:
-        res = requests.post(url=MY_LOGIN_INFO_dam["URL"], headers=MY_LOGIN_INFO_dam["HEADERS"], data=MY_LOGIN_INFO_dam["DATA"])
-        dict_headers = dict(res.headers)
-        token = dict_headers['X-AUTH-TOKEN']
-        return token
-    else:
-        res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
-        dict_headers = dict_res(res.text)
-        token = dict_headers['content']["accessToken"]
-        return 'Bearer ' + token
+    try:
+        if '57' in HOST:
+            res = requests.post(url=MY_LOGIN_INFO_dam["URL"], headers=MY_LOGIN_INFO_dam["HEADERS"], data=MY_LOGIN_INFO_dam["DATA"])
+            dict_headers = dict(res.headers)
+            token = dict_headers['X-AUTH-TOKEN']
+            return token
+        else:
+            res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
+            dict_headers = dict_res(res.text)
+            token = dict_headers['content']["accessToken"]
+            return 'Bearer ' + token
+    except:
+        return
 
 # 组装headers， 接口请求时调用
 def get_headers(HOST):
     x_auth_token = get_auth_token(HOST)
-    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
+    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "*/*"}
     return headers
 
 
@@ -31,7 +34,7 @@ def get_headers_upload(HOST):
     headers = {"X-AUTH-TOKEN": x_auth_token,
                'Origin': 'http://192.168.1.189:8515',
                'Referer': 'http://192.168.1.189:8515/',
-                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
+               'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
                }
     return headers
 
@@ -54,7 +57,7 @@ def get_auth_token_root(HOST):
 # 组装headers， 接口请求时调用
 def get_headers_root(HOST):
     x_auth_token = get_auth_token_root(HOST)
-    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "application/json"}
+    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "*/*"}
     # print(headers)
     return headers
 

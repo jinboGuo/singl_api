@@ -3,7 +3,7 @@ from basic_info.setting import Dsp_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from util.logs import Logger
 
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"])
+ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"], Dsp_MySQL_CONFIG["PORT"])
 log = Logger().get_log()
 
 def deal_parameters(data):

@@ -73,7 +73,7 @@ def main3(host,receivers):
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
     api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
-    cases_sheet = api_cases_table.get_sheet_by_name('199')
+    cases_sheet = api_cases_table.get_sheet_by_name('k8s_149')
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
     pass_cases = 0
@@ -120,7 +120,7 @@ def main3(host,receivers):
         # 设置附件的MIME和文件名:
         mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
         # 加上必要的头信息:
-        mime.add_header('Content-Disposition', 'attachment', filename='api_casex.xlsx')
+        mime.add_header('Content-Disposition', 'attachment', filename='api_cases.xlsx')
         mime.add_header('Content-ID', '<0>')
         mime.add_header('X-Attachment-Id', '0')
         # 把附件的内容读进来:
@@ -138,7 +138,7 @@ def main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = ",".join(receivers)  # 接收者的邮箱
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -314,7 +314,7 @@ def dsp_main3(host,receivers):
         # 设置附件的MIME和文件名:
         mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
         # 加上必要的头信息:
-        mime.add_header('Content-Disposition', 'attachment', filename='api_casex.xlsx')
+        mime.add_header('Content-Disposition', 'attachment', filename='api_cases.xlsx')
         mime.add_header('Content-ID', '<0>')
         mime.add_header('X-Attachment-Id', '0')
         # 把附件的内容读进来:
@@ -401,7 +401,7 @@ def dw_main3(host,receivers):
         # 设置附件的MIME和文件名:
         mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
         # 加上必要的头信息:
-        mime.add_header('Content-Disposition', 'attachment', filename='api_casex.xlsx')
+        mime.add_header('Content-Disposition', 'attachment', filename='api_cases.xlsx')
         mime.add_header('Content-ID', '<0>')
         mime.add_header('X-Attachment-Id', '0')
         # 把附件的内容读进来:
@@ -488,7 +488,7 @@ def compass_main3(host,receivers):
         # 设置附件的MIME和文件名:
         mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
         # 加上必要的头信息:
-        mime.add_header('Content-Disposition', 'attachment', filename='api_casex.xlsx')
+        mime.add_header('Content-Disposition', 'attachment', filename='api_cases.xlsx')
         mime.add_header('Content-ID', '<0>')
         mime.add_header('X-Attachment-Id', '0')
         # 把附件的内容读进来:
