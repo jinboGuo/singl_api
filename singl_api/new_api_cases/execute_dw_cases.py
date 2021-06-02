@@ -25,7 +25,7 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('dw')
+case_table_sheet = case_table.get_sheet_by_name('842')
 all_rows = case_table_sheet.max_row
 jar_dir = ab_dir('woven-common-3.0.jar')
 log = Logger().get_log()
