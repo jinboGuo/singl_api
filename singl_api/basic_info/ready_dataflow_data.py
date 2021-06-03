@@ -99,6 +99,7 @@ def delete_autotest_dw():
         dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
         dw_ref_dataset = "delete from dw_ref_dataset where name like 'api_order%'"
         dw_metadata = "delete from dw_metadata where name like 'api_order%' or name like 'api_aggr%'"
+        dw_metadata_info = "delete from dw_metadata_info where name like 'api_order%' or name like 'api_aggr%'"
         dw_model = "delete from dw_model where name like 'api_aggr%' or name like 'api_order%'"
         dw_category = "delete from dw_category where name like 'api_model%' or name like 'api_standard%'"
         dw_name_rules = "delete from dw_name_rules where alias like 'api_auto_namerule%'"
@@ -113,6 +114,8 @@ def delete_autotest_dw():
         ms.ExecuNoQuery(dw_ref_dataset.encode('utf-8'))
         #print("删除dw_metadata表测试数据 ", dw_metadata)
         ms.ExecuNoQuery(dw_metadata.encode('utf-8'))
+        #print("删除dw_metadata_info表测试数据 ", dw_metadata_info)
+        ms.ExecuNoQuery(dw_metadata_info.encode('utf-8'))
         #print("删除dw_model表测试数据 ", dw_model)
         ms.ExecuNoQuery(dw_model.encode('utf-8'))
         #print("删除dw_category表测试数据 ", dw_category)
