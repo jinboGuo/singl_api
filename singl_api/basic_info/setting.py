@@ -94,28 +94,28 @@ Dsp_MySQL_CONFIG = {
 }
 
 # -------dw环境使用-------
-# # # # HOST
-# dw_host = "http://192.168.1.83:8515"
-# # # # # # 数据库连接信息
-# Dw_MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce-scheduler'
-# }
+# # # HOST
+dw_host = "http://192.168.1.83:8515"
+# # # # # 数据库连接信息
+Dw_MySQL_CONFIG = {
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce-scheduler'
+}
 
 # -------k8s-dw环境使用-------
 # # HOST
-dw_host = "http://192.168.1.145:30000"
-# # # # # 数据库连接信息
-Dw_MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 30307,
-    "USER": 'root',
-    "PASSWORD": 'root',
-    "DB": 'k8s_149'
-}
+# dw_host = "http://192.168.1.145:30000"
+# # # # # # 数据库连接信息
+# Dw_MySQL_CONFIG = {
+#     'HOST': '192.168.1.145',
+#     "PORT": 30307,
+#     "USER": 'root',
+#     "PASSWORD": 'root',
+#     "DB": 'k8s_149'
+# }
 
 # -------83环境使用-------
 # HOST
