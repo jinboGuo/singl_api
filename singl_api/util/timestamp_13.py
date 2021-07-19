@@ -91,13 +91,13 @@ def hour_slice():
     import datetime
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%d %H')+":00:00"
-    print(now_time_nyr)
+    #print(now_time_nyr)
     return str(now_time_nyr)
 
 def hour_stamp():
     import datetime
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y%m%d%H')
-    print(now_time_nyr)
+    #print(now_time_nyr)
     return str(now_time_nyr)
-hour_stamp()
+#hour_stamp()
