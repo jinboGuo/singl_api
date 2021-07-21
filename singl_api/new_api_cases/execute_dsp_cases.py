@@ -520,7 +520,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == ('管理员查询订阅服务'):  # 取消SQL analyse接口
+            elif case_detail == '管理员查询订阅服务':  # 取消SQL analyse接口
                 new_url = url.format(data)
                 log.info("request   url：%s" %new_url)
                 response = requests.get(url=new_url, headers=headers)
