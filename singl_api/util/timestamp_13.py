@@ -37,14 +37,14 @@ def get_now():
     :return: 获取精确毫秒时间戳,13位
     """
     millis = int(round(time.time() * 1000))
-    print("now:", millis)
+    #print("now:", millis)
     return millis
 
 def get_tomorrow():
     import datetime,time
     # 生成13时间戳   eg:1557842280000
     now = datetime.datetime.now()
-    tomorrow = now + datetime.timedelta(days=1)
+    tomorrow = now + datetime.timedelta(hours=1)
     #print(tomorrow.strftime("%Y-%m-%d %H:%M:%S"))
     #print(tomorrow)
     # 10位，时间点相当于从1.1开始的当年时间编号
@@ -52,7 +52,7 @@ def get_tomorrow():
     # 3位，微秒
     data_microsecond = str("%06d" % tomorrow.microsecond)[0:3]
     date_stamp = date_stamp + data_microsecond
-    print("tomorrow:", date_stamp)
+    #print("tomorrow:", date_stamp)
     return int(date_stamp)
 
 from datetime import datetime, timedelta
@@ -62,14 +62,14 @@ def timestamp_now():
     #print("ISO格式的日期和时间是 %s" % now_time)
     time = datetime.strptime(now_time, "%Y-%m-%dT%H:%M:%S.%f")
     times = str(time)[:-3]
-    print(times)
+    #print(times)
     return times
 def timestamp_utc():
     now_time = datetime.now().isoformat()
     #print("ISO格式的日期和时间是 %s" % now_time)
     #time = datetime.strptime(now_time, "%Y-%m-%dT%H:%M:%S.%f")
     times = str(now_time)[:-3]+"Z"
-    print(times)
+    #print(times)
     return times
 #timestamp_now1()
 
@@ -84,7 +84,7 @@ def data_now():
     import datetime
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%d %H:%M:%S')
-    print(now_time_nyr)
+    #print(now_time_nyr)
     return str(now_time_nyr)
 
 def hour_slice():
@@ -100,4 +100,4 @@ def hour_stamp():
     now_time_nyr = now_time.strftime('%Y%m%d%H')
     #print(now_time_nyr)
     return str(now_time_nyr)
-#hour_stamp()
+#get_tomorrow()
