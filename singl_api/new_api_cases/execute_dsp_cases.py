@@ -165,7 +165,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '修改数据源-HDFS-CSV':
+        elif '修改数据源' in case_detail:
             log.info("request   url：%s" %url)
             new_data = cust_data_source(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
