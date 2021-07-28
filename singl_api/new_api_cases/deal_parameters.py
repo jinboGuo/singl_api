@@ -57,6 +57,8 @@ def deal_parameters(data):
                         return new_data
                     elif "select id from merce_schema" in data:
                         return new_data
+                    elif "select id from merce_tag" in data:
+                        return new_data
                     else:
                         dat = ','.join([str(i) for i in new_data])
                         return dat

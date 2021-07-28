@@ -77,13 +77,14 @@ def delete_autotest_datas():
     print("------开始删除测试数据-------")
     ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
-        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%'"
+        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%' or name like 'partition%'"
         flow_execution_sql = "delete from merce_flow_execution where name like 'lq%'"
         dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%' or name like 'lq%'"
         schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%' or name like 'lq%'"
         tenant_sql = "delete from merce_tenant where name like 'api_tenants%' order by create_time desc limit 1"
         filesets_sql="DELETE from merce_fileset"
         filesets_dir ="DELETE FROM merce_resource_dir where name like 'lq_fileset%'"
+        dss_sql="DELETE FROM merce_dss where name like 'lq%'"
         print("删除flow表测试数据 ", flow_sql)
         ms.ExecuNoQuery(flow_sql.encode('utf-8'))
         print("删除flow_execution表测试数据 ", flow_execution_sql)
@@ -98,12 +99,14 @@ def delete_autotest_datas():
         ms.ExecuNoQuery(filesets_sql.encode('utf-8'))
         print("删除filesets_dir表测试数据 ", filesets_dir)
         ms.ExecuNoQuery(filesets_dir.encode('utf-8'))
+        ms.ExecuQuery(dss_sql.encode('utf-8'))
+        print("删除dss表测试数据 ", dss_sql)
     except:
        return
 
 def delete_autotest_dw():
     #print("------开始删除测试数据-------")
-    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"])
+    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"],Dw_MySQL_CONFIG["PORT"])
     try:
         dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
         dw_ref_dataset = "delete from dw_ref_dataset where name like 'api_order%'"
