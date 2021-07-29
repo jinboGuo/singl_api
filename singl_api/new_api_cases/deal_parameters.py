@@ -108,13 +108,13 @@ def deal_parameters(data):
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if len(data_select_result) > 1:
                 for i in range(len(data_select_result)):
-                 try:
+                    try:
                         if data_select_result[i]["enabled"] == 1:
                             data_select_result[i]["enabled"] = 0
                         else:
                             data_select_result[i]["enabled"] = 1
-                 except:
-                     log.error("请确认第%d行SQL语句")
+                    except:
+                        log.error("请确认第%d行SQL语句")
                 print(data_select_result)
                 return data_select_result
             else:

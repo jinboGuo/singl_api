@@ -16,7 +16,7 @@ email_to = {
     "fengqian": "qian.feng@inforefiner.com",
     "daming": "zhiming.wang@inforefiner.com",
     "guojinbo": "jinbo.guo@inforefiner.com",
-            }
+}
 
 ws_url = "ws://192.168.1.55:8020/compass/shell/executor"  # 远程执行脚本url
 # 远程执行脚本发送data
@@ -93,7 +93,7 @@ Dsp_MySQL_CONFIG = {
     "DB": 'merce_199'
 }
 
-# # -------dw环境使用-------
+# -------dw环境使用-------
 # # # # HOST
 # dw_host = "http://192.168.1.83:8515"
 # # # # # # 数据库连接信息
@@ -165,66 +165,66 @@ MY_LOGIN_INFO_compass = {
 
 # dsp customer账户登录信息
 MY_LOGIN_INFO_dsp_customer = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic Y3VzdG9tZXI6MTIzNDU2', "Accept": "application/json"},
- "URL": "%s/api/auth/oauth/token" % dsp_host,
- "DATA": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'},
- "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
-             'grant_type': 'customer_password'},
- "HOST": "%s" % dsp_host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic Y3VzdG9tZXI6MTIzNDU2', "Accept": "application/json"},
+    "URL": "%s/api/auth/oauth/token" % dsp_host,
+    "DATA": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'},
+    "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
+                        'grant_type': 'customer_password'},
+    "HOST": "%s" % dsp_host
 }
 
 # dsp admin账户登录信息
 MY_LOGIN_INFO_dsp_admin = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
- "URL": "%s/api/auth/oauth/token" % dsp_host,
- "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
- "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
- "HOST": "%s" % dsp_host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
+    "URL": "%s/api/auth/oauth/token" % dsp_host,
+    "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
+    "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
+    "HOST": "%s" % dsp_host
 }
 
 MY_LOGIN_INFO = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
- "URL": "http://192.168.1.189:8515/api/auth/login",
- "DATA": {'name': 'gbj_use', 'password': '123456', 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': 'default'},
- "HOST": "http://192.168.1.189:8515"
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "http://192.168.1.189:8515/api/auth/login",
+    "DATA": {'name': 'gbj_use', 'password': '123456', 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': 'default'},
+    "HOST": "http://192.168.1.189:8515"
 }
 
 # base64加密使用该账户 admin，HOST信息和环境信息保持一致
 MY_LOGIN_INFO2 = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
- "URL": "%s/api/auth/login" % host,
- "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
- "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
- "HOST": "%s" % host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+    "HOST": "%s" % host
 }
 
 # root账户登录信息
 MY_LOGIN_INFO_root = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
- "URL": "%s/api/auth/login" % host,
- "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
- "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
- "HOST": "%s" % host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "HOST": "%s" % host
 }
 
 # AES加密方式使用以下登录信息
 
 # DAM1.0不同的加密方式
 MY_LOGIN_INFO_dam = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
- "URL": "%s/api/auth/login" % host,
- "DATA": {'name': '13ec4fe486e87d0b1145f2248a090db5', 'password': '3cde4fd05c58aee9937bfb2db12c9a91', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': '1463a3ec85fbfbeb2fe07183d7518a48'},
- "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
- "HOST": "%s" % host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': '13ec4fe486e87d0b1145f2248a090db5', 'password': '3cde4fd05c58aee9937bfb2db12c9a91', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': '1463a3ec85fbfbeb2fe07183d7518a48'},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+    "HOST": "%s" % host
 }
 
 #DAM1.0使用
 MY_LOGIN_INFO_root_dam = {
- "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
- "URL": "%s/api/auth/login" % host,
- "DATA": {'name': '5a8987fa3b9573f0708fe61f30fd2393', 'password': '3cde4fd05c58aee9937bfb2db12c9a91', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': '5a8987fa3b9573f0708fe61f30fd2393'},
- "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
- "HOST": "%s" % host
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': '5a8987fa3b9573f0708fe61f30fd2393', 'password': '3cde4fd05c58aee9937bfb2db12c9a91', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': '5a8987fa3b9573f0708fe61f30fd2393'},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "HOST": "%s" % host
 }
 
 
@@ -276,41 +276,41 @@ flow_id_list = [{"flow_id": "35033c8d-fadc-4628-abf9-6803953fba34", "o_dataset":
                 {"flow_id": "f2677db1-6923-42a1-8f18-f8674394580a","o_dataset":"b896ff9d-691e-4939-a860-38eb828b1ad2"}
                 ]
 flow_id_json = [{'flow_id': '35033c8d-fadc-4628-abf9-6803953fba34',
-                     'dataset_json':
+                 'dataset_json':
                      [{'subject': 'subject', 'grade': 'grade', 'name': 'name', 'id': 'id'},
-                     {'subject': '语文', 'grade': '89', 'name': '张三', 'id': '1'},
-                     {'subject': '英语', 'grade': '85', 'name': '张三', 'id': '2'},
-                     {'subject': '数学', 'grade': '95', 'name': '李四', 'id': '3'},
-                     {'subject': '英语', 'grade': '65', 'name': '李四', 'id': '4'},
-                     {'subject': '语文', 'grade': '35', 'name': '李四', 'id': '5'},
-                     {'subject': '数学', 'grade': '58', 'name': '小明', 'id': '6'},
-                     {'subject': '英语', 'grade': '96', 'name': '小明', 'id': '7'},
-                     {'subject': '语文', 'grade': '96', 'name': '小明', 'id': '8'},
-                     {'subject': '数学', 'grade': '85', 'name': '小红', 'id': '9'},
-                     {'subject': '英语', 'grade': '95', 'name': '小红', 'id': '10'},
-                     {'subject': '语文', 'grade': '78', 'name': '小红', 'id': '11'},
-                     {'subject': '数学', 'grade': '98', 'name': '小玲', 'id': '12'},
-                     {'subject': '语文', 'grade': '46', 'name': '小玲', 'id': '13'},
-                     {'subject': '英语', 'grade': '78', 'name': '小玲', 'id': '14'},
-                     {'subject': '数学', 'grade': '68', 'name': '张三', 'id': '15'}]},
-                     {'flow_id': 'f2677db1-6923-42a1-8f18-f8674394580a',
-                     'dataset_json':
+                      {'subject': '语文', 'grade': '89', 'name': '张三', 'id': '1'},
+                      {'subject': '英语', 'grade': '85', 'name': '张三', 'id': '2'},
+                      {'subject': '数学', 'grade': '95', 'name': '李四', 'id': '3'},
+                      {'subject': '英语', 'grade': '65', 'name': '李四', 'id': '4'},
+                      {'subject': '语文', 'grade': '35', 'name': '李四', 'id': '5'},
+                      {'subject': '数学', 'grade': '58', 'name': '小明', 'id': '6'},
+                      {'subject': '英语', 'grade': '96', 'name': '小明', 'id': '7'},
+                      {'subject': '语文', 'grade': '96', 'name': '小明', 'id': '8'},
+                      {'subject': '数学', 'grade': '85', 'name': '小红', 'id': '9'},
+                      {'subject': '英语', 'grade': '95', 'name': '小红', 'id': '10'},
+                      {'subject': '语文', 'grade': '78', 'name': '小红', 'id': '11'},
+                      {'subject': '数学', 'grade': '98', 'name': '小玲', 'id': '12'},
+                      {'subject': '语文', 'grade': '46', 'name': '小玲', 'id': '13'},
+                      {'subject': '英语', 'grade': '78', 'name': '小玲', 'id': '14'},
+                      {'subject': '数学', 'grade': '68', 'name': '张三', 'id': '15'}]},
+                {'flow_id': 'f2677db1-6923-42a1-8f18-f8674394580a',
+                 'dataset_json':
                      [{'subject': 'subject', 'grade': 'grade', 'name': 'name', 'id': 'id'},
-                     {'subject': '语文', 'grade': '89', 'name': '张三', 'id': '1'},
-                     {'subject': '英语', 'grade': '85', 'name': '张三', 'id': '2'},
-                     {'subject': '数学', 'grade': '95', 'name': '李四', 'id': '3'},
-                     {'subject': '英语', 'grade': '65', 'name': '李四', 'id': '4'},
-                     {'subject': '语文', 'grade': '35', 'name': '李四', 'id': '5'},
-                     {'subject': '数学', 'grade': '58', 'name': '小明', 'id': '6'},
-                     {'subject': '英语', 'grade': '96', 'name': '小明', 'id': '7'},
-                     {'subject': '语文', 'grade': '96', 'name': '小明', 'id': '8'},
-                     {'subject': '数学', 'grade': '85', 'name': '小红', 'id': '9'},
-                     {'subject': '英语', 'grade': '95', 'name': '小红', 'id': '10'},
-                     {'subject': '语文', 'grade': '78', 'name': '小红', 'id': '11'},
-                     {'subject': '数学', 'grade': '98', 'name': '小玲', 'id': '12'},
-                     {'subject': '语文', 'grade': '46', 'name': '小玲', 'id': '13'},
-                     {'subject': '英语', 'grade': '78', 'name': '小玲', 'id': '14'},
-                     {'subject': '数学', 'grade': '68', 'name': '张三', 'id': '15'}]}
+                      {'subject': '语文', 'grade': '89', 'name': '张三', 'id': '1'},
+                      {'subject': '英语', 'grade': '85', 'name': '张三', 'id': '2'},
+                      {'subject': '数学', 'grade': '95', 'name': '李四', 'id': '3'},
+                      {'subject': '英语', 'grade': '65', 'name': '李四', 'id': '4'},
+                      {'subject': '语文', 'grade': '35', 'name': '李四', 'id': '5'},
+                      {'subject': '数学', 'grade': '58', 'name': '小明', 'id': '6'},
+                      {'subject': '英语', 'grade': '96', 'name': '小明', 'id': '7'},
+                      {'subject': '语文', 'grade': '96', 'name': '小明', 'id': '8'},
+                      {'subject': '数学', 'grade': '85', 'name': '小红', 'id': '9'},
+                      {'subject': '英语', 'grade': '95', 'name': '小红', 'id': '10'},
+                      {'subject': '语文', 'grade': '78', 'name': '小红', 'id': '11'},
+                      {'subject': '数学', 'grade': '98', 'name': '小玲', 'id': '12'},
+                      {'subject': '语文', 'grade': '46', 'name': '小玲', 'id': '13'},
+                      {'subject': '英语', 'grade': '78', 'name': '小玲', 'id': '14'},
+                      {'subject': '数学', 'grade': '68', 'name': '张三', 'id': '15'}]}
                 ]
 
 #  used by cases_for_collectors.py
@@ -336,7 +336,7 @@ preProcessFlowId = "aa5f83c6-aff0-4405-8473-8c09c0f167e4"
 preProcessFlowName = "students_int_flow_filter"
 processDataId = "students_dataset_copy_int"
 
-ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+#ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
 # 查询最新创建的sql分析规则id
 # # sql_rule_id_sql = 'select id from merce_zrule where build_type = "Custom" and custom_type = "SQL" and ' \
 # #                   'name like "rule_for_SQL_students_copy%"  order by create_time desc limit 1  '
@@ -346,13 +346,13 @@ ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PAS
 # print(sql_rule_id)
 
 # 查询最新创建的分析规则id
-rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
-rule_id_list = ms.ExecuQuery(rule_id_sql)
-
-try:
-    rule_id = rule_id_list[0]["id"]
-except IndexError:
-    print('没有查询到最新的分析规则，返回空')
+# rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
+# rule_id_list = ms.ExecuQuery(rule_id_sql)
+#
+# try:
+#     rule_id = rule_id_list[0]["id"]
+# except IndexError:
+#     print('没有查询到最新的分析规则，返回空')
 
 # print(rule_id_list)
 

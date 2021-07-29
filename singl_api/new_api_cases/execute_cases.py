@@ -85,7 +85,7 @@ def deal_request_method():
                 if request_method_upper == 'POST':
                     # 调用post方法发送请求
                     post_request_result_check(row=i, host=host, column=8, url=request_url, headers=get_headers(host),
-                                                    data=request_data, table_sheet_name=case_table_sheet)
+                                              data=request_data, table_sheet_name=case_table_sheet)
 
                 elif request_method_upper == 'GET':
                     # 调用GET请求
@@ -250,7 +250,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)       
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '新Dataset预览接口,得到statement  id(datasetId存在)':
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
@@ -577,7 +577,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 new_data = {"fieldList": [
                     {"fieldName": "executionId", "fieldValue": data, "comparatorOperator": "EQUAL",
                      "logicalOperator": "AND"}], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"},
-                            "offset": 0, "limit": 8}
+                    "offset": 0, "limit": 8}
                 print(new_data)
                 response = httpop.api_post(url=url, headers=headers, json=new_data)
                 print(response.text, response.status_code)
@@ -809,31 +809,31 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 data = str(data)
                 # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
                 if '&' in data:
-                   # 分隔参数
-                   parameters = data.split('&')
-                   # 拼接URL
-                   new_url = url.format(parameters[0])
-                   # 发送的参数体
-                   parameters_data = parameters[-1]
-                   if parameters_data.startswith('{'):
-                      response = httpop.api_post(url=new_url, headers=headers, json=dict_res(parameters_data))
-                      print("response data:", response.status_code, response.text)
-                      clean_vaule(table_sheet_name, row, column)
-                      write_result(table_sheet_name, row, column, response.status_code)
-                      write_result(table_sheet_name, row, column+4, response.text)
-                   else:
-                    print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
+                    # 分隔参数
+                    parameters = data.split('&')
+                    # 拼接URL
+                    new_url = url.format(parameters[0])
+                    # 发送的参数体
+                    parameters_data = parameters[-1]
+                    if parameters_data.startswith('{'):
+                        response = httpop.api_post(url=new_url, headers=headers, json=dict_res(parameters_data))
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column+4, response.text)
+                    else:
+                        print('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
                 elif data.startswith('select id'):
-                     result = ms.ExecuQuery(data)
-                     if result:
-                       new_data = result[0]["id"]
-                       new_url = url.format(new_data)
-                       response = httpop.api_post(url=url, headers=headers, data=new_data)
-                       print("response data:", response.status_code, response.text)
-                       clean_vaule(table_sheet_name, row, column)
-                       write_result(table_sheet_name, row, column, response.status_code)
-                       write_result(table_sheet_name, row, column + 4, response.text)
-                     else:
+                    result = ms.ExecuQuery(data)
+                    if result:
+                        new_data = result[0]["id"]
+                        new_url = url.format(new_data)
+                        response = httpop.api_post(url=url, headers=headers, data=new_data)
+                        print("response data:", response.status_code, response.text)
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column + 4, response.text)
+                    else:
                         print('请确认result:！', result)
                 elif data.startswith('{') and data.endswith('}'):
                     data_dict = dict_res(data)
@@ -1155,8 +1155,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 while count<=100:
                     status=json.loads(response.text)["statusType"]
                     if status == "WAITTING" or status =="RUNNING" or status =="READY":
-                       response = httpop.api_get(url=new_url,headers=headers)
-                       time.sleep(10)
+                        response = httpop.api_get(url=new_url,headers=headers)
+                        time.sleep(10)
                     elif status == "SUCCEEDED":
                         break
                     else:
@@ -1179,7 +1179,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif '根据statementId取Dataset数据'in case_detail:
-            # 先获取statementId,然后格式化URL，再发送请求
+                # 先获取statementId,然后格式化URL，再发送请求
                 print('开始执行：', case_detail)
                 statement_id, new_data = statementId_no_dataset(host, data)
                 #new_data = json.dumps(new_data, separators=(',', ':'))
@@ -1288,7 +1288,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '刷新令牌':
                 res = httpop.api_post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"],
-                                    data=MY_LOGIN_INFO2["DATA"])
+                                      data=MY_LOGIN_INFO2["DATA"])
                 login_info = dict_res(res.text)
                 token = login_info["content"]["accessToken"]
                 new_url = url.format(token)
@@ -1436,7 +1436,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
         write_result(table_sheet_name, row, column, '-1')
         write_result(table_sheet_name, row, column+4,  value='{"id":"-1"}')
     #else:
-        #print('第%s行的参数为空或格式异常' % row)
+    #print('第%s行的参数为空或格式异常' % row)
 
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):

@@ -4,19 +4,17 @@ from basic_info.setting import Dw_MySQL_CONFIG
 from util.Open_DB import MYSQL
 from util.logs import Logger
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"],Dw_MySQL_CONFIG["PORT"])
+ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
 log = Logger().get_log()
 
 def deal_parameters(data):
     try:
         if data:
             if '随机数' in data:
-                # print(data)
-                data = data.replace('随机数', str(random.randint(0, 999999999999999)))
+                data = data.replace('随机数', str(random.randint(0, 999)))
                 return deal_parameters(data)
             if 'select id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                #print("999999", data_select_result)
                 new_data = []
                 if data_select_result:
                     if len(data_select_result) > 1:
@@ -32,10 +30,12 @@ def deal_parameters(data):
                     else:
                         try:
                                 data = data_select_result[0]["id"]
-                                return data
+                                return str(data)
                         except Exception as e:
                             log.error("异常信息：%s" %e)
-            if 'select name' in data:
+                else:
+                    log.info("查询结果为空！")
+            if 'select name from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
                     try:
@@ -43,16 +43,107 @@ def deal_parameters(data):
                         return deal_parameters(data)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
-            if 'select execution_id' in data:
+                else:
+                    log.info("查询结果为空！")
+            if 'select current_info_id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 if data_select_result:
                     try:
-                        data = data_select_result[0]["execution_id"]
-                        return deal_parameters(data)
+                        data = data_select_result[0]["current_info_id"]
+                        return str(data)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
-                    return
+                    log.info("查询结果为空！")
+            if 'select business_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        business_id,id = data_select_result[0]["business_id"],data_select_result[0]["id"]
+                        new_data.append(business_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select dataset_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        dataset_id,id = data_select_result[0]["dataset_id"],data_select_result[0]["id"]
+                        new_data.append(dataset_id)
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select project_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        data = data_select_result[0]["project_id"]
+                        return str(data)
+                    except Exception as e:
+                        log.error("异常信息：%s" %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select metadata_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        metadata_id,id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
+                        new_data.append(str(metadata_id))
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select id,current_info_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        metadata_id,current_info_id = data_select_result[0]["id"],data_select_result[0]["current_info_id"]
+                        new_data.append(str(metadata_id))
+                        new_data.append(str(current_info_id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select name,project_id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        name,project_id = data_select_result[0]["name"],data_select_result[0]["project_id"]
+                        new_data.append(name)
+                        new_data.append(str(project_id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
+            if 'select project_id,id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data=[]
+                if data_select_result:
+                    try:
+                        project_id,id = data_select_result[0]["project_id"],data_select_result[0]["id"]
+                        new_data.append(str(project_id))
+                        new_data.append(str(id))
+                        return new_data
+                    except Exception as e:
+                        log.info("请确认SQL语句,异常信息：%s " %e)
+                else:
+                    log.info("查询结果为空！")
             else:
                 return data
         else:
@@ -63,31 +154,10 @@ def deal_parameters(data):
 def deal_random(new_data):
     try:
         dict_res(new_data)
-        get_targe_value(new_data)
-        print(new_data)
+        for key, value in new_data.items():
+            if '随机数' in str(value):
+                i = value.replace('随机数', str(random.randint(0, 999)))
+                new_data[key] = str(i)
         return new_data
     except Exception as e:
-        print("\033[31m异常：\033[0m",e)
-
-def get_targe_value(new_data):
-    # 循环字典，获取键、值
-    for key, values in new_data.items():
-        # 判断值的type类型，如果是list,调用get_list() 函数，
-        if type(values) == list:
-            get_list(values)
-        # 如果是字典，调用自身
-        elif type(values) == dict:
-            get_targe_value(values)
-        # 如果值不是list且是需要被替换的，就替换掉
-        elif type(values) != list and type(values) == str and '随机数' in values:
-            i = values.replace('随机数', str(random.randint(0, 999)))
-            new_data[key] = str(i)
-        else:
-            pass
-
-def get_list(values):
-    rustle = values[0]
-    if type(rustle) == list:
-        get_list(values)
-    else:
-        get_targe_value(rustle)
+        log.error("异常信息：%s" %e)

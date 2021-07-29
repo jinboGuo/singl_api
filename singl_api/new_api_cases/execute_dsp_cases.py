@@ -17,7 +17,7 @@ from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pul
     pull_Aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_Aggs_sql, resource_data_save,resource_data_dss, resource_data_push, update_customer, update_user
 from basic_info.setting import dsp_host
 
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"],Dsp_MySQL_CONFIG["PORT"])
+ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"], Dsp_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('dsp_199')

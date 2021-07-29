@@ -14,7 +14,7 @@ from util.logs import Logger
 from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add_job, add_jobSingle, update_jobSingle, \
     add_jobMap, update_jobMap, update_re, query_reth, add_reth, update_reth, query_rethExt, update_rethExt, add_rethExt
 
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"],Compass_MySQL_CONFIG["PORT"])
+ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
 case_table_sheet = case_table.get_sheet_by_name('compass')

@@ -54,4 +54,3 @@ class MYSQL:
 
 # update_sql = 'update merce_schema set name = "8899" where id = "360e9d2d-1f4d-4283-bf10-ec232d7ab4ec"'
 # res_update = ms.ExecuNoQuery(update_sql)
-

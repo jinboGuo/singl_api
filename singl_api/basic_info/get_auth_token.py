@@ -34,7 +34,7 @@ def get_headers_upload(HOST):
     headers = {"X-AUTH-TOKEN": x_auth_token,
                'Origin': 'http://192.168.1.189:8515',
                'Referer': 'http://192.168.1.189:8515/',
-                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
+               'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
                }
     return headers
 

@@ -27,7 +27,7 @@ from basic_info.setting import receivers_list
 # fp.close()
 
 #清除测试数据
-delete_autotest_datas()
+#delete_autotest_datas()
 print('------开始执行用例-------')
 start_time = datetime.datetime.now()
 print('开始时间：', start_time)
@@ -38,6 +38,7 @@ CheckResult().deal_result()
 stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
+#delete_autotest_datas()
 # 发送邮件
 main3(host, receivers_list)
 
