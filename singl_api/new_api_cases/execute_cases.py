@@ -20,7 +20,7 @@ from util.format_res import dict_res, get_time
 from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
 from util.Open_DB import MYSQL
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data, query_dataflow_data
-from basic_info.setting import tenant_id_83
+from basic_info.setting import tenant_id_83,host
 from new_api_cases.deal_parameters import deal_parameters
 import unittest
 from new_api_cases.get_statementId import statementId_flow_use, statementId_flow_output_use
@@ -42,14 +42,14 @@ fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
 log=myLog().getLog().logger
 minio_data=[]
 httpop=Httpop()
-
+host=host
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
     for i in range(2, all_rows+1):
         request_method = case_table_sheet.cell(row=i, column=4).value
-        old_request_url = case_table_sheet.cell(row=i, column=5).value
+        old_request_url = host+case_table_sheet.cell(row=i, column=5).value
         request_url = deal_parameters(old_request_url)
-        host = get_host.get_host(request_url)
+        # host = get_host.get_host(request_url)
         old_data = case_table_sheet.cell(row=i, column=6).value
         request_data = deal_parameters(old_data)
         #request_data = old_data.encode('utf-8')
@@ -1151,21 +1151,20 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             elif "运行成功" in case_detail:
                 new_url=url.format(data)
                 response = httpop.api_get(url=new_url,headers=headers)
-                count = 0
-                while count<=100:
-                    status=json.loads(response.text)["statusType"]
-                    if status == "WAITTING" or status =="RUNNING" or status =="READY":
-                        response = httpop.api_get(url=new_url,headers=headers)
-                        time.sleep(10)
-                    elif status == "SUCCEEDED":
-                        break
-                    else:
-                        print("flow执行状态出错")
-                        return
-                    count+=1
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                status=json.loads(response.text)["statusType"]
+                while status == "WAITTING" or status =="RUNNING" or status =="READY":
+                      log.info("------进入while循环------\n")
+                      response = httpop.api_get(url=new_url,headers=headers)
+                      status=json.loads(response.text)["statusType"]
+                      log.info("------再次查询后的状态为: %s------\n" % status)
+                      time.sleep(10)
+                if status == "SUCCEEDED":
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                else:
+                    print("flow执行状态出错")
+                    return
             elif 'datasetId不存在'in case_detail:
                 # 先获取statementId,然后格式化URL，再发送请求
                 print('开始执行：', case_detail)
@@ -1290,7 +1289,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 res = httpop.api_post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"],
                                       data=MY_LOGIN_INFO2["DATA"])
                 login_info = dict_res(res.text)
-                token = login_info["content"]["accessToken"]
+                token = login_info["content"]["access_token"]
                 new_url = url.format(token)
                 print(new_url)
                 response = httpop.api_get(url=new_url,headers=headers)

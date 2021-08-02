@@ -25,10 +25,10 @@ class GetCheckoutDataSet(object):
 
     def __init__(self):
         """初始化数据库连接"""
-        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
         self.host = host
         self.table = "flow_dataset_info.xlsx"
-        self.table_sheet = 'flow_info-57'
+        self.table_sheet = 'k8s_149'
 
     def get_flow_id(self):
         """
@@ -197,7 +197,7 @@ class GetCheckoutDataSet(object):
             scheduler_number += 1
             time.sleep(2)
             # print(res.status_code, res.text)
-            if res.status_code == 201 and res.text:
+            if str(res.status_code).startswith('2') and res.text:
                 scheduler_id_format = dict_res(res.text)
                 try:
                     scheduler_id = scheduler_id_format["id"]
@@ -377,8 +377,8 @@ class GetCheckoutDataSet(object):
                                     res = requests.get(url=priview_url, headers=get_headers(self.host))
                                     result = res.text
                                 else:
-                                    statementID = statementId_flow_use(self.host, dataset_id, tenant_id_83)
-                                    result = preview_result_flow_use(self.host, dataset_id, get_tenant(self.host),statementID)
+                                    statementID = statementId_flow_use(self.host, dataset_id)
+                                    result = preview_result_flow_use(self.host, dataset_id,statementID)
                                 flow_sheet.cell(row=j+i, column=4, value=dataset_id)
                                 flow_sheet.cell(row=j+i, column=8, value=str(result))
 
@@ -392,8 +392,9 @@ class GetCheckoutDataSet(object):
                 res = requests.get(url=priview_url, headers=get_headers(self.host))
                 result = res.text
             else:
-                statementID = statementId_flow_use(self.host, dataset_id, tenant_id_83)
-                result = preview_result_flow_use(self.host, dataset_id, get_tenant(self.host), statementID)
+                statementID = statementId_flow_use(self.host, dataset_id)
+                result = preview_result_flow_use(self.host, dataset_id, statementID)
+                print("打印预览数据集的结果%s"%result)
             for j in range(2, sheet_rows + 1):  # 按照行数进行循环
                     log_url = GetLog(sink_output_info[i]["execution_id"], self.host).get_log_url()
                     # 如果 dataset id相等就写入实际结果，不相等就向下找

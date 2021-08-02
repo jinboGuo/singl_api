@@ -2,7 +2,7 @@ import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.mylogging import myLog
 from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
-    tenant_id_84, tenant_id_199
+    tenant_id_84, tenant_id_199, tenant_id_145
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
 
@@ -32,6 +32,9 @@ def get_tenant(host):
     elif '199' in host:
         tenant_id = tenant_id_199
         return tenant_id
+    elif '145' in host:
+        tenant_id = tenant_id_145
+        return tenant_id
     else:
         print('使用的host不在预期中，请确认host信息')
         return
@@ -58,8 +61,9 @@ def statementId(host, param):
         return '59b30d45-8583-4e00-9413-e65057e57028', 1
 
 
-def statementId_flow_use(host, datasetId, tenant):
-    url = '%s/api/datasets/%s/previewinit?tenant=%s&rows=50' % (host, datasetId, get_tenant(host))
+def statementId_flow_use(host, datasetId):
+    url = '%s/api/datasets/%s/previewinit?rows=50' % (host,datasetId)
+    print("statementId_flow_use请求url=%s"%url)
     res = requests.get(url=url, headers=get_headers(host))
     print(res.status_code, res.text)
     try:
@@ -86,10 +90,10 @@ def statementId_flow_output_use(host, datasetId):
     else:
         return statementId
 
-def preview_result_flow_use(host, datasetId, tenant, statementID):
+def preview_result_flow_use(host, datasetId, statementID):
     if isinstance(statementID, int):
-        url = "%s/api/datasets/%s/previewresult?tenant=%s&statementId=%d" % (host, datasetId, get_tenant(host), statementID)
-        res = requests.post(url=url, headers=get_headers(host))
+        url = "%s/api/datasets/%s/previewresult?statementId=%d&clusterId=cluster1" % (host, datasetId, statementID)
+        res = requests.get(url=url, headers=get_headers(host))
         print(res.url)
         print('%s数据集preview_result:%s' % (datasetId, res.text))
         while 'waiting' in res.text or 'running' in res.text:
@@ -220,3 +224,8 @@ def get_step_output_ensure_statementId(HOST,params):
         return output_stattementid
     except:
         return
+
+if __name__=="__main__":
+    sid=statementId_flow_use("http://192.168.1.84:8515","71f734bd-92d2-43c4-a0b2-b00a21c50dfc")
+    b=preview_result_flow_use("http://192.168.1.84:8515","71f734bd-92d2-43c4-a0b2-b00a21c50dfc",sid)
+    print(b)
