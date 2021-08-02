@@ -520,18 +520,20 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == ('管理员查询订阅服务'):  # 取消SQL analyse接口
+            elif case_detail == '管理员查询订阅服务':
                 new_url = url.format(data)
                 log.info("request   url：%s" %new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
+                time.sleep(30)
                 count_num = 0
                 while '"executedTimes":0'in response.text:
                     log.info("再次查询前：%s %s" %(response.status_code, response.text))
                     response = requests.get(url=new_url, headers=headers)
                     time.sleep(5)
                     count_num += 1
-                    if count_num == 80:
+                    if count_num == 90:
+                        response = requests.get(url=new_url, headers=headers)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -539,7 +541,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '服务删除':  #
+            elif case_detail == '服务删除':
                 new_url = url.format(data)
                 log.info("request   url：%s" %new_url)
                 response = requests.get(url=new_url, headers=headers)
@@ -607,6 +609,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                     time.sleep(5)
                     count_num += 1
                     if count_num == 5:
+                        response = requests.get(url=new_url, headers=headers)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)

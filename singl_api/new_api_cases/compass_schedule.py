@@ -69,7 +69,7 @@ def check_s_r_task(data):
                     if task_select_result[0]["status"] == 0:
                         sleep(5)
                         continue
-                    elif task_select_result[0]["status"] == True:
+                    elif task_select_result[0]["status"] == 1:
                         log.info("----s_r_task----日志调度任务执行中！")
                         log.info("task_oid: %s job_oid: %s status: %s slice_type: %s slice_time: %s create_time: %s row_number: %s dataset_name: %s dataformat_name: %s"\
                           % (str(task_select_result[0]["task_oid"]), str(task_select_result[0]["job_oid"]),\
@@ -79,7 +79,7 @@ def check_s_r_task(data):
                         task_select_result = ms.ExecuQuery(data.encode('utf-8'))
                         try:
                             if task_select_result:
-                                if task_select_result[0]["status"] == True:
+                                if task_select_result[0]["status"] == 1:
                                     sleep(5)
                                     continue
                             else:
@@ -89,7 +89,7 @@ def check_s_r_task(data):
                                     break
                         except:
                             return
-                elif task_select_result[0]["status"] == True:
+                elif task_select_result[0]["status"] == 1:
                     log.info("----s_r_task----日志调度任务执行中！")
                     log.info("task_oid: %s job_oid: %s status: %s slice_type: %s slice_time: %s create_time: %s row_number: %s dataset_name: %s dataformat_name: %s"\
                           % (str(task_select_result[0]["task_oid"]), str(task_select_result[0]["job_oid"]),\
@@ -129,7 +129,7 @@ def check_s_l_result_task(data):
         result_task_select_result = ms.ExecuQuery(data.encode('utf-8'))
         while True:
             if result_task_select_result:
-                if result_task_select_result[0]["status"] == True:
+                if result_task_select_result[0]["status"] == 1:
                     log.info("----s_l_result_task----调度任务执行中！")
                     log.info("job_oid: %s status: %s slice_type: %s slice_time: %s create_time: %s row_number_output: %s task_name: %s result_oid: %s"\
                           % (str(result_task_select_result[0]["job_oid"]), result_task_select_result[0]["status"], result_task_select_result[0]["slice_type"],\
@@ -137,7 +137,7 @@ def check_s_l_result_task(data):
                              result_task_select_result[0]["row_number_output"], result_task_select_result[0]["task_name"], result_task_select_result[0]["result_oid"]))
                     result_task_select_result = ms.ExecuQuery(data.encode('utf-8'))
                     if result_task_select_result:
-                        if result_task_select_result[0]["status"] == True:
+                        if result_task_select_result[0]["status"] == 1:
                             sleep(5)
                             continue
                         elif result_task_select_result[0]["status"] == 2:
