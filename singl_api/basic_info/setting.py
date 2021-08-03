@@ -119,7 +119,7 @@ Dw_MySQL_CONFIG = {
 
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.145:40001"
+host = "http://192.168.1.84:8515"
 # host = "http://192.168.1.84:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -138,7 +138,7 @@ MySQL_CONFIG1 = {
     'case_db': 'test'}
 
 MySQL_CONFIG = {
-    'HOST': '192.168.1.84',
+    'HOST': '192.168.1.82',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
@@ -192,9 +192,9 @@ MY_LOGIN_INFO = {
 
 # base64加密使用该账户 admin，HOST信息和环境信息保持一致
 MY_LOGIN_INFO2 = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded','Authorization':'Basic YmF5bWF4OjEyMzQ1Ng=='},
-    "URL": "%s/api/auth/oauth/token" % host,
-    "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password',"remember": False},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': 'AES(414e48388a4ac93aa9707d5ac1b0d441)', 'password': 'AES(38cbd271dcecd23763faed1c4e6c9b37)', 'version': 'AES(13c1901e638cd722c268d21f45bf08ae)','tenant': 'AES(45cf55246a66a7817cca335b7b254312)'},
     "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
     "HOST": "%s" % host
 }

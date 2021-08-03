@@ -97,7 +97,7 @@ def preview_result_flow_use(host, datasetId, statementID):
         print(res.url)
         print('%s数据集preview_result:%s' % (datasetId, res.text))
         while 'waiting' in res.text or 'running' in res.text:
-            res = requests.post(url=url, headers=get_headers(host))
+            res = requests.get(url=url, headers=get_headers(host))
         try:
             dataset_result = dict_res(res.text)['content']
         except:
@@ -226,6 +226,6 @@ def get_step_output_ensure_statementId(HOST,params):
         return
 
 if __name__=="__main__":
-    sid=statementId_flow_use("http://192.168.1.84:8515","71f734bd-92d2-43c4-a0b2-b00a21c50dfc")
-    b=preview_result_flow_use("http://192.168.1.84:8515","71f734bd-92d2-43c4-a0b2-b00a21c50dfc",sid)
+    sid=statementId_flow_use("http://192.168.1.84:8515","875dc24b-e2bc-4361-8dd3-d340a9d32a49")
+    b=preview_result_flow_use("http://192.168.1.84:8515","875dc24b-e2bc-4361-8dd3-d340a9d32a49",sid)
     print(b)
