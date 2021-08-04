@@ -119,8 +119,8 @@ Dw_MySQL_CONFIG = {
 
 # -------83环境使用-------
 # HOST
-host = "http://192.168.1.145:30000"
-#host = "http://192.168.21.123:8515"
+host = "http://192.168.1.84:8515"
+# host = "http://192.168.1.84:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
 #     'HOST': '192.168.1.199',
@@ -138,11 +138,11 @@ MySQL_CONFIG1 = {
     'case_db': 'test'}
 
 MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 30307,
-    "USER": 'root',
-    "PASSWORD": 'root',
-    "DB": 'k8s_149',
+    'HOST': '192.168.1.82',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_83',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
@@ -152,7 +152,8 @@ tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
 tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
 tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b' #yulijiang
-tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
+tenant_id_84 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
+tenant_id_145 = "a5a4b81e-d2a6-498d-9ff0-3a627d3d5b5a"
 
 # compass admin账户登录信息
 MY_LOGIN_INFO_compass = {
@@ -193,16 +194,16 @@ MY_LOGIN_INFO = {
 MY_LOGIN_INFO2 = {
     "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
     "URL": "%s/api/auth/login" % host,
-    "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
+    "DATA": {'name': 'AES(414e48388a4ac93aa9707d5ac1b0d441)', 'password': 'AES(38cbd271dcecd23763faed1c4e6c9b37)', 'version': 'AES(13c1901e638cd722c268d21f45bf08ae)','tenant': 'AES(45cf55246a66a7817cca335b7b254312)'},
     "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
     "HOST": "%s" % host
 }
 
 # root账户登录信息
 MY_LOGIN_INFO_root = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
-    "URL": "%s/api/auth/login" % host,
-    "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded','Authorization':'Basic YmF5bWF4OjEyMzQ1Ng=='},
+    "URL": "%s/api/auth/oauth/token" % host,
+    "DATA": {'name': 'root', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password',"remember": False},
     "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
     "HOST": "%s" % host
 }

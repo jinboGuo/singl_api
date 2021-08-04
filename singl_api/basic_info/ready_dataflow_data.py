@@ -4,7 +4,7 @@ from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1, Dw_MySQL_CONFIG
 
 
 def get_dataflow_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id, name,flow_type from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -22,7 +22,7 @@ def get_dataflow_data(flow_name):
         return
 
 def query_dataflow_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -33,7 +33,7 @@ def query_dataflow_data(flow_name):
     return data
 
 def get_executions_data(flow_name):
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
         sql = "select id from merce_flow_execution where flow_name like '%s%%%%' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
@@ -46,7 +46,7 @@ def get_executions_data(flow_name):
 
 def set_upsert_data():
     print("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
     try:
       sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
       ms.ExecuNoQuery(sql.encode('utf-8'))
@@ -59,7 +59,7 @@ def set_upsert_data():
 
 def set_upsert_datas():
     print("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"])
+    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
     try:
         count=1
         sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
@@ -75,31 +75,42 @@ def set_upsert_datas():
 #删除测试数据
 def delete_autotest_datas():
     print("------开始删除测试数据-------")
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
     try:
-        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%'"
-        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%'  "
-        schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%'"
+        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%' or name like 'partition%'"
+        flow_execution_sql = "delete from merce_flow_execution where name like 'lq%'"
+        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%' or name like 'lq%'"
+        schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%' or name like 'lq%'"
         tenant_sql = "delete from merce_tenant where name like 'api_tenants%' order by create_time desc limit 1"
+        filesets_sql="DELETE from merce_fileset"
+        filesets_dir ="DELETE FROM merce_resource_dir where name like 'lq_fileset%'"
+        dss_sql="DELETE FROM merce_dss where name like 'lq%'"
         print("删除flow表测试数据 ", flow_sql)
         ms.ExecuNoQuery(flow_sql.encode('utf-8'))
+        print("删除flow_execution表测试数据 ", flow_execution_sql)
+        ms.ExecuNoQuery(flow_execution_sql.encode('utf-8'))
         print("删除dataset表测试数据 ", dataset_sql)
         ms.ExecuNoQuery(dataset_sql.encode('utf-8'))
         print("删除schema表测试数据 ", schema_sql)
         ms.ExecuNoQuery(schema_sql.encode('utf-8'))
         print("删除tenant表测试数据 ", tenant_sql)
         ms.ExecuNoQuery(tenant_sql.encode('utf-8'))
+        print("删除filesets表测试数据 ", filesets_sql)
+        ms.ExecuNoQuery(filesets_sql.encode('utf-8'))
+        print("删除filesets_dir表测试数据 ", filesets_dir)
+        ms.ExecuNoQuery(filesets_dir.encode('utf-8'))
+        ms.ExecuQuery(dss_sql.encode('utf-8'))
+        print("删除dss表测试数据 ", dss_sql)
     except:
        return
 
 def delete_autotest_dw():
     #print("------开始删除测试数据-------")
-    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
+    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"],Dw_MySQL_CONFIG["PORT"])
     try:
         dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
         dw_ref_dataset = "delete from dw_ref_dataset where name like 'api_order%'"
         dw_metadata = "delete from dw_metadata where name like 'api_order%' or name like 'api_aggr%'"
-        dw_metadata_info = "delete from dw_metadata_info where name like 'api_order%' or name like 'api_aggr%'"
         dw_model = "delete from dw_model where name like 'api_aggr%' or name like 'api_order%'"
         dw_category = "delete from dw_category where name like 'api_model%' or name like 'api_standard%'"
         dw_name_rules = "delete from dw_name_rules where alias like 'api_auto_namerule%'"
@@ -114,8 +125,6 @@ def delete_autotest_dw():
         ms.ExecuNoQuery(dw_ref_dataset.encode('utf-8'))
         #print("删除dw_metadata表测试数据 ", dw_metadata)
         ms.ExecuNoQuery(dw_metadata.encode('utf-8'))
-        #print("删除dw_metadata_info表测试数据 ", dw_metadata_info)
-        ms.ExecuNoQuery(dw_metadata_info.encode('utf-8'))
         #print("删除dw_model表测试数据 ", dw_model)
         ms.ExecuNoQuery(dw_model.encode('utf-8'))
         #print("删除dw_category表测试数据 ", dw_category)

@@ -15,7 +15,7 @@ def get_auth_token(HOST):
         else:
             res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
             dict_headers = dict_res(res.text)
-            token = dict_headers['content']["accessToken"]
+            token = dict_headers['content']["access_token"]
             return 'Bearer ' + token
     except:
         return
@@ -23,7 +23,7 @@ def get_auth_token(HOST):
 # 组装headers， 接口请求时调用
 def get_headers(HOST):
     x_auth_token = get_auth_token(HOST)
-    headers = {'Content-Type': 'application/json', "X-AUTH-TOKEN": x_auth_token, "Accept": "*/*"}
+    headers = {'Content-Type': 'application/json', "Authorization": x_auth_token, "Accept": "*/*"}
     return headers
 
 
@@ -48,11 +48,14 @@ def get_auth_token_root(HOST):
         token = dict_headers['X-AUTH-TOKEN']
         return token
     else:
-        res = requests.post(url=MY_LOGIN_INFO_root["URL"], headers=MY_LOGIN_INFO_root["HEADERS"],
-                            data=MY_LOGIN_INFO_root["DATA"])
-        dict_headers = dict_res(res.text)
-        token = dict_headers['content']["accessToken"]
-        return 'Bearer ' + token
+        try:
+            res = requests.post(url=MY_LOGIN_INFO_root["URL"], headers=MY_LOGIN_INFO_root["HEADERS"],
+                                data=MY_LOGIN_INFO_root["DATA"])
+            dict_headers = dict_res(res.text)
+            token = dict_headers['content']["access_token"]
+            return 'Bearer ' + token
+        except:
+            return
 
 # 组装headers， 接口请求时调用
 def get_headers_root(HOST):
@@ -116,7 +119,7 @@ def get_auth_token_compass(HOST):
         res = requests.post(url=MY_LOGIN_INFO_compass["URL"], headers=MY_LOGIN_INFO_compass["HEADERS"], json=MY_LOGIN_INFO_compass["DATA"])
         #print("res: ", res)
         dict_headers = dict_res(res.text)
-        token = dict_headers['content']["accessToken"]
+        token = dict_headers['content']["access_token"]
         return token
 
 # 组装headers， 接口请求时调用

@@ -6,22 +6,6 @@ import datetime
 from basic_info.setting import receivers_list,receivers_test
 
 
-# 添加用例集的API用例。暂停
-# testcase = unittest.TestSuite()
-# discover = unittest.defaultTestLoader.discover(start_dir='./api_test_cases', pattern='cases_for_*.py')
-# for test_suite in discover:
-#     for test_case in test_suite:
-#         # print(test_case)
-#         testcase.addTest(test_case)
-# filename = time.strftime("%Y%m%d%H", time.localtime()) + '_report.html'
-# # report_path = 'E:\Reports\\' + filename
-# # report_path = '/root/gbj/Reports/' + filename  # 192.168.1.87环境Jenkins使用
-# report_path = './Reports/' + filename  # 192.168.1.87环境Jenkins使用
-# fp = open(report_path, 'wb')
-# runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title='API自动化测试报告', description='覆盖dataset,schema,schedulers,execution等测试场景')
-# print('开始执行用例集用例')
-# runner.run(testcase)
-# fp.close()
 print('------开始执行用例-------')
 start_time = datetime.datetime.now()
 print('用例执行环境：', host)
@@ -41,8 +25,7 @@ stop_time = datetime.datetime.now()
 print('结束时间：', stop_time)
 print('耗时:', stop_time-start_time)
 # 发送邮件
-#mail_for_flow(host,receivers_list)
-
+# mail_for_flow(host,receivers_list)
 
 
 

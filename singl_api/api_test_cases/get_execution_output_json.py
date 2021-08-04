@@ -15,7 +15,7 @@ import os
 
 abs_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
-
+sink_output_info=[{'flow_id': '24f31e32-3f6b-43ec-bfb5-78d729a130d1', 'execution_id': '7067f0dc-5329-4a23-8bdf-97828f5440b8', 'flow_scheduler_id': 'c346f756-acbe-4f8b-8aae-10dd44d47b93', 'e_final_status': 'SUCCEEDED', 'dataset_id': 'd6bcbe32-3fcd-4e9f-ba9a-26a7bb6f7a81'}, {'flow_id': '828972d0-ddc5-4072-b9c5-914fb05199aa', 'execution_id': '52f7f051-089a-4239-aec6-67176dfaa372', 'flow_scheduler_id': 'a8c0da5d-0700-4763-8ef8-c14893e07b96', 'e_final_status': 'SUCCEEDED', 'dataset_id': '3b4ade52-5eaf-4ed6-98cd-824b217549e1'}, {'flow_id': 'c3755e6b-0190-4487-b892-642124f7a6f6', 'execution_id': 'ffd87be6-0ca5-4f4f-bb4a-05904323f467', 'flow_scheduler_id': '7c41505d-4ce0-4b4e-93ef-006ec1e0c37e', 'e_final_status': 'SUCCEEDED', 'dataset_id': '875dc24b-e2bc-4361-8dd3-d340a9d32a49'}, {'flow_id': '960c167c-bcc7-4a7d-9f51-536affcb4d58', 'execution_id': '5b6f0a34-6c2a-48a9-81ec-eb5b5a8d03e0', 'flow_scheduler_id': '6788b0c7-dcbb-449f-9a01-803ca6632ab7', 'e_final_status': 'SUCCEEDED', 'dataset_id': '36cf17f9-e7a7-4161-a5e0-c0f0d0b3f45d'}]
 class GetCheckoutDataSet(object):
     """
     批量提交execution任务
@@ -25,10 +25,10 @@ class GetCheckoutDataSet(object):
 
     def __init__(self):
         """初始化数据库连接"""
-        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+        self.ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
         self.host = host
         self.table = "flow_dataset_info.xlsx"
-        self.table_sheet = 'flow_info-57'
+        self.table_sheet = '84'
 
     def get_flow_id(self):
         """
@@ -197,7 +197,7 @@ class GetCheckoutDataSet(object):
             scheduler_number += 1
             time.sleep(2)
             # print(res.status_code, res.text)
-            if res.status_code == 201 and res.text:
+            if str(res.status_code).startswith('2') and res.text:
                 scheduler_id_format = dict_res(res.text)
                 try:
                     scheduler_id = scheduler_id_format["id"]
@@ -352,11 +352,11 @@ class GetCheckoutDataSet(object):
         :return:
         """
         print("------开始执行get_json()------")
-        sink_output_info = self.get_execution_out_put()
+        # sink_output_info = self.get_execution_out_put()
         flow_table = load_workbook(abs_dir(self.table))
         flow_sheet = flow_table.get_sheet_by_name(self.table_sheet)
         sheet_rows = flow_sheet.max_row  # 获取行数
-        print(sink_output_info)
+        print("打印sink_output_info的结果%s"%sink_output_info)
         flow_id_list = self.get_flow_id_not_distinct()  # 获取flow表中未去重的所有flow id
         sink_multi_flow_id = count_items(flow_id_list)[0]  # 重复的flow id
         sink_multi_flow_sink_num = count_items(flow_id_list)[1]  # 重复的flow id 所重复的次数
@@ -377,42 +377,48 @@ class GetCheckoutDataSet(object):
                                     res = requests.get(url=priview_url, headers=get_headers(self.host))
                                     result = res.text
                                 else:
-                                    statementID = statementId_flow_use(self.host, dataset_id, tenant_id_83)
-                                    result = preview_result_flow_use(self.host, dataset_id, get_tenant(self.host),statementID)
+                                    statementID = statementId_flow_use(self.host, dataset_id)
+                                    result = preview_result_flow_use(self.host, dataset_id,statementID)
                                 flow_sheet.cell(row=j+i, column=4, value=dataset_id)
                                 flow_sheet.cell(row=j+i, column=8, value=str(result))
 
 
         for i in range(0, len(sink_output_info)):
-            dataset_id = sink_output_info[i]["dataset_id"]
-            flow_id = sink_output_info[i]["flow_id"]
-            if '57' in self.host:
-                priview_url = "%s/api/datasets/%s/preview?rows=5000&tenant=%s&rows=50" % (
-                    self.host, dataset_id, get_tenant(self.host))
-                res = requests.get(url=priview_url, headers=get_headers(self.host))
-                result = res.text
+            try:
+                dataset_id = sink_output_info[i]["dataset_id"]
+                flow_id = sink_output_info[i]["flow_id"]
+            except:
+                print('请确认sink_output_info的结果:')
             else:
-                statementID = statementId_flow_use(self.host, dataset_id, tenant_id_83)
-                result = preview_result_flow_use(self.host, dataset_id, get_tenant(self.host), statementID)
-            for j in range(2, sheet_rows + 1):  # 按照行数进行循环
-                    log_url = GetLog(sink_output_info[i]["execution_id"], self.host).get_log_url()
-                    # 如果 dataset id相等就写入实际结果，不相等就向下找
-                    if dataset_id == flow_sheet.cell(row=j, column=4).value:
-                        flow_sheet.cell(row=j, column=8, value=str(result))  # dataset id 相等，实际结果写入表格
-                    # flow id 相等时，将execution id ,yarn上的log URL 和执行状态写入
-                    if flow_id == flow_sheet.cell(row=j, column=2).value:
-                        # print(sink_dataset[i]["flow_id"])
-                        flow_sheet.cell(row=j, column=5, value=sink_output_info[i]["execution_id"])
-                        flow_sheet.cell(row=j, column=12, value=log_url)
-                        flow_sheet.cell(row=j, column=6, value=sink_output_info[i]["e_final_status"])
-                    else:
-                        for t in range(j, 2, -1):
-                            if flow_id == flow_sheet.cell(row=t - 1, column=2).value:
-                                flow_sheet.cell(row=j, column=5, value=sink_output_info[i]["execution_id"])
-                                flow_sheet.cell(row=j, column=12, value=log_url)
-                                flow_sheet.cell(row=j, column=6, value=sink_output_info[i]["e_final_status"])
-                                # flow_sheet.cell(row=j, column=8, value=result.text)  # 实际结果写入表格
-                                break
+                if '57' in self.host:
+                    priview_url = "%s/api/datasets/%s/preview?rows=5000&tenant=%s&rows=50" % (
+                        self.host, dataset_id, get_tenant(self.host))
+                    res = requests.get(url=priview_url, headers=get_headers(self.host))
+                    result = res.text
+                else:
+                    statementID = statementId_flow_use(self.host, dataset_id)
+                    result = preview_result_flow_use(self.host, dataset_id, statementID)
+                    print("打印预览数据集的结果%s"%result)
+                for j in range(2, sheet_rows + 1):  # 按照行数进行循环
+                        log_url = GetLog(sink_output_info[i]["execution_id"], self.host).get_log_url()
+                        # 如果 dataset id相等就写入实际结果，不相等就向下找
+                        if dataset_id == flow_sheet.cell(row=j, column=4).value:
+                            flow_sheet.cell(row=j, column=8, value=str(result))  # dataset id 相等，实际结果写入表格
+                        # flow id 相等时，将execution id ,yarn上的log URL 和执行状态写入
+                        if flow_id == flow_sheet.cell(row=j, column=2).value:
+                            # print(sink_dataset[i]["flow_id"])
+                            flow_sheet.cell(row=j, column=5, value=sink_output_info[i]["execution_id"])
+                            flow_sheet.cell(row=j, column=12, value=log_url)
+                            flow_sheet.cell(row=j, column=6, value=sink_output_info[i]["e_final_status"])
+                            break
+                        else:
+                            for t in range(j, 2, -1):
+                                if flow_id == flow_sheet.cell(row=t - 1, column=2).value:
+                                    flow_sheet.cell(row=j, column=5, value=sink_output_info[i]["execution_id"])
+                                    flow_sheet.cell(row=j, column=12, value=log_url)
+                                    flow_sheet.cell(row=j, column=6, value=sink_output_info[i]["e_final_status"])
+                                    # flow_sheet.cell(row=j, column=8, value=result.text)  # 实际结果写入表格
+                                    break
         flow_table.save(abs_dir(self.table))
 
         table = load_workbook(abs_dir(self.table))
@@ -442,7 +448,7 @@ class GetCheckoutDataSet(object):
                     table_sheet.cell(row=i, column=9, value="fail")
                     table_sheet.cell(row=i, column=10, value="execution: %s 预期结果实际结果不一致,实际结果为空 " %
                                                              (table_sheet.cell(row=i, column=5).value))
-                elif table_sheet.cell(row=i, column=6).value == 'FAILED':
+                elif table_sheet.cell(row=i, column=6).value == 'FAILED'or table_sheet.cell(row=i, column=6).value == '':
                     table_sheet.cell(row=i, column=9, value="fail")
                     table_sheet.cell(row=i, column=10, value="execution: %s 执行状态为 %s" % (
                         table_sheet.cell(row=i, column=5).value, table_sheet.cell(row=i, column=6).value))
@@ -456,8 +462,10 @@ class GetCheckoutDataSet(object):
                     if table_sheet.cell(row=i, column=8).value and table_sheet.cell(row=i, column=6).value == "SUCCEEDED":
                         # va7为预期结果，va8为实际结果，将二者先排序后对比是否相等
                         va7 = list(eval(table_sheet.cell(row=i, column=7).value))
-                        va8 = list(eval(table_sheet.cell(row=i, column=8).value))   # 注意：是不是需要放在if 语句后面？？？？
+                        va8=table_sheet.cell(row=i, column=8).value
+                          # 注意：是不是需要放在if 语句后面？？？？
                         if va7 != [] and eval(table_sheet.cell(row=i, column=8).value).__class__ == [].__class__ :
+                            va8 = list(eval(table_sheet.cell(row=i, column=8).value))
                             va7_k = va7[0].keys()
                             va7_key = list(va7_k)
                             # 安排不同的key进行排序，只要有其中一个key排序后相等，就认为两个结果相等
@@ -522,7 +530,7 @@ class GetCheckoutDataSet(object):
 
 
 if __name__ == '__main__':
-    GetCheckoutDataSet()
+    GetCheckoutDataSet().get_json()
     # print(GetCheckoutDataSet().get_flow_id())
 
 
