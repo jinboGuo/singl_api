@@ -6,6 +6,12 @@ from util.logs import Logger
 from new_api_cases.test import operateKafka
 
 kafka =operateKafka()
+# fs_scheduler = {
+#     'HOST': '192.168.1.188',
+#     "USER": 'merce',
+#     "PASSWORD": 'merce'
+# }
+
 fs_scheduler = {
     'HOST': '192.168.1.81',
     "USER": 'merce',
@@ -23,7 +29,7 @@ def check_s_l_message(data):
     try:
         log.info("----开始监控发送kafka消息----")
         message_select_result = ms.ExecuQuery(data.encode('utf-8'))
-        while 1:
+        while True:
             if message_select_result:
                 log.info("----s_l_message----存在kafka消息数据！")
                 log.info("job_data_oid: %s full_name: %s status: %s slice_type: %s slice_time: %s create_time: %s row_number: %s"\
@@ -50,7 +56,7 @@ def check_s_r_task(data):
     try:
         log.info("----开始监控日志调度任务数据----")
         task_select_result = ms.ExecuQuery(data.encode('utf-8'))
-        while 1:
+        while True:
             if task_select_result:
                 if task_select_result[0]["status"] == 0:
                     log.info("----s_r_task----日志调度任务待执行！")
@@ -93,7 +99,7 @@ def check_s_r_task(data):
                     task_select_result = ms.ExecuQuery(data.encode('utf-8'))
                     try:
                         if task_select_result:
-                            if task_select_result[0]["status"] == 1:
+                            if task_select_result[0]["status"] == True:
                                 sleep(5)
                                 continue
                         else:
@@ -121,7 +127,7 @@ def check_s_l_result_task(data):
     try:
         log.info("----开始监控调度任务数据----")
         result_task_select_result = ms.ExecuQuery(data.encode('utf-8'))
-        while 1:
+        while True:
             if result_task_select_result:
                 if result_task_select_result[0]["status"] == 1:
                     log.info("----s_l_result_task----调度任务执行中！")
@@ -186,7 +192,7 @@ def check_s_l_result_detail(data):
         log.info("----开始监控调度任务输入结果----")
         result_detail_select_result = ms.ExecuQuery(data.encode('utf-8'))
         n = 0
-        while 1:
+        while True:
             if result_detail_select_result:
                 if result_detail_select_result[0]["status"] == 2:
                     log.info("----s_l_result_detail----调度任务输入结果执行成功！")
@@ -240,7 +246,7 @@ def check_s_l_result_output(data):
         log.info("----开始监控调度任务输出结果----")
         result_output_select_result = ms.ExecuQuery(data.encode('utf-8'))
         n = 0
-        while 1:
+        while True:
             if result_output_select_result:
                 if result_output_select_result[0]["status"] == 2:
                     log.info("----s_l_result_output----调度任务输出结果执行成功！")
@@ -289,11 +295,11 @@ def check_s_l_result_output(data):
     except Exception as e:
         log.error("异常信息：%s" %e)
 
-s_l_message="select job_data_oid,full_name,status,slice_type ,slice_time,create_time,row_number from s_l_message order by create_time desc limit 1"
-s_r_task = "select task_oid,job_oid,status,slice_type ,slice_time ,create_time,row_number,cdo_name, dataformat_name from s_r_task order by create_time desc limit 1"
+s_l_message="select job_data_oid,full_name,status,slice_type ,slice_time,create_time,row_number from s_l_message where full_name like '%demo%' order by create_time desc limit 1"
+s_r_task = "select task_oid,job_oid,status,slice_type ,slice_time ,create_time,row_number,cdo_name, dataformat_name from s_r_task where dataformat_name like 'test%' order by create_time desc limit 1"
 s_l_result_task = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_output,task_name, result_oid from s_l_result_task order by create_time desc limit 1"
-s_l_result_detail = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_detail order by create_time desc limit 1"
-s_l_result_output = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_output order by create_time desc limit 1"
+s_l_result_detail = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_detail where dataformat_name like 'test%' order by create_time desc limit 1"
+s_l_result_output = "select job_oid,status,slice_type ,slice_time ,create_time,row_number_init,task_name, cdo_name ,dataformat_name from s_l_result_output where dataformat_name like 'test%' order by create_time desc limit 1"
 # cd = "cd /data/input/demo/"
 # sh = "sh createdata2.sh"
 # mv = "mv [demo]* gdemo/"
@@ -301,7 +307,8 @@ cd = "cd /app/data/"
 sh = "sh createdata2.sh"
 dle = "rm -rf demo*"
 upload = "hdfs dfs -put [demo]* /tmp/gjt"
-msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////test4_2021024318_20210223185943_192.168.1.55_97.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>hour_now()</sliceTime><createTime>data_now()</createTime><rowNumber>370</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>13331</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
+msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////test4_2021024318_20210223185943_192.168.1.55_97.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>hour_now()</sliceTime><createTime>data_now()</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
+cluster ="hdfs://mycluster"  # "hdfs://europa:8020"
 
 def run_all():
     # host.connect()
@@ -317,7 +324,7 @@ def run_all():
     sleep(7)
     fs_host.send(upload)
     sleep(3)
-    kafka.sendMessage(msg)
+    kafka.sendMessage(cluster,msg)
     fs_host.send(dle)
     check_s_l_message(s_l_message)
     check_s_r_task(s_r_task)
@@ -326,8 +333,8 @@ def run_all():
     check_s_l_result_output(s_l_result_output)
 
 n = 0
-while 1:
+while True:
  run_all()
  n += 1
- if n == 50:
+ if n == 10:
      break
