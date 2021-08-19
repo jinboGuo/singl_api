@@ -27,18 +27,6 @@ Compass_scheduler = {
     "PASSWORD": 'Inf0refiner'
 }
 
-# # -------189环境使用-------
-# HOST
-# host = "http://192.168.1.189:8515"
-# # 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce',
-#     'case_db': 'test'}
-
 # # -------comapss环境使用-------
 # # HOST
 compass_host = "http://192.168.1.55:8023"
@@ -59,17 +47,7 @@ Compass_MySQL_CONFIG = {
 #     "DB": 'merce_199',
 #     'case_db': 'test'
 # }
-# # -------81环境使用-------
-# # HOST
-# host = "http://192.168.1.81:8515"
-# # # # # 数据库连接信息
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.57',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'database_81'
-# }
+
 # # -------dsp环境使用-------
 # # # HOST
 dsp_host = "http://192.168.1.82:8008"
@@ -107,7 +85,7 @@ Dsp_MySQL_CONFIG = {
 
 # -------k8s-dw环境使用-------
 # # HOST
-dw_host = "http://192.168.1.145:30000"
+dw_host = "http://192.168.1.145:40001"
 # # # # # 数据库连接信息
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.145',
@@ -117,9 +95,9 @@ Dw_MySQL_CONFIG = {
     "DB": 'k8s_149'
 }
 
-# -------83环境使用-------
+# -------k8s环境使用-------
 # HOST
-host = "http://192.168.1.84:8515"
+host = "http://192.168.1.145:40001"
 # host = "http://192.168.1.84:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
@@ -138,11 +116,11 @@ MySQL_CONFIG1 = {
     'case_db': 'test'}
 
 MySQL_CONFIG = {
-    'HOST': '192.168.1.82',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_83',
+    'HOST': '192.168.1.145',
+    "PORT": 30307,
+    "USER": 'root',
+    "PASSWORD": 'root',
+    "DB": 'baymax_test',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
@@ -151,7 +129,7 @@ tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
 tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
 tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
-tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b' #yulijiang
+tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b'
 tenant_id_84 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_145 = "a5a4b81e-d2a6-498d-9ff0-3a627d3d5b5a"
 
@@ -199,7 +177,16 @@ MY_LOGIN_INFO2 = {
     "HOST": "%s" % host
 }
 
-# root账户登录信息
+# 1.2.2-root账户登录信息
+# MY_LOGIN_INFO_root = {
+#     "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+#     "URL": "%s/api/auth/login" % host,
+#     "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+#     "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+#     "HOST": "%s" % host
+# }
+
+# master-root账户登录信息
 MY_LOGIN_INFO_root = {
     "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded','Authorization':'Basic YmF5bWF4OjEyMzQ1Ng=='},
     "URL": "%s/api/auth/oauth/token" % host,
@@ -370,5 +357,5 @@ ES = [
 ]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
-receivers_test = ['289332729@qq.com','jinbo.guo@inforefiner.com','qian.feng@inforefiner.com','zhiming.wang@inforefiner.com']
+receivers_list = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
+receivers_test = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com','zhiming.wang@inforefiner.com']
