@@ -1,6 +1,5 @@
 # coding:utf-8
 import smtplib
-import os.path as pth
 import time, os
 from email import encoders
 from email.mime.text import MIMEText
@@ -12,7 +11,7 @@ from smtplib import SMTP_SSL
 from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
 from new_api_cases.execute_cases import ab_dir
-from basic_info.setting import receivers_list, host
+from basic_info.setting import receivers_list, host, receivers_test
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
@@ -60,11 +59,11 @@ def main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
-    sender_163 = "ruifan_test@163.com"
+    sender_163 = "ruifan_apitest@163.com"
     # pwd为发件人163邮箱的授权码
-    pwd = "ruifantest2018"
+    pwd = "OVTVEQJNXXUEKTVV"
     # 发件人的邮箱
-    sender_163_mail = "ruifan_test@163.com"
+    sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
     receivers = receivers_list  # 定时任务使用
     #receivers = receivers_test  # 调试使用
@@ -148,11 +147,11 @@ def mail_for_flow(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
-    sender_163 = "ruifan_test@163.com"
+    sender_163 = "ruifan_apitest@163.com"
     # pwd为发件人163邮箱的授权码
-    pwd = "ruifantest2018"
+    pwd = "OVTVEQJNXXUEKTVV"
     # 发件人的邮箱
-    sender_163_mail = "ruifan_test@163.com"
+    sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
     #receivers = receivers_test  # 调试使用
     receivers = receivers_list  # 定时任务使用
@@ -241,7 +240,7 @@ def mail_for_flow(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,fq,wzm", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -254,13 +253,13 @@ def dsp_main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
-    sender_163 = "ruifan_test@163.com"
+    sender_163 = "ruifan_apitest@163.com"
     # pwd为发件人163邮箱的授权码
-    pwd = "ruifantest2018"
+    pwd = "OVTVEQJNXXUEKTVV"
     # 发件人的邮箱
-    sender_163_mail = "ruifan_test@163.com"
+    sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
-    receivers = receivers_list  # 定时任务使用
+    receivers = receivers_test  # 定时任务使用
     #receivers = receivers_test  # 调试使用
     msg = MIMEMultipart()
 
@@ -332,7 +331,7 @@ def dsp_main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,fq,wzm", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -341,11 +340,11 @@ def dw_main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
-    sender_163 = "ruifan_test@163.com"
+    sender_163 = "ruifan_apitest@163.com"
     # pwd为发件人163邮箱的授权码
-    pwd = "ruifantest2018"
+    pwd = "OVTVEQJNXXUEKTVV"
     # 发件人的邮箱
-    sender_163_mail = "ruifan_test@163.com"
+    sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
     receivers = receivers_list  # 定时任务使用
     #receivers = receivers_test  # 调试使用
@@ -419,7 +418,7 @@ def dw_main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,fq,wzm", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
@@ -428,11 +427,11 @@ def compass_main3(host,receivers):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
-    sender_163 = "ruifan_test@163.com"
+    sender_163 = "ruifan_apitest@163.com"
     # pwd为发件人163邮箱的授权码
-    pwd = "ruifantest2018"
+    pwd = "OVTVEQJNXXUEKTVV"
     # 发件人的邮箱
-    sender_163_mail = "ruifan_test@163.com"
+    sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
     receivers = receivers_list  # 定时任务使用
     #receivers = receivers_test  # 调试使用
@@ -506,7 +505,7 @@ def compass_main3(host,receivers):
     smtp.login(sender_163_mail, pwd)
     msg["Subject"] = Header(mail_title, 'utf-8')
     msg["From"] = sender_163
-    msg["To"] = Header("gjb,lq,fq", 'utf-8')  # 接收者的别名
+    msg["To"] = Header("gjb,fq,wzm", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
