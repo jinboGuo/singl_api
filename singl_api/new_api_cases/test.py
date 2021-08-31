@@ -8,7 +8,7 @@ import requests
 from elasticsearch import Elasticsearch
 from util.timestamp_13 import data_now, hour_stamp, hour_slice
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 ''''''
 sql = "select links from merce_flow where  name = 'minus_0628_3_no_element_test'"
 insetsql = "insert  into blob_test0430"
@@ -116,13 +116,13 @@ class operateKafka:
     """
     function:send message to kafka
     """
-    def sendMessage(self, data):
+    def sendMessage(self, cluster,data):
         with self.topic.get_sync_producer() as producer:
                  js = xmlToJson(data)
                  js=json.loads(js)
                  js["root"]["sliceTime"]=str(hour_slice())
                  js["root"]["createTime"]=str(data_now())
-                 js["root"]["fullName"]="hdfs://info1:8020///tmp/gjt////demo-"+str(hour_stamp())+".csv"
+                 js["root"]["fullName"]=cluster+"///tmp/gjt////demo-"+str(hour_stamp())+".csv"
                  print(js)
                  xm = jsonToXml(json.dumps(js))
                  print(xm)
