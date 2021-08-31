@@ -1,14 +1,13 @@
 # coding:utf-8
 import os
-from util import Open_DB
 from util.encrypt import encrypt_rf
 
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__name__)))
 DATA_PATH = os.path.join(BASE_PATH, 'test_cases')
 REPORT_PATH = os.path.join(BASE_PATH, 'report')
-email_user = 'ruifan_test@163.com'  # 发送者账号
-email_pwd = 'ruifantest'       # 发送者密码
+email_user = 'ruifan_apitest@163.com'  # 发送者账号
+email_pwd = 'ruifantest2018'       # 发送者密码
 email_list = {
     "guojinbo": "jinbo.guo@inforefiner.com",
 }
@@ -101,11 +100,11 @@ host = "http://192.168.1.145:40001"
 # host = "http://192.168.1.84:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
-#     'HOST': '192.168.1.199',
+#     'HOST': '192.168.1.84',
 #     "PORT": 3306,
 #     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'wac666',
+#     "PASSWORD": 'merce',
+#     "DB": 'merce_83',
 #     'case_db': 'test'}
 MySQL_CONFIG1 = {
     'HOST': '192.168.1.75',
@@ -358,4 +357,4 @@ ES = [
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
 receivers_list = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
-receivers_test = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com','zhiming.wang@inforefiner.com']
+receivers_test = ['jinbo.guo@inforefiner.com']
