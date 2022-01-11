@@ -7,7 +7,6 @@ import time
 from datetime import datetime
 import jsonpath
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
-
 from basic_info.mylogging import myLog
 from httpop.Httpop import Httpop
 from util import get_host
@@ -17,7 +16,7 @@ from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_tok
 from util.elasticsearch import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
-from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2
+from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2, baymax_sheet
 from util.Open_DB import MYSQL
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data, query_dataflow_data
 from basic_info.setting import tenant_id_83
@@ -35,9 +34,8 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('k8s_149')
+case_table_sheet = case_table.get_sheet_by_name(baymax_sheet)
 all_rows = case_table_sheet.max_row
-jar_dir=os.path.join(os.path.abspath('.'),'attachment\process-20210524164710.woven')
 fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
 log=myLog().getLog().logger
 minio_data=[]
@@ -495,7 +493,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail in ('配置工作流选择器-上传jar包', '配置过滤器-上传jar包', '配置批处理选择器-上传jar包'):
             print('开始执行：', case_detail)
-            files = {"file": open(jar_dir, 'rb')}
+            files = {"file": open(fileset_dir, 'rb')}
             headers.pop('Content-Type')
             response = httpop.api_post(url=url, files=files, headers=headers)
             print(response.text, response.status_code)

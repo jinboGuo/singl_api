@@ -5,7 +5,7 @@ import re
 from openpyxl import load_workbook
 import requests
 from util.format_res import dict_res
-from basic_info.setting import Compass_MySQL_CONFIG, compass_host
+from basic_info.setting import Compass_MySQL_CONFIG, compass_host, compass_sheet
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_compass
 from new_api_cases.compass_deal_parameters import deal_parameters
@@ -17,9 +17,9 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('compass')
+case_table_sheet = case_table.get_sheet_by_name(compass_sheet)
 all_rows = case_table_sheet.max_row
-jar_dir = ab_dir('Scheduler_import.xlsx')
+jar_dir_push = os.path.join(os.path.abspath('.'),'attachment\Scheduler_import.xlsx')
 host =compass_host
 log = Logger().get_log()
 

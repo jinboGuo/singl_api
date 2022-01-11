@@ -55,7 +55,7 @@ def get_tomorrow():
     #print("tomorrow:", date_stamp)
     return int(date_stamp)
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 def timestamp_now():
     now_time = datetime.now().isoformat()
@@ -64,6 +64,8 @@ def timestamp_now():
     times = str(time)[:-3]
     #print(times)
     return times
+#print(timestamp_now())
+
 def timestamp_utc():
     now_time = datetime.now().isoformat()
     #print("ISO格式的日期和时间是 %s" % now_time)
@@ -98,6 +100,27 @@ def hour_stamp():
     import datetime
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y%m%d%H')
+    #print(now_time_nyr)
+    return str(now_time_nyr)
+
+def min_stamp():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y%m%d%H%M')
+    #print(now_time_nyr)
+    return now_time_nyr
+
+def second_stamp():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y%m%d%H%M%S')
+    #print(now_time_nyr)
+    return now_time_nyr
+
+def day_now():
+    import datetime
+    now_time = datetime.datetime.now()
+    now_time_nyr = now_time.strftime('%Y-%m-%d')
     #print(now_time_nyr)
     return str(now_time_nyr)
 #get_tomorrow()

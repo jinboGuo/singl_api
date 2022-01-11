@@ -3,7 +3,7 @@ from basic_info.setting import Compass_MySQL_CONFIG, Compass_scheduler
 from util.Open_DB import MYSQL
 from util.conn_linux import Linux
 from util.logs import Logger
-from new_api_cases.test import operateKafka
+from util.comm_util import operateKafka
 
 kafka =operateKafka()
 # fs_scheduler = {
@@ -306,7 +306,7 @@ s_l_result_output = "select job_oid,status,slice_type ,slice_time ,create_time,r
 cd = "cd /app/data/"
 sh = "sh createdata2.sh"
 dle = "rm -rf demo*"
-upload = "hdfs dfs -put [demo]* /tmp/gjt"
+upload = "hadoop dfs -put [demo]* /tmp/gjt"
 msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////test4_2021024318_20210223185943_192.168.1.55_97.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>hour_now()</sliceTime><createTime>data_now()</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
 cluster ="hdfs://mycluster"  # "hdfs://europa:8020"
 
@@ -321,9 +321,9 @@ def run_all():
     fs_host.connect()
     fs_host.send(cd)
     fs_host.send(sh)
-    sleep(7)
+    sleep(9)
     fs_host.send(upload)
-    sleep(3)
+    sleep(5)
     kafka.sendMessage(cluster,msg)
     fs_host.send(dle)
     check_s_l_message(s_l_message)
@@ -336,5 +336,5 @@ n = 0
 while True:
  run_all()
  n += 1
- if n == 10:
+ if n == 2:
      break

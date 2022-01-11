@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import Dsp_MySQL_CONFIG
+from basic_info.setting import Dsp_MySQL_CONFIG, dsp_sheet
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
@@ -20,12 +20,12 @@ from basic_info.setting import dsp_host
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"], Dsp_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('dsp')
+case_table_sheet = case_table.get_sheet_by_name(dsp_sheet)
 all_rows = case_table_sheet.max_row
 log = Logger().get_log()
 host = dsp_host
-jar_dir_pull = ab_dir('pullService_2021.xlsx')
-jar_dir_push = ab_dir('pushService_2021.xlsx')
+jar_dir_pull = os.path.join(os.path.abspath('.'),'attachment\pullService_2021.xlsx')
+jar_dir_push = os.path.join(os.path.abspath('.'),'attachment\pushService_2021.xlsx')
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
