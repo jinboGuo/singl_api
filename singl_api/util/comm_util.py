@@ -1,4 +1,9 @@
-from basic_info.setting import MySQL_CONFIG
+import socket
+import time
+
+from kafka import KafkaProducer
+from util.logs import Logger
+from basic_info.setting import MySQL_CONFIG1
 from util.Open_DB import MYSQL
 import base64
 import xmltodict
@@ -6,12 +11,13 @@ from pykafka import KafkaClient
 import json
 import requests
 from elasticsearch import Elasticsearch
-from util.timestamp_13 import data_now, hour_stamp, hour_slice
+from util.timestamp_13 import data_now, hour_stamp, hour_slice, second_stamp, min_stamp, day_now, timestamp_now
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
+log = Logger().get_log()
+ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"], MySQL_CONFIG1["PORT"])
 ''''''
 sql = "select links from merce_flow where  name = 'minus_0628_3_no_element_test'"
-insetsql = "insert  into blob_test0430"
+
 
 
 def xmlToJson(xml):
@@ -56,14 +62,6 @@ def test_pull():
 #     blob1=f.read()
 #     f.close()
 #     print(blob1)
-#     f= open("F:/AUtoApi/For_API/singl_api/new_api_cases/3.doc", "rb")
-#     doc=f.read()
-#     f.close()
-#     print(doc)
-#     f=open("F:/AUtoApi/For_API/singl_api/new_api_cases/test1.txt", "rb")
-#     txt=f.read()
-#     f.close()
-#     print(txt)
 #     f = open("F:/AUtoApi/For_API/singl_api/new_api_cases/sex.xls", "rb")
 #     xls = f.read()
 #     f.close()
@@ -98,20 +96,55 @@ def decod_blob():
 
 
 def es_create():
-    es = Elasticsearch(hosts="192.168.2.142", port=9200, http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证
-    es.indices.create(index="sink_es3", ignore=400)
+    es = Elasticsearch(hosts="192.168.2.131", port=9200,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+    #es = Elasticsearch(hosts="192.168.1.82", port=9206) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+    es.indices.create(index="sink_es6", ignore=400)
+    for i in range(10000):
+        time.sleep(1)
+        data = {"name": "小明", "age": "28", "gender": "男","date":"2021-12-16","ad":"","calss":3,"kind":"23","book":"语文","count":"","price":228,"love":"reading"}
+        # 3发数据
+        log.info("往es输入的data：%s",data)
+        res = es.index(index="sink_es6", doc_type="doc", body=data)
+        if i==10000:
+            break
 
-    data = {"name": "小明", "age": "8", "gender": "男"}
-    res = es.index(index="sink_es3", doc_type="doc", body=data)
-    print(res)
 
+def socket_tcp():
+  # 1初始化套接字
+    tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+      # 2建立链接  要传入链接的服务器ip和port
+    tcp_socket.connect(('192.168.1.83', 8881))
+    for i in range(10000):
+        time.sleep(1)
+        data={"id":i,"name":"zhangsan"+str(i),"sex":"M","age":30,"dates":data_now()}
+        # 3发数据
+        log.info("往tcp协议socket输入的data：%s",data)
+        tcp_socket.send(str(data).encode('utf-8'))
+        tcp_socket.send(str('\n').encode('utf-8'))
+
+
+def insert_table():
+    for i in range(100000):
+      if i%2==0:
+        insertsql = "insert  into supp values ('%s','%s','%s','%s')"%("wangwu"+str(i),31,'F',data_now())
+        ms.ExecuNoQuery(insertsql)
+      else:
+          insertsql = "insert  into supp values ('%s','%s','%s','%s')"%("lisi"+str(i),29,'M',data_now())
+          ms.ExecuNoQuery(insertsql)
 
 class operateKafka:
+
+
 
     def __init__(self):
         hosts = "192.168.1.55:9092"
         client = KafkaClient(hosts=hosts)
-        self.topic = client.topics['CARPO_XDR']
+        self.topic = client.topics['commander.scheduler']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        self.bstrap_servers=['192.168.1.82:9094']
+        self.kafka_topic = "into_01"
+
+
 
     """
     function:send message to kafka
@@ -129,3 +162,33 @@ class operateKafka:
                  mydict = xm.replace('<?xml version="1.0" encoding="utf-8"?>','')
                  print( mydict)
                  producer.produce(str(mydict).encode())
+
+    """
+    function:send json message to kafka
+    """
+    def send_json_kafka(self):
+     producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
+     for i in range(10000):
+        time.sleep(1)
+        data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
+        log.info("往kafka输入的data：%s",data)
+        producer.send(self.kafka_topic, data)
+     producer.close()
+
+    """
+    function:send str message to kafka
+    """
+    def send_str_kafka(self):
+        producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
+        for i in range(10000):
+            time.sleep(1)
+            data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
+            dat = ','.join([str(i) for i in list(data.values())])
+            log.info("往kafka输入的data：%s",dat)
+            producer.send(self.kafka_topic, dat)  #往topic里发送str数据
+        producer.close()
+
+if __name__ == '__main__':
+
+  while True:
+     operateKafka().send_str_kafka()

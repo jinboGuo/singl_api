@@ -27,6 +27,8 @@ Compass_scheduler = {
 }
 
 # # -------comapss环境使用-------
+#脚本sheet name
+compass_sheet="compass"
 # # HOST
 compass_host = "http://192.168.1.55:8023"
 # # # # # 数据库连接信息
@@ -35,7 +37,8 @@ Compass_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'compass-app'
+    "DB": 'commander-baymax' #1.2.3
+    #"DB": 'compass-app'  # 1.2.2
 }
 
 # MySQL_CONFIG = {
@@ -48,8 +51,10 @@ Compass_MySQL_CONFIG = {
 # }
 
 # # -------dsp环境使用-------
+#脚本sheet name
+dsp_sheet="dsp"
 # # # HOST
-dsp_host = "http://192.168.1.82:8008"
+dsp_host = "http://192.168.1.83:8008"
 # # # # # 数据库连接信息
 Dsp_MySQL_CONFIG = {
      'HOST': '192.168.1.82',
@@ -83,6 +88,8 @@ Dsp_MySQL_CONFIG = {
 # }
 
 # -------k8s-dw环境使用-------
+#脚本sheet name
+dw_sheet="dw"
 # # HOST
 dw_host = "http://192.168.1.145:40001"
 # # # # # 数据库连接信息
@@ -95,6 +102,8 @@ Dw_MySQL_CONFIG = {
 }
 
 # -------k8s环境使用-------
+#脚本sheet name
+baymax_sheet="k8s_149"
 # HOST
 host = "http://192.168.1.145:40001"
 # host = "http://192.168.1.84:8515"
@@ -107,11 +116,11 @@ host = "http://192.168.1.145:40001"
 #     "DB": 'merce_83',
 #     'case_db': 'test'}
 MySQL_CONFIG1 = {
-    'HOST': '192.168.1.75',
+    'HOST': '192.168.1.82',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'test_flow',
+    "DB": 'auto_apitest',
     'case_db': 'test'}
 
 MySQL_CONFIG = {
@@ -127,17 +136,17 @@ tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
 tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
 tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
 tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
-tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
+tenant_id_82 = "926463668147716096"
 tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b'
 tenant_id_84 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_145 = "a5a4b81e-d2a6-498d-9ff0-3a627d3d5b5a"
 
 # compass admin账户登录信息
 MY_LOGIN_INFO_compass = {
-    "HEADERS": {"Content-Type": "application/json;charset=UTF-8", "Accept": "application/json"},
-    "URL": "%s/compass/auth/login" % compass_host,
-    "DATA": {'username': 'admin', 'password': 'AES(3cde4fd05c58aee9937bfb2db12c9a91)'},
-    "DATA_ERROR_NAME": {'username': 'adminn', 'password': 'AES(3cde4fd05c58aee9937bfb2db12c9a91)', 'remember': 'true'},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded','Authorization':'Basic YmF5bWF4OjEyMzQ1Ng=='},
+    "URL": "%s/api/auth/oauth/token" % compass_host,
+    "DATA": {'name': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password',"remember": False},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
     "HOST": "%s" % compass_host
 }
 
@@ -177,13 +186,13 @@ MY_LOGIN_INFO2 = {
 }
 
 # 1.2.2-root账户登录信息
-# MY_LOGIN_INFO_root = {
-#     "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
-#     "URL": "%s/api/auth/login" % host,
-#     "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
-#     "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
-#     "HOST": "%s" % host
-# }
+MY_LOGIN_INFO_admin = {
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
+    "URL": "%s/api/auth/login" % host,
+    "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "HOST": "%s" % host
+}
 
 # master-root账户登录信息
 MY_LOGIN_INFO_root = {
@@ -213,22 +222,6 @@ MY_LOGIN_INFO_root_dam = {
     "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
     "HOST": "%s" % host
 }
-
-
-# # upload_file使用该用户
-# MY_LOGIN_INFO_upload_file_use = {
-#  "HEADERS": {'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryqa6thIhrtfSBTQCH'},
-#  "URL": "%s/api/auth/login" % host,
-#  "DATA": {'name': encrypt_rf('admin'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "DATA_ERROR_NAME": {'name': encrypt_rf('adminn'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('default')},
-#  "HOST": "%s" % host
-# }
-
-
-
-
-
-
 
 
 
@@ -331,17 +324,6 @@ processDataId = "students_dataset_copy_int"
 # # sql_rule_id = [item[key] for item in sql_rule_id_list for key in item]
 # sql_rule_id = cases_for_analysis_model.CasesForRule().test_create_rule_SQL()
 # print(sql_rule_id)
-
-# 查询最新创建的分析规则id
-# rule_id_sql = 'select id from merce_zrule ORDER BY create_time desc limit 1'
-# rule_id_list = ms.ExecuQuery(rule_id_sql)
-#
-# try:
-#     rule_id = rule_id_list[0]["id"]
-# except IndexError:
-#     print('没有查询到最新的分析规则，返回空')
-
-# print(rule_id_list)
 
 # 创建分析任务使用的分析模板
 zmod_id = ["e2dbfd88-0e2d-4fa2-b145-75c1a13ab455"]
