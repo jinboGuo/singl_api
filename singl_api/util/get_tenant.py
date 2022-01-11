@@ -9,18 +9,15 @@ sys.path.append(root_path)
 
 def get_env_num(host):
     host_netloc = urllib.parse.urlparse(host).netloc
-    # print(host_netloc)
     no_port_host = host_netloc.split(":")
-    # print(no_port_host)
     env_num = no_port_host[0].split(".")[-1]
-    # print(env_num)
     return env_num
 
 def get_tenant(host):
     host_env_num = get_env_num(host)
     tenant_id_145 = "a5a4b81e-d2a6-498d-9ff0-3a627d3d5b5a"  # 145环境default租戶ID
     tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
-    tenant_id_82 = "db09f359-1e4d-4b3c-872e-7775bd8eed8b"
+    tenant_id_82 = "926463668147716096"
     tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
     tenant_id_84 = "8c488afc-e9d7-42af-b127-f8a1412ba50e"
     tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
@@ -49,5 +46,3 @@ def get_owner():
          return owner
     except TypeError:
       return "018479ae-01a7-4603-9e1f-77e11af63f68"
-
-#get_owner()

@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import Dsp_MySQL_CONFIG
+from basic_info.setting import Dsp_MySQL_CONFIG, dsp_sheet
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_admin, get_headers_customer
 from new_api_cases.dsp_deal_parameters import deal_parameters
@@ -20,12 +20,12 @@ from basic_info.setting import dsp_host
 ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"], Dsp_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name('dsp')
+case_table_sheet = case_table.get_sheet_by_name(dsp_sheet)
 all_rows = case_table_sheet.max_row
 log = Logger().get_log()
 host = dsp_host
-jar_dir_pull = ab_dir('pullService_2021.xlsx')
-jar_dir_push = ab_dir('pushService_2021.xlsx')
+jar_dir_pull = os.path.join(os.path.abspath('.'),'attachment\pullService_2021.xlsx')
+jar_dir_push = os.path.join(os.path.abspath('.'),'attachment\pushService_2021.xlsx')
 
 # 判断请求方法，并根据不同的请求方法调用不同的处理方式
 def deal_request_method():
@@ -916,9 +916,9 @@ class CheckResult(unittest.TestCase):
                             case_table_sheet.cell(row=row, column=column, value='pass')
                     else:
                         try:
-                            self.assertEqual(expect_text, response_text, '第%d行的response_text长度和预期不一致' % row)
+                            self.assertEqual(expect_text, response_text, '第%d行的expect_text:%s和response_text:%s不相等' % (row,expect_text, response_text))
                         except:
-                            log.info("第 %d 行 response_text和预期text不相等" %row)
+                            log.info("第%d行的expect_text:%s和response_text:%s不相等" %(row,expect_text, response_text))
                             case_table_sheet.cell(row=row, column=column, value='fail')
                         else:
                             case_table_sheet.cell(row=row, column=column, value='pass')
@@ -932,17 +932,28 @@ class CheckResult(unittest.TestCase):
                         case_table_sheet.cell(row=row, column=column, value='pass')
 
             elif relation == 'in':  # 返回多内容时，判断返回内容中包含id属性，并且expect_text包含在response_text中
-                try:
-                    # self.assertIsNotNone(response_text_dict.get("id"), '第 %d 行 response_text没有返回id' % row)
-                    self.assertIn(expect_text, response_text, '第 %d 行 expect_text没有包含在接口返回的response_text中' % row)
-                except:
-                    log.info("第 %d 行 expect_text没有包含在response_text中， 结果对比失败" %row)
-                    case_table_sheet.cell(row=row, column=column, value='fail')
+                if "&" in expect_text:
+                    for i in expect_text.split("&"):
+                        try:
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
+                        except:
+                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,i))
+                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            break
+                        else:
+                            case_table_sheet.cell(row=row, column=column, value='pass')
                 else:
-                    case_table_sheet.cell(row=row, column=column, value='pass')
+                    try:
+                        # self.assertIsNotNone(response_text_dict.get("id"), '第 %d 行 response_text没有返回id' % row)
+                        self.assertIn(expect_text, response_text, '第 %d 行 预期结果：%s没有包含在response_text中'%(row,expect_text))
+                    except:
+                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail')
+                    else:
+                        case_table_sheet.cell(row=row, column=column, value='pass')
             else:
                 log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" %row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relatrion')
+                case_table_sheet.cell(row=row, column=column, value='请确认%d行 的预期text和接口response.text的relatrion'%row)
         elif key_word in ('query', 'update', 'delete'):
             if relation == '=':
                 compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', '%s' % (response_text))
@@ -951,7 +962,7 @@ class CheckResult(unittest.TestCase):
                 # 返回值是id 串，字母和数字的组合
                 if compare_result == response_text_list:
                     try:
-                        self.assertEqual(expect_text, len(response_text), '第%s行expect_text和response_text不相等' % row)
+                        self.assertEqual(expect_text, len(response_text), '第%d行expect_text和response_text不相等' % row)
                     except:
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
@@ -962,23 +973,36 @@ class CheckResult(unittest.TestCase):
 
                 else:
                     try:
-                        self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
+                        self.assertEqual(expect_text, response_text, '第%d行expect_text:%s和response_text:%s不相等' % (row,expect_text,response_text))
                     except:
+                        log.info("第 %d 行 response_text和预期text不相等" %row)
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
                         case_table_sheet.cell(row=row, column=column, value='pass')
 
             elif relation == 'in':
-                try:
-                    self.assertIn(expect_text, response_text, '第 %d 行 expect_text没有包含在接口返回的response_text中' % row)
-                except:
-                    log.info("第 %d 行 expect_text和response_text不相等， 结果对比失败" % row)
-                    case_table_sheet.cell(row=row, column=column, value='fail')
+                if "&" in expect_text:
+                    for i in expect_text.split("&"):
+                        try:
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
+                        except:
+                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,i))
+                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            break
+                        else:
+                            case_table_sheet.cell(row=row, column=column, value='pass')
                 else:
-                    case_table_sheet.cell(row=row, column=column, value='pass')
+                    try:
+                        # self.assertIsNotNone(response_text_dict.get("id"), '第 %d 行 response_text没有返回id' % row)
+                        self.assertIn(expect_text, response_text, '第 %d 行 预期结果：%s没有包含在response_text中'%(row,expect_text))
+                    except:
+                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail')
+                    else:
+                        case_table_sheet.cell(row=row, column=column, value='pass')
             else:
                 log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relation')
+                case_table_sheet.cell(row=row, column=column, value='请确认第 %d 行 预期expect_text和response_text的relation'%row)
         else:
             log.info("请确认第 %d 行 的key_word" % row)
         case_table.save(ab_dir('api_cases.xlsx'))
@@ -999,14 +1023,16 @@ class CheckResult(unittest.TestCase):
                 log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='pass')
                 case_table_sheet.cell(row=row, column=15, value='')
-            elif status_code_result == 'fail' or response_text_result in ('fail',''):
+            elif status_code_result == 'fail' and response_text_result in ('fail',''):
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
+                case_table_sheet.cell(row=row, column=15, value='')
                 case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s' \
                                                                 % (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             elif status_code_result == 'pass' and response_text_result == 'fail':
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
+                case_table_sheet.cell(row=row, column=15, value='')
                 case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败,预期为%s,实际为%s' %
                                                                 (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
             else:
