@@ -217,6 +217,10 @@ def cust_data_source(data):
             new_data = {"id":source_info[0]["id"],"name":"autotest_ftp_随机数","type":"FTP","description":"autotest_ftp","attributes":{"chineseName":"autotest_ftp","host":"192.168.1.84","port":"21","username":"europa","password":"europa","recursive":"true","secure":"false","skipHeader":"false","dir":"/home/europa/dsp","fieldsSeparator":","},"owner":source_info[0]["owner"],"enabled":1,"tenantId":source_info[0]["tenant_id"],"creator":"customer3","createTime":data_now(),"lastModifier":"customer3","lastModifiedTime":data_now()}
             deal_random(new_data)
             return new_data
+        elif 'autotest_sftp' in data:
+            new_data = {"id":source_info[0]["id"],"name":"autotest_sftp_随机数","type":"SFTP","description":"autotest_ftp","attributes":{"chineseName":"autotest_sftp","host":"192.168.1.84","port":"22","username":"europa","password":"europa","recursive":"true","secure":"false","skipHeader":"false","dir":"/home/europa/dsp","fieldsSeparator":","},"owner":source_info[0]["owner"],"enabled":1,"tenantId":source_info[0]["tenant_id"],"creator":"customer3","createTime":data_now(),"lastModifier":"customer3","lastModifiedTime":data_now()}
+            deal_random(new_data)
+            return new_data
         else:
             return
     except Exception as e:
