@@ -138,11 +138,13 @@ class operateKafka:
 
 
     def __init__(self):
-        hosts = "192.168.1.55:9092"
-        client = KafkaClient(hosts=hosts)
-        self.topic = client.topics['commander.scheduler']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        hosts = ["192.168.1.55:9092","192.168.1.82:9094"]
+        client = KafkaClient(hosts=hosts[0])
+        clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.82:9094']
-        self.kafka_topic = "into_01"
+        self.topic = client.topics['commander.scheduler']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        self.str_topic = clients.topics['test_kafka1207'] #往topic发送字符串
+        self.json_topic = "into_003_kafka_012" #往topic发送json
 
 
 
@@ -172,23 +174,28 @@ class operateKafka:
         time.sleep(1)
         data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
         log.info("往kafka输入的data：%s",data)
-        producer.send(self.kafka_topic, data)
+        producer.send(self.json_topic, data)
      producer.close()
 
     """
     function:send str message to kafka
     """
     def send_str_kafka(self):
-        producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
-        for i in range(10000):
-            time.sleep(1)
-            data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
-            dat = ','.join([str(i) for i in list(data.values())])
-            log.info("往kafka输入的data：%s",dat)
-            producer.send(self.kafka_topic, dat)  #往topic里发送str数据
-        producer.close()
+        with self.str_topic.get_sync_producer() as producer:
+            for i in range(10000):
+                time.sleep(1)
+                if i%2==0:
+                    data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
+                    dat = ','.join([str(i) for i in list(data.values())])
+                    log.info("往kafka输入的data：%s",dat)
+                    producer.produce(str(dat).encode())
+                else:
+                    data={"id":i,"name":"ouyanfei"+str(i),"sex":"F","age":31,"dates":timestamp_now()}
+                    dat = ','.join([str(i) for i in list(data.values())])
+                    log.info("往kafka输入的data：%s",dat)
+                    producer.produce(str(dat).encode())
 
 if __name__ == '__main__':
 
-  while True:
+    while True:
      operateKafka().send_str_kafka()
