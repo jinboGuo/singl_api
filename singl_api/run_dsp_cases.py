@@ -21,7 +21,7 @@ stop_time = datetime.datetime.now()
 log.info("结束时间：%s" %stop_time)
 log.info("耗时：%s" %(stop_time-start_time))
 # 发送邮件
-#dsp_main3(dsp_host, receivers_list)
+dsp_main3(dsp_host, receivers_list)
 
 
 

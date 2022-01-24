@@ -187,10 +187,13 @@ def resource_data(data):
 def resource_data_dss(data):
     from new_api_cases.dw_deal_parameters import deal_random
     try:
-        sql = "select id,name from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data
+        data = data.split("&")
+        dir_sql = "select id from merce_resource_dir where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data[1]
+        dir_info = ms.ExecuQuery(dir_sql.encode('utf-8'))
+        sql = "select id,name from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data[0]
         dss_info = ms.ExecuQuery(sql.encode('utf-8'))
         if 'autotest_mysql' in data:
-            new_data = {"name": "api_datasource随机数", "sourceType": "DATASOURCE", "datasetName": dss_info[0]["name"], "datasetId":dss_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings": [], "openStatus":0,"type":0,"isIncrementField":"false","incrementField":"","encoder":"UTF-8","timeStamp":"","storage":"DB","dataset":"","query":{"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}}
+            new_data = {"name": "api_datasource随机数","resourceId": dir_info[0]["id"], "sourceType": "DATASOURCE", "datasetName": dss_info[0]["name"], "datasetId":dss_info[0]["id"], "categoryId": 0, "expiredTime": 0, "fieldMappings": [], "openStatus":0,"type":0,"isIncrementField":"false","incrementField":"","encoder":"UTF-8","timeStamp":"","storage":"DB","dataset":"","query":{"parameters":[{"content":"","value":"18","name":"age"}],"sqlTemplate":"select\n  *\nfrom\n  student_2020\nwhere\n  age > #{age}"}}
             deal_random(new_data)
             return new_data
         else:
@@ -200,9 +203,11 @@ def resource_data_dss(data):
 
 def appconfig_data(data):
     try:
-        sql = "select id ,tenant_id, owner, access_key ,cust_id ,cust_name,public_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
+        sql = "select id ,tenant_id, owner, access_key ,access_ip,cust_id ,cust_name,public_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         config_info = ms.ExecuQuery(sql.encode('utf-8'))
-        new_data = {"accessIp":["192.168.2.142"], "name": "autotest_appconfig_随机数", "enabled":1,"tenantId": config_info[0]["tenant_id"], "owner": config_info[0]["owner"],"creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now(),"description":"","id": config_info[0]["id"],"custId":config_info[0]["cust_id"],"custName":config_info[0]["cust_name"],"accessKey": config_info[0]["access_key"],"publicKey": config_info[0]["public_key"]}
+        access_ip=[]
+        access_ip.append(str(config_info[0]["access_ip"]))
+        new_data = {"accessIp":access_ip, "name": "autotest_appconfig_随机数", "enabled":1,"tenantId": config_info[0]["tenant_id"], "owner": config_info[0]["owner"],"creator":"customer3","createTime": data_now(),"lastModifier":"customer3","lastModifiedTime": data_now(),"description":"","id": config_info[0]["id"],"custId":config_info[0]["cust_id"],"custName":config_info[0]["cust_name"],"accessKey": config_info[0]["access_key"],"publicKey": config_info[0]["public_key"]}
         deal_random(new_data)
         return new_data
     except Exception as e:
@@ -412,13 +417,98 @@ def update_customer(data):
 
 def update_user(data):
     try:
-        sql = "select id,owner,tenant_id,login_id from merce_user where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
+        sql = "select id from merce_user where  name like '%s%%%%' order by create_time desc limit 1" % data
         user_info = ms.ExecuQuery(sql.encode('utf-8'))
-        if 'autotest_dsp_' in data:
-            new_data = {"confirmPassword":"","email":"11@11.com","loginId":user_info[0]["login_id"],"name":"autotest_dsp_随机数","password":"AES(aa920aacdab0d8f75bc3d04b3d84586d9825e2b2b2842d7a480a3e06c888c2d848d1144f4813e55d5c0807dae20acd80)","phone":"13111111111","resourceQueues":["default"],"enabled":0,"tenantId":user_info[0]["tenant_id"],"owner":user_info[0]["owner"],"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":user_info[0]["id"],"pwdExpiredTime":"2022-05-15","accountExpiredTime":"2022-08-15","hdfsSpaceQuota":"0","admin":0,"clientIds":"dsp","roles":[],"expiredPeriod":"0"}
+        if 'dsp' in data:
+            new_data = {"name":"dsp随机数","loginId":"dsp随机数","phone":"15801232688","email":"15801232688@139.com","id":user_info[0]["id"],"resourceQueues":["default"],"disable":"true"}
             deal_random(new_data)
             return new_data
         else:
             return
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def update_role(data):
+    try:
+        sql = "select id,name from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
+        role_info = ms.ExecuQuery(sql.encode('utf-8'))
+        if 'dsp' in data:
+            new_data = {"name":"dsp随机数","permissions":[],"id":role_info[0]["id"]}
+            deal_random(new_data)
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def enable_role(data):
+    try:
+        sql = "select enabled,id from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
+        role_info = ms.ExecuQuery(sql.encode('utf-8'))
+        ids=[]
+        ids.append(str(role_info[0]["id"]))
+        if role_info[0]["enabled"]==1:
+            new_data = {"enabled":0,"ids":ids}
+            return new_data
+        elif role_info[0]["enabled"]==0:
+            new_data = {"enabled":1,"ids":ids}
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def enable_user(data):
+    try:
+        sql = "select enabled,id from merce_user where name like '%s%%%%' order by create_time desc limit 1" % data
+        user_info = ms.ExecuQuery(sql.encode('utf-8'))
+        ids=[]
+        ids.append(str(user_info[0]["id"]))
+        if user_info[0]["enabled"]==1:
+            new_data = {"enabled":0,"ids":ids}
+            return new_data
+        elif user_info[0]["enabled"]==0:
+            new_data = {"enabled":1,"ids":ids}
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def set_user_role(data):
+    try:
+        user,role=[],[]
+        user_sql = "select id from merce_user where name like '%s%%%%' order by create_time desc limit 1" % data
+        user_info = ms.ExecuQuery(user_sql.encode('utf-8'))
+        user.append(str(user_info[0]["id"]))
+        sql = "select id from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
+        role_info = ms.ExecuQuery(sql.encode('utf-8'))
+        role.append(str(role_info[0]["id"]))
+        user.append(role)
+        data={"accountExpiredTime":"2022-07-21","id":user_info[0]["id"],"pwdExpiredTime":"2022-04-21"}
+        user.append(data)
+        return user
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def new_dir(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        dir_sql = "select id,res_type from merce_resource_dir where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data
+        dir_info = ms.ExecuQuery(dir_sql.encode('utf-8'))
+        new_data = {"name":"autoapi_test随机数","parentId":dir_info[0]["id"],"resType":dir_info[0]["res_type"]}
+        deal_random(new_data)
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" %e)
+
+def rename_dir(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        dir_sql = "select id,res_type,owner,tenant_id,create_time,last_modified_time,parent_id,path from merce_resource_dir where name like '%%%%%s%%%%' ORDER BY create_time desc limit 1" % data
+        dir_info = ms.ExecuQuery(dir_sql.encode('utf-8'))
+        new_data = {"name":"autoapi_two随机数","parentId":dir_info[0]["parent_id"],"resType":dir_info[0]["res_type"],"tenantId":dir_info[0]["tenant_id"],"owner":dir_info[0]["owner"],"enabled":1,"creator":"admin","createTime":str(dir_info[0]["create_time"]),"lastModifier":"admin","lastModifiedTime":str(dir_info[0]["last_modified_time"]),"id":dir_info[0]["id"],"version":None,"groupCount":None,"groupFieldValue":"","order":1,"isHide":0,"path":dir_info[0]["path"],"children":[],"halfSelect":"true","parentCode":dir_info[0]["parent_id"],"selfCode":dir_info[0]["id"],"hasChildren":"false","expiredPeriod":0}
+        deal_random(new_data)
+        return new_data
     except Exception as e:
         log.error("异常信息：%s" %e)
