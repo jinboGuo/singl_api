@@ -13,10 +13,10 @@ from util import get_host
 from openpyxl import load_workbook
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_token
-from util.elasticsearch import get_es_data, get_es_data_for_thumbnailMode
+from util.elasticsearch7 import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
-from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2, baymax_sheet
+from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2, baymax_sheet, baymax_master
 from util.Open_DB import MYSQL
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data, query_dataflow_data
 from basic_info.setting import tenant_id_83,host
@@ -34,7 +34,7 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 case_table = load_workbook(ab_dir("api_cases.xlsx"))
-case_table_sheet = case_table.get_sheet_by_name(baymax_sheet)
+case_table_sheet = case_table.get_sheet_by_name(baymax_master)
 all_rows = case_table_sheet.max_row
 fileset_dir=os.path.join(os.path.abspath('.'),'attachment\Capture001.png')
 log=myLog().getLog().logger
@@ -152,6 +152,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif '创建数据源' in case_detail:
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
+            print("new_url:", url)
             new_data = dss_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
@@ -253,10 +254,10 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
             dataset_id, new_data = dataset_data(data)
-            new_url = url.format(dataset_id)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+            #new_url = url.format(dataset_id)
+            #new_data = json.dumps(new_data, separators=(',', ':'))
             print("new_data:", new_data)
-            response = httpop.api_post(url=new_url, headers=headers, data=new_data)
+            response = httpop.api_post(url=url, headers=headers, data=new_data)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
             clean_vaule(table_sheet_name, row, column)
@@ -266,15 +267,31 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
             dataset_id, statement_id, new_data = statementId(host, data)
-            new_url = url.format(dataset_id, statement_id)
+            new_url = url.format(statement_id)
             print(new_url)
             print("new_data:", new_data)
-            response = httpop.api_post(url=new_url, headers=headers)
-            # 将返回的status_code和response.text分别写入第10列和第14列
-            print(response.text, response.status_code)
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            res = httpop.api_post(url=new_url, headers=headers,data=new_data)
+            count_num = 0
+            while ("waiting") in res.text or ("running") in res.text:
+                print('再次查询前', res.text)
+                res = requests.post(url=new_url, headers=headers,data=new_data)
+                count_num += 1
+                if count_num == 100:
+                    return
+                print('再次查询后', res.text)
+            # 返回的是str类型
+            print(res.text)
+            if '"statement":"available"' in res.text:
+             #将返回的status_code和response.text分别写入第10列和第14列
+                print(res.text, res.status_code)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=res.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=res.text)
+            else:
+                print(res.text, res.status_code)
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=res.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=res.text)
         elif case_detail == '获取SQL执行任务结果':
             print('开始执行：', case_detail)
             # 先获取接口需要使用的statement id 和 数据集分析字段

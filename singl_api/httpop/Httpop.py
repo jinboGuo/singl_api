@@ -12,7 +12,7 @@ def failrun(n=3):
                     return re
                 else:
                     print("测试用例第%s次运行状态码%s"%(i+1,re.status_code))
-                    time.sleep(10)
+                    time.sleep(15)
         return wrapper
     return decorator
 

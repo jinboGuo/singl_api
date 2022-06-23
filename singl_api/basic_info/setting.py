@@ -37,8 +37,8 @@ Compass_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'commander-baymax' #1.2.3
-    #"DB": 'compass-app'  # 1.2.2
+    #"DB": 'commander-baymax' #1.2.3
+    "DB": 'compass-app'  # 1.2.2
 }
 
 # MySQL_CONFIG = {
@@ -107,8 +107,7 @@ Dw_MySQL_CONFIG = {
 #脚本sheet name
 baymax_sheet="k8s_149"
 # HOST
-host = "http://192.168.1.145:40001"
-# host = "http://192.168.1.84:8515"
+#host = "http://192.168.1.145:40001"
 # 数据库的连接配置，需要根据不同环境进行变更
 # MySQL_CONFIG = {
 #     'HOST': '192.168.1.84',
@@ -125,18 +124,41 @@ MySQL_CONFIG1 = {
     "DB": 'auto_apitest',
     'case_db': 'test'}
 
+# MySQL_CONFIG = {
+#     'HOST': '192.168.1.145',
+#     "PORT": 30307,
+#     "USER": 'root',
+#     "PASSWORD": 'root',
+#     "DB": 'baymax_test',
+#     'case_db': 'test'}
+
+
+# -------baymax master环境使用-------
+#脚本sheet name
+baymax_master="842"#"baymax_master"
+# HOST
+host = "http://192.168.1.62:8515"
+# 数据库的连接配置，需要根据不同环境进行变更
+# MySQL_CONFIG = {
+#     'HOST': '192.168.1.84',
+#     "PORT": 3306,
+#     "USER": 'merce',
+#     "PASSWORD": 'merce',
+#     "DB": 'merce_83',
+#     'case_db': 'test'}
+
 MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 30307,
-    "USER": 'root',
-    "PASSWORD": 'root',
-    "DB": 'baymax_test',
+    'HOST': '192.168.1.63',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_62',
     'case_db': 'test'}
 
 tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
 tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
 tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
-tenant_id_57 = "087e55ee-5ad4-451e-ba3d-0be93ec4546c"
+tenant_id_62 = "966715467089575936"
 tenant_id_83 = "e5188f23-d472-4b2d-9cfa-97a0d65994cf"
 tenant_id_82 = "926463668147716096"
 tenant_id_123 = 'db09f359-1e4d-4b3c-872e-7775bd8eed8b'
@@ -196,12 +218,12 @@ MY_LOGIN_INFO_admin = {
     "HOST": "%s" % host
 }
 
-# master-root账户登录信息
+# master-admin账户登录信息
 MY_LOGIN_INFO_root = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded','Authorization':'Basic YmF5bWF4OjEyMzQ1Ng=='},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
     "URL": "%s/api/auth/oauth/token" % host,
-    "DATA": {'name': 'root', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type': 'manager_password',"remember": False},
-    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
+    "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
+    "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
 }
 
@@ -336,7 +358,7 @@ collector_id = 'c9'
 
 # elasticsearch集群服务器的地址
 ES = [
-    'http://192.168.1.145:30301/'
+    'http://192.168.1.82:9204/'
 ]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用

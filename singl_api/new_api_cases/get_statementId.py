@@ -1,8 +1,8 @@
 import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.mylogging import myLog
-from basic_info.setting import tenant_id_189, tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
-    tenant_id_84, tenant_id_199, tenant_id_145
+from basic_info.setting import tenant_id_81, tenant_id_83, tenant_id_82, tenant_id_123, \
+    tenant_id_84, tenant_id_199, tenant_id_145, tenant_id_62
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
 
@@ -14,8 +14,8 @@ def get_tenant(host):
     if '81' in host:
         tenant_id = tenant_id_81
         return tenant_id
-    elif '189' in host:
-        tenant_id = tenant_id_189
+    elif '62' in host:
+        tenant_id = tenant_id_62
         return tenant_id
     elif '83' in host:
         tenant_id = tenant_id_83

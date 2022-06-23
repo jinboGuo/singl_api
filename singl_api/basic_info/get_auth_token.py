@@ -13,17 +13,18 @@ def get_auth_token(HOST):
             token = dict_headers['X-AUTH-TOKEN']
             return token
         else:
-            res = requests.post(url=MY_LOGIN_INFO2["URL"], headers=MY_LOGIN_INFO2["HEADERS"], data=MY_LOGIN_INFO2["DATA"])
+            res = requests.post(url=MY_LOGIN_INFO_root["URL"], headers=MY_LOGIN_INFO_root["HEADERS"],
+                                data=MY_LOGIN_INFO_root["DATA"])
             dict_headers = dict_res(res.text)
             token = dict_headers['content']["access_token"]
             return 'Bearer ' + token
     except:
-        return
+      return
 
 # 组装headers， 接口请求时调用
 def get_headers(HOST):
-    x_auth_token = get_auth_token(HOST)
-    headers = {'Content-Type': 'application/json', "Authorization": x_auth_token, "Accept": "*/*"}
+    Authorization = get_auth_token(HOST)
+    headers = {'Content-Type': 'application/json', "Authorization": Authorization, "Accept": "application/json"}
     return headers
 
 
@@ -32,8 +33,8 @@ def get_headers(HOST):
 def get_headers_upload(HOST):
     x_auth_token = get_auth_token(HOST)
     headers = {"X-AUTH-TOKEN": x_auth_token,
-               'Origin': 'http://192.168.1.189:8515',
-               'Referer': 'http://192.168.1.189:8515/',
+               'Origin': 'http://192.168.1.62:8515',
+               'Referer': 'http://192.168.1.62:8515/',
                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
                }
     return headers

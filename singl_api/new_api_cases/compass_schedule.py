@@ -307,7 +307,7 @@ cd = "cd /app/data/"
 sh = "sh createdata2.sh"
 dle = "rm -rf demo*"
 upload = "hadoop dfs -put [demo]* /tmp/gjt"
-msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////test4_2021024318_20210223185943_192.168.1.55_97.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>hour_now()</sliceTime><createTime>data_now()</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
+msg = '<root><ip>370</ip><fileSourceID>788343591339556864</fileSourceID><fullName>hdfs://mycluster///tmp/gjt////demo-2022030719.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>2022-03-07 19:00:00</sliceTime><createTime>2022-03-07 19:22:00</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
 cluster ="hdfs://mycluster"  # "hdfs://europa:8020"
 
 def run_all():

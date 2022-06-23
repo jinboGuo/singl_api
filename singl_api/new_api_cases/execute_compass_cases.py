@@ -153,7 +153,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '导入调度任务':
-            files = {"file": open(jar_dir, 'rb')}
+            files = {"file": open(jar_dir_push, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
             log.info("response data：%s %s"%(response.status_code, response.text))
