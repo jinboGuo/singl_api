@@ -43,22 +43,19 @@ def get_tenant(host):
 # datasetId存在时
 def statementId(host, param):
     from new_api_cases.prepare_datas_for_cases import dataset_data
-    dataset_id, new_data = dataset_data(param)
-    print("new_data -dataset_id", new_data, dataset_id)
-    if new_data:
-        url = '%s/api/datasets/%s/previewinit?rows=50' % (host, dataset_id)
+    try:
+        new_data = dataset_data(param)
+        print("snew_data", new_data)
+        url = '%s/api/datasets/previewinit?rows=50'%(host)
         new_data = json.dumps(new_data, separators=(',', ':'))
-        res = requests.get(url=url, headers=get_headers(host), data=new_data)
-        try:
-            res_statementId = json.loads(res.text)
-            print("ids:", res_statementId)
-            statementId = res_statementId['statementId']
-            print("statementid:", statementId)
-            return dataset_id, statementId, new_data
-        except:
-            return '59b30d45-8583-4e00-9413-e65057e57028', 1
-    else:
-        return '59b30d45-8583-4e00-9413-e65057e57028', 1
+        res = requests.post(url=url, headers=get_headers(host), data=new_data)
+        res_statementId = json.loads(res.text)
+        print("ids:", res_statementId)
+        statementId = res_statementId['statementId']
+        print("statementid:", statementId)
+        return statementId, new_data
+    except:
+        return
 
 
 def statementId_flow_use(host, datasetId):
@@ -132,6 +129,7 @@ def get_sql_analyse_statement_id(host, param):
     try:
         res_statementId = json.loads(res.text)
         sql_analyse_statement_id = res_statementId['statementId']
+        print("statmentid: ",sql_analyse_statement_id)
         return sql_analyse_statement_id
     except KeyError:
         return

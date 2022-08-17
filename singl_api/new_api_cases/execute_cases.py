@@ -29,7 +29,8 @@ from new_api_cases.get_statementId import statementId, statementId_no_dataset, g
 from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, get_applicationId, \
     get_woven_qaoutput_dataset_path, upload_jar_file_workflow, upload_jar_file_dataflow, upload_jar_file_filter, \
     dss_data, upddss_data, dataset_data, upddataset_data, create_schema_data, updschema_data, create_flow_data, \
-    update_flow_data, filesets_data, get_old_id_name, get_collector_data, tag_data
+    update_flow_data, filesets_data, get_old_id_name, get_collector_data, tag_data, set_user_role, update_role, \
+    update_user, enable_user, enable_role
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -137,6 +138,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
     global case_detail
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s" % case_detail)
         if '(Id不存在)' in case_detail:
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
@@ -253,10 +255,10 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '新Dataset预览接口,得到statement  id(datasetId存在)':
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
-            dataset_id, new_data = dataset_data(data)
+            new_data = dataset_data(data)
             #new_url = url.format(dataset_id)
-            #new_data = json.dumps(new_data, separators=(',', ':'))
-            print("new_data:", new_data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_data1:", new_data)
             response = httpop.api_post(url=url, headers=headers, data=new_data)
             # 将返回的status_code和response.text分别写入第10列和第14列
             print(response.text, response.status_code)
@@ -266,10 +268,11 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '根据statement id,获取预览Dataset的结果数据(datasetId存在)':
             # 先获取statementId,然后格式化URL，再发送请求
             print('开始执行：', case_detail)
-            dataset_id, statement_id, new_data = statementId(host, data)
+            statement_id, new_data = statementId(host, data)
             new_url = url.format(statement_id)
             print(new_url)
-            print("new_data:", new_data)
+            #new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_data2:", new_data)
             res = httpop.api_post(url=new_url, headers=headers,data=new_data)
             count_num = 0
             while ("waiting") in res.text or ("running") in res.text:
@@ -319,6 +322,45 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             print("new_data:", new_data)
             response = httpop.api_post(url=url, headers=headers, data=new_data)
             print(response.text, response.status_code)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '更新用户':
+            log.info("request   url：%s" %url)
+            new_data = update_user(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '更新角色':
+            log.info("request   url：%s" %url)
+            new_data = update_role(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_data: ",new_data)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '设置用户角色':
+            new_datas = set_user_role(data)
+            new_url = url.format(new_datas[0])
+            log.info("new_url：%s"% new_url)
+            new_data = json.dumps(new_datas[1], separators=(',', ':'))
+            response = requests.post(url=new_url, data=new_data, headers=headers)
+            log.info("response data：%s %s"%(response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '设置用户有效期':
+            new_datas = set_user_role(data)
+            new_url = url.format(new_datas[0])
+            log.info("new_url：%s"% new_url)
+            new_data = json.dumps(new_datas[2], separators=(',', ':'))
+            response = requests.post(url=new_url, data=new_data, headers=headers)
+            log.info("response data：%s %s"%(response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -478,7 +520,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '初始化Sql Analyze,返回statementId'in case_detail:
+        elif '初始化Sql'in case_detail:
             print('开始执行：', case_detail)
             print("data:", data)
             #new_data = json.dumps(data, separators=(',', ':'))
@@ -528,15 +570,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '根据statement id,获取预览Dataset的结果数据(datasetId存在)':
             print('开始执行：', case_detail)
-            data[0], statementId1, data[1] = statementId(host, data)
-            print("fh", data[0], statementId1, data[1])
-            new_url = url.format(data[0], statementId1)
-            response = httpop.api_post(url=new_url, headers=headers, data=data[1])
+            statementId1, new_data = statementId(host, data)
+            print("fh",statementId1, new_data)
+            new_url = url.format(statementId1)
+            response = httpop.api_post(url=new_url, headers=headers, data=new_data)
             print(response.text, response.status_code)
             count_num = 0
             while "running" in response.text or "waiting" in response.text:
                 time.sleep(5)
-                response = httpop.api_post(url=new_url, headers=headers, data=data[1])
+                response = httpop.api_post(url=new_url, headers=headers, data=new_data)
                 count_num += 1
                 if count_num == 100:
                     return
@@ -914,6 +956,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
 # GET请求
 def get_request_result_check(url, headers, host, data, table_sheet_name, row, column):
     case_detail = case_table_sheet.cell(row=row, column=2).value
+    log.info("开始执行：%s" % case_detail)
     # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
     try:
         if data:
@@ -1320,7 +1363,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        log.error("{}执行过程中出错{}".format(case_detail,e))
+        log.error("{}执行过程中出错{}".format(case_detail, e))
         clean_vaule(table_sheet_name, row, column)
         write_result(sheet=table_sheet_name, row=row, column=column, value='-1')
         write_result(sheet=table_sheet_name, row=row, column=column + 4, value='{"id":"-1"}')
@@ -1329,6 +1372,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
 # PUT请求
 def put_request_result_check(url, host, row, data, table_sheet_name, column, headers):
     case_detail = case_table_sheet.cell(row=row, column=2).value
+    log.info("开始执行：%s" % case_detail)
     #if data and isinstance(data, str):
     try:
         if case_detail == '项目目录改名':
@@ -1397,6 +1441,42 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)
             write_result(table_sheet_name, row, column+4, response.text)
+        elif case_detail == '禁用角色':
+            log.info("request   url：%s" % url)
+            new_data = enable_role(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '启用角色':
+            log.info("request   url：%s" % url)
+            new_data = enable_role(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '禁用用户':
+            log.info("request   url：%s" % url)
+            new_data = enable_user(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '启用用户':
+            log.info("request   url：%s" % url)
+            new_data = enable_user(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '&' in str(data):
             # 分隔参数
             parameters = data.split('&')
@@ -1455,6 +1535,7 @@ def put_request_result_check(url, host, row, data, table_sheet_name, column, hea
 
 def delete_request_result_check(url, host, data, table_sheet_name, row, column, headers):
     case_detail = case_table_sheet.cell(row=row, column=2).value
+    log.info("开始执行：%s" % case_detail)
     try:
         if isinstance(data, str):
             if case_detail == '':
