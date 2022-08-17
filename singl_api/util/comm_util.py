@@ -222,7 +222,7 @@ class operateKafka:
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.82:9094']
-        self.topic = client.topics['CARPO_XDR']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        self.topic = client.topics['commander.scheduler.poseidon.flow']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka0210" #往topic发送json
     global stu_nm
