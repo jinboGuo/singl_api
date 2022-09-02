@@ -265,7 +265,7 @@ class operateKafka:
         with self.str_topic.get_sync_producer() as producer:
             for i in range(100000):
                 time.sleep(1)
-                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(1,1),"dates":timestamp_now()}
+                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"dates":timestamp_now()}
                 dat = ','.join([str(i) for i in list(data.values())])
                 log.info("往kafka输入的data：%s",dat)
                 producer.produce(str(dat).encode())
