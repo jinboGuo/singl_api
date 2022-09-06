@@ -37,7 +37,6 @@ Compass_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    #"DB": 'commander-baymax' #1.2.3
     "DB": 'compass-app'  # 1.2.2
 }
 
@@ -77,31 +76,33 @@ Dsp_MySQL_CONFIG = {
 #     "DB": 'merce-scheduler'
 # }
 
-# -------dw环境使用-------
+# -------62-dw环境使用-------
+#脚本sheet name
+#dw_sheet="dw-asset"
 # # # # HOST
-# dw_host = "http://192.168.1.83:8515"
+# dw_host = "http://192.168.1.62:8515"
 # # # # # # 数据库连接信息
 # Dw_MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
+#     'HOST': '192.168.1.62',
 #     "PORT": 3306,
 #     "USER": 'merce',
 #     "PASSWORD": 'merce',
-#     "DB": 'merce-scheduler'
+#     "DB": 'merce_62'
 # }
 
-# -------k8s-dw环境使用-------
+# -------65-dw环境使用-------
 #脚本sheet name
-dw_sheet="dw"
+dw_sheet="dw-asset" #dw-asset
 # # HOST
-dw_host = "http://192.168.1.145:40001"
+dw_host = "http://192.168.1.65:8515"
 # # # # # 数据库连接信息
 Dw_MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 30307,
-    "USER": 'root',
-    "PASSWORD": 'root',
-    "DB": 'k8s_149'
-}
+    'HOST': '192.168.1.63',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_65',
+    'case_db': 'test'}
 
 # -------k8s环境使用-------
 #脚本sheet name
@@ -135,7 +136,7 @@ MySQL_CONFIG1 = {
 
 # -------baymax master环境使用-------
 #脚本sheet name
-baymax_master="842"#"baymax_master"
+baymax_master = "baymax_master"#"baymax_master"
 # HOST
 host = "http://192.168.1.62:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
@@ -155,7 +156,7 @@ MySQL_CONFIG = {
     "DB": 'merce_62',
     'case_db': 'test'}
 
-tenant_id_189 = "2d7ad891-41c5-4fba-9ff2-03aef3c729e5"  # 189环境default租戶ID
+tenant_id_65 = "1013879801501769728"  #
 tenant_id_81 = "55f7f910-b1c9-41d2-9771-e734e6b8285f"  # 81环境default租戶ID
 tenant_id_199 = "39823d2e-7998-4d0e-a3e7-5edeecba0dc2"
 tenant_id_62 = "966715467089575936"
@@ -176,11 +177,11 @@ MY_LOGIN_INFO_compass = {
 
 # dsp customer账户登录信息
 MY_LOGIN_INFO_dsp_customer = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', "Authorization": 'Basic Y3VzdG9tZXI6MTIzNDU2', "Accept": "application/json"},
     "URL": "%s/api/auth/oauth/token" % dsp_host,
-    "DATA": {'username': 'customer3', 'password': '12345678', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'manager_password'},
-    "DATA_ERROR_NAME": {'username': 'customer', 'password': '12345678', 'version': 'Baymax-3.0.0.23-20180606', 'tenant':'default',
-                        'grant_type': 'manager_password'},
+    "DATA": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default','grant_type':'customer_password'},
+    "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
+                        'grant_type': 'customer_password'},
     "HOST": "%s" % dsp_host
 }
 
@@ -193,12 +194,6 @@ MY_LOGIN_INFO_dsp_admin = {
     "HOST": "%s" % dsp_host
 }
 
-MY_LOGIN_INFO = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
-    "URL": "http://192.168.1.189:8515/api/auth/login",
-    "DATA": {'name': 'gbj_use', 'password': '123456', 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': 'default'},
-    "HOST": "http://192.168.1.189:8515"
-}
 
 # base64加密使用该账户 admin，HOST信息和环境信息保持一致
 MY_LOGIN_INFO2 = {
@@ -209,20 +204,20 @@ MY_LOGIN_INFO2 = {
     "HOST": "%s" % host
 }
 
-# 1.2.2-root账户登录信息
-MY_LOGIN_INFO_admin = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded'},
-    "URL": "%s/api/auth/login" % host,
-    "DATA": {'name': encrypt_rf('root'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
-    "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
-    "HOST": "%s" % host
+# 1.4-admin账户登录信息
+MY_LOGIN_INFO_dw = {
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==','Accept': 'application/json'},
+    "URL": "%s/api/auth/oauth/token" % dw_host,
+    "DATA": {'username': 'a$13ec4fe486e87d0b1145f2248a090db5~', 'password': 'a$3cde4fd05c58aee9937bfb2db12c9a91~','version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
+    "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606','tenant': 'default', 'grant_type': 'manager_password'},
+    "HOST": "%s" % dw_host
 }
 
-# master-admin账户登录信息
+# 1.2.4-admin账户登录信息
 MY_LOGIN_INFO_root = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ZHNwOjEyMzQ1Ng==', 'Accept': 'application/json'},
+    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==', 'Accept': 'application/json'},
     "URL": "%s/api/auth/oauth/token" % host,
-    "DATA": {'username': 'admin', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
+    "DATA": {'username': 'a$13ec4fe486e87d0b1145f2248a090db5~', 'password': 'a$3cde4fd05c58aee9937bfb2db12c9a91~', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
     "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
 }
@@ -246,15 +241,6 @@ MY_LOGIN_INFO_root_dam = {
     "DATA_ERROR_NAME": {'name': encrypt_rf('roo'), 'password': encrypt_rf('123456'), 'version': 'Europa-3.0.0.19 - 20180428', 'tenant': encrypt_rf('root')},
     "HOST": "%s" % host
 }
-
-
-
-
-# login user:admin
-owner = "2059750c-a300-4b64-84a6-e8b086dbfd42"
-# login user:gbj_use
-owner2 = "d2fee4a4-d296-4db8-9b62-46bd9bc46a94"
-
 
 dataset_resource = {"id": "39386f75-9b28-43a6-a6bf-bd5e0e85d437"}
 schema_resource = {"id": "9123ca72-ebd1-422b-b8b0-e150b7c69dc5"}
@@ -340,14 +326,6 @@ preProcessFlowId = "aa5f83c6-aff0-4405-8473-8c09c0f167e4"
 preProcessFlowName = "students_int_flow_filter"
 processDataId = "students_dataset_copy_int"
 
-#ms = Open_DB.MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"])
-# 查询最新创建的sql分析规则id
-# # sql_rule_id_sql = 'select id from merce_zrule where build_type = "Custom" and custom_type = "SQL" and ' \
-# #                   'name like "rule_for_SQL_students_copy%"  order by create_time desc limit 1  '
-# # sql_rule_id_list = ms.ExecuQuery(sql_rule_id_sql)
-# # sql_rule_id = [item[key] for item in sql_rule_id_list for key in item]
-# sql_rule_id = cases_for_analysis_model.CasesForRule().test_create_rule_SQL()
-# print(sql_rule_id)
 
 # 创建分析任务使用的分析模板
 zmod_id = ["e2dbfd88-0e2d-4fa2-b145-75c1a13ab455"]
@@ -362,5 +340,5 @@ ES = [
 ]
 
 #receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-# receivers_list = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com','jinpeng.wu@inforefiner.com']
-# receivers_test = ['jinbo.guo@inforefiner.com']
+receivers_list = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
+receivers_test = ['jinbo.guo@inforefiner.com']
