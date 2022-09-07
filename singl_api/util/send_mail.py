@@ -336,7 +336,7 @@ def dsp_main3(host,receivers):
     print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()
 
-def dw_main3(host,receivers):
+def baymax_main3(host,receivers,dw_sheet):
     # 163邮箱smtp服务器
     host_server = "smtp.163.com"
     # 发件人
@@ -346,14 +346,14 @@ def dw_main3(host,receivers):
     # 发件人的邮箱
     sender_163_mail = "ruifan_apitest@163.com"
     # 收件人邮箱
-    receivers = receivers_list  # 定时任务使用
+    #receivers = receivers_list  # 定时任务使用
     #receivers = receivers_test  # 调试使用
     msg = MIMEMultipart()
 
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
     api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
-    cases_sheet = api_cases_table.get_sheet_by_name('dw')
+    cases_sheet = api_cases_table.get_sheet_by_name(dw_sheet)
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
     pass_cases = 0
@@ -387,7 +387,7 @@ def dw_main3(host,receivers):
         用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases)
     # print(mail_content)
     # 邮件标题
-    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + ' DW系统API用例自动化执行日报'
+    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + dw_sheet +' 系统API用例自动化执行日报'
 
     # 添加邮件正文，格式 MIMEText:
     msg.attach(MIMEText(mail_content, "plain", 'utf-8'))

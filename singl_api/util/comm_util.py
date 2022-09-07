@@ -1,6 +1,7 @@
+import os
 import socket
 import time
-
+import random
 from kafka import KafkaProducer
 from util.logs import Logger
 from basic_info.setting import MySQL_CONFIG1
@@ -10,15 +11,16 @@ import xmltodict
 from pykafka import KafkaClient
 import json
 import requests
+from faker import Faker
 from elasticsearch import Elasticsearch
-from util.timestamp_13 import data_now, hour_stamp, hour_slice, second_stamp, min_stamp, day_now, timestamp_now
+from util.timestamp_13 import data_now, hour_stamp, hour_slice, second_stamp, min_stamp, day_now, timestamp_now, timestamp_utc
 
 log = Logger().get_log()
 ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"], MySQL_CONFIG1["PORT"])
 ''''''
 sql = "select links from merce_flow where  name = 'minus_0628_3_no_element_test'"
 
-
+fake = Faker("zh_CN") # 初始化，可生成中文数据
 
 def xmlToJson(xml):
     try:
@@ -96,17 +98,21 @@ def decod_blob():
 
 
 def es_create():
-    es = Elasticsearch(hosts="192.168.2.131", port=9200,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
-    #es = Elasticsearch(hosts="192.168.1.82", port=9206) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
-    es.indices.create(index="sink_es6", ignore=400)
-    for i in range(10000):
-        time.sleep(1)
-        data = {"name": "小明", "age": "28", "gender": "男","date":"2021-12-16","ad":"","calss":3,"kind":"23","book":"语文","count":"","price":228,"love":"reading"}
-        # 3发数据
-        log.info("往es输入的data：%s",data)
-        res = es.index(index="sink_es6", doc_type="doc", body=data)
-        if i==10000:
-            break
+    try:
+        es = Elasticsearch(hosts="192.168.1.82", port=9204,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+        #es = Elasticsearch(hosts="192.168.1.82", port=9206) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+        es.indices.create(index="sink_es6", ignore=400)
+        for i in range(10000):
+            time.sleep(1)
+            data = {"name": "小明", "age": "28", "gender": "男","date":"2021-12-16","ad":"","calss":3,"kind":"23","book":"语文","count":"","price":228,"love":"reading"}
+            # 3发数据
+            log.info("往es输入的data：%s",data)
+            res = es.index(index="sink_es6", doc_type="doc", body=data)
+            if i==10000:
+                break
+    except Exception as e:
+        log.error("es查询异常",e)
+        return
 
 
 def socket_tcp():
@@ -125,16 +131,90 @@ def socket_tcp():
 
 
 def insert_table():
-    for i in range(100000):
-      if i%2==0:
-        insertsql = "insert  into supp values ('%s','%s','%s','%s')"%("wangwu"+str(i),31,'F',data_now())
-        ms.ExecuNoQuery(insertsql)
-      else:
-          insertsql = "insert  into supp values ('%s','%s','%s','%s')"%("lisi"+str(i),29,'M',data_now())
+    for i in range(10000000):
+          insertsql = "insert  into supp values ('%s','%s','%s','%s')"%(fake.name(),random.randint(20,35),random.choice('男女'),data_now())
           ms.ExecuNoQuery(insertsql)
 
-class operateKafka:
+# -*- coding: utf-8 -*-
+import pandas as pd
+from faker import Faker
+import random
+import datetime
+def random_data():
+    fake = Faker("zh_CN") # 初始化，可生成中文数据
 
+    #设置字段
+    #index = []
+    # for i in range(1,12):
+    #     exec('x'+str(i)+'=[]')
+    start_time = datetime.datetime.now()
+    log.info('开始时间：%s',start_time)
+    x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21=[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
+    #设置样本
+    prod_cd = ['W00028','W00021','W00022']
+    prod_nm = ['微信支付','银联扫码支付','转账']
+    channel = ['APP','网银','短信']
+    year = ['2020','2021','2022']
+
+    #循环生成数据20行，具体多少行可以根据需求修改
+    for i in range(5000000):
+        date = random.choice(year)+fake.date()[4:]
+        time = random.choice(year)+fake.date()[4:]+' '+fake.time()
+        x1.append('1'+str(fake.random_number(digits=8))) # 随机数字，参数digits设置生成的数字位数
+        x2.append(fake.name())
+        x3.append(fake.ssn()) # 身份证
+        x4.append(random.choice('男女'))
+        x5.append(random.randint(22,35))
+        x6.append(fake.job())
+        x7.append(random.randint(10000,1000000))
+        x8.append(random.choice(prod_cd))
+        x17.append(fake.currency_code())
+        x18.append(fake.credit_card_number())
+        x19.append(fake.credit_card_provider())
+        x20.append(fake.credit_card_security_code())
+        x9.append(random.choice(prod_nm))
+        x10.append(random.choice(channel))
+        x11.append(date)
+        x21.append(time)
+        x12.append(fake.profile())
+        x13.append(fake.postcode())
+        x14.append(fake.province())
+        x15.append(fake.city_suffix())
+        x16.append(fake.street_address())
+
+    #创建数据表
+    datas = pd.DataFrame({
+        'user_id':x1,
+        'name':x2,
+        'ID_card':x3,
+        'gender':x4,
+        'age':x5,
+        'job':x6,
+        'salary':x7,
+        'product_id':x8,
+        'currency_code':x17,
+        'credit_card_number':x18,
+        'credit_card_provider':x19,
+        'credit_card_security_code':x20,
+        'product':x9,
+        'channel':x10,
+        'prt_dt':x11,
+        'time':x21,
+        'profile':x12,
+        'postcode':x13,
+        'province':x14,
+        'city':x15,
+        'street':x16
+    })
+
+    #DataFrame类的to_csv()方法输出数据内容，不保存行索引和列名
+    datas.to_csv(r'F:\baymax-1.2.3\customer.csv',encoding='utf-8',index=False,header=True)
+    stop_time = datetime.datetime.now()
+    log.info("结束时间：%s",stop_time)
+    log.info("耗时：%s",stop_time-start_time)
+#random_data()
+
+class operateKafka:
 
 
     def __init__(self):
@@ -142,10 +222,11 @@ class operateKafka:
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.82:9094']
-        self.topic = client.topics['commander.scheduler']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
-        self.str_topic = clients.topics['test_kafka1207'] #往topic发送字符串
-        self.json_topic = "into_003_kafka_012" #往topic发送json
-
+        self.topic = client.topics['commander.scheduler.poseidon.flow']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
+        self.json_topic = "test_kafka0210" #往topic发送json
+    global stu_nm
+    stu_nm = ['张三','李四','王五','赵六','黄七','陈八']
 
 
     """
@@ -170,9 +251,9 @@ class operateKafka:
     """
     def send_json_kafka(self):
      producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
-     for i in range(10000):
+     for i in range(100000):
         time.sleep(1)
-        data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
+        data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(21,35),"stime":timestamp_utc()}
         log.info("往kafka输入的data：%s",data)
         producer.send(self.json_topic, data)
      producer.close()
@@ -182,20 +263,32 @@ class operateKafka:
     """
     def send_str_kafka(self):
         with self.str_topic.get_sync_producer() as producer:
-            for i in range(10000):
+            for i in range(100000):
                 time.sleep(1)
-                if i%2==0:
-                    data={"id":i,"name":"zhangsan"+str(i),"sex":"m","age":30,"dates":timestamp_now()}
-                    dat = ','.join([str(i) for i in list(data.values())])
-                    log.info("往kafka输入的data：%s",dat)
-                    producer.produce(str(dat).encode())
-                else:
-                    data={"id":i,"name":"ouyanfei"+str(i),"sex":"F","age":31,"dates":timestamp_now()}
-                    dat = ','.join([str(i) for i in list(data.values())])
-                    log.info("往kafka输入的data：%s",dat)
-                    producer.produce(str(dat).encode())
+                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"dates":timestamp_now()}
+                dat = ','.join([str(i) for i in list(data.values())])
+                log.info("往kafka输入的data：%s",dat)
+                producer.produce(str(dat).encode())
 
 if __name__ == '__main__':
 
     while True:
      operateKafka().send_str_kafka()
+
+#insert_table()
+
+from pdf2docx import Converter
+
+def pdfTodoc():
+
+  ## pdf转换doc**
+    fileset_dir=os.path.join(os.path.abspath('.'),'TempoAI帮助手册_V6.6.pdf')
+    pdf_file ='sTempoAI帮助手册_V6.6 - 副本.pdf'
+    docx_file ='TempoAI帮助手册_V6.6.docx'
+
+    # convert pdf to docx
+    cv = Converter(fileset_dir)
+    cv.convert(docx_file, start=0, end=None)
+    cv.close()
+
+#pdfTodoc()

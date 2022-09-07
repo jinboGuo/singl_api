@@ -1,4 +1,4 @@
-from elasticsearch5 import Elasticsearch
+from elasticsearch import Elasticsearch
 
 from basic_info.mylogging import myLog
 from basic_info.setting import ES
