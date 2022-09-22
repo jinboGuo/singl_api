@@ -37,16 +37,16 @@ def deal_parameters(data):
             return data
         if 'select id from' in data:
             log.info("开始执行语句{}".format(data))
-            count=10
+            #count=10
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            while count>0:
-                if data_select_result==():
-                    time.sleep(5)
-                    data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                else:
-                    break
-                count-=1
-            # print(data_select_result)
+            # while count>0:
+            #     if data_select_result==():
+            #         time.sleep(5)
+            #         data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            #     else:
+            #         continue
+            #     count-=1
+            # # print(data_select_result)
             log.info("{}查询结果为{}".format(data,data_select_result))
             new_data = []
             if data_select_result:
@@ -59,9 +59,13 @@ def deal_parameters(data):
                         return new_data
                     elif "select id from merce_tag" in data:
                         return new_data
+                    elif "select id from merce_dataset where name like 'gjb_test%'" in data:
+                        print("[str-list]: ", new_data)
+                        return new_data
                     else:
-                        dat = ','.join([str(i) for i in new_data])
-                        return dat
+                        list_data = ','.join([str(i) for i in new_data])
+                        print("[str]: ", list_data)
+                        return list_data
                 elif "select id from merce_schema where name like 'gtest_mysql_0428_training_%'" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data

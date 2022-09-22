@@ -22,7 +22,7 @@ def logger_info(msg):
         os.mkdir(logs_dir)
 
     # define a rotating file handler
-    rotatingFileHandler = logging.handlers.RotatingFileHandler(filename="logs/outlog.txt",
+    rotatingFileHandler = logging.handlers.RotatingFileHandler(filename="log/outlog.txt",
 
                                                                maxBytes=1024 * 1024 * 50,
 

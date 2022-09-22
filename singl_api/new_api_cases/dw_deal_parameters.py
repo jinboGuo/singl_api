@@ -24,11 +24,29 @@ def deal_parameters(data):
                             return new_data
                         elif "select id from merce_schema" in data:
                             return new_data
+                        elif "select id from assets_info ai" in data:
+                            return new_data
                         else:
                             dat = ','.join([str(i) for i in new_data])
                             return dat
                     else:
                         try:
+                            if "select id from assets_info ai" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_dataset md" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_schema ms" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from assets_info ao" in data:
+                                data = data_select_result[0]["id"]
+                                return data
+                            elif "select id from merce_dataset ao" in data:
+                                data = data_select_result[0]["id"]
+                                return data
+                            else:
                                 data = data_select_result[0]["id"]
                                 return str(data)
                         except Exception as e:

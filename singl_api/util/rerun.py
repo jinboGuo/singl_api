@@ -1,6 +1,8 @@
 import time
 from unittest import TestCase
+from unittest.case import *
 from unittest.case import _Outcome
+
 
 class TestCase_(TestCase):
     # 是否开启失败重跑
