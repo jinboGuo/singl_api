@@ -1667,7 +1667,7 @@ class CheckResult(unittest.TestCase):
                 log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='pass')
                 case_table_sheet.cell(row=row, column=15, value='')
-            elif status_code_result == 'fail' and response_text_result in ('fail',''):
+            elif status_code_result == 'fail':
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
                 case_table_sheet.cell(row=row, column=15, value='')
