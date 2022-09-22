@@ -25,33 +25,24 @@ Compass_scheduler = {
     "USER": 'root',
     "PASSWORD": 'Inf0refiner'
 }
-
+hdfs_url = "hdfs://into1:8020"
 # # -------comapss环境使用-------
-#脚本sheet name
-compass_sheet="compass"
+# 脚本sheet name
+compass_sheet = "scheduler"  # compass
 # # HOST
-compass_host = "http://192.168.1.55:8023"
+compass_host = "http://192.168.1.65:8515"
 # # # # # 数据库连接信息
 Compass_MySQL_CONFIG = {
-    'HOST': '192.168.1.85',
+    'HOST': '192.168.1.63',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'compass-app'  # 1.2.2
-}
-
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": '123456',
-#     "DB": 'merce_199',
-#     'case_db': 'test'
-# }
+    "DB": 'merce_65',
+    'case_db': 'test'}
 
 # # -------dsp环境使用-------
-#脚本sheet name
-dsp_sheet="dsp"
+# 脚本sheet name
+dsp_sheet = "dsp"
 # # # HOST
 dsp_host = "http://192.168.1.62:8515"
 # # # # # 数据库连接信息
@@ -60,11 +51,11 @@ Dsp_MySQL_CONFIG = {
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_62'  #merce-scheduler
+     "DB": 'merce_62'  # merce-scheduler
  }
 
-#脚本sheet name
-#dsp_sheet="dsp"
+# 脚本sheet name
+# dsp_sheet="dsp"
 # # # HOST
 # dsp_host = "http://192.168.1.83:8008"
 # # # # # # 数据库连接信息
@@ -77,8 +68,8 @@ Dsp_MySQL_CONFIG = {
 # }
 
 # -------62-dw环境使用-------
-#脚本sheet name
-#dw_sheet="dw-asset"
+# 脚本sheet name
+# dw_sheet = "dw-asset"
 # # # # HOST
 # dw_host = "http://192.168.1.62:8515"
 # # # # # # 数据库连接信息
@@ -91,8 +82,8 @@ Dsp_MySQL_CONFIG = {
 # }
 
 # -------65-dw环境使用-------
-#脚本sheet name
-dw_sheet="dw-asset" #dw-asset
+# 脚本sheet name
+dw_sheet = "dw-asset"  # dw-asset
 # # HOST
 dw_host = "http://192.168.1.65:8515"
 # # # # # 数据库连接信息
@@ -105,18 +96,11 @@ Dw_MySQL_CONFIG = {
     'case_db': 'test'}
 
 # -------k8s环境使用-------
-#脚本sheet name
-baymax_sheet="k8s_149"
+# 脚本sheet name
+# baymax_sheet = "k8s_149"
 # HOST
-#host = "http://192.168.1.145:40001"
+# host = "http://192.168.1.145:40001"
 # 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.84',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce_83',
-#     'case_db': 'test'}
 MySQL_CONFIG1 = {
     'HOST': '192.168.1.82',
     "PORT": 3306,
@@ -135,19 +119,11 @@ MySQL_CONFIG1 = {
 
 
 # -------baymax master环境使用-------
-#脚本sheet name
-baymax_master = "baymax_master"#"baymax_master"
+# 脚本sheet name
+baymax_master = "baymax_master"  # "baymax_master"
 # HOST
 host = "http://192.168.1.62:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.84',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce_83',
-#     'case_db': 'test'}
-
 MySQL_CONFIG = {
     'HOST': '192.168.1.63',
     "PORT": 3306,
@@ -339,6 +315,5 @@ ES = [
     'http://192.168.1.82:9204/'
 ]
 
-#receivers_list = ['jinbo.guo@inforefiner.com', 'zhiming.wang@inforefiner.com', 'qian.feng@inforefiner.com', 'haijun.wang@inforefiner.com']  # 定时任务使用
-receivers_list = ['jinbo.guo@inforefiner.com','qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
+receivers_list = ['jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
 receivers_test = ['jinbo.guo@inforefiner.com']

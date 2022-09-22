@@ -794,7 +794,7 @@ def create_asset(data):
         dataset = "select id,name from merce_dataset where name like'%s%%%%' order by create_time desc limit 1" %data[0]
         dataset = ms.ExecuQuery(dataset.encode('utf-8'))
         new_data = {"assetModel":0,"storage":"HDFS","resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"name":"test_asset_gjb随机数","isShare":0,"updateFrequency":"","datasetName":dataset[0]["name"],"datasetId":dataset[0]["id"],"description":"创建数据集资产","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]}
-        deal_random(new_data)
+        #deal_random(new_data)
         return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)

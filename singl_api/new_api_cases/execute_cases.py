@@ -16,7 +16,7 @@ from basic_info.get_auth_token import get_headers, get_headers_root,get_auth_tok
 from util.elasticsearch7 import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
-from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2, baymax_sheet, baymax_master
+from basic_info.setting import MySQL_CONFIG, MY_LOGIN_INFO2, baymax_master
 from util.Open_DB import MYSQL
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, set_upsert_data, query_dataflow_data
 from basic_info.setting import tenant_id_83,host

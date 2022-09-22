@@ -1,5 +1,4 @@
 import random
-
 from util.format_res import dict_res
 from util.timestamp_13 import *
 from basic_info.setting import Compass_MySQL_CONFIG
@@ -23,6 +22,49 @@ def deal_parameters(data):
             elif '监控结束时间' in data:
                 data = data.replace('监控结束时间', get_now_time()[1])
                 return deal_parameters(data)
+            elif 'select id from' in data:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                new_data = []
+                if data_select_result:
+                    if len(data_select_result) > 1:
+                        for i in range(len(data_select_result)):
+                            new_data.append(data_select_result[i]["id"])
+                        if "select id from merce_dss" in data:
+                            return new_data
+                        elif "select id from merce_schema" in data:
+                            return new_data
+                        elif "select id from assets_info ai" in data:
+                            return new_data
+                        else:
+                            dat = ','.join([str(i) for i in new_data])
+                            return dat
+                    else:
+                        try:
+                            if "select id from assets_info ai" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_dataset md" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_schema ms" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_jar_package_info mjpi" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from assets_info ao" in data:
+                                data = data_select_result[0]["id"]
+                                return data
+                            elif "select id from merce_dataset ao" in data:
+                                data = data_select_result[0]["id"]
+                                return data
+                            else:
+                                data = data_select_result[0]["id"]
+                                return str(data)
+                        except Exception as e:
+                            log.error("异常信息：%s" %e)
+                else:
+                    log.info("查询结果为空！")
             elif 'select job_pool_oid' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
                 new_data = []
