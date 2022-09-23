@@ -52,12 +52,24 @@ def deal_parameters(data):
                             elif "select id from merce_jar_package_info mjpi" in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
+                            elif "select id from dc_collecter dc" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
                             elif "select id from assets_info ao" in data:
                                 data = data_select_result[0]["id"]
                                 return data
                             elif "select id from merce_dataset ao" in data:
                                 data = data_select_result[0]["id"]
                                 return data
+                            elif "select id from s_v_job_view_hist svjvh" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from s_v_job_view svjv" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from dc_task" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
                             else:
                                 data = data_select_result[0]["id"]
                                 return str(data)
@@ -192,7 +204,7 @@ def deal_parameters(data):
                             new_data.append(str(data_select_result[i]["re_th_ext_oid"]))
                         return new_data
                     else:
-                        if data == "select re_th_ext_oid from s_c_re_th_ext where re_th_oid in(select t.re_th_oid from s_c_re_th as t where re_oid in(select s.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as s))":
+                        if data == "select re_th_ext_oid from s_c_re_th_ext where re_th_oid in(select t.re_th_oid from s_c_re_th as t where re_oid in(select s.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as s)) limit 1":
                             re_th_ext_oid = str(data_select_result[0]["re_th_ext_oid"])
                             return deal_parameters(re_th_ext_oid)
                         else:
@@ -209,7 +221,7 @@ def deal_parameters(data):
                             new_data.append(str(data_select_result[i]["re_th_oid"]))
                         return new_data
                     else:
-                        if data == "select re_th_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as t)":
+                        if data == "select re_th_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as t) limit 1":
                             re_th_oid = str(data_select_result[0]["re_th_oid"])
                             return deal_parameters(re_th_oid)
                         else:
@@ -244,7 +256,7 @@ def deal_random(new_data):
         dict_res(new_data)
         for key, value in new_data.items():
             if '随机数' in str(value):
-                i = value.replace('随机数', str(random.randint(0, 999)))
+                i = value.replace('随机数', str(random.randint(0, 99999)))
                 new_data[key] = str(i)
         return new_data
     except Exception as e:
