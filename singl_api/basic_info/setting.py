@@ -28,7 +28,7 @@ Compass_scheduler = {
 hdfs_url = "hdfs://into1:8020"
 # # -------comapss环境使用-------
 # 脚本sheet name
-compass_sheet = "scheduler"  # compass
+compass_sheet = "scheduler"  # compass scheduler
 # # HOST
 compass_host = "http://192.168.1.65:8515"
 # # # # # 数据库连接信息
