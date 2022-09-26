@@ -1386,16 +1386,15 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     response = requests.put(url=new_url, headers=headers, data=data)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
-                    write_result(table_sheet_name, row, column, response.status_code)
-                    write_result(table_sheet_name, row, column + 4, response.text)
-
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             log.info("request   url：%s " %url)
             response = requests.put(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
-            write_result(table_sheet_name, row, column, response.status_code)
-            write_result(table_sheet_name, row, column + 4, response.text)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("异常信息：%s" %e)
         

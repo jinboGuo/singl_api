@@ -8,14 +8,14 @@ from util.format_res import dict_res
 from basic_info.setting import Compass_MySQL_CONFIG, compass_host, compass_sheet
 from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers_root, get_headers_dw
-from new_api_cases.compass_deal_parameters import deal_parameters
+from new_api_cases.compass_deal_parameters import deal_parameters, time
 import unittest
 from util.logs import Logger
 from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add_job, add_jobSingle, update_jobSingle, \
     add_jobMap, update_jobMap, update_re, query_reth, add_reth, update_reth, query_rethExt, update_rethExt, add_rethExt, \
     get_asset_directory, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
     update_asset_directory, get_jobview, update_jobview, query_jobview, get_jobview_exec, get_datasource, \
-    dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow
+    dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow, get_jobview_history, execution_task
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -273,6 +273,48 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             new_data = merce_dataflow(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '新建视图任务版本':
+            new_data = get_jobview_history(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '监控采集任务执行状态运行成功':
+            new_data = execution_task(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            count_num = 0
+            while '"status":"RUNNING"' in response.text or '"status":"UNKNOWN"' in response.text or '"status":"CREATED"' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=new_data)
+                time.sleep(2)
+                count_num += 1
+                if count_num == 30:
+                    return
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '监控调度任务执行状态成功':
+            new_data = get_jobview_exec(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            log.info("new_data：%s" % new_data)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            count_num = 0
+            time.sleep(5)
+            while '"status":1' in response.text or '"list":[]' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=new_data)
+                time.sleep(3)
+                count_num += 1
+                if count_num == 50:
+                    return
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -560,22 +602,21 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
                 else:
                     new_url = url.format(data)
                     log.info("request   url：%s" % new_url)
                     response = requests.put(url=new_url, headers=headers)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
-                    write_result(table_sheet_name, row, column, response.status_code)
-                    write_result(table_sheet_name, row, column + 4, response.text)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:  # data为空
             log.info("request   url：%s" % url)
             response = requests.put(url=url, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
-            write_result(table_sheet_name, row, column, response.status_code)
-            write_result(table_sheet_name, row, column + 4, response.text)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("异常信息：%s" %e)
 
