@@ -15,7 +15,8 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
     add_jobMap, update_jobMap, update_re, query_reth, add_reth, update_reth, query_rethExt, update_rethExt, add_rethExt, \
     get_asset_directory, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
     update_asset_directory, get_jobview, update_jobview, query_jobview, get_jobview_exec, get_datasource, \
-    dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow, get_jobview_history, execution_task
+    dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow, get_jobview_history, execution_task, \
+    qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -277,8 +278,32 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建质量分析任务':
+            new_data = qa_rule_task(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '质量任务审核通过' in case_detail:
+            new_data = approval_qa_task(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '新建视图任务版本':
             new_data = get_jobview_history(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '新建视图任务版本-质量核查':
+            new_data = get_qa_jobview_history(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -311,7 +336,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             while '"status":1' in response.text or '"list":[]' in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
-                time.sleep(3)
+                time.sleep(2)
                 count_num += 1
                 if count_num == 50:
                     return
@@ -595,6 +620,15 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '发布调度flow':
                     job_id, new_data = publish_flow(data)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    new_url = url.format(job_id)
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '发布调度质量flow':
+                    job_id, new_data = publish_qa_flow(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     new_url = url.format(job_id)
                     response = requests.put(url=new_url, headers=headers, data=new_data)

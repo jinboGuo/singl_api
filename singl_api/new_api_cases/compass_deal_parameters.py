@@ -61,6 +61,9 @@ def deal_parameters(data):
                             elif "select id from merce_dataset ao" in data:
                                 data = data_select_result[0]["id"]
                                 return data
+                            elif "select id from qa_job qj " in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
                             elif "select id from s_v_job_view_hist svjvh" in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
@@ -68,6 +71,9 @@ def deal_parameters(data):
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
                             elif "select id from dc_task" in data:
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
+                            elif "select id from merce_flow_execution mfe" in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
                             else:

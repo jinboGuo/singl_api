@@ -18,10 +18,10 @@ def dict_res(res):
         elif isinstance(res, dict):
             return res
         else:
-            log.info("返回值类型无法转化为dictionary")
+            log.warn("返回值类型无法转化为dictionary")
             return res
     else:
-        print("没有返回值或返回值为空")
+        log.warn("返回值类型无法转化为dictionary")
         return None
 
 def get_time():
