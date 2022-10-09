@@ -20,7 +20,7 @@ stop_time = datetime.datetime.now()
 log.info("结束时间：%s" % stop_time)
 log.info("耗时：%s" % (stop_time-start_time))
 # 发送邮件
-baymax_main3(compass_host, receivers_list, compass_sheet)
+#baymax_main3(compass_host, receivers_list, compass_sheet)
 
 
 
