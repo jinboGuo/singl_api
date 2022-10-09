@@ -26,6 +26,7 @@ Compass_scheduler = {
     "PASSWORD": 'Inf0refiner'
 }
 hdfs_url = "hdfs://into1:8020"
+
 # # -------comapss环境使用-------
 # 脚本sheet name
 compass_sheet = "scheduler"  # compass scheduler
@@ -44,42 +45,15 @@ Compass_MySQL_CONFIG = {
 # 脚本sheet name
 dsp_sheet = "dsp"
 # # # HOST
-dsp_host = "http://192.168.1.62:8515"
+dsp_host = "http://192.168.1.65:8515"
 # # # # # 数据库连接信息
 Dsp_MySQL_CONFIG = {
      'HOST': '192.168.1.63',
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_62'  # merce-scheduler
+     "DB": 'merce_65'  # merce-scheduler
  }
-
-# 脚本sheet name
-# dsp_sheet="dsp"
-# # # HOST
-# dsp_host = "http://192.168.1.83:8008"
-# # # # # # 数据库连接信息
-# Dsp_MySQL_CONFIG = {
-#     'HOST': '192.168.1.82',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce-scheduler'
-# }
-
-# -------62-dw环境使用-------
-# 脚本sheet name
-# dw_sheet = "dw-asset"
-# # # # HOST
-# dw_host = "http://192.168.1.62:8515"
-# # # # # # 数据库连接信息
-# Dw_MySQL_CONFIG = {
-#     'HOST': '192.168.1.62',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce_62'
-# }
 
 # -------65-dw环境使用-------
 # 脚本sheet name
@@ -122,14 +96,14 @@ MySQL_CONFIG1 = {
 # 脚本sheet name
 baymax_master = "baymax_master"  # "baymax_master"
 # HOST
-host = "http://192.168.1.62:8515"
+host = "http://192.168.1.65:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
 MySQL_CONFIG = {
     'HOST': '192.168.1.63',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_62',
+    "DB": 'merce_65',
     'case_db': 'test'}
 
 tenant_id_65 = "1013879801501769728"  #

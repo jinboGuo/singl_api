@@ -700,6 +700,16 @@ def publish_data_model(data):
 
 def get_asset_directory(data):
     try:
+        merce_resource_dir = "delete from merce_resource_dir where res_type ='assets_dir' and name like 'test_asset%' order by create_time desc"
+        ms.ExecuNoQuery(merce_resource_dir.encode('utf-8'))
+        assets_info = "delete from assets_info where name like 'test_asset%'"
+        ms.ExecuNoQuery(assets_info.encode('utf-8'))
+        assets_info = "delete from assets_info where name like 'test_sql_asset_gjb%'"
+        ms.ExecuNoQuery(assets_info.encode('utf-8'))
+        assets_info = "delete from assets_info where name like 'gjb_ttest_hdfs042219%'"
+        ms.ExecuNoQuery(assets_info.encode('utf-8'))
+        assets_info = "delete from assets_info where name like 'training%'"
+        ms.ExecuNoQuery(assets_info.encode('utf-8'))
         new_data = {"name": "test_asset随机数", "parentId": data, "resType": "assets_dir"}
         deal_random(new_data)
         return new_data
@@ -746,7 +756,7 @@ def duplicate_move_asset_directory(data):
 
 def delete_asset_directory(data):
     try:
-        asset_directory = "select id from merce_resource_dir mrd where res_type ='assets_dir' and creator='admin' and name like'%s%%%%' order by create_time desc limit 1" %data
+        asset_directory = "select id from merce_resource_dir mrd where res_type ='%s' and creator='admin' and name like'%s%%%%' order by create_time desc limit 1" % (data[1], data[0])
         asset_directory_info = ms.ExecuQuery(asset_directory.encode('utf-8'))
         new_data = {"data": str(asset_directory_info[0]["id"])}
         return asset_directory_info[0]["id"], new_data
@@ -757,10 +767,16 @@ def query_data_tier():
     try:
         dw_data_tier = "SELECT id FROM dw_data_tier where status ='ONLINE' order by create_time desc limit 1"
         dw_data_tier = ms.ExecuQuery(dw_data_tier.encode('utf-8'))
-        data = []
-        data.append(str(dw_data_tier[0]["id"]))
-        new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"dataTierIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
-        return new_data
+        if len(dw_data_tier) == 0:
+            data = []
+            data.append("123456")
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"dataTierIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
+            return new_data
+        else:
+            data = []
+            data.append(str(dw_data_tier[0]["id"]))
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"dataTierIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
+            return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
 
@@ -768,10 +784,16 @@ def query_subject_domain():
     try:
         dw_subject_domain = "SELECT id FROM dw_subject_domain where status ='ONLINE' order by create_time desc limit 1"
         dw_subject_domain = ms.ExecuQuery(dw_subject_domain.encode('utf-8'))
-        data = []
-        data.append(str(dw_subject_domain[0]["id"]))
-        new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"domainIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
-        return new_data
+        if len(dw_subject_domain) == 0:
+            data = []
+            data.append("123456")
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"domainIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
+            return new_data
+        else:
+            data = []
+            data.append(str(dw_subject_domain[0]["id"]))
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"domainIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
+            return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
 
@@ -779,10 +801,16 @@ def query_tags():
     try:
         merce_tag = "SELECT id FROM merce_tag order by create_time desc limit 1"
         merce_tag = ms.ExecuQuery(merce_tag.encode('utf-8'))
-        data = []
-        data.append(str(merce_tag[0]["id"]))
-        new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"tagIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":2,"pageSize":8,"pageable":True}}
-        return new_data
+        if len(merce_tag) == 0:
+            data = []
+            data.append("123456")
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"tagIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":2,"pageSize":8,"pageable":True}}
+            return new_data
+        else:
+            data = []
+            data.append(str(merce_tag[0]["id"]))
+            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"tagIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":2,"pageSize":8,"pageable":True}}
+            return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
 
@@ -794,7 +822,7 @@ def create_asset(data):
         dataset = "select id,name from merce_dataset where name like'%s%%%%' order by create_time desc limit 1" %data[0]
         dataset = ms.ExecuQuery(dataset.encode('utf-8'))
         new_data = {"assetModel":0,"storage":"HDFS","resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"name":"test_asset_gjb随机数","isShare":0,"updateFrequency":"","datasetName":dataset[0]["name"],"datasetId":dataset[0]["id"],"description":"创建数据集资产","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]}
-        #deal_random(new_data)
+        deal_random(new_data)
         return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
