@@ -16,7 +16,7 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
     get_asset_directory, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
     update_asset_directory, get_jobview, update_jobview, query_jobview, get_jobview_exec, get_datasource, \
     dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow, get_jobview_history, execution_task, \
-    qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history
+    qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history, delete_asset_directory
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
@@ -315,10 +315,10 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
             count_num = 0
-            while '"status":"RUNNING"' in response.text or '"status":"UNKNOWN"' in response.text or '"status":"CREATED"' in response.text:
+            while '"status":"RUNNING"' in response.text or '"status":"UNKNOWN"' in response.text or '"status":"CREATED"' in response.text or '"list":[]' in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
-                time.sleep(2)
+                time.sleep(5)
                 count_num += 1
                 if count_num == 30:
                     return
@@ -689,6 +689,17 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif "删除资产目录" in case_detail:
+                asset_id, new_data = delete_asset_directory(data)
+                log.info("request   data：%s " % new_data)
+                new_url = url.format(asset_id)
+                log.info("request   url：%s " % new_url)
+                response = requests.delete(url=new_url, headers=headers, data=new_data)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                # 将返回的status_code和response.text分别写入第10列和第14列
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             log.info("request   url：%s" % url)
             response = requests.delete(url=url, headers=headers)

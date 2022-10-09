@@ -36,8 +36,7 @@ def deal_parameters(data):
                         elif "select id from assets_info ai" in data:
                             return new_data
                         else:
-                            dat = ','.join([str(i) for i in new_data])
-                            return dat
+                            return new_data
                     else:
                         try:
                             if "select id from assets_info ai" in data:
@@ -52,33 +51,33 @@ def deal_parameters(data):
                             elif "select id from merce_jar_package_info mjpi" in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
-                            elif "select id from dc_collecter dc" in data:
-                                new_data.append(data_select_result[0]["id"])
-                                return new_data
+                            elif "select id from dc_collecter dcc" in data:
+                                data = data_select_result[0]["id"]
+                                return data
                             elif "select id from assets_info ao" in data:
                                 data = data_select_result[0]["id"]
                                 return data
                             elif "select id from merce_dataset ao" in data:
                                 data = data_select_result[0]["id"]
                                 return data
+                            elif "select id from merce_resource_dir" in data:
+                                data = data_select_result[0]["id"]
+                                return data
                             elif "select id from qa_job qj " in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
-                            elif "select id from s_v_job_view_hist svjvh" in data:
-                                new_data.append(data_select_result[0]["id"])
-                                return new_data
-                            elif "select id from s_v_job_view svjv" in data:
-                                new_data.append(data_select_result[0]["id"])
-                                return new_data
-                            elif "select id from dc_task" in data:
-                                new_data.append(data_select_result[0]["id"])
-                                return new_data
+                            elif "select id from s_v_job_view_hist svh" in data:
+                                data = data_select_result[0]["id"]
+                                return data
+                            elif "select id from s_v_job_view svv" in data:
+                                data = data_select_result[0]["id"]
+                                return data
                             elif "select id from merce_flow_execution mfe" in data:
                                 new_data.append(data_select_result[0]["id"])
                                 return new_data
                             else:
-                                data = data_select_result[0]["id"]
-                                return str(data)
+                                new_data.append(data_select_result[0]["id"])
+                                return new_data
                         except Exception as e:
                             log.error("异常信息：%s" %e)
                 else:
