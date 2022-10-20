@@ -964,22 +964,22 @@ def query_asset(data):
 
 # 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
 def get_improt_data(headers, HOST):
+    dataset_sql = "delete from merce_dataset where name like 'gjb_ttest_hdfs042219%' or  name like 'training%'"
+    ms.ExecuNoQuery(dataset_sql)
+    schema_sql = "delete from merce_schema where name like 'gjb_ttest_mysql0420_training%' or  name like 'training%'"
+    ms.ExecuNoQuery(schema_sql)
     url = '%s/api/mis/upload' % HOST
     fs = {"file": open(woven_dir, 'rb')}
     headers.pop('Content-Type')
     res = requests.post(url=url, headers=headers, files=fs)
     try:
-        res = json.loads(res.text)
-        cds1 = res['cds'][0]['id']
-        cds2 = res['cds'][1]['id']
-        csm1 = res['csm'][0]['id']
-        csm2 = res['csm'][1]['id']
         cdf_list, cds_list, csm_list = [], [], []
+        res = json.loads(res.text)
+        for cds_id in res['cds']:
+         cds_list.append(cds_id["id"])
+        for csm_id in res['csm']:
+         csm_list.append(csm_id["id"])
         cdf_list.append(res['cfd'][0]['id'])
-        cds_list.append(cds1)
-        cds_list.append(cds2)
-        csm_list.append(csm1)
-        csm_list.append(csm2)
         new_data = {"cfd": cdf_list, "cds": cds_list, "csm": csm_list, "tag":[], "uploadDirectory": res["uploadDir"],"overWrite":True,"flowResourceId":"","datasetResourceId":"","schemaResourceId":""}
         return new_data
     except KeyError:

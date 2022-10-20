@@ -6,7 +6,6 @@ import time
 from openpyxl import load_workbook
 import requests
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
-
 from basic_info.ready_dataflow_data import delete_autotest_dw
 from util.format_res import dict_res
 from basic_info.setting import Dw_MySQL_CONFIG, dw_host, dw_sheet
@@ -51,7 +50,7 @@ def deal_request_method():
         request_url = deal_parameters(old_request_url)
         old_data = case_table_sheet.cell(row=i, column=6).value
         request_data = deal_parameters(old_data)
-        log.info("request  data：%s" %request_data)
+        log.info("request  data：%s" % request_data)
         api_name = case_table_sheet.cell(row=i, column=1).value
         # 请求方法转大写
         if request_method:
@@ -102,7 +101,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
     try:
     # if isinstance(data, str):
         case_detail = case_table_sheet.cell(row=row, column=2).value
-        log.info("开始执行：%s " %case_detail)
+        log.info("开始执行：%s " % case_detail)
         if case_detail == '根据id查询主题域':
             new_data, business_id = query_subject_data(data)
             new_url = url.format(business_id)
