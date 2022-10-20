@@ -1,12 +1,6 @@
-import os
 import time
-import unittest
-
-from logging import exception
-
 import requests
 from openpyxl import load_workbook
-
 from api_test_cases.get_execution_output_json import abs_dir
 from basic_info.get_auth_token import get_headers
 from new_api_cases.get_statementId import statementId_flow_use, preview_result_flow_use
