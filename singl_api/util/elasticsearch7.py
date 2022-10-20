@@ -1,5 +1,4 @@
 from elasticsearch import Elasticsearch
-
 from basic_info.mylogging import myLog
 from basic_info.setting import ES
 from new_api_cases.prepare_datas_for_cases import filesets_id

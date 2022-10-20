@@ -20,7 +20,7 @@ ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD
 ''''''
 sql = "select links from merce_flow where  name = 'minus_0628_3_no_element_test'"
 
-fake = Faker("zh_CN") # 初始化，可生成中文数据
+fake = Faker("zh_CN")  # 初始化，可生成中文数据
 
 def xmlToJson(xml):
     try:
@@ -45,7 +45,7 @@ def test_secret_key():
     body = {"accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1"}
     url = 'http://192.168.1.82:8008/api/dsp/dataapi/data/secertkey'
     result = requests.get(url=url, params=body, headers=header)
-    print("--====----", result.text)
+    log.info("secertkey%s: " % result.text)
 
 
 def test_pull():
@@ -54,7 +54,7 @@ def test_pull():
     body = {"dataServiceId": "722844377071747072", "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1", "encrypted":"false","offset": 0, "size": 100, "timestamp": 1}
     url = 'http://192.168.1.82:8008/api/dsp/dataapi/data/pull'
     result = requests.post(url=url, json=body, headers=header)
-    print("------", result.text)
+    log.info("pull%s: " % result.text)
 
 
 # def test_inset():
@@ -81,14 +81,11 @@ def test_blob():
     body = {"namespace": "default", "column": "doc,blob", "rowkey": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b", "tablename": "blob_test43017"}
     url = 'http://192.168.1.23:8515/api/woven/synchronizations/objectSyncJobs/data'
     result = requests.post(url=url, json=body, headers=header)
-    print("------", result)
     return result.text
 
 def decod_blob():
 
     result = test_blob()
-    print(result)
-    print(type(result))
     img = base64.b64decode(json.loads(result)['vf']['blob'])
     with open("pic1.png", "wb") as f:
         f.write(img)
@@ -99,8 +96,8 @@ def decod_blob():
 
 def es_create():
     try:
-        es = Elasticsearch(hosts="192.168.1.82", port=9204,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
-        #es = Elasticsearch(hosts="192.168.1.82", port=9206) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+        es = Elasticsearch(hosts="192.168.1.65", port=9200) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+        #es = Elasticsearch(hosts="192.168.1.82", port=9206,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
         es.indices.create(index="sink_es6", ignore=400)
         for i in range(10000):
             time.sleep(1)
@@ -112,7 +109,6 @@ def es_create():
                 break
     except Exception as e:
         log.error("es查询异常",e)
-        return
 
 
 def socket_tcp():
@@ -129,11 +125,38 @@ def socket_tcp():
         tcp_socket.send(str(data).encode('utf-8'))
         tcp_socket.send(str('\n').encode('utf-8'))
 
-
+#批量数据插入表
 def insert_table():
-    for i in range(10000000):
-          insertsql = "insert  into supp values ('%s','%s','%s','%s')"%(fake.name(),random.randint(20,35),random.choice('男女'),data_now())
-          ms.ExecuNoQuery(insertsql)
+    import datetime, random
+    values_list = []
+    # 记录生成时间
+    record_start_time = datetime.datetime.now()
+    log.info("生成数据开始时间：%s" % record_start_time)
+    for i in range(5000000):
+        name = fake.name()
+        age = random.randint(20, 39)
+        sex = random.choice('男女')
+        times = data_now()
+        values_list.append((name, age, sex, times))
+    record_end_time = datetime.datetime.now()
+    # 记录生成时间
+    log.info("生成数据结束时间：%s" % record_end_time)
+    log.info("生成数据总耗时：%s" % (record_end_time - record_start_time))
+    # 记录执行前时间
+    start_time = datetime.datetime.now()
+    log.info("数据插入开始时间：%s" % start_time)
+    log.info("批量数据插入中.....")
+    sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
+    ms.ExecutManyInsert(sql, values_list)
+    # 记录执行完成时间
+    end_time = datetime.datetime.now()
+    log.info("数据插入结束时间：%s" % end_time)
+    # 计算时间差
+    log.info("批量插入完成")
+    log.info("插入数据耗时：%s" % (end_time - start_time))
+    log.info("总耗时：%s" % (end_time - record_start_time))
+
+#insert_table()
 
 # -*- coding: utf-8 -*-
 import pandas as pd
@@ -157,7 +180,7 @@ def random_data():
     year = ['2020','2021','2022']
 
     #循环生成数据20行，具体多少行可以根据需求修改
-    for i in range(5000000):
+    for i in range(500000):
         date = random.choice(year)+fake.date()[4:]
         time = random.choice(year)+fake.date()[4:]+' '+fake.time()
         x1.append('1'+str(fake.random_number(digits=8))) # 随机数字，参数digits设置生成的数字位数
@@ -270,10 +293,10 @@ class operateKafka:
                 log.info("往kafka输入的data：%s",dat)
                 producer.produce(str(dat).encode())
 
-if __name__ == '__main__':
-
-    while True:
-     operateKafka().send_str_kafka()
+# if __name__ == '__main__':
+#
+#     while True:
+#      operateKafka().send_str_kafka()
 
 #insert_table()
 

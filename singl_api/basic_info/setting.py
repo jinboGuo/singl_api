@@ -94,7 +94,7 @@ MySQL_CONFIG1 = {
 
 # -------baymax master环境使用-------
 # 脚本sheet name
-baymax_master = "baymax_master"  # "baymax_master"
+baymax_master = "842"  # "baymax_master"
 # HOST
 host = "http://192.168.1.65:8515"
 # 数据库的连接配置，需要根据不同环境进行变更
@@ -286,7 +286,7 @@ collector_id = 'c9'
 
 # elasticsearch集群服务器的地址
 ES = [
-    'http://192.168.1.82:9204/'
+    'http://192.168.1.65:9200/'
 ]
 
 receivers_list = ['jinbo.guo@inforefiner.com', 'qian.feng@inforefiner.com', 'zhiming.wang@inforefiner.com']
