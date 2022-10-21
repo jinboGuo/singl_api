@@ -1,7 +1,6 @@
 import time
-from unittest import TestCase
 from unittest.case import *
-from unittest.case import _Outcome
+from unittest2.case import _Outcome
 
 
 class TestCase_(TestCase):

@@ -14,13 +14,13 @@ start_time = datetime.datetime.now()
 log.info("开始时间：%s" % start_time)
 log.info("--------开始执行api case-------")
 
-# 执行API用例并对比结果
+"""执行API用例并对比结果"""
 deal_request_method()
 CheckResult().deal_result()
 stop_time = datetime.datetime.now()
 log.info("结束时间：%s" % stop_time)
 log.info("总耗时：%s" % (stop_time-start_time))
-# 发送邮件
+"""发送邮件"""
 baymax_main3(host, receivers_list, baymax_master)
 
 

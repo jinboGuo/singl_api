@@ -1,10 +1,9 @@
 from elasticsearch import Elasticsearch
-from basic_info.mylogging import myLog
 from basic_info.setting import ES
 from new_api_cases.prepare_datas_for_cases import filesets_id
+from util.logs import Logger
 
-log=myLog().getLog().logger
-
+log = Logger().get_log()
 
 # 创建elasticsearch客户端
 es = Elasticsearch(
@@ -55,8 +54,3 @@ def get_es_data_for_thumbnailMode(index,doc_type,data):
     except Exception as e:
         log.error("es查询异常",e)
         return
-
-#
-# if __name__=="__main__":
-#     a=get_es_data_for_thumbnailMode("index_file_32","_doc")
-#     print(a)
