@@ -28,8 +28,12 @@ jar_dir = os.path.join(os.path.abspath('.'),'attachment\mysql-connector-java-8.0
 host = compass_host
 log = Logger().get_log()
 
-# 判断请求方法，并根据不同的请求方法调用不同的处理方式
+
 def deal_request_method():
+    """
+    判断请求方法，并根据不同的请求方法调用不同的处理方式
+    :return:
+    """
     for i in range(2, all_rows+1):
         request_method = case_table_sheet.cell(row=i, column=4).value
         old_request_url = case_table_sheet.cell(row=i, column=5).value
@@ -39,61 +43,64 @@ def deal_request_method():
         request_data = deal_parameters(old_data)
         log.info("request data：%s" % request_data)
         api_name = case_table_sheet.cell(row=i, column=1).value
-        # 请求方法转大写
         if request_method:
             request_method_upper = request_method.upper()
-            if api_name == 'tenants':  # 租户的用例需要使用root用户登录后操作
-                # 根据不同的请求方法，进行分发
+            if api_name == 'tenants':
+                """
+                租户的用例需要使用root用户登录后操作
+                根据不同的请求方法，进行分发
+                """
                 if request_method_upper == 'POST':
-                    # 调用post方法发送请求
                     post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(host),
                                               data=request_data, table_sheet_name=case_table_sheet)
-
                 elif request_method_upper == 'GET':
-                    # 调用GET请求
                     get_request_result_check(url=request_url, headers=get_headers_root(host), data=request_data,
                                              table_sheet_name=case_table_sheet, row=i, column=8)
-
                 elif request_method_upper == 'PUT':
                     put_request_result_check(url=request_url, row=i, data=request_data,
                                              table_sheet_name=case_table_sheet, column=8,
                                              headers=get_headers_root(host))
-
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(request_url, data=request_data, table_sheet_name=case_table_sheet,
                                                 row=i, column=8, headers=get_headers_root(host))
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
             else:
-                # 根据不同的请求方法，进行分发
+                """
+                根据不同的请求方法，进行分发
+                """
                 if request_method_upper == 'POST':
-                    # 调用post方法发送请求
                     post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_dw(host),
                                               data=request_data, table_sheet_name=case_table_sheet)
-
                 elif request_method_upper == 'GET':
-                    # 调用GET请求
                     get_request_result_check(url=request_url, headers=get_headers_dw(host), data=request_data,
                                              table_sheet_name=case_table_sheet, row=i, column=8)
-
                 elif request_method_upper == 'PUT':
                     put_request_result_check(url=request_url, row=i, data=request_data,
                                              table_sheet_name=case_table_sheet, column=8, headers=get_headers_dw(host))
-
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet,
                                                 row=i, column=8, headers=get_headers_dw(host))
-
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
         else:
             log.info("第 %d 行请求方法为空" % i)
-    #  执行结束后保存表格
+    """执行结束后保存表格"""
     case_table.save(ab_dir("api_cases.xlsx"))
 
 
-# POST请求
 def post_request_result_check(row, column, url, headers, data, table_sheet_name):
+    """
+    POST接口请求，脚本里post请求的处理
+    :param row:
+    :param column:
+    :param url:
+    :param host:
+    :param headers:
+    :param data:
+    :param table_sheet_name:
+    :return:
+    """
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
@@ -347,7 +354,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         else:
             if data:
                 data = str(data)
-                # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"Datasource_create_0301_1_0688","creator":"admin"}
+                """字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"Datasource_create_0301_1_0688","creator":"admin"}"""
                 if data.startswith('{') and data.endswith('}'):
                     data_dict = dict_res(data)
                     log.info("request   url：%s" % url)
@@ -356,7 +363,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                # 列表作为参数， 如["9d3639f0-02bc-44cd-ac71-9a6d0f572632"]
                 elif data.startswith('[') and data.endswith(']'):
                     if "'" in data:
                         data = data.replace("'", '"')
@@ -373,7 +379,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                else:  # 处理参数是一个字符串id的情况,按照接口格式，放入list中处理
+                else:
                     new_data = []
                     new_data.append(data)
                     new_data = str(new_data)
@@ -392,7 +398,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            else:  # data为空
+            else:
                 log.info("request   url：%s" % url)
                 response = requests.post(url=url, headers=headers, data=data)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -403,16 +409,24 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         log.error("异常信息：%s" % e)
 
 
-# GET请求
+
 def get_request_result_check(url, headers, data, table_sheet_name, row, column):
+    """
+    GET请求需要从parameter中获取参数,并把参数拼装到URL中
+    :param url:
+    :param headers:
+    :param data:
+    :param table_sheet_name:
+    :param row:
+    :param column:
+    :return:
+    """
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
-        # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
         if data:
-            if '&' in str(data):  # 包含多个参数并以&分割
+            if '&' in str(data):
                 parameters = data.split('&')
-                # 处理存在select语句中的参数，并重新赋值
                 for i in range(len(parameters)):
                     if parameters[i].startswith('select id from'):
                         try:
@@ -433,7 +447,6 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                             parameters[i] = select_result[0]["execution_id"]
                         except:
                             log.info("第%s行参数没有返回结果"% row)
-                # 判断URL中需要的参数个数，并比较和data中的参数个数是否相等
                 if len(parameters) == 1:
                     try:
                         url_new = url.format(parameters[0])
@@ -468,7 +481,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 else:
                    log.info("请确认第%d行parameters" % row)
-            else:  # 参数中不包含&，只有一个参数
+            else:
                 url_new = url.format(data)
                 log.info("request   url：%s" % url_new)
                 response = requests.get(url=url_new, headers=headers)
@@ -476,8 +489,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        # GET 请求参数写在URL中，直接发送请求
-        else:  # data为空
+        else:
             log.info("request   url：%s" % url)
             response = requests.get(url=url, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -488,20 +500,30 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
         log.error("异常信息：%s" %e)
 
 
-# PUT请求
 def put_request_result_check(url, row, data, table_sheet_name, column, headers):
-    try:
-        case_detail = case_table_sheet.cell(row=row, column=2).value
-        log.info("开始执行：%s" % case_detail)
-        # if data and isinstance(data, str):
-        if data:
-            if '&' in str(data):
+    """
+    PUT接口请求
+                if '&' in str(data):
                 # 分隔参数
                 parameters = data.split('&')
                 # 拼接URL
                 new_url = url.format(parameters[0])
+    :param url:
+    :param row:
+    :param data:
+    :param table_sheet_name:
+    :param column:
+    :param headers:
+    :return:
+    """
+    try:
+        case_detail = case_table_sheet.cell(row=row, column=2).value
+        log.info("开始执行：%s" % case_detail)
+        if data:
+            if '&' in str(data):
+                parameters = data.split('&')
+                new_url = url.format(parameters[0])
                 log.info("request   url：%s" % url)
-                # 发送的参数体
                 parameters_data = parameters[-1]
                 if parameters_data.startswith('{'):
                     response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
@@ -644,7 +666,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        else:  # data为空
+        else:
             log.info("request   url：%s" % url)
             response = requests.put(url=url, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -656,12 +678,21 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
 
 
 def delete_request_result_check(url, data, table_sheet_name, row, column, headers):
+    """
+    delete接口请求
+    :param url:
+    :param data:
+    :param table_sheet_name:
+    :param row:
+    :param column:
+    :param headers:
+    :return:
+    """
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
         if data:
             data = str(data)
-            # 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
             if data.startswith('{') and data.endswith('}'):
                 data_dict = dict_res(data)
                 log.info("request   url：%s " % url)
@@ -670,7 +701,6 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            # 列表作为参数， 如["9d3639f0-02bc-44cd-ac71-9a6d0f572632"]
             elif data.startswith('[') and data.endswith(']'):
                 if "'" in data:
                     data = data.replace("'", '"')
@@ -696,7 +726,6 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                 log.info("request   url：%s " % new_url)
                 response = requests.delete(url=new_url, headers=headers, data=new_data)
                 log.info("response data：%s %s" % (response.status_code, response.text))
-                # 将返回的status_code和response.text分别写入第10列和第14列
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -704,7 +733,6 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
             log.info("request   url：%s" % url)
             response = requests.delete(url=url, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
-            # 将返回的status_code和response.text分别写入第10列和第14列
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -712,13 +740,28 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
         log.error("异常信息：%s" % e)
 
 
-#  写入返回结果
+
 def write_result(sheet, row, column, value):
+    """
+    写入返回结果
+    :param sheet:
+    :param row:
+    :param column:
+    :param value:
+    :return:
+    """
     sheet.cell(row=row, column=column, value=value)
 
 
-#  写入结果前，先把结果和对比结果全部清空
+
 def clean_vaule(sheet, row, column):
+    """
+    写入结果前，先把结果和对比结果全部清空
+    :param sheet:
+    :param row:
+    :param column:
+    :return:
+    """
     sheet.cell(row=row, column=column, value='')
     sheet.cell(row=row, column=column+1, value='')
     sheet.cell(row=row, column=column + 4, value='')
@@ -727,18 +770,17 @@ def clean_vaule(sheet, row, column):
     sheet.cell(row=row, column=column + 7, value='')
 
 
-# 对比code和text
+
 class CheckResult(unittest.TestCase):
 
     def compare_code_result(self):
         """1.对比预期code和接口响应返回的status code"""
         for row in range(2, all_rows+1):
-            # 预期status code和接口返回status code
+            """预期status code和接口返回status code"""
             ex_status_code = case_table_sheet.cell(row=row, column=7).value
             ac_status_code = case_table_sheet.cell(row=row, column=8).value
-            # 判断两个status code是否相等
+            """判断两个status code是否相等"""
             if ex_status_code and ac_status_code != '':
-                # code相等时，pass
                 if ex_status_code == ac_status_code:
                     case_table_sheet.cell(row=row, column=9, value='pass')
                 else:
@@ -749,26 +791,33 @@ class CheckResult(unittest.TestCase):
                 log.info("第 %d 行 status_code为空" % row)
         case_table.save(ab_dir('api_cases.xlsx'))
 
-    # 对比预期response和实际返回的response.text，根据预期和实际结果的关系进行处理
+
     def compare_text_result(self):
+        """对比预期response和实际返回的response.text，根据预期和实际结果的关系进行处理"""
         for row in range(2, all_rows+1):
-            response_text = case_table_sheet.cell(row=row, column=12).value  # 接口返回的response.text
+            """接口返回的response.text"""
+            response_text = case_table_sheet.cell(row=row, column=12).value
             response_text_dict = dict_res(response_text)
-            expect_text = case_table_sheet.cell(row=row, column=10).value  # 预期结果
-            key_word = case_table_sheet.cell(row=row, column=3).value  # 接口关键字
-            code_result = case_table_sheet.cell(row=row, column=9).value  # status_code对比结果
-            relation = case_table_sheet.cell(row=row, column=11).value  # 预期text和response.text的关系
-            #  1.status_code 对比结果pass的前提下，判断response.text断言是否正确,
-            #  2.status_code 对比结果fail时，用例整体结果设为fail
+            """预期结果"""
+            expect_text = case_table_sheet.cell(row=row, column=10).value
+            """接口关键字"""
+            key_word = case_table_sheet.cell(row=row, column=3).value
+            """status_code对比结果"""
+            code_result = case_table_sheet.cell(row=row, column=9).value
+            """预期text和response.text的关系"""
+            relation = case_table_sheet.cell(row=row, column=11).value
+
+            """
+            1.status_code 对比结果pass的前提下，判断response.text断言是否正确,
+            2.status_code 对比结果fail时，用例整体结果设为fail
+            """
             if code_result == 'pass':
                 if key_word in ('create', 'query', 'update', 'delete'):
                     self.assert_deal(key_word, relation, expect_text, response_text, response_text_dict, row, 13)
                 else:
                     log.info("请确认第%d行的key_word" %row)
             elif code_result == 'fail':
-                # case 结果列
                 case_table_sheet.cell(row=row, column=14, value='fail')
-                # case失败原因
                 case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
                                                                 (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
@@ -776,15 +825,26 @@ class CheckResult(unittest.TestCase):
 
         case_table.save(ab_dir('api_cases.xlsx'))
 
-    #  根据expect_text, response_text的关系，进行断言, 目前只处理了等于和包含两种关系
+
     def assert_deal(self, key_word, relation, expect_text, response_text, response_text_dict, row, column):
+        """
+        根据expect_text, response_text的关系，进行断言, 目前只处理了等于和包含两种关系
+        :param key_word:
+        :param relation:
+        :param expect_text:
+        :param response_text:
+        :param response_text_dict:
+        :param row:
+        :param column:
+        :return:
+        """
         if key_word == 'create':
-            if relation == '=':   # 只返回id时，判断返回内容中包含id属性，id长度为36
+            if relation == '=':
                 if isinstance(response_text_dict, dict):
                     if response_text_dict.get("id"):
-                        # 返回的内容中包含 id属性，判断返回的id长度和预期给定的id长度一致
                         try:
-                            self.assertEqual(expect_text, len(response_text_dict['id']), '第%d行的response_text长度和预期不一致' % row)
+                            self.assertEqual(expect_text, len(response_text_dict['id']),
+                                             '第%d行的response_text长度和预期不一致' % row)
                         except:
                             log.info("第 %d 行 response_text返回的id和预期id长度不一致" % row)
                             case_table_sheet.cell(row=row, column=column, value='fail')
@@ -792,13 +852,14 @@ class CheckResult(unittest.TestCase):
                             case_table_sheet.cell(row=row, column=column, value='pass')
                     else:
                         try:
-                            self.assertEqual(expect_text, response_text, '第%d行的response_text长度和预期不一致' % row)
+                            self.assertEqual(expect_text, response_text, '第%d行的expect_text:%s和response_text:%s不相等' % (
+                            row, expect_text, response_text))
                         except:
-                            log.info("第 %d 行 response_text和预期text不相等" % row)
+                            log.info("第%d行的expect_text:%s和response_text:%s不相等" % (row, expect_text, response_text))
                             case_table_sheet.cell(row=row, column=column, value='fail')
                         else:
                             case_table_sheet.cell(row=row, column=column, value='pass')
-                else:  # 只返回一个id串的情况下，判断预期长度和id长度一致
+                else:
                     try:
                         self.assertEqual(expect_text, len(response_text), '第%d行的response_text长度和预期不一致' % row)
                     except:
@@ -807,65 +868,94 @@ class CheckResult(unittest.TestCase):
                     else:
                         case_table_sheet.cell(row=row, column=column, value='pass')
 
-            elif relation == 'in':  # 返回多内容时，判断返回内容中包含id属性，并且expect_text包含在response_text中
-                try:
-                    # self.assertIsNotNone(response_text_dict.get("id"), '第 %d 行 response_text没有返回id' % row)
-                    self.assertIn(expect_text, response_text, '第 %d 行 expect_text没有包含在接口返回的response_text中' % row)
-                except:
-                    log.info("第 %d 行 expect_text没有包含在response_text中， 结果对比失败" % row)
-                    case_table_sheet.cell(row=row, column=column, value='fail')
+            elif relation == 'in':
+                """返回多内容时，断言多个值可以用&连接，并且expect_text包含在response_text中"""
+                if "&" in expect_text:
+                    for i in expect_text.split("&"):
+                        try:
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' % (row, i))
+                        except:
+                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, i))
+                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            break
+                        else:
+                            case_table_sheet.cell(row=row, column=column, value='pass')
                 else:
-                    case_table_sheet.cell(row=row, column=column, value='pass')
+                    try:
+                        self.assertIn(expect_text, response_text,
+                                      '第 %d 行 预期结果：%s没有包含在response_text中' % (row, expect_text))
+                    except:
+                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail')
+                    else:
+                        case_table_sheet.cell(row=row, column=column, value='pass')
             else:
                 log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relatrion')
+                case_table_sheet.cell(row=row, column=column, value='请确认%d行 的预期text和接口response.text的relatrion' % row)
         elif key_word in ('query', 'update', 'delete'):
             if relation == '=':
-                compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', '%s' % (response_text))
+                compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}',
+                                            '%s' % (response_text))
                 response_text_list = []
                 response_text_list.append(response_text)
-                # 返回值是id 串，字母和数字的组合
                 if compare_result == response_text_list:
                     try:
-                        self.assertEqual(expect_text, len(response_text), '第%s行expect_text和response_text不相等' % row)
+                        self.assertEqual(expect_text, len(response_text), '第%d行expect_text和response_text不相等' % row)
                     except:
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
                         case_table_sheet.cell(row=row, column=column, value='pass')
-                # 返回空值
                 elif expect_text == None and response_text == "":
                     case_table_sheet.cell(row=row, column=column, value='pass')
 
                 else:
                     try:
-                        self.assertEqual(expect_text, response_text, '第%s行expect_text和response_text不相等' % row)
+                        self.assertEqual(expect_text, response_text,
+                                         '第%d行expect_text:%s和response_text:%s不相等' % (row, expect_text, response_text))
                     except:
+                        log.info("第 %d 行 response_text和预期text不相等" % row)
                         case_table_sheet.cell(row=row, column=column, value='fail')
                     else:
                         case_table_sheet.cell(row=row, column=column, value='pass')
-
             elif relation == 'in':
-                try:
-                    self.assertIn(expect_text, response_text, '第 %d 行 expect_text没有包含在接口返回的response_text中' % row)
-                except:
-                    log.info("第 %d 行 expect_text和response_text不相等， 结果对比失败" % row)
-                    case_table_sheet.cell(row=row, column=column, value='fail')
+                if "&" in expect_text:
+                    for i in expect_text.split("&"):
+                        try:
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' % (row, i))
+                        except:
+                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, i))
+                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            break
+                        else:
+                            case_table_sheet.cell(row=row, column=column, value='pass')
                 else:
-                    case_table_sheet.cell(row=row, column=column, value='pass')
+                    try:
+                        self.assertIn(expect_text, response_text,
+                                      '第 %d 行 预期结果：%s没有包含在response_text中' % (row, expect_text))
+                    except:
+                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail')
+                    else:
+                        case_table_sheet.cell(row=row, column=column, value='pass')
             else:
                 log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认预期text和接口response.text的relation')
+                case_table_sheet.cell(row=row, column=column,
+                                      value='请确认第 %d 行 预期expect_text和response_text的relation' % row)
         else:
             log.info("请确认第 %d 行 的key_word" % row)
         case_table.save(ab_dir('api_cases.xlsx'))
 
-    # 对比case最终的结果
     def deal_result(self):
-        # 对比code
+        """
+        对比code
         self.compare_code_result()
-        # 对比text
+        对比text
         self.compare_text_result()
-        # 根据code result和text result判断case最终结果
+        根据code result和text result判断case最终结果
+        :return: 对比case最终的结果
+        """
+        self.compare_code_result()
+        self.compare_text_result()
         for row in range(2, all_rows + 1):
             status_code_result = case_table_sheet.cell(row=row, column=9).value
             response_text_result = case_table_sheet.cell(row=row, column=13).value
@@ -876,14 +966,19 @@ class CheckResult(unittest.TestCase):
             elif status_code_result == 'fail':
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
-                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s'
-                                                                % (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
+                case_table_sheet.cell(row=row, column=15, value='')
+                case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s' \
+                                                                % (case_table_sheet.cell(row=row, column=2).value,
+                                                                   case_table_sheet.cell(row=row, column=7).value,
+                                                                   case_table_sheet.cell(row=row, column=8).value))
             elif status_code_result == 'pass' and response_text_result == 'fail':
                 log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
                 case_table_sheet.cell(row=row, column=14, value='fail')
+                case_table_sheet.cell(row=row, column=15, value='')
                 case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败,预期为%s,实际为%s' %
-                                                                (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
+                                                                (case_table_sheet.cell(row=row, column=2).value,
+                                                                 case_table_sheet.cell(row=row, column=10).value,
+                                                                 case_table_sheet.cell(row=row, column=12).value))
             else:
                 log.info("请确认status code或response.text对比结果")
         case_table.save(ab_dir('api_cases.xlsx'))
-
