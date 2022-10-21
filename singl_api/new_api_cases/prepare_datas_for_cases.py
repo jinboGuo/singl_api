@@ -1831,6 +1831,12 @@ def update_custom_step(data):
         log.error("异常信息：%s" % e)
 
 def get_improt_dataflow(headers, HOST):
+    """
+    返回导入dataflow文件的请求体参数
+    :param headers:
+    :param HOST:
+    :return:
+    """
     url = '%s/api/mis/upload' % HOST
     fs = {"file": open(woven_dataflow, 'rb')}
     headers.pop('Content-Type')

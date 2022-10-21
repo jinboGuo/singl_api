@@ -12,26 +12,30 @@ from pykafka import KafkaClient
 import json
 import requests
 from faker import Faker
-from elasticsearch import Elasticsearch
-from util.timestamp_13 import data_now, hour_stamp, hour_slice, second_stamp, min_stamp, day_now, timestamp_now, timestamp_utc
+from util.timestamp_13 import data_now, hour_stamp, hour_slice, timestamp_now, timestamp_utc
 
 log = Logger().get_log()
 ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"], MySQL_CONFIG1["PORT"])
-''''''
-sql = "select links from merce_flow where  name = 'minus_0628_3_no_element_test'"
-
 fake = Faker("zh_CN")  # 初始化，可生成中文数据
 
+
 def xmlToJson(xml):
+    """
+    function:xml转换为json
+    """
     try:
         converteJson = xmltodict.parse(xml,encoding='utf-8')
         jsonStr = json.dumps(converteJson,indent=4)
         return jsonStr
     except Exception as e:
-        print("异常信息：%s",e)
+        print("异常信息：%s", e)
+
 
 def jsonToXml(js):
-    convertXml =''
+    """
+    function:json转换为xml
+    """
+    convertXml = ''
     jsDict =json.loads(js)
     try:
         convertXml = xmltodict.unparse(jsDict,encoding='utf-8')
@@ -40,21 +44,29 @@ def jsonToXml(js):
     finally:
         return convertXml
 
-def test_secret_key():
+
+def test_secret_key(url, body, header):
+    """
+    function:返回密钥
     header = {'Content-Type': 'application/json', "Accept": "application/json"}
     body = {"accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1"}
     url = 'http://192.168.1.82:8008/api/dsp/dataapi/data/secertkey'
+    """
     result = requests.get(url=url, params=body, headers=header)
-    log.info("secertkey%s: " % result.text)
+    log.info("返回密钥：%s: " % result.text)
+    return result.text
 
 
-def test_pull():
-
+def test_pull(url, body, header):
+    """
+    function:查询数据记录接口
     header = {'hosts': '192.168.2.142', 'Content-Type': 'application/json', "Accept": "application/json"}
     body = {"dataServiceId": "722844377071747072", "accessKey": "5d577396-2f67-483c-90ab-a4e94932ecd1", "encrypted":"false","offset": 0, "size": 100, "timestamp": 1}
     url = 'http://192.168.1.82:8008/api/dsp/dataapi/data/pull'
+    """
     result = requests.post(url=url, json=body, headers=header)
-    log.info("pull%s: " % result.text)
+    log.info("查询数据记录：%s: " % result.text)
+    return result.text
 
 
 # def test_inset():
@@ -83,6 +95,7 @@ def test_blob():
     result = requests.post(url=url, json=body, headers=header)
     return result.text
 
+
 def decod_blob():
 
     result = test_blob()
@@ -94,9 +107,11 @@ def decod_blob():
         f.write(doc)
 
 
+
 def es_create():
+    from elasticsearch import Elasticsearch
     try:
-        es = Elasticsearch(hosts="192.168.1.65", port=9200) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
+        es = Elasticsearch(hosts="192.168.1.65", port=9200)
         #es = Elasticsearch(hosts="192.168.1.82", port=9206,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
         es.indices.create(index="sink_es6", ignore=400)
         for i in range(10000):
@@ -109,6 +124,7 @@ def es_create():
                 break
     except Exception as e:
         log.error("es查询异常",e)
+
 
 
 def socket_tcp():
@@ -125,10 +141,55 @@ def socket_tcp():
         tcp_socket.send(str(data).encode('utf-8'))
         tcp_socket.send(str('\n').encode('utf-8'))
 
-#批量数据插入表
-def insert_table():
-    import datetime, random
+
+
+def batch_create_table():
+    """
+    function:批量创建表
+    """
+    import datetime
+    # 记录生成时间
+    record_start_time = datetime.datetime.now()
+    log.info("创建表开始时间：%s" % record_start_time)
+    for name in range(2022102101, 2022102110):
+        sql = '''CREATE TABLE `cutomer`{} (
+          `user_id` bigint(20) DEFAULT NULL,
+          `name` text,
+          `ID_card` text,
+          `gender` text,
+          `age` bigint(20) DEFAULT NULL,
+          `job` text,
+          `salary` bigint(20) DEFAULT NULL,
+          `product_id` text,
+          `currency_code` text,
+          `credit_card_number` bigint(20) DEFAULT NULL,
+          `credit_card_provider` text,
+          `credit_card_security_code` bigint(20) DEFAULT NULL,
+          `product` text,
+          `channel` text,
+          `prt_dt` text,
+          `time` text,
+          `profile` text,
+          `postcode` bigint(20) DEFAULT NULL,
+          `province` text,
+          `city` text,
+          `street` text
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8'''.format(name)
+        ms.ExecuNoQuery(sql)
+    record_end_time = datetime.datetime.now()
+    # 表记录生成时间
+    log.info("表生成结束时间：%s" % record_end_time)
+    log.info("创建表总耗时：%s" % (record_end_time - record_start_time))
+
+
+def batch_insert_table():
+    """
+    :return: 大批量数据插入mysql表
+     sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
+    """
+    import datetime,random
     values_list = []
+    sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
     # 记录生成时间
     record_start_time = datetime.datetime.now()
     log.info("生成数据开始时间：%s" % record_start_time)
@@ -146,7 +207,6 @@ def insert_table():
     start_time = datetime.datetime.now()
     log.info("数据插入开始时间：%s" % start_time)
     log.info("批量数据插入中.....")
-    sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
     ms.ExecutManyInsert(sql, values_list)
     # 记录执行完成时间
     end_time = datetime.datetime.now()
@@ -156,16 +216,20 @@ def insert_table():
     log.info("插入数据耗时：%s" % (end_time - start_time))
     log.info("总耗时：%s" % (end_time - record_start_time))
 
-#insert_table()
+#batch_insert_table()
+
 
 # -*- coding: utf-8 -*-
 import pandas as pd
 from faker import Faker
 import random
 import datetime
-def random_data():
-    fake = Faker("zh_CN") # 初始化，可生成中文数据
 
+def random_data():
+    """
+    :return: 生成csv文件
+    """
+    fake = Faker("zh_CN") # 初始化，可生成中文数据
     #设置字段
     #index = []
     # for i in range(1,12):
@@ -180,7 +244,7 @@ def random_data():
     year = ['2020','2021','2022']
 
     #循环生成数据20行，具体多少行可以根据需求修改
-    for i in range(500000):
+    for i in range(50000):
         date = random.choice(year)+fake.date()[4:]
         time = random.choice(year)+fake.date()[4:]+' '+fake.time()
         x1.append('1'+str(fake.random_number(digits=8))) # 随机数字，参数digits设置生成的数字位数
@@ -235,11 +299,52 @@ def random_data():
     stop_time = datetime.datetime.now()
     log.info("结束时间：%s",stop_time)
     log.info("耗时：%s",stop_time-start_time)
+
 #random_data()
 
+
+
+# -*- coding:UTF-8 -*-
+import pandas as pd
+from sqlalchemy import create_engine
+
+def csv_import_table():
+    """
+    :return: 批量创建表，如果不存在表，则自动创建，csv文件批量导入表
+    """
+    # 文件路径
+    path = r'F:\baymax-1.2.3\customer.csv'
+    data = pd.read_csv(path,encoding='utf-8')
+    log.info("data: " % data)
+    start_time = datetime.datetime.now()
+    log.info("csv文件导入表-开始时间：%s" % start_time)
+    # 表名
+    # 如果不存在表，则自动创建
+    table_name = []
+    for i in range(2022102101,2022102105):
+        name ="cutomer"+ str(i)
+        table_name.append(name)
+    for table in table_name:
+        engine = create_engine("mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}".format(**MySQL_CONFIG1), max_overflow=5)
+        data.to_sql(table,engine,index=False,if_exists='append',)
+        end_time = datetime.datetime.now()
+        log.info("csv文件导入%s表-结束时间：%s" % (table, end_time))
+    # 记录执行完成时间
+    end_time = datetime.datetime.now()
+    log.info("csv文件导入表-结束时间：%s" % end_time)
+    # 计算时间差
+    log.info("csv文件导入完成")
+    log.info("导入数据总耗时：%s" % (end_time - start_time))
+
+#csv_import_table()
+
+
+
+
 class operateKafka:
-
-
+    """
+    :return: 操作kafka，往kafka发送字符串和json数据
+    """
     def __init__(self):
         hosts = ["192.168.1.55:9092","192.168.1.82:9094"]
         client = KafkaClient(hosts=hosts[0])
@@ -251,9 +356,8 @@ class operateKafka:
     global stu_nm
     stu_nm = ['张三','李四','王五','赵六','黄七','陈八']
 
-
     """
-    function:send message to kafka
+    function:send 调度message to kafka
     """
     def sendMessage(self, cluster,data):
         with self.topic.get_sync_producer() as producer:
@@ -298,17 +402,17 @@ class operateKafka:
 #     while True:
 #      operateKafka().send_str_kafka()
 
-#insert_table()
+
 
 from pdf2docx import Converter
 
 def pdfTodoc():
-
-  ## pdf转换doc**
+    """
+    function:pdf转换doc**
+    """
     fileset_dir=os.path.join(os.path.abspath('.'),'TempoAI帮助手册_V6.6.pdf')
     pdf_file ='sTempoAI帮助手册_V6.6 - 副本.pdf'
     docx_file ='TempoAI帮助手册_V6.6.docx'
-
     # convert pdf to docx
     cv = Converter(fileset_dir)
     cv.convert(docx_file, start=0, end=None)
