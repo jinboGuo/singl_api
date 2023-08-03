@@ -1,3 +1,4 @@
+# coding:utf-8
 import logging
 from logging import handlers
 import time
@@ -19,7 +20,7 @@ class Logger(object):
 
     def __init__(self):
         global resultPath, log
-        log= 'AutoTest' + '_' + time.strftime('%Y%m%d', time.localtime()) + '.log'
+        log = 'AutoAPITest' + '-' + time.strftime('%Y%m%d', time.localtime()) + '.log'
         resultPath = PATH("../Reports/Log")
         if not os.path.exists(resultPath):
             os.mkdir(resultPath)
@@ -27,11 +28,11 @@ class Logger(object):
 
     def get_log(self):
         self.delDir(resultPath)
-        fmt='%(asctime)s - %(funcName)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+        fmt = '%(asctime)s-%(funcName)s[line:%(lineno)d]-%(levelname)s: %(message)s'
         filename = os.path.join(resultPath, log)
         logger = logging.getLogger(filename)
         format_str = logging.Formatter(fmt)#设置日志格式
-        logger.setLevel(self.level_relation.get('info'))#设置日志级别
+        logger.setLevel(self.level_relation.get('debug'))#设置日志级别
         if not logger.handlers:
             sh = logging.StreamHandler()#往屏幕上输出
             sh.setFormatter(format_str) #设置屏幕上显示的格式
@@ -47,7 +48,7 @@ class Logger(object):
             th.setFormatter(format_str)#设置文件里写入的格式
             logger.addHandler(sh) #把对象加到logger里
             logger.addHandler(th)
-        return  logger
+        return logger
 
     @staticmethod
     def delDir(resultPath,t=24*60*60*2):
@@ -66,11 +67,11 @@ class Logger(object):
                 #删除过期文件
                 if (now - last >= t):
                     os.remove(filePath)
-                    Logger().get_log().info(" %s was removed!" % filePath)
+                    #Logger().get_log().info(" %s was removed!" % filePath)
             elif os.path.isdir(filePath):
                 #如果是文件夹，继续遍历删除
                 resultPath.delDir(filePath, t)
                 #如果是空文件夹，删除空文件夹
                 if not os.listdir(filePath):
                     os.rmdir(filePath)
-                    Logger().get_log().info(" %s was removed!" % filePath)
+                    #Logger().get_log().info(" %s was removed!" % filePath)

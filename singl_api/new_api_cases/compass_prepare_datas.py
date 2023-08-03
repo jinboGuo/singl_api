@@ -396,7 +396,7 @@ def dc_collecter_group(data):
         ms.ExecuNoQuery(dc_collecter.encode('utf-8'))
         dc_collecter_group = "select id from dc_collecter_group where name like'%s%%%%' order by create_time desc limit 1" % data
         dc_collecter_group = ms.ExecuQuery(dc_collecter_group.encode('utf-8'))
-        new_data = {"groupId":dc_collecter_group[0]["id"],"id":"","name":"gjb_c1随机数","secretKey":"","authType":0,"host":"192.168.1.62","port":22,"proxyPort":8989,"appPath":"/app/merce/poseidon/poseidon-root-1.0.0","restUri":"http://192.168.1.62:8989","user":"merce","password":"62@merce","status":0,"isCacheStatus":0}
+        new_data = {"groupId":dc_collecter_group[0]["id"],"id":"","name":"gjb_c1随机数","secretKey":"","authType":0,"host":"192.168.1.61","port":22,"proxyPort":8989,"appPath":"/app/merce/poseidon/poseidon-root-1.0.0","restUri":"http://192.168.1.61:8989","user":"merce","password":"merce","status":1,"isCacheStatus":0}
         deal_random(new_data)
         return new_data
     except Exception as e:

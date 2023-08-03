@@ -23,7 +23,7 @@ def get_es_data(index=None,doc_type=None,value=None,name_list=None):
     try:
         ret = es.search(index=index, doc_type=doc_type, body=query)
     except Exception as e:
-        log.error("es查询异常",e)
+        log.error("es查询异常：%s",e)
         return
     else:
         log.info("es查询结果为%s"%ret)
@@ -53,4 +53,3 @@ def get_es_data_for_thumbnailMode(index,doc_type,data):
         return a
     except Exception as e:
         log.error("es查询异常",e)
-        return

@@ -1,11 +1,14 @@
 import requests, json
 from basic_info.get_auth_token import get_headers
+from util.Open_DB import MYSQL
 from util.logs import Logger
-from basic_info.setting import tenant_id_83, tenant_id_82, \
-    tenant_id_84, tenant_id_145, tenant_id_62, tenant_id_65
+from basic_info.setting import tenant_id_145, tenant_id_62, tenant_id_65, MySQL_CONFIG, \
+    tenant_id_61, tenant_id_95, tenant_id_220
 from new_api_cases.dw_prepare_datas import sql_analyse_data
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
+
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 
 log = Logger().get_log()
 # 根据host信息返回tenant信息
@@ -14,14 +17,14 @@ def get_tenant(host):
     if '62' in host:
         tenant_id = tenant_id_62
         return tenant_id
-    elif '83' in host:
-        tenant_id = tenant_id_83
+    elif '95' in host:
+        tenant_id = tenant_id_95
         return tenant_id
-    elif '82' in host:
-        tenant_id = tenant_id_82
+    elif '220' in host:
+        tenant_id = tenant_id_220
         return tenant_id
-    elif '84' in host:
-        tenant_id = tenant_id_84
+    elif '61' in host:
+        tenant_id = tenant_id_61
         return tenant_id
     elif '65' in host:
         tenant_id = tenant_id_65
@@ -110,8 +113,14 @@ def statementId_no_dataset(host, param):
         return
 
 
-# 初始化Sql Analyze(解析数据集输出字段)，返回statement id，获取数据集字段给分析任务使用
+
 def get_sql_analyse_statement_id(host, param):
+    """
+    初始化Sql Analyze(解析数据集输出字段)，返回statement id，获取数据集字段给分析任务使用
+    :param host:
+    :param param:
+    :return:
+    """
     url = ' %s/api/datasets/sql/analyzeinit' % host
     param = sql_analyse_data(param)
     new_data = json.dumps(param, separators=(',', ':'))
@@ -124,8 +133,14 @@ def get_sql_analyse_statement_id(host, param):
         return
 
 
-# 根据初始化SQL Analyze返回的statement id,获取数据集字段(获取输出字段)
+
 def get_sql_analyse_dataset_info(host, params):
+    """
+    根据初始化SQL Analyze返回的statement id,获取数据集字段(获取输出字段)
+    :param host:
+    :param params:
+    :return:
+    """
     sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
     url = ' %s/api/datasets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
     res = requests.get(url=url, headers=get_headers(host))
@@ -160,10 +175,83 @@ def get_sql_execte_statement_id(HOST,param):
         return
 
 
-# 根据Sql语句解析表名,初始化ParseSql任务,返回statementID
-def steps_sql_parseinit_statemenId(HOST,params):
-    url = '%s/api/steps/sql/parseinit/dataflow' % HOST
-    res = requests.post(url=url, headers=get_headers(HOST), data=params)
+def step_sql_analyse_data(data):
+    """
+    获取step的输出字段分析任务的请求体
+    :param data:
+    :return:
+    """
+    try:
+        dataset = "select id,schema_id from merce_dataset where name = '%s' order by create_time desc limit 1" % data
+        dataset_info = ms.ExecuQuery(dataset.encode('utf-8'))
+        new_data = {"id":"source_1","name":"source","type":"source","otherConfigurations":{"schema":"training_training","dataset-dateTo":"","dataset-dateFrom":"","dataset-paths":"","dataset-sql":"","schemaId":dataset_info[0]["schema_id"],"interceptor":"","dataset":[{"rule":"set_1","dataset":"training","ignoreMissingPath":False,"datasetId":dataset_info[0]["id"],"storage":"JDBC"}]},"inputConfigurations":None,"outputConfigurations":{"output":[{"name":"id","type":"int","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"ts","type":"timestamp","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"code","type":"string","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"total","type":"float","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"forward_total","type":"float","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"reverse_total","type":"float","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"sum_flow","type":"float","alias":"","description":None,"fieldCategory":None,"specId":None}]},"libs":None,"flowId":None,"x":400,"y":250,"implementation":None,"uiConfigurations":{"output":["output"]}}
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+def get_step_output_init_statementId(host, params):
+    """
+    获取step的输出字段分析任务的statementID
+    :param host:
+    :param params:
+    :return:
+    """
+    param = step_sql_analyse_data(params)
+    new_data = json.dumps(param, separators=(',', ':'))
+    url = '%s/api/steps/output/fields/init?branch=output' % host
+    res = requests.post(url=url, headers=get_headers(host), data=new_data)
+    try:
+        res_statementId = json.loads(res.text)
+        sql_analyse_statement_id = res_statementId['statementId']
+        return sql_analyse_statement_id
+    except KeyError:
+        return
+
+def get_step_output_ensure_statementId(host, params):
+    """
+    获取初始化确认step任务的statementID
+    :param host:
+    :param params:
+    :return:
+    """
+    param = step_sql_analyse_data(params)
+    new_data = json.dumps(param, separators=(',', ':'))
+    url = '%s/api/steps/validateinit/dataflow' % host
+    try:
+        res = requests.post(url=url, headers=get_headers(host), data=new_data)
+        res_statementId = json.loads(res.text)
+        output_stattementid=res_statementId['statementId']
+        return output_stattementid
+    except:
+        return
+
+
+def step_sql_analyse_flow(params):
+    """
+    获取sqlsource step的输出字段分析任务的请求体
+    :param :params
+    :return:
+    """
+    try:
+        dataset = "select id,name from merce_dataset where name = '%s' order by create_time desc limit 1" % params
+        dataset_info = ms.ExecuQuery(dataset.encode('utf-8'))
+        new_data = {"id":"sqlsource_1","name":"sqlsource","type":"sqlsource","otherConfigurations":{"interceptor":"","dataset":[{"dataset":dataset_info[0]["name"],"datasetId":dataset_info[0]["id"]}],"sql":"select * from stu"},"inputConfigurations":{},"outputConfigurations":{"output":[{"name":"sId","type":"int","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"sName","type":"string","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"age","type":"int","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"sex","type":"string","alias":"","description":None,"fieldCategory":None,"specId":None},{"name":"class","type":"string","alias":"","description":None,"fieldCategory":None,"specId":None}]},"libs":None,"flowId":None,"x":10,"y":140,"implementation":None,"uiConfigurations":{"output":["output"]}}
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+
+def steps_sql_parseinit_statemenId(host, params):
+    """
+    根据Sql语句解析表名,初始化ParseSql任务,返回statementID
+    :param host:
+    :param params:
+    :return:
+    """
+    param = step_sql_analyse_flow(params)
+    new_data = json.dumps(param, separators=(',', ':'))
+    url = '%s/api/steps/sql/parseinit/dataflow' % host
+    res = requests.post(url=url, headers=get_headers(host), data=new_data)
     try:
         res_statementId = json.loads(res.text)
         steps_sql_parseinit_statemenId = res_statementId['statementId']
@@ -172,38 +260,21 @@ def steps_sql_parseinit_statemenId(HOST,params):
         return
 
 
-# 初始化Sql Analyze,返回任务的statementID
-def steps_sql_analyzeinit_statementId(HOST, params):
-    url = '%s/api/steps/sql/analyzeinit/dataflow' % HOST
-    params = params.encode('utf-8')
+
+def steps_sql_analyzeinit_statementId(host,params):
+    """
+    初始化Sql Analyze,返回任务的statementID
+    :param host:
+    :param params:
+    :return:
+    """
+    param = step_sql_analyse_flow(params)
+    new_data = json.dumps(param, separators=(',', ':'))
+    url = '%s/api/steps/sql/analyzeinit/dataflow' % host
     try:
-        res = requests.post(url=url, headers=get_headers(HOST), data=params)
+        res = requests.post(url=url, headers=get_headers(host), data=new_data)
         res_statementId = json.loads(res.text)
         steps_sql_analyzeinit_statementId = res_statementId['statementId']
         return steps_sql_analyzeinit_statementId
     except KeyError:
         return
-
-def get_step_output_init_statementId(HOST,params):
-    url = '%s/api/steps/output/fields/init?branch=output' % HOST
-    try:
-        res = requests.post(url=url, headers=get_headers(HOST), data=params)
-        log.info("response data：%s %s" % (res.status_code, res.text))
-    except:
-        return
-    else:
-        return dict_res(res.text)["statementId"]
-
-def get_step_output_ensure_statementId(HOST,params):
-    url = '%s/api/steps/validateinit/dataflow' % HOST
-    try:
-        res = requests.post(url=url, headers=get_headers(HOST), data=params)
-        res_statementId = json.loads(res.text)
-        output_stattementid=res_statementId['statementId']
-        return output_stattementid
-    except:
-        return
-
-if __name__=="__main__":
-    sid=statementId_flow_use("http://192.168.1.84:8515","875dc24b-e2bc-4361-8dd3-d340a9d32a49")
-    b=preview_result_flow_use("http://192.168.1.84:8515","875dc24b-e2bc-4361-8dd3-d340a9d32a49",sid)

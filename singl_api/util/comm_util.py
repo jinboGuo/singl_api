@@ -1,7 +1,6 @@
 import os
 import socket
 import time
-import random
 from kafka import KafkaProducer
 from util.logs import Logger
 from basic_info.setting import MySQL_CONFIG1
@@ -108,25 +107,6 @@ def decod_blob():
 
 
 
-def es_create():
-    from elasticsearch import Elasticsearch
-    try:
-        es = Elasticsearch(hosts="192.168.1.65", port=9200)
-        #es = Elasticsearch(hosts="192.168.1.82", port=9206,http_auth=('admin', 'admin')) #http_auth开启用户名和密码认证http_auth=('admin', 'admin')
-        es.indices.create(index="sink_es6", ignore=400)
-        for i in range(10000):
-            time.sleep(1)
-            data = {"name": "小明", "age": "28", "gender": "男","date":"2021-12-16","ad":"","calss":3,"kind":"23","book":"语文","count":"","price":228,"love":"reading"}
-            # 3发数据
-            log.info("往es输入的data：%s",data)
-            res = es.index(index="sink_es6", doc_type="doc", body=data)
-            if i==10000:
-                break
-    except Exception as e:
-        log.error("es查询异常",e)
-
-
-
 def socket_tcp():
   # 1初始化套接字
     tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -151,7 +131,7 @@ def batch_create_table():
     # 记录生成时间
     record_start_time = datetime.datetime.now()
     log.info("创建表开始时间：%s" % record_start_time)
-    for name in range(2022102101, 2022102110):
+    for name in range(2023010101, 2023010201):
         sql = '''CREATE TABLE `cutomer`{} (
           `user_id` bigint(20) DEFAULT NULL,
           `name` text,
@@ -173,6 +153,46 @@ def batch_create_table():
           `postcode` bigint(20) DEFAULT NULL,
           `province` text,
           `city` text,
+          `user_id1` bigint(20) DEFAULT NULL,
+          `name1` text,
+          `ID_card1` text,
+          `gender1` text,
+          `age1` bigint(20) DEFAULT NULL,
+          `job1` text,
+          `salary1` bigint(20) DEFAULT NULL,
+          `product_id1` text,
+          `currency_code1` text,
+          `credit_card_number1` bigint(20) DEFAULT NULL,
+          `credit_card_provider1` text,
+          `credit_card_security_code1` bigint(20) DEFAULT NULL,
+          `product1` text,
+          `channel1` text,
+          `prt_dt1` text,
+          `time1` text,
+          `profile1` text,
+          `postcode1` bigint(20) DEFAULT NULL,
+          `province1` text,
+          `city1` text,
+          `name2` text,
+          `ID_card2` text,
+          `gender2` text,
+          `age2` bigint(20) DEFAULT NULL,
+          `job2` text,
+          `salary2` bigint(20) DEFAULT NULL,
+          `product_id2` text,
+          `currency_code2` text,
+          `credit_card_number2` bigint(20) DEFAULT NULL,
+          `credit_card_provider2` text,
+          `credit_card_security_code2` bigint(20) DEFAULT NULL,
+          `product2` text,
+          `channel2` text,
+          `prt_dt2` text,
+          `time2` text,
+          `profile2` text,
+          `postcode2` bigint(20) DEFAULT NULL,
+          `province2` text,
+          `city2` text,
+          `street2` text,
           `street` text
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8'''.format(name)
         ms.ExecuNoQuery(sql)
@@ -180,16 +200,16 @@ def batch_create_table():
     # 表记录生成时间
     log.info("表生成结束时间：%s" % record_end_time)
     log.info("创建表总耗时：%s" % (record_end_time - record_start_time))
-
+#batch_create_table()
 
 def batch_insert_table():
     """
     :return: 大批量数据插入mysql表
-     sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
+     sql = "INSERT INTO `supp_1` VALUES (%s,%s,%s,%s)"
     """
     import datetime,random
     values_list = []
-    sql = "INSERT INTO `supp` VALUES (%s,%s,%s,%s)"
+    sql = "INSERT INTO `supp_1` VALUES (%s,%s,%s,%s)"
     # 记录生成时间
     record_start_time = datetime.datetime.now()
     log.info("生成数据开始时间：%s" % record_start_time)
@@ -219,12 +239,10 @@ def batch_insert_table():
 #batch_insert_table()
 
 
-# -*- coding: utf-8 -*-
-import pandas as pd
 from faker import Faker
 import random
 import datetime
-
+import pandas as pd
 def random_data():
     """
     :return: 生成csv文件
@@ -236,7 +254,7 @@ def random_data():
     #     exec('x'+str(i)+'=[]')
     start_time = datetime.datetime.now()
     log.info('开始时间：%s',start_time)
-    x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21=[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
+    x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36,x37,x38,x39,x40,x41,x42,x43,x44,x45,x46,x47,x48,x49,x50,x51,x52,x53,x54,x55,x56,x57,x58,x59,x60=[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
     #设置样本
     prod_cd = ['W00028','W00021','W00022']
     prod_nm = ['微信支付','银联扫码支付','转账']
@@ -244,7 +262,7 @@ def random_data():
     year = ['2020','2021','2022']
 
     #循环生成数据20行，具体多少行可以根据需求修改
-    for i in range(50000):
+    for i in range(10):
         date = random.choice(year)+fake.date()[4:]
         time = random.choice(year)+fake.date()[4:]+' '+fake.time()
         x1.append('1'+str(fake.random_number(digits=8))) # 随机数字，参数digits设置生成的数字位数
@@ -263,12 +281,50 @@ def random_data():
         x10.append(random.choice(channel))
         x11.append(date)
         x21.append(time)
-        x12.append(fake.profile())
+        x12.append(fake.postcode())
         x13.append(fake.postcode())
         x14.append(fake.province())
         x15.append(fake.city_suffix())
         x16.append(fake.street_address())
-
+        x22.append(fake.name())
+        x23.append(fake.ssn()) # 身份证
+        x24.append(random.choice('男女'))
+        x25.append(random.randint(22,35))
+        x26.append(fake.job())
+        x27.append(random.randint(10000,1000000))
+        x28.append(random.choice(prod_cd))
+        x29.append(fake.currency_code())
+        x30.append(fake.credit_card_number())
+        x31.append(fake.credit_card_provider())
+        x32.append(fake.credit_card_security_code())
+        x33.append(random.choice(prod_nm))
+        x34.append(random.choice(channel))
+        x35.append(date)
+        x36.append(time)
+        x37.append(fake.postcode())
+        x38.append(fake.postcode())
+        x39.append(fake.province())
+        x40.append(fake.city_suffix())
+        x41.append(fake.street_address())
+        x42.append(fake.name())
+        x43.append(fake.ssn()) # 身份证
+        x44.append(random.choice('男女'))
+        x45.append(random.randint(22,35))
+        x46.append(fake.job())
+        x47.append(random.randint(10000,1000000))
+        x48.append(random.choice(prod_cd))
+        x49.append(fake.currency_code())
+        x50.append(fake.credit_card_number())
+        x51.append(fake.credit_card_provider())
+        x52.append(fake.credit_card_security_code())
+        x53.append(random.choice(prod_nm))
+        x54.append(random.choice(channel))
+        x55.append(date)
+        x56.append(time)
+        x57.append(fake.postcode())
+        x58.append(fake.postcode())
+        x59.append(fake.province())
+        x60.append(fake.city_suffix())
     #创建数据表
     datas = pd.DataFrame({
         'user_id':x1,
@@ -291,11 +347,50 @@ def random_data():
         'postcode':x13,
         'province':x14,
         'city':x15,
-        'street':x16
+        'street':x16,
+        'user_id1': x22,
+        'name1': x23,
+        'ID_card1': x24,
+        'gender1': x25,
+        'age1': x26,
+        'job1': x27,
+        'salary1': x28,
+        'product_id1': x29,
+        'currency_code1': x30,
+        'credit_card_number1': x31,
+        'credit_card_provider1': x32,
+        'credit_card_security_code1': x33,
+        'product1': x34,
+        'channel1': x35,
+        'prt_dt1': x36,
+        'time1': x37,
+        'profile1': x38,
+        'postcode1': x39,
+        'province1': x40,
+        'city1': x41,
+        'street1': x42,
+        'user_id2': x43,
+        'name2': x44,
+        'ID_card2': x45,
+        'gender2': x46,
+        'age2': x47,
+        'job2': x48,
+        'salary2': x49,
+        'product_id2': x50,
+        'currency_code2': x51,
+        'credit_card_number2': x52,
+        'credit_card_provider2': x53,
+        'credit_card_security_code2': x54,
+        'product2': x55,
+        'channel2': x56,
+        'prt_dt2': x57,
+        'time2': x58,
+        'profile2': x59,
+        'postcode2': x60
     })
 
     #DataFrame类的to_csv()方法输出数据内容，不保存行索引和列名
-    datas.to_csv(r'F:\baymax-1.2.3\customer.csv',encoding='utf-8',index=False,header=True)
+    datas.to_csv(r'F:\baymax-1.2.3\customer1.csv',encoding='utf-8',index=False,header=True)
     stop_time = datetime.datetime.now()
     log.info("结束时间：%s",stop_time)
     log.info("耗时：%s",stop_time-start_time)
@@ -313,15 +408,15 @@ def csv_import_table():
     :return: 批量创建表，如果不存在表，则自动创建，csv文件批量导入表
     """
     # 文件路径
-    path = r'F:\baymax-1.2.3\customer.csv'
-    data = pd.read_csv(path,encoding='utf-8')
+    path = r'F:\baymax-1.2.3\customer1.csv'
+    data = pd.read_csv(path,encoding='utf8')
     log.info("data: " % data)
     start_time = datetime.datetime.now()
     log.info("csv文件导入表-开始时间：%s" % start_time)
     # 表名
     # 如果不存在表，则自动创建
     table_name = []
-    for i in range(2022102101,2022102105):
+    for i in range(2023010101,2023010201):
         name ="cutomer"+ str(i)
         table_name.append(name)
     for table in table_name:
@@ -352,7 +447,7 @@ class operateKafka:
         self.bstrap_servers=['192.168.1.82:9094']
         self.topic = client.topics['commander.scheduler.poseidon.flow']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
-        self.json_topic = "test_kafka0210" #往topic发送json
+        self.json_topic = "test_kafka042712" #往topic发送json
     global stu_nm
     stu_nm = ['张三','李四','王五','赵六','黄七','陈八']
 
@@ -392,15 +487,32 @@ class operateKafka:
         with self.str_topic.get_sync_producer() as producer:
             for i in range(100000):
                 time.sleep(1)
-                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"dates":timestamp_now()}
+                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"stime":timestamp_now()}
                 dat = ','.join([str(i) for i in list(data.values())])
                 log.info("往kafka输入的data：%s",dat)
                 producer.produce(str(dat).encode())
 
-# if __name__ == '__main__':
-#
-#     while True:
-#      operateKafka().send_str_kafka()
+
+"""
+function:send json message to kafka
+"""
+
+
+def send_manayjson_kafka(self):
+    producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                             bootstrap_servers=self.bstrap_servers)
+    for i in range(100000):
+        time.sleep(1)
+        data = {"id": i, "name": fake.name(), "sex": random.choice('男女'), "age": random.randint(21, 35),
+                "stime": timestamp_utc()}
+        log.info("往kafka输入的data：%s", data)
+        producer.send(self.json_topic, data)
+    producer.close()
+
+if __name__ == '__main__':
+
+    while True:
+     operateKafka().send_str_kafka()
 
 
 

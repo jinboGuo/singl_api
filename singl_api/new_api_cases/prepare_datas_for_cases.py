@@ -2,7 +2,6 @@
 import json
 import os
 import time
-from urllib import parse
 import requests
 from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
 from new_api_cases.compass_deal_parameters import deal_random
@@ -17,6 +16,8 @@ from util.timestamp_13 import data_now
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\import_dataflow_steps.woven')
+multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\mutil_sink_storage.woven')
+multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\multi_rtc_steps.woven')
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 log = Logger().get_log()
 
@@ -51,15 +52,6 @@ def collector_schema_sync(data):
     time.sleep(3)
     return response.text
 
-
-def get_flow_id():
-    name = "gbj_for_project_removeList" + str(random.randint(0,999999999999))
-    data = {"name": name, "flowType": "dataflow",
-            "projectEntity": {"id": "e47fe6f4-6086-49ed-81d1-68704aa82f2d"}, "steps": [], "links": []}
-    url = '%s/api/flows/create' % host
-    response = requests.post(url=url, headers=get_headers(), json=data)
-    flow_id = dict_res(response.text)['id']
-    return flow_id
 
 
 def admin_flow_id(data):
@@ -115,70 +107,11 @@ def get_woven_qaoutput_dataset_path():
         path.append(content_path.replace('/', '%252F'))
     return path
 
-dir1 = ab_dir('woven-common-3.0.jar')
-
-
-def upload_jar_file_filter():
-    url = "%s/api/processconfigs/uploadjar/filter class" % host
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-        filter_fileName = dict_res(response.text)["fileName"]
-    except:
-        return
-    else:
-        return filter_fileName
-
-
-def upload_jar_file_workflow():
-    url = "%s/api/processconfigs/uploadjar/workflow selector" % host
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-        workflow_fileName = dict_res(response.text)["fileName"]
-    except:
-        return
-    else:
-        return workflow_fileName
-
-
-def upload_jar_file_dataflow():
-    url = "%s/api/processconfigs/uploadjar/dataflow selector" % host
-    unquote_url = parse.unquote(url)
-    files = {"file": open(dir1, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-        data_fileName = dict_res(response.text)["fileName"]
-    except:
-        return
-    else:
-        return data_fileName
-
-
-def upload_file_standard(host,file,url):
-    dir2 = ab_dir(file)
-    unquote_url = parse.unquote(url)
-    files = {"file": open(dir2, 'rb')}
-    headers = get_headers(host)
-    headers.pop('Content-Type')
-    try:
-        response = requests.post(url, files=files, headers=headers)
-    except:
-        return
-    else:
-        return response.status_code, response.text
-
 def dss_data(data):
     from new_api_cases.dw_deal_parameters import deal_random
     try:
         sql = "select id from merce_resource_dir where creator='admin' and name='Datasources' and parent_id is NULL"
-        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        Datasources = ms.ExecuQuery(sql.encode('utf-8'))
         if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
             new_data = {"name": "gjb_api_for_all_type_JDBC_datasource_test_随机数", "type": "DB", "description": "",
                         "attributes": {"jarPath": "mysql-connector-java-5.1.48.jar", "DBType": "Mysql",
@@ -187,7 +120,7 @@ def dss_data(data):
                                        "driver": "com.mysql.jdbc.Driver", "properties": [{"name": "", "value": ""}],
                                        "url": "jdbc:mysql://192.168.1.82:3306/merce_62", "chineseName": "",
                                        "dateToTimestamp": False, "catalog": "", "schema": "", "batchsize": 10000,
-                                       "name": "mysql_5"}, "resource": {"id": flow_info[0]["id"]}}
+                                       "name": "mysql_5"}, "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_http_datasource_test' in data:
@@ -195,7 +128,7 @@ def dss_data(data):
                         "description": "",
                         "attributes": {"method": "GET", "rootPath": "gbj_http", "parameters": "", "url": "gbj_http",
                                        "properties": [{"name": "", "value": ""}]}, "tags": [],
-                        "resource": {"id": flow_info[0]["id"]}}
+                        "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_ftp_datasource_test' in data:
@@ -203,60 +136,62 @@ def dss_data(data):
                         "attributes": {"host": "info4", "port": "22", "username": "europa", "password": "europa",
                                        "recursive": "true", "secure": "true", "skipHeader": "false",
                                        "dir": "/home/europa/ftp_auto_import", "fieldsSeparator": ","}, "tags": [],
-                        "resource": {"id": flow_info[0]["id"]}}
+                        "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_socket_datasource_test' in data:
             new_data = {"name": "gjb_for_all_type_socket_datasource_test_随机数", "type": "socket", "description": "",
                         "attributes": {"charset": "utf-8", "ipAddress": "gbj_socket", "port": "gbj_socket",
-                                       "protocol": "TCP"}, "tags": [], "resource": {"id": flow_info[0]["id"]}}
+                                       "protocol": "TCP"}, "tags": [], "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_MANGODB_datasource_test' in data:
             new_data = {"name": "gjb_for_all_type_MANGODB_datasource_test_随机数", "type": "MONGODB", "description": "",
                         "attributes": {"address": "gbj_mangodb", "port": "27017", "username": "gbj_mangodb",
                                        "password": "gbj_mangodb", "database": "gbj_mangodb"}, "tags": [],
-                        "resource": {"id": flow_info[0]["id"]}}
+                        "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_es_datasource_test' in data:
             new_data = {"name": "gjb_for_all_type_es_datasource_test_随机数", "type": "ES", "description": "",
                         "attributes": {"clusterName": "es85", "ipAddresses": "192.168.1.85:9200", "index": "test",
                                        "indexType": "test", "version": "5.x"}, "tags": [],
-                        "resource": {"id": flow_info[0]["id"]}}
+                        "resource": {"id": Datasources[0]["id"]}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_HDFS_datasource_test' in data:
             new_data = {"name": "gjb_for_all_type_HDFS_datasource_test_随机数", "type": "HDFS",
-                        "description": "gjb_for_all_type_HDFS_datasource_test", "resource": {"id": flow_info[0]["id"]},
+                        "description": "gjb_for_all_type_HDFS_datasource_test", "resource": {"id": Datasources[0]["id"]},
                         "tags": [], "attributes": {"encoder": "UTF-8", "path": "hdfs://mycluster/"}}
             deal_random(new_data)
             return new_data
         elif 'gjb_for_all_type_kafka_datasource_test' in data:
             new_data = {"name": "gjb_for_all_type_kafka_datasource_test_随机数", "type": "KAFKA",
-                        "description": "gjb_for_all_type_kafka_datasource_test", "resource": {"id": flow_info[0]["id"]},
+                        "description": "gjb_for_all_type_kafka_datasource_test", "resource": {"id": Datasources[0]["id"]},
                         "tags": [],
                         "attributes": {"kafkaVersion": "1.0+", "brokers": "info2:9094", "isKerberosSupport": "false",
                                        "authLoginConfigFile": "", "krb5ConfigFile": ""}}
             deal_random(new_data)
             return new_data
-        elif 'datasource_query' in data:
+        elif "gjb_for_all_type_localfs_datasource_test" in data:
+            new_data = {"name": "gjb_for_all_type_localfs_datasource_test_随机数", "type": "LOCALFS", "description": "",
+                        "attributes": {"encoder": "UTF-8", "path": "test"}, "resource": {"id": Datasources[0]["id"]}}
+            deal_random(new_data)
+            return new_data
+        elif 'datasource_query' == data:
             new_data = {"fieldList": [
-                {"fieldName": "parentId", "fieldValue": flow_info[0]["id"], "comparatorOperator": "EQUAL",
+                {"fieldName": "parentId", "fieldValue": Datasources[0]["id"], "comparatorOperator": "EQUAL",
                  "logicalOperator": "AND"}], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"},
                         "offset": 0, "limit": 8}
             return new_data
-        elif "gjb_for_all_type_localfs_datasource_test" in data:
-            new_data = {"name": "gjb_for_all_type_localfs_datasource_test_随机数", "type": "LOCALFS", "description": "",
-                        "attributes": {"encoder": "UTF-8", "path": "test"}, "resource": {"id": flow_info[0]["id"]}}
-            deal_random(new_data)
+        elif 'lastModifiedTime' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1635696000000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1704038399000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasources[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
             return new_data
-        elif '%test_Mysql%' in data:
-            new_data = {"fieldList": [{"fieldName": "name", "fieldValue": "%test_Mysql%", "comparatorOperator": "LIKE",
-                                       "logicalOperator": "AND"},
-                                      {"fieldName": "parentId", "fieldValue": flow_info[0]["id"],
-                                       "comparatorOperator": "EQUAL", "logicalOperator": "AND"}],
-                        "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
+        elif 'name' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasources[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'name_lastModifiedTime' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1635696000000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1704038399000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasources[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
             return new_data
         else:
             return
@@ -1022,6 +957,27 @@ def dataset_data(data):
         return
 
 
+def query_dataset(data):
+    try:
+        sql = "select id from merce_resource_dir where creator='admin' and name='Datasets' and parent_id is NULL"
+        Datasets = ms.ExecuQuery(sql.encode('utf-8'))
+        if 'name' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'lastModifiedTime' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1635696000000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1704038399000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'tags' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"tags","comparatorOperator":"LIKE","fieldValue":"%mysql%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'name_lastModifiedTime' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1638201600000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1704038399000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("dss_data查询出错{}".format(e))
+
 def upddataset_data(data):
     try:
         data = data.split("&")
@@ -1264,6 +1220,27 @@ def create_schema_data(data):
         log.error("create_schema_data查询出错{}".format(e))
 
 
+def query_schema(data):
+    try:
+        sql = "select id,tenant_id from merce_resource_dir where creator='admin' and name='Schemas' and parent_id is NULL"
+        Schemas = ms.ExecuQuery(sql.encode('utf-8'))
+        if 'offset' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Schemas[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":8,"limit":8}
+            return new_data
+        elif 'name' in data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Schemas[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'tags' in data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"tags","comparatorOperator":"LIKE","fieldValue":"%mysql%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Schemas[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'lastModifiedTime' in data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1667145600000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1701359999000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Schemas[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("create_schema_data查询出错{}".format(e))
+
 def updschema_data(data):
     try:
         sql = "select id,owner,tenant_id,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
@@ -1291,6 +1268,40 @@ def updschema_data(data):
     except Exception as e:
         log.error("updschema_data查询出错{}".format(e))
         return
+
+def create_standard_data(data):
+    from new_api_cases.dw_deal_parameters import deal_random
+    try:
+        sql = "select id from merce_resource_dir where creator='admin' and name='Standards' and parent_id is NULL"
+        stand_data = ms.ExecuQuery(sql.encode('utf-8'))
+        if 'create' == data:
+            new_data = {"name":"gjb_standard随机数","type":"standard","description":"","isTree":False,"tags":[],"resourceId":stand_data[0]["id"]}
+            deal_random(new_data)
+            return new_data
+        else:
+            new_data = {"name":"gjb_standard随机数","type":"standard","description":"","isTree":False,"tags":[],"resourceId":stand_data[0]["id"]}
+            deal_random(new_data)
+            return new_data
+    except Exception as e:
+        log.error("stand_data查询出错{}".format(e))
+
+def stand_data(data):
+    try:
+        sql = "select id from merce_resource_dir where creator='admin' and name='Standards' and parent_id is NULL"
+        stand_data = ms.ExecuQuery(sql.encode('utf-8'))
+        if 'all' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":stand_data[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'name' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":stand_data[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        elif 'lastModifiedTime' == data:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1633017600000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1701359999000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":stand_data[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
+        else:
+            return
+    except Exception as e:
+        log.error("stand_data查询出错{}".format(e))
 
 
 def create_flow_data(data):
@@ -1830,7 +1841,30 @@ def update_custom_step(data):
     except Exception as e:
         log.error("异常信息：%s" % e)
 
-def get_improt_dataflow(headers, HOST):
+
+def get_fs(flag):
+    """
+    返回导入文件，根据flag判断
+    :param flag:
+    :return:
+    """
+    try:
+        if flag == 'flag1':
+            fs = {"file": open(woven_dataflow, 'rb')}
+            return fs
+        elif flag == 'flag2':
+            fs = {"file": open(multi_sink_steps, 'rb')}
+            return fs
+        elif flag == 'flag3':
+            fs = {"file": open(multi_rtc_steps, 'rb')}
+            return fs
+        else:
+            return log.warn("请输入正确的flag1或者flag2")
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+
+def get_improt_dataflow(headers, HOST, flag):
     """
     返回导入dataflow文件的请求体参数
     :param headers:
@@ -1838,7 +1872,7 @@ def get_improt_dataflow(headers, HOST):
     :return:
     """
     url = '%s/api/mis/upload' % HOST
-    fs = {"file": open(woven_dataflow, 'rb')}
+    fs = get_fs(flag)
     headers.pop('Content-Type')
     res = requests.post(url=url, headers=headers, files=fs)
     try:

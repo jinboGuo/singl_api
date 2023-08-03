@@ -61,8 +61,9 @@ def timestamp_utc():
     """
     now_time = datetime.now().isoformat()
     times = str(now_time)[:-3]+"Z"
-    return times
+    return str(times)
 
+#print(timestamp_utc())
 
 def datatime_now():
     """
@@ -133,3 +134,6 @@ def day_now():
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%d')
     return str(now_time_nyr)
+
+# if __name__ == '__main__':
+#     print("shell调用：", day_now())

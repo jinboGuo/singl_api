@@ -193,7 +193,7 @@ def check_reult():
     flow_table.save(table)
 
 
-if __name__=="__main__":
-    check_reult()
+# if __name__=="__main__":
+#     check_reult()
 
 

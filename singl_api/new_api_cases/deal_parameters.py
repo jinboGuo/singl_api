@@ -45,9 +45,15 @@ def deal_parameters(data):
                         return new_data
                     elif "select id from merce_udf mu" in data:
                         return new_data
+                    elif "select id from merce_user mu" in data:
+                        return new_data
+                    elif "select id from merce_role mr" in data:
+                        return new_data
                     elif "select id from merce_jar_package_info mjpi" in data:
                         return new_data
                     elif "select id from merce_dataset where name like 'gjb_test%'" in data:
+                        return new_data
+                    elif "select id from merce_tag mt" in data:
                         return new_data
                     else:
                         list_data = ','.join([str(i) for i in new_data])
@@ -61,7 +67,10 @@ def deal_parameters(data):
                 elif "'select id from merce_resource_dir where name like 'api_test%' ORDER BY create_time desc limit 1;'" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
-                elif "select id from merce_user" in data:
+                elif "select id from merce_user mu" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    return new_data
+                elif "select id from merce_role mr" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
                 elif "select id from merce_fileset order by create_time limit 1" in data:
@@ -86,6 +95,12 @@ def deal_parameters(data):
                     new_data.append(data_select_result[0]["id"])
                     return new_data
                 elif "select id from merce_flow_schedule mfs" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    return new_data
+                elif "select id from merce_sdb ms" in data:
+                    new_data.append(data_select_result[0]["id"])
+                    return new_data
+                elif "select id from merce_tag mt" in data:
                     new_data.append(data_select_result[0]["id"])
                     return new_data
                 else:
@@ -123,7 +138,37 @@ def deal_parameters(data):
                     return data_select_result
                 except:
                     log.error("请确认SQL语句")
-
+        if 'select id,enabled from' in data:
+            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+            ids = []
+            new_data = {}
+            if len(data_select_result) > 1:
+                for i in range(len(data_select_result)):
+                    try:
+                        if data_select_result[i]["enabled"] == 1:
+                            ids.append(data_select_result[i]["id"])
+                            new_data['ids'] = ids
+                            new_data['enabled'] = 0
+                        else:
+                            ids.append(data_select_result[i]["id"])
+                            new_data['ids'] = ids
+                            new_data['enabled'] = 1
+                    except:
+                        log.error("请确认SQL语句")
+                return new_data
+            else:
+                try:
+                    if data_select_result[0]["enabled"] == 1:
+                        ids.append(data_select_result[0]["id"])
+                        new_data['ids'] = ids
+                        new_data['enabled'] = 0
+                    else:
+                        ids.append(data_select_result[0]["id"])
+                        new_data['ids'] = ids
+                        new_data['enabled'] = 1
+                    return new_data
+                except:
+                    log.error("请确认SQL语句")
         if 'select name' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
@@ -145,4 +190,4 @@ def deal_parameters(data):
         else:
             return data
     else:
-        return
+        return data

@@ -1,18 +1,18 @@
 # coding:utf-8
 from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG, MySQL_CONFIG1, Dw_MySQL_CONFIG
+from basic_info.setting import MySQL_CONFIG
 from util.logs import Logger
-from util.timestamp_13 import get_now, data_now
+from util.timestamp_13 import get_now, data_now, timestamp_utc
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 log = Logger().get_log()
 
 def get_dataflow_data(flow_name):
 
     try:
-        sql = "select id,version,name,flow_type from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
+        sql = "select id,version,name,flow_type from merce_flow where name ='%s' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        if "auto_api_test" in flow_name:
+        if "auto_api_test" == flow_name:
             data = {"configurations": {"startTime": get_now(), "arguments": [], "dependencies": [],
                                        "extraConfigurations": {},
                                        "properties": [{"name": "all.debug", "value": "false", "input": "false"},
@@ -45,9 +45,9 @@ def get_dataflow_data(flow_name):
                                        "retry": {"enable": "false", "limit": 1, "timeInterval": 1,
                                                  "intervalUnit": "MINUTES"}}, "schedulerId": "once", "ource": "rhinos",
                     "version": flow_info[0]["version"], "flowId": flow_info[0]["id"], "flowType": flow_info[0]["flow_type"],
-                    "name": "auto_api_test"+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
+                    "name": flow_info[0]["name"]+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
             return data
-        elif "ES-upsert" in flow_name:
+        elif "ES-upsert" == flow_name:
             data = {"configurations": {"startTime": get_now(), "arguments": [], "dependencies": [],
                                        "extraConfigurations": {},
                                        "properties": [{"name": "all.debug", "value": "false", "input": "false"},
@@ -80,9 +80,9 @@ def get_dataflow_data(flow_name):
                                        "retry": {"enable": "false", "limit": 1, "timeInterval": 1,
                                                  "intervalUnit": "MINUTES"}}, "schedulerId": "once", "ource": "rhinos",
                     "version": flow_info[0]["version"], "flowId": flow_info[0]["id"], "flowType": flow_info[0]["flow_type"],
-                    "name": "ES-upsert_随机数", "creator": "admin", "oldName": flow_info[0]["name"]}
+                    "name": flow_info[0]["name"]+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
             return data
-        elif "auto_apitest_df" in flow_name:
+        elif "auto_apitest_df" == flow_name:
             data = {"configurations": {"startTime": get_now(), "arguments": [], "dependencies": [],
                                        "extraConfigurations": {},
                                        "properties": [{"name": "all.debug", "value": "false", "input": "false"},
@@ -115,7 +115,80 @@ def get_dataflow_data(flow_name):
                                        "retry": {"enable": "false", "limit": 1, "timeInterval": 1,
                                                  "intervalUnit": "MINUTES"}}, "schedulerId": "once", "ource": "rhinos",
                     "version": flow_info[0]["version"], "flowId": flow_info[0]["id"], "flowType": flow_info[0]["flow_type"],
-                    "name": "auto_apitest_df"+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
+                    "name": flow_info[0]["name"]+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
+            return data
+        elif "mutil_sink_storage" == flow_name:
+            data = {"configurations": {"startTime": get_now(), "arguments": [], "dependencies": [],
+                                       "extraConfigurations": {},
+                                       "properties": [{"name": "all.debug", "value": "false", "input": "false"},
+                                                      {"name": "all.dataset-nullable", "value": "false",
+                                                       "input": "false"},
+                                                      {"name": "all.optimized.enable", "value": "true",
+                                                       "input": "true"},
+                                                      {"name": "all.lineage.enable", "value": "false",
+                                                       "input": "false"},
+                                                      {"name": "all.debug-rows", "value": "20", "input": "20"},
+                                                      {"name": "all.runtime.cluster-id", "value": "cluster1",
+                                                       "input": ["cluster1"]},
+                                                      {"name": "dataflow.master", "value": "yarn", "input": "yarn"},
+                                                      {"name": "dataflow.deploy-mode", "value": "client",
+                                                       "input": ["client", "cluster"]},
+                                                      {"name": "dataflow.queue", "value": "default",
+                                                       "input": ["default"]},
+                                                      {"name": "dataflow.num-executors", "value": "2", "input": "2"},
+                                                      {"name": "dataflow.driver-memory", "value": "512M",
+                                                       "input": "512M"},
+                                                      {"name": "dataflow.executor-memory", "value": "1G",
+                                                       "input": "1G"},
+                                                      {"name": "dataflow.executor-cores", "value": "2", "input": "2"},
+                                                      {"name": "dataflow.verbose", "value": "true", "input": "true"},
+                                                      {"name": "dataflow.local-dirs", "value": "", "input": ""},
+                                                      {"name": "dataflow.sink.concat-files", "value": "true",
+                                                       "input": "true"},
+                                                      {"name": "dataflow.tempDirectory", "value": "/tmp/dataflow/spark",
+                                                       "input": "/tmp/dataflow/spark"}],
+                                       "retry": {"enable": "false", "limit": 1, "timeInterval": 1,
+                                                 "intervalUnit": "MINUTES"}}, "schedulerId": "once", "ource": "rhinos",
+                    "version": flow_info[0]["version"], "flowId": flow_info[0]["id"], "flowType": flow_info[0]["flow_type"],
+                    "name": flow_info[0]["name"]+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
+            return data
+        elif "scheduer" == flow_name:
+            data = {"configurations": {"startTime": get_now(), "arguments": [], "dependencies": [],
+                                       "extraConfigurations": {},
+                                       "properties": [{"name": "all.debug", "value": "false", "input": "false"},
+                                                      {"name": "all.dataset-nullable", "value": "false",
+                                                       "input": "false"},
+                                                      {"name": "all.optimized.enable", "value": "true",
+                                                       "input": "true"},
+                                                      {"name": "all.lineage.enable", "value": "false",
+                                                       "input": "false"},
+                                                      {"name": "all.debug-rows", "value": "20", "input": "20"},
+                                                      {"name": "all.runtime.cluster-id", "value": "cluster1",
+                                                       "input": ["cluster1"]},
+                                                      {"name": "dataflow.master", "value": "yarn", "input": "yarn"},
+                                                      {"name": "dataflow.deploy-mode", "value": "client",
+                                                       "input": ["client", "cluster"]},
+                                                      {"name": "dataflow.queue", "value": "default",
+                                                       "input": ["default"]},
+                                                      {"name": "dataflow.num-executors", "value": "2", "input": "2"},
+                                                      {"name": "dataflow.driver-memory", "value": "512M",
+                                                       "input": "512M"},
+                                                      {"name": "dataflow.executor-memory", "value": "1G",
+                                                       "input": "1G"},
+                                                      {"name": "dataflow.executor-cores", "value": "2", "input": "2"},
+                                                      {"name": "dataflow.verbose", "value": "true", "input": "true"},
+                                                      {"name": "dataflow.local-dirs", "value": "", "input": ""},
+                                                      {"name": "dataflow.sink.concat-files", "value": "true",
+                                                       "input": "true"},
+                                                      {"name": "dataflow.tempDirectory", "value": "/tmp/dataflow/spark",
+                                                       "input": "/tmp/dataflow/spark"}],
+                                       "retry": {"enable": "false", "limit": 1, "timeInterval": 1,
+                                                 "intervalUnit": "MINUTES"}}, "schedulerId": "once", "ource": "rhinos",
+                    "version": flow_info[0]["version"], "flowId": flow_info[0]["id"], "flowType": flow_info[0]["flow_type"],
+                    "name": flow_info[0]["name"]+data_now(), "creator": "admin", "oldName": flow_info[0]["name"]}
+            return data
+        elif "multi_rtc_steps" == flow_name:
+            data = {"creator":"admin","flowId":flow_info[0]["id"],"flowVersion":flow_info[0]["version"],"flowName":flow_info[0]["name"],"flowType":flow_info[0]["flow_type"],"name":flow_info[0]["name"]+"#"+timestamp_utc(),"properties":{"clusterId":"cluster1","settingsId":"","lastRunConfig":False,"engine":"flink","debug":False,"runtimeSettings":{"master":"yarn","queue":"default","nodeLabel":"","driverMemory":1024,"executorMemory":1024,"executorCores":1,"parallelism":1,"useLatestState":False,"allowNonRestoredState":False,"lineageEnable":False,"savepointDir":"","kerberosEnable":False,"kerberosPrincipal":"","kerberosKeytab":"","kerberosJaasConf":"","flinkOpts":[],"javaOpts":""},"checkpointSettings":{"checkpointEnable":True,"checkpointMode":"exactly_once","checkpointDir":"hdfs:///tmp/flink/checkpoints","checkpointAsync":True,"checkpointStateBackend":"rocksdb","checkpointIncremental":False,"checkpointInterval":10000,"checkpointMinpause":5000,"checkpointTimeout":600000,"checkpointExternalSave":True,"checkpointUnaligned":False},"restartStrategySettings":{"restartStrategy":"FixedDelayRestart","restartMaxAttempts":3,"restartInterval":60,"restartDelayInterval":10},"latencyTrackingSettings":{"latencyTrackingEnable":False,"latencyTrackingInterval":60000}}}
             return data
         else:
             return
@@ -125,10 +198,10 @@ def get_dataflow_data(flow_name):
 
 def query_dataflow_data(flow_name):
     try:
-        sql = "select id from merce_flow where name like '%s%%%%' order by create_time desc limit 1" % flow_name
+        sql = "select id,flow_type from merce_flow where name ='%s' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         data = {"fieldList": [{"logicalOperator": "AND", "fieldName": "flowType", "comparatorOperator": "EQUAL",
-                               "fieldValue": "dataflow"},
+                               "fieldValue": flow_info[0]["flow_type"]},
                               {"logicalOperator": "AND", "fieldName": "flowId", "comparatorOperator": "EQUAL",
                                "fieldValue": flow_info[0]["id"]}],
                 "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
@@ -140,7 +213,7 @@ def query_dataflow_data(flow_name):
 def get_executions_data(flow_name):
     try:
         data = flow_name.split("&")
-        sql = "select flow_id from merce_flow_execution where flow_name like '%s%%%%' order by create_time desc limit 1" % data[0]
+        sql = "select flow_id,id from merce_flow_execution where flow_name like '%s%%%%' order by create_time desc limit 1" % data[0]
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         if "fieldName" in flow_name:
             new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%auto_apitest%"},{"logicalOperator":"AND","fieldName":"flowType","comparatorOperator":"EQUAL","fieldValue":"dataflow"},{"logicalOperator":"AND","fieldName":"flowId","comparatorOperator":"EQUAL","fieldValue":flow_info[0]["flow_id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
@@ -151,39 +224,14 @@ def get_executions_data(flow_name):
         elif "non" in flow_name:
             new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"flowType","comparatorOperator":"EQUAL","fieldValue":"dataflow"},{"logicalOperator":"AND","fieldName":"flowId","comparatorOperator":"EQUAL","fieldValue":flow_info[0]["flow_id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
             return new_data
+        elif "execution_id" in flow_name:
+            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"executionId","comparatorOperator":"EQUAL","fieldValue":flow_info[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            return new_data
         else:
             return
     except Exception as e:
         log.error("异常信息：%s" % e)
 
-
-def set_upsert_data():
-    log.info("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
-    try:
-      sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
-      ms.ExecuNoQuery(sql.encode('utf-8'))
-      sql ="UPDATE `test_flow`.`training`  set ts=CURRENT_TIMESTAMP "
-      ms.ExecuNoQuery(sql.encode('utf-8'))
-    except Exception as e:
-      log.error("异常信息：%s" % e)
-
-#set_upsert_data()
-
-def set_upsert_datas():
-    log.info("开始执行set_upsert_data")
-    ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],MySQL_CONFIG["PORT"])
-    try:
-        count=1
-        sql = "INSERT INTO `test_flow`.`training`(`ts`, `code`, `total`, `forward_total`, `reverse_total`, `sum_flow`, `sum_inst`, `inst_num`, `max_inst`, `max_inst_ts`, `min_inst`, `min_inst_ts`) VALUES ( CURRENT_TIMESTAMP, 'code1', 310001, 50, 5, 48, 2222, 42, 55, '2020-05-01 00:09:00', 23, '2020-01-01 00:09:00')"
-        while 1:
-            log.info("插入count：%d" % count)
-            ms.ExecuNoQuery(sql.encode('utf-8'))
-            count+=1
-            if count==150000:
-                break
-    except Exception as e:
-        log.error("异常信息：%s" % e)
 
 #删除测试数据
 def delete_autotest_datas():
