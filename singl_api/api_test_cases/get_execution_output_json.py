@@ -3,7 +3,7 @@ from util.Open_DB import MYSQL
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import MySQL_CONFIG
 from util.format_res import dict_res, get_time
-from basic_info.setting import host, tenant_id_83
+from basic_info.setting import host
 from basic_info.get_execution_log import GetLog
 from new_api_cases.get_statementId import statementId_flow_use, preview_result_flow_use
 from util.encrypt import parameter_ungzip
@@ -181,37 +181,6 @@ class GetCheckoutDataSet(object):
         print("------返回创建任务的data------")
         # print(data_list)
         return data_list
-
-    def create_new_scheduler(self):
-        """
-        批量创建scheduler，
-        并返回scheduler_id_list， 供get_execution_info(self)调用
-        :return: scheduler_id_list
-        """
-        print("------开始创建任务------")
-        from basic_info.url_info import create_scheduler_url
-        scheduler_id_list = []
-        scheduler_number = 1
-        for data in self.data_for_create_scheduler():
-            res = requests.post(url=create_scheduler_url, headers=get_headers(host), json=data)
-            print('第%d 个scheduler%s' % (scheduler_number,res.text))
-            scheduler_number += 1
-            time.sleep(2)
-            # print(res.status_code, res.text)
-            if str(res.status_code).startswith('2') and res.text:
-                scheduler_id_format = dict_res(res.text)
-                try:
-                    scheduler_id = scheduler_id_format["id"]
-                except KeyError as e:
-                    print("scheduler_id_format中存在异常%s" % e)
-                else:
-                    scheduler_id_list.append(scheduler_id)
-            else:
-                print("flow: %s scheduler创建失败" % data["flowid"])
-                # return None
-        print("------create_new_scheduler(self)执行结束, 返回scheduler_id_list------\n")
-        print('scheduler_id_list', scheduler_id_list)
-        return scheduler_id_list
 
     def get_execution_info(self):
         """

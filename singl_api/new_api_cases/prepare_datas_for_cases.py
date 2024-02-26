@@ -112,70 +112,70 @@ def dss_data(data):
     try:
         sql = "select id from merce_resource_dir where creator='admin' and name='Datasources' and parent_id is NULL"
         Datasources = ms.ExecuQuery(sql.encode('utf-8'))
-        if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
-            new_data = {"name": "gjb_api_for_all_type_JDBC_datasource_test_随机数", "type": "DB", "description": "",
-                        "attributes": {"jarPath": "mysql-connector-java-5.1.48.jar", "DBType": "Mysql",
-                                       "host": "192.168.1.82", "port": 3306, "database": "merce", "user": "merce",
-                                       "password": "a$cad2fb721d282f6e5151605a1874ffe4~",
-                                       "driver": "com.mysql.jdbc.Driver", "properties": [{"name": "", "value": ""}],
-                                       "url": "jdbc:mysql://192.168.1.82:3306/merce_62", "chineseName": "",
-                                       "dateToTimestamp": False, "catalog": "", "schema": "", "batchsize": 10000,
-                                       "name": "mysql_5"}, "resource": {"id": Datasources[0]["id"]}}
+        if 'gjb_type_JDBC_datasource_test' in data:
+            new_data = {"name":"gjb_type_JDBC_datasource_test_随机数","type":"DB","description":"","resourceId":Datasources[0]["id"],"attributes":{"DBType":"Mysql","directConnection":True,"collectorId":"","collectorName":"","urls":"jdbc:mysql://192.168.1.82:3306/auto_apitest","database":"auto_apitest","tags":[],"tagNames":[],"user":"merce","password":"merce","inOrganization":"test","inSystem":"test","inReporter":"test","inPhoneNumber":"test","businessCompany":"test","name":"mysql","driver":"com.mysql.cj.jdbc.Driver","url":"jdbc:mysql://192.168.1.82:3306/auto_apitest","defaultUrl":"jdbc:mysql://[HOST]:[PORT]/[DB]","port":3306,"paraPrefix":"?","paraSep":"&","jarPath":"mysql-connector-java-8.0.28.jar"}}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_http_datasource_test' in data:
-            new_data = {"id": "", "name": "gjb_for_all_type_http_datasource_test_随机数", "type": "HTTP",
-                        "description": "",
-                        "attributes": {"method": "GET", "rootPath": "gbj_http", "parameters": "", "url": "gbj_http",
-                                       "properties": [{"name": "", "value": ""}]}, "tags": [],
-                        "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_http_datasource_test' in data:
+            new_data = {"name":"gjb_type_http_datasource_test_随机数","type":"HTTP","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"http://1.2.3.4/api","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"Http"}}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_ftp_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_ftp_datasource_test_随机数", "type": "FTP", "description": "",
-                        "attributes": {"host": "info4", "port": "22", "username": "europa", "password": "europa",
-                                       "recursive": "true", "secure": "true", "skipHeader": "false",
-                                       "dir": "/home/europa/ftp_auto_import", "fieldsSeparator": ","}, "tags": [],
-                        "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_ftp_datasource_test' in data:
+            new_data = {"name":"gjb_type_ftp_datasource_test_随机数","type":"FTP","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.84:21","username":"europa","password":"europa","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"FTP"}}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_socket_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_socket_datasource_test_随机数", "type": "socket", "description": "",
-                        "attributes": {"charset": "utf-8", "ipAddress": "gbj_socket", "port": "gbj_socket",
-                                       "protocol": "TCP"}, "tags": [], "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_sftp_datasource_test' in data:
+            new_data = {"name":"gjb_type_sftp_datasource_test_随机数","type":"SFTP","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.82:22","username":"merce","password":"merce@82","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"SFTP"}}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_MANGODB_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_MANGODB_datasource_test_随机数", "type": "MONGODB", "description": "",
-                        "attributes": {"address": "gbj_mangodb", "port": "27017", "username": "gbj_mangodb",
-                                       "password": "gbj_mangodb", "database": "gbj_mangodb"}, "tags": [],
-                        "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_websocket_datasource_test' in data:
+            new_data = {"name":"gjb_type_websocket_datasource_test_随机数","type":"WEBSOCKET","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"http://218.84.39.208:12056","authType":"token","charset":"","tokenUri":"http://218.84.39.208:12056/api/v1/basic/key?username=slmh&password=slmh123!","tokenMethod":"GET","tokenAlias":"data->key","tokenPeriod":30,"contentType":"","tokenHeaders":[],"tokenParamBody":"","tokenJsonBody":"","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"WEBSOCKET"},"attributes.tokenHeaders":[]}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_es_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_es_datasource_test_随机数", "type": "ES", "description": "",
-                        "attributes": {"clusterName": "es85", "ipAddresses": "192.168.1.85:9200", "index": "test",
-                                       "indexType": "test", "version": "5.x"}, "tags": [],
-                        "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_mongodb_datasource_test' in data:
+            new_data = {"name":"gjb_type_mongodb_datasource_test_随机数","type":"DB","description":"","resourceId":Datasources[0]["id"],"attributes":{"DBType":"MongoDB","directConnection":True,"collectorId":"","collectorName":"","urls":"192.168.1.67:27017","database":"admin","tags":[],"tagNames":[],"user":"root","password":"123456","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":""}}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_HDFS_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_HDFS_datasource_test_随机数", "type": "HDFS",
-                        "description": "gjb_for_all_type_HDFS_datasource_test", "resource": {"id": Datasources[0]["id"]},
-                        "tags": [], "attributes": {"encoder": "UTF-8", "path": "hdfs://mycluster/"}}
+        elif 'gjb_type_rest_datasource_test' in data:
+            new_data = {"name":"gjb_type_rest_datasource_test_随机数","type":"REST","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"http://192.168.1.220:8515","authType":"token","tokenUri":"http://192.168.1.220:8515/api/auth/oauth/token","tokenMethod":"POST","tokenAlias":"content->access_token","tokenPeriod":30,"contentType":"x-www-form-urlencoded","tokenHeaders":[{"key":"Content-Type","value":"Content-Type: application/x-www-form-urlencoded","desc":""},{"key":"Host","value":"192.168.1.220:8515","desc":""},{"key":"Authorization","value":"Authorization","desc":""}],"tokenParamBody":[{"key":"vsersion","value":"Baymax-3.0.0.23-20180606","desc":"version"},{"key":"tenant","value":"default","desc":"tenant"},{"key":"grant_type","value":"manager_password","desc":""},{"key":"username","value":"a$a67fba7b9f50eca1677f50c0d7eb0993~","desc":""},{"key":"password","value":"a$0615f89cbee023498ebc2e31cc2c8fca~","desc":""}],"tokenJsonBody":"","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"REST"},"attributes.tokenHeaders":[{"key":"Content-Type","value":"Content-Type: application/x-www-form-urlencoded","desc":""},{"key":"Host","value":"192.168.1.220:8515","desc":""},{"key":"Authorization","value":"Authorization","desc":""}],"attributes.tokenParamBody":[{"key":"vsersion","value":"Baymax-3.0.0.23-20180606","desc":"version"},{"key":"tenant","value":"default","desc":"tenant"},{"key":"grant_type","value":"manager_password","desc":""},{"key":"username","value":"a$a67fba7b9f50eca1677f50c0d7eb0993~","desc":""},{"key":"password","value":"a$0615f89cbee023498ebc2e31cc2c8fca~","desc":""}]}
             deal_random(new_data)
             return new_data
-        elif 'gjb_for_all_type_kafka_datasource_test' in data:
-            new_data = {"name": "gjb_for_all_type_kafka_datasource_test_随机数", "type": "KAFKA",
-                        "description": "gjb_for_all_type_kafka_datasource_test", "resource": {"id": Datasources[0]["id"]},
-                        "tags": [],
-                        "attributes": {"kafkaVersion": "1.0+", "brokers": "info2:9094", "isKerberosSupport": "false",
-                                       "authLoginConfigFile": "", "krb5ConfigFile": ""}}
+        elif 'gjb_type_HDFS_datasource_test' in data:
+            new_data = {"name":"gjb_type_HDFS_datasource_test_随机数","type":"HDFS","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"hdfs://into1:8020","isKerberosSupport":True,"krb5ConfigFile":"/etc/krb5.conf","keytabPrincipal":"merce@HADOOP.COM","keytabPath":"/app/merce/kerberos/merce.keytab","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"HDFS"}}
             deal_random(new_data)
             return new_data
-        elif "gjb_for_all_type_localfs_datasource_test" in data:
-            new_data = {"name": "gjb_for_all_type_localfs_datasource_test_随机数", "type": "LOCALFS", "description": "",
-                        "attributes": {"encoder": "UTF-8", "path": "test"}, "resource": {"id": Datasources[0]["id"]}}
+        elif 'gjb_type_kafka_datasource_test_SASL' in data:
+            kafka_data =data.split("&")
+            new_data = {"name":"gjb_type_kafka_datasource_test"+kafka_data[2]+"随机数","type":"KAFKA","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.65:2282","isKerberosSupport":False,"authLoginConfigFile":"","krb5ConfigFile":"","kafkaVersion":"1.0+","protocol":"password","security.protocol":kafka_data[1],"sasl.mechanism":kafka_data[2],"username":"admin","password":"admin","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"KAFKA"}}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_kafka_datasource_test_kerberos' in data:
+            kafka_data =data.split("&")
+            new_data = {"name":"gjb_type_kafka_datasource_test_kerberos_随机数","type":"KAFKA","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.65:2282","isKerberosSupport":True,"authLoginConfigFile":"/app/merce/kerberos/java_client_jaas.conf","krb5ConfigFile":"/etc/krb5","kafkaVersion":"1.0+","protocol":"kerberos","security.protocol":kafka_data[1],"sasl.mechanism":kafka_data[2],"username":"","password":"","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"KAFKA"}}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_kafka_datasource_test_no' in data:
+            new_data = {"name":"gjb_type_kafka_datasource_test_no_随机数","type":"KAFKA","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.65:2282","isKerberosSupport":False,"authLoginConfigFile":"","krb5ConfigFile":"","kafkaVersion":"1.0+","protocol":"no","security.protocol":"PLAINTEXT","sasl.mechanism":"SCRAM-SHA-512","username":"","password":"","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"KAFKA"}}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_hbase_datasource_test_no' in data:
+            new_data = {"name":"gjb_type_hbase_datasource_test_no_随机数","type":"HBASE","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.61:2181,192.168.1.62:2181","hbaseVersion":"1.0.0","zkNodeParent":"/hbase-unsecure","securityMode":"no","krb5confPath":"","keytabPath":"","principal":"","securityExtParams":[],"cluster":"","tagNames":[],"tags":[],"inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"Hbase"},"attributes.securityExtParams":[]}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_hbase_datasource_test_kerberos' in data:
+            new_data = {"name":"gjb_type_hbase_datasource_test_kerberos_随机数","type":"HBASE","description":"","resourceId":Datasources[0]["id"],"attributes":{"urls":"192.168.1.61:2181,192.168.1.62:2181","hbaseVersion":"1.0.0","zkNodeParent":"/hbase-unsecure","securityMode":"kerberos","krb5confPath":"/etc/krb5.conf","keytabPath":"/app/merce/kerberos/merce.keytab","principal":"merce@HADOOP.COM","securityExtParams":[],"cluster":"","tagNames":[],"tags":[],"inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","DBType":"Hbase"},"attributes.securityExtParams":[]}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_hive_datasource_test_no' in data:
+            new_data = {"name":"gjb_type_hive_datasource_test_no_随机数","type":"DB","description":"","resourceId":Datasources[0]["id"],"attributes":{"DBType":"HIVE","directConnection":True,"collectorId":"","collectorName":"","urls":"jdbc:hive2://192.168.1.62:10000/default;principal=hive/into2@HADOOP.COM?hive.resultset.use.unique.column.names=false","database":"default","tags":[],"tagNames":[],"user":"merce","password":"merce","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","name":"hive","driver":"org.apache.hive.jdbc.HiveDriver","url":"jdbc:hive2://192.168.1.62:10000/default;principal=hive/into2@HADOOP.COM?hive.resultset.use.unique.column.names=false","defaultUrl":"jdbc:hive2://[HOST]:[PORT]/[DB]","port":10000,"paraPrefix":";","paraSep":";","jarPath":"hive-jdbc-3.1.0.3.1.5.0-152.jar","securityMode":"no","krb5confPath":"","keytabPath":"","principal":""}}
+            deal_random(new_data)
+            return new_data
+        elif 'gjb_type_hive_datasource_test_kerberos' in data:
+            new_data = {"name":"gjb_type_hive_datasource_test_kerberos_随机数","type":"DB","description":"","resourceId":Datasources[0]["id"],"attributes":{"DBType":"HIVE","directConnection":True,"collectorId":"","collectorName":"","urls":"jdbc:hive2://192.168.1.62:10000/default;principal=hive/into2@HADOOP.COM?hive.resultset.use.unique.column.names=false","database":"default","tags":[],"tagNames":[],"user":"merce","password":"merce","inOrganization":"","inSystem":"","inReporter":"","inPhoneNumber":"","businessCompany":"","name":"hive","driver":"org.apache.hive.jdbc.HiveDriver","url":"jdbc:hive2://192.168.1.62:10000/default;principal=hive/into2@HADOOP.COM?hive.resultset.use.unique.column.names=false","defaultUrl":"jdbc:hive2://[HOST]:[PORT]/[DB]","port":10000,"paraPrefix":";","paraSep":";","jarPath":"hive-jdbc-3.1.0.3.1.5.0-152.jar","securityMode":"kerberos","keytabPath":"/app/merce/kerberos/merce.keytab","krb5confPath":"/etc/krb5.conf","principal":"merce@HADOOP.COM"}}
+            deal_random(new_data)
+            return new_data
+        elif "gjb_type_localfs_datasource_test" in data:
+            new_data = {"name":"gjb_type_localfs_datasource_test_随机数","type":"LOCALFS","description":"localfs","resourceId":Datasources[0]["id"],"attributes":{"urls":"/app/data","encoder":"UTF-8","inOrganization":"localfs","inSystem":"localfs","inReporter":"localfs","inPhoneNumber":"xxxxx","businessCompany":"localfs","DBType":"LOCALFS"}}
             deal_random(new_data)
             return new_data
         elif 'datasource_query' == data:
@@ -202,24 +202,13 @@ def dss_data(data):
 
 def upddss_data(data):
     try:
-        sql = "select id,owner,name,tenant_id,resource_id from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data
+        sql = "select id,name,resource_id,tenant_id,owner from merce_dss where name like '%s%%%%' ORDER BY create_time limit 1" % data
         dss_info = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = dss_info[0]["id"]
-        if 'gjb_api_for_all_type_JDBC_datasource_test' in data:
-            new_data = {"tenantId": dss_info[0]["tenant_id"], "owner": dss_info[0]["owner"],
-                        "name": dss_info[0]["name"], "enabled": 1, "creator": "admin",
-                        "createTime": "2022-04-19 16:02:09", "lastModifier": "admin",
-                        "lastModifiedTime": "2022-04-19 16:18:31", "id": dss_id, "version": 2, "groupCount": None,
-                        "groupFieldValue": None, "tableName": data[1], "type": "DB", "path": None,
-                        "attributes": {"schema": "", "jarPath": "mysql-connector-java-5.1.48.jar", "catalog": "",
-                                       "DBType": "Mysql", "batchsize": 10000, "paraSep": "&",
-                                       "url": "jdbc:mysql://192.168.1.82:3306/merce_62", "database": "merce_62",
-                                       "password": "a$cad2fb721d282f6e5151605a1874ffe4~",
-                                       "driver": "com.mysql.jdbc.Driver", "port": 3306, "name": "mysql_5",
-                                       "host": "192.168.1.82", "paraPrefix": "?", "user": "merce",
-                                       "defaultUrl": "jdbc:mysql://[HOST]:[PORT]/[DB]", "properties": [],
-                                       "dateToTimestamp": False}, "resource": None,
-                        "resourceId": dss_info[0]["resource_id"], "tags": [], "description": "", "expiredPeriod": 0}
+        if 'gjb_type_JDBC_datasource_test' in data:
+            new_data = {"tenantId":dss_info[0]["tenant_id"],"owner":dss_info[0]["owner"],"name":dss_info[0]["name"],"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":dss_info[0]["id"],"version":2,"groupCount":None,"groupFieldValue":None,"tableName":"merce_dss","type":"DB","path":None,"attributes":{"jarPath":"mysql-connector-java-8.0.28.jar","collectorId":"","businessCompany":"test","DBType":"Mysql","inReporter":"test","inOrganization":"test","paraSep":"&","tagNames":[],"url":"jdbc:mysql://192.168.1.82:3306/auto_apitest","tags":[],"urls":"jdbc:mysql://192.168.1.82:3306/auto_apitest","database":"auto_apitest","password":"a$eabcabc6a2d09f494202d24670c15e15~","inPhoneNumber":"test","driver":"com.mysql.cj.jdbc.Driver","port":3306,"name":"mysql","paraPrefix":"?","collectorName":"","user":"merce","defaultUrl":"jdbc:mysql://[HOST]:[PORT]/[DB]","inSystem":"test","directConnection":True},"resourceId":dss_info[0]["resource_id"],"resource":None,"tags":None,"description":"","tagObjs":None,"expiredPeriod":0}
+            #deal_random(new_data)
+            print("---------------",new_data,dss_id)
             return dss_id, new_data
         else:
             return
@@ -233,75 +222,23 @@ def dataset_data(data):
     from new_api_cases.dw_deal_parameters import deal_random
     try:
         list_data = data.split("&")
-        schema_id, schema_resourceid,schema_name = schema_data(list_data[1])
+        schema_id, schema_resourceid,schema_name,schema_info,schema_hisid = schema_data(list_data[1])
         sql = "select id,tenant_id,owner from merce_resource_dir where creator='admin' and name='Datasets' and parent_id is NULL"
         dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
         resource_id,tenant_id,owner=dataset_info[0]["id"], dataset_info[0]["owner"], dataset_info[0]["tenant_id"]
         if 'gjb_test_ftp_dataset' in data:
-            new_data = {"name": "gjb_test_ftp_dataset_随机数",
-                        "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM",
-                                   "name": schema_name, "creator": "admin", "createTime": 1587370296000,
-                                   "lastModifier": "admin", "lastModifiedTime": 1587370296000, "version": 1,
-                                   "enabled": 1, "description": "gjb_ttest_mysql0420_training",
-                                   "resourceId": schema_resourceid,
-                                   "fields": [{"name": "id", "type": "int", "alias": "", "description": ""},
-                                              {"name": "ts", "type": "timestamp", "alias": "", "description": ""},
-                                              {"name": "code", "type": "string", "alias": "", "description": ""},
-                                              {"name": "total", "type": "float", "alias": "", "description": ""},
-                                              {"name": "forward_total", "type": "float", "alias": "",
-                                               "description": ""},
-                                              {"name": "reverse_total", "type": "float", "alias": "",
-                                               "description": ""},
-                                              {"name": "sum_flow", "type": "float", "alias": "", "description": ""}],
-                                   "oid": schema_id, "newest": 1, "isHide": 0, "expiredPeriod": 0}, "storage": "FTP",
-                        "expiredPeriod": 0,
-                        "storageConfigurations": {"user": "europa", "password": "AES(11b5a9d816c0a4fd8f99ef1e7de42d32)",
-                                                  "format": "csv", "path": "ftp://info4/home/europa/gbj_ftp/demo.csv",
-                                                  "relativePath": "ftp://info4/home/europa/gbj_ftp/demo.csv",
-                                                  "header": "false", "ignoreRow": 0, "separator": ",",
-                                                  "quoteChar": "\"", "escapeChar": "\\", "csv": "csv"}, "sliceTime": "",
-                        "sliceType": "H", "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "description": "gjb_ttest_mysql0420_training",
-                        "schemaId": schema_id}
+            new_data = {"id":"","name":"gjb_test_ftp_dataset_随机数","alias":"","description":"","resource":{"id":resource_id},"resourceId":resource_id,"schema":{"id":schema_id,"hisId":schema_hisid,"name":schema_name,"type":"input","description":None,"version":1,"hisVersion":1,"resourceId":schema_resourceid,"resource":None,"datasourceIds":"","datasourceNames":None,"fields":[{"name":"id","type":"int","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606720","formula":"","isCalc":0},{"name":"ts","type":"timestamp","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606721","formula":"","isCalc":0},{"name":"code","type":"string","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606722","formula":"","isCalc":0},{"name":"total","type":"float","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606723","formula":"","isCalc":0},{"name":"forward_total","type":"float","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606724","formula":"","isCalc":0},{"name":"reverse_total","type":"float","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606725","formula":"","isCalc":0},{"name":"sum_flow","type":"float","types":None,"alias":"","description":"","fieldCategory":None,"specId":None,"id":"1141789505080606726","formula":"","isCalc":0}],"changeStr":None,"change":None,"mappings":None,"schemaInfo":None,"oid":schema_id,"tenantId":tenant_id,"expiredTime":253402214400,"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"owner":owner,"tags":None,"tagObjs":None,"showInput":True},"storage":"FTP","expiredPeriod":0,"tags":[],"tagNames":[],"source":"create","storageConfigurations":{"expiredTime":0,"time":"","user":"europa","password":"a$01ba63d2e701965dea27a50d9fad5113~","format":"csv","pathMode":"exact","recursive":"false","scanPathRegular":"","scanFileRegular":"","dataFilterRegular":"","startFilterTime":"","endFilterTime":"","path":"ftp://192.168.1.84/home/europa/guojinbo","relativePath":"","header":"false","ignoreRow":0,"separator":",","quoteChar":"\"","clusterId":"","escapeChar":"\\","lineSeparator":"0A","host":"192.168.1.84","isNow":True,"timeField":"","timeFormat":""},"sliceTime":"","sliceType":"H","owner":"","schemaVersion":1,"timestampAsOf":"","specialField":{},"datasourceId":"","datasourceName":"","schemaId":schema_id,"oid":schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_sftp' in data:
-            new_data = {"id": "", "name": "gjb_test_sftp_dataset_随机数", "description": "",
-                        "resource": {"id": dataset_info[0]["id"]},
-                        "schema": {"tenantId": tenant_id, "owner": owner, "name": schema_name, "enabled": 1,
-                                   "creator": "admin", "createTime": data_now(), "lastModifier": "admin",
-                                   "lastModifiedTime": data_now(), "id": schema_id, "version": 1, "groupCount": None,
-                                   "groupFieldValue": None, "resourceId": schema_resourceid, "fields": [
-                                {"name": "id", "type": "int", "alias": "", "description": "", "fieldCategory": None,
-                                 "specId": None}, {"name": "ts", "type": "timestamp", "alias": "", "description": "",
-                                                   "fieldCategory": None, "specId": None},
-                                {"name": "code", "type": "string", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "forward_total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "reverse_total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "sum_flow", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None}], "primaryKeys": None, "resource": None,
-                                   "oid": schema_id, "newest": 1, "isHide": 0, "tags": [],
-                                   "description": "gjb_ttest_mysql0420_training", "expiredPeriod": 0,
-                                   "showInput": "true"}, "storage": "SFTP", "expiredPeriod": 0, "tags": [],
-                        "storageConfigurations": {"expiredTime": 0, "time": "", "format": "csv",
-                                                  "path": "/home/europa/test_to_ftp/sftp/0311", "host": "192.168.1.84",
-                                                  "port": "22", "user": "europa",
-                                                  "password": "a$11b5a9d816c0a4fd8f99ef1e7de42d32~", "relativePath": "",
-                                                  "pathMode": "exact", "header": "false", "ignoreRow": 0,
-                                                  "separator": ",", "quoteChar": "\"", "localTempDir": "",
-                                                  "clusterId": "", "escapeChar": "\\"}, "sliceTime": "",
-                        "sliceType": "H", "owner": "", "schemaVersion": 1, "timestampAsOf": "", "specialField": {},
-                        "schemaId": schema_id, "oid": schema_id}
+            new_data = {"datasourceId":"","datasourceName":"","name":"gjb_test_sftp_dataset_随机数","alias":"","description":"","resource":None,"resourceId":resource_id,"schema":{"tenantId":tenant_id,"owner":owner,"name":schema_name,"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":schema_id,"version":2,"resourceId":schema_resourceid,"fields":[],"fieldCount":3,"primaryKeys":None,"resource":None,"oid":schema_id,"newest":1,"isHide":0,"tags":None,"description":None,"hisVersion":1,"status":0,"dataSourceIds":None,"dataSourceNames":None,"type":None,"tagObjs":None,"expiredPeriod":0},"storage":"SFTP","source":"create","expiredPeriod":0,"tags":[],"tagNames":"","storageConfigurations":{"expiredTime":0,"time":"","format":"csv","scanPathRegular":"","scanFileRegular":"","dataFilterRegular":"","startFilterTime":"","endFilterTime":"","path":"/home/europa/test_sftp/sftp_sink_csv1","host":"192.168.1.84","port":"22","user":"europa","password":"a$01ba63d2e701965dea27a50d9fad5113~","relativePath":"","pathMode":"exact","recursive":"false","header":"false","ignoreRow":0,"separator":",","quoteChar":"\"","localTempDir":"","clusterId":"","escapeChar":"\\","lineSeparator":"0A","isNow":True,"timeField":"","timeFormat":""},"sliceTime":"","sliceType":"H","owner":owner,"schemaVersion":2,"specialField":{"name":None,"type":None,"alias":None,"description":None,"currVal":None},"tenantId":"1093978681540575232","enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"version":1,"hasSafetyLevel":False,"schemaId":schema_id,"recordNumber":0,"byteSize":0,"type":"NORMAL","analysisTime":0,"formatConfigurations":None,"isHide":0,"oid":schema_id,"properties":None,"ctype":0,"schemaHisId":None,"isShare":0,"queryFeature":"${format:csv}","tagObjs":None}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_hudi_dataset' in data:
             new_data = {"id": "", "name": "gjb_test_hudi_dataset_随机数", "description": "",
-                        "resource": {"id": dataset_info[0]["id"]},
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schema": {"tenantId": tenant_id, "owner": owner, "name": schema_name, "enabled": 1,
                                    "creator": "admin", "createTime": data_now(), "lastModifier": "admin",
                                    "lastModifiedTime": data_now(), "id": schema_id, "version": 1, "groupCount": None,
@@ -318,48 +255,17 @@ def dataset_data(data):
                                                   "endTime": "", "expiredTime": 0, "beginTime": "", "clusterId": ""},
                         "sliceTime": "", "sliceType": "H", "owner": "", "schemaVersion": 1, "timestampAsOf": "",
                         "specialField": {}, "schemaId": schema_id, "oid": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_neo4j' in data:
-            new_data = {"id": "", "name": "gjb_test_neo4j_dataset_随机数", "description": "",
-                        "resource": {"id": dataset_info[0]["id"]},
-                        "schema": {"tenantId": tenant_id, "owner": owner, "name": schema_name, "enabled": 1,
-                                   "creator": "admin", "createTime": data_now(), "lastModifier": "admin",
-                                   "lastModifiedTime": data_now(), "id": schema_id, "version": 1, "groupCount": None,
-                                   "groupFieldValue": None, "resourceId": schema_resourceid, "fields": [
-                                {"name": "id", "type": "int", "alias": "", "description": "", "fieldCategory": None,
-                                 "specId": None}, {"name": "ts", "type": "timestamp", "alias": "", "description": "",
-                                                   "fieldCategory": None, "specId": None},
-                                {"name": "code", "type": "string", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "forward_total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "reverse_total", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None},
-                                {"name": "sum_flow", "type": "float", "alias": "", "description": "",
-                                 "fieldCategory": None, "specId": None}], "primaryKeys": None, "resource": None,
-                                   "oid": schema_id, "newest": 1, "isHide": 0, "tags": [],
-                                   "description": "gjb_ttest_mysql0420_training", "expiredPeriod": 0,
-                                   "showInput": "true"}, "storage": "Neo4j", "expiredPeriod": 0, "tags": [],
-                        "storageConfigurations": {"expiredTime": 0, "time": "", "url": "bolt://192.168.1.75:7687",
-                                                  "user": "neo4j", "password": "a$3cde4fd05c58aee9937bfb2db12c9a91~",
-                                                  "src": "id", "source": "all", "edge": "all", "target": "all",
-                                                  "sourceFields": [{"name": "test", "value": "id"}],
-                                                  "edgeFields": [{"name": "test1", "value": "ts"}], "clusterId": "",
-                                                  "targetFields": [{"name": "test2", "value": "code"},
-                                                                   {"name": "test3", "value": "total"},
-                                                                   {"name": "test4", "value": "forward_total"},
-                                                                   {"name": "test5", "value": "reverse_total"},
-                                                                   {"name": "test6", "value": "sum_flow"}]},
-                        "sliceTime": "", "sliceType": "H", "owner": "", "schemaVersion": 2, "timestampAsOf": "",
-                        "specialField": {}, "schemaId": schema_id, "oid": schema_id}
+            new_data = {"id":"","name":"gjb_test_neo4j_随机数","alias":"","description":"","resource":{"id":resource_id},"resourceId":resource_id,"schema":{"id":schema_id,"hisId":schema_hisid,"name":schema_name,"type":"input","description":None,"version":1,"hisVersion":1,"resourceId":schema_resourceid,"resource":None,"datasourceIds":"","datasourceNames":None,"fields":[],"changeStr":None,"change":None,"mappings":None,"schemaInfo":None,"oid":schema_id,"tenantId":tenant_id,"expiredTime":253402214400,"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"owner":owner,"tags":None,"tagObjs":None,"showInput":None},"storage":"Neo4j","expiredPeriod":0,"tags":[],"tagNames":[],"source":"create","storageConfigurations":{"expiredTime":0,"time":"","url":"bolt://192.168.1.61:7687","user":"neo4j","password":"a$fdc6d1b091cff90a6507590654a0b39d~","src":"all","source":"all","edge":"all","target":"all","sourceFields":[{"name":"id","value":"id","_uuid_":"dynamic_1"}],"edgeFields":[{"name":"ts","value":"ts","_uuid_":"dynamic_2"}],"clusterId":"","targetFields":[{"name":"code","value":"code","_uuid_":"dynamic_3"}]},"sliceTime":"","sliceType":"H","owner":"","schemaVersion":1,"timestampAsOf":"","specialField":{},"schemaId":schema_id,"oid":schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_redis' in data:
             new_data = {"id": "", "name": "gjb_test_redis_dataset_随机数", "description": "",
-                        "resource": {"id": dataset_info[0]["id"]},
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schema": {"tenantId": tenant_id, "owner": owner, "name": schema_name, "enabled": 1,
                                    "creator": "admin", "createTime": data_now(), "lastModifier": "admin",
                                    "lastModifiedTime": data_now(), "id": schema_id, "version": 1, "groupCount": None,
@@ -385,6 +291,7 @@ def dataset_data(data):
                                                   "table": "test"}, "sliceTime": "", "sliceType": "H", "owner": "",
                         "schemaVersion": 1, "timestampAsOf": "", "specialField": {}, "schemaId": schema_id,
                         "oid": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_hbase' in data:
@@ -410,8 +317,9 @@ def dataset_data(data):
                                                                       "isSingle": "true", "columnsItems": 0,
                                                                       "undefined": "csv"}, "sliceTime": "",
                         "sliceType": "H", "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "description": "gjb_test-hbase_随机数",
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "description": "gjb_test-hbase_随机数",
                         "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_es_dataset' in data:
@@ -449,7 +357,8 @@ def dataset_data(data):
                         "storageConfigurations": {"clusterName": "elasticsearch", "ipAddresses": "info5:9203",
                                                   "index": "test_stre", "indexType": "test_stre"}, "sliceTime": "",
                         "sliceType": "H", "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_SearchOne_dataset' in data:
@@ -474,32 +383,13 @@ def dataset_data(data):
                                                   "ipAddresses": "192.168.1.81:9200,192.168.1.82:9200,192.168.1.84:9200",
                                                   "index": "test_new_0103", "indexType": "test_new_0103"},
                         "sliceTime": "", "sliceType": "H", "owner": dataset_info[0]["owner"],
-                        "resource": {"id": dataset_info[0]["id"]}}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"]}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_HDFS_dataset' in data:
-            new_data = {"name": "gjb_test_HDFS_dataset_随机数",
-                        "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "owner": "SYSTEM",
-                                   "name": schema_name, "creator": "admin", "createTime": 1587370296000,
-                                   "lastModifier": "admin", "lastModifiedTime": 1587370296000, "version": 1,
-                                   "enabled": 1, "description": "tester_mysql0420_training",
-                                   "resourceId": schema_resourceid,
-                                   "fields": [{"name": "id", "type": "int", "alias": "", "description": ""},
-                                              {"name": "ts", "type": "timestamp", "alias": "", "description": ""},
-                                              {"name": "code", "type": "string", "alias": "", "description": ""},
-                                              {"name": "total", "type": "float", "alias": "", "description": ""},
-                                              {"name": "forward_total", "type": "float", "alias": "",
-                                               "description": ""},
-                                              {"name": "reverse_total", "type": "float", "alias": "",
-                                               "description": ""},
-                                              {"name": "sum_flow", "type": "float", "alias": "", "description": ""}],
-                                   "oid": schema_id, "newest": 1, "isHide": 0, "expiredPeriod": 0}, "storage": "HDFS",
-                        "expiredPeriod": 0,
-                        "storageConfigurations": {"format": "csv", "path": "/tmp/gbj/datas_for_test/students.txt",
-                                                  "relativePath": "/tmp/gbj/datas_for_test/students.txt",
-                                                  "pathMode": "exact", "header": "false", "separator": ",",
-                                                  "quoteChar": "\"", "escapeChar": "\\"}, "sliceTime": "",
-                        "sliceType": "H", "owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+            new_data = {"name":"gjb_ttest_hdfs042219_随机数","alias":None,"description":"","resource":None,"resourceId":resource_id,"schema":{"tenantId":tenant_id,"owner":owner,"name":schema_name,"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":schema_id,"version":1,"resourceId":schema_resourceid,"fields":[],"fieldCount":7,"primaryKeys":None,"resource":None,"oid":schema_id,"newest":1,"isHide":0,"tags":None,"description":None,"hisVersion":1,"status":0,"dataSourceIds":None,"dataSourceNames":None,"type":None,"tagObjs":None,"expiredPeriod":0},"storage":"HDFS","expiredPeriod":0,"tags":[],"tagNames":[],"source":None,"storageConfigurations":{"flatten":True,"expiredTime":0,"time":"s","format":"csv","path":"/auto_test/api","relativePath":"/auto_test/api","pathMode":"exact","header":"false","ignoreRow":"0","separator":",","quoteChar":"\"","escapeChar":"\\","encryptKey":"","encryptColumnsTemplate":[],"encryptColumns":"","hdfsPartitionColumn":"","specialFieldSelect":"","partitionType":"DateFormat","dateFormat":"","dateFrom":"","dateTo":"","cycle":"","externalTableName":"","datePeriod":"","dateUnit":"HOUR","clusterId":"cluster1","storageOutSlicePath":True,"storageDynamicPath":"","partitionList":"","pathFilter":"(.inprogress|.pending)","csv":"csv"},"sliceTime":"","sliceType":"H","owner":owner,"schemaVersion":1,"timestampAsOf":"","specialField":{"name":None,"type":None,"alias":None,"description":None,"currVal":None},"tenantId":tenant_id,"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"version":2,"hasSafetyLevel":None,"schemaId":schema_id,"recordNumber":0,"byteSize":0,"type":"NORMAL","analysisTime":0,"formatConfigurations":None,"isHide":0,"datasourceId":"","datasourceName":"","oid":None,"properties":None,"ctype":0,"schemaHisId":None,"isShare":0,"queryFeature":"${format:csv}","tagObjs":None}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_kafka_dataset' in data:
@@ -526,7 +416,8 @@ def dataset_data(data):
                                                                       "reader": "", "separator": ",", "header": "false",
                                                                       "quoteChar": "\"", "escapeChar": "\\"},
                         "sliceTime": "", "sliceType": "H", "owner": dataset_info[0]["owner"],
-                        "resource": {"id": dataset_info[0]["id"]}}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"]}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_test_hive_dataset' in data:
@@ -549,12 +440,13 @@ def dataset_data(data):
                         "expiredPeriod": 0,
                         "storageConfigurations": {"sql": "", "table": "students_info_hive_sink_0617",
                                                   "partitionColumns": ""}, "sliceTime": "", "sliceType": "H",
-                        "owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]}}
+                        "owner": dataset_info[0]["owner"], "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"]}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'gjb_ttest_hdfs042219' == data.split("&")[0]:
             dataset_id, dataset_name, resource_id = get_dataset_data(list_data[0])
-            new_datas = {"id": dataset_id, "name": dataset_name, "alias": None, "description": "", "resource": None,
+            new_data = {"id": dataset_id, "name": dataset_name, "alias": None, "description": "", "resource": None,
                          "schema": {"tenantId": dataset_info[0]["tenant_id"], "owner": dataset_info[0]["owner"],
                                     "name": schema_name, "enabled": 1, "creator": "admin", "createTime": data_now(),
                                     "lastModifier": "admin", "lastModifiedTime": data_now(), "id": schema_id,
@@ -595,7 +487,8 @@ def dataset_data(data):
                          "resourceId": resource_id, "schemaId": schema_id, "recordNumber": 0, "byteSize": 0,
                          "type": "NORMAL", "analysisTime": 0, "formatConfigurations": None, "isRelated": 1, "isHide": 0,
                          "datasourceId": None, "datasourceName": None, "oid": None}
-            return new_datas
+            new_data["schema"]["fields"].append(schema_info)
+            return new_data
         elif 'lq_dataset_hdfs' == data.split("&")[0]:
             new_data = {"name": "lq_dataset_hdfs_随机数",
                         "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "name": schema_name,
@@ -632,7 +525,8 @@ def dataset_data(data):
                                                   "partitionList": "", "encryptKey": "", "encryptColumns": "",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H",
                         "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"], "schemaId": schema_id}}
+                        "resource": {"id": dataset_info[0]["id"],"resourceId":dataset_info[0]["id"], "schemaId": schema_id}}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_hdfs' == data.split("&")[0]:
@@ -671,7 +565,8 @@ def dataset_data(data):
                                                   "partitionList": "", "encryptKey": "", "encryptColumns": "",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H",
                         "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"], "schemaId": schema_id}}
+                        "resource": {"id": dataset_info[0]["id"],"resourceId":dataset_info[0]["id"], "schemaId": schema_id}}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_kafka' == data.split("&")[0]:
@@ -718,7 +613,8 @@ def dataset_data(data):
                                                                       "escapeChar": "\\", "encryptKey": "",
                                                                       "encryptColumns": "", "columnsItems": 0},
                         "sliceTime": "", "sliceType": "H", "owner": None, "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_hive' == data.split("&")[0]:
@@ -737,8 +633,9 @@ def dataset_data(data):
                                    "newest": 1, "isHide": 0, "expiredPeriod": 0}, "storage": "HIVE", "expiredPeriod": 0,
                         "storageConfigurations": {"sql": "", "table": "lq_test_sink_随机数", "partitionColumns": "",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H", "owner": None,
-                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},
+                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_neo4j' == data.split("&")[0]:
@@ -760,7 +657,8 @@ def dataset_data(data):
                                                                    {"name": "born", "value": "born"}], "edgeFields": [],
                                                   "targetFields": [], "columnsItems": 0}, "sliceTime": "",
                         "sliceType": "H", "owner": None, "schemaVersion": 4, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_source_dataset_neo4j' == data.split("&")[0]:
@@ -782,8 +680,9 @@ def dataset_data(data):
                                                   "dateTo": "", "datePeriod": "", "dateUnit": "HOUR",
                                                   "partitionList": "", "encryptKey": "", "encryptColumns": "",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H", "owner": None,
-                        "schemaVersion": 4, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},
+                        "schemaVersion": 4, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_dataset_jdbc' == data.split("&")[0]:
@@ -807,8 +706,9 @@ def dataset_data(data):
                                                   "dateTo": "", "datePeriod": "", "dateUnit": "HOUR",
                                                   "partitionList": "", "encryptKey": "", "encryptColumns": "",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H", "owner": None,
-                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},
+                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_jdbc' == data.split("&")[0]:
@@ -833,7 +733,8 @@ def dataset_data(data):
                                               {"name": "id", "type": "int", "alias": "", "description": ""}],
                                    "mode": None, "primaryKeys": None, "resource": None, "projectEntity": None,
                                    "newest": 1, "isHide": 0, "expiredPeriod": 0}, "owner": None, "schemaVersion": 1,
-                        "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_hbase' == data.split("&")[0]:
@@ -875,7 +776,8 @@ def dataset_data(data):
                                                   "columns": "rowKey:key,columns:Sex,columns:Age,columns:Identity_code,columns:C_time,columns:Data_long,columns:Data_double,columns:Data_boolean,columns:time_col,columns:Str_time,columns:Salary,columns:None_data,columns:City,columns:data1,columns:data2,columns:data3,columns:data4,columns:data5,columns:data6,columns:data7,columns:data8,columns:data9",
                                                   "columnsKey": "Name", "isSingle": True, "columnsItems": 0},
                         "sliceTime": "", "sliceType": "H", "owner": None, "schemaVersion": 1, "clusterId": "",
-                        "resource": {"id": dataset_info[0]["id"]}, "schemaId": schema_id}
+                        "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"], "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_sink_dataset_redis' == data.split("&")[0]:
@@ -916,12 +818,13 @@ def dataset_data(data):
                         "expiredPeriod": 0,
                         "storageConfigurations": {"url": "info4:6379", "keyColumn": "", "password": "", "table": "ssss",
                                                   "columnsItems": 0}, "sliceTime": "", "sliceType": "H", "owner": None,
-                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},
+                        "schemaVersion": 1, "clusterId": "", "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schemaId": schema_id}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         elif 'lq_dataset_kafka' == data.split("&")[0]:
-            new_data = {"name": "lq_dataset_kafka_随机数", "description": "", "resource": {"id": dataset_info[0]["id"]},
+            new_data = {"name": "lq_dataset_kafka_随机数", "description": "", "resource": {"id": dataset_info[0]["id"]},"resourceId":dataset_info[0]["id"],
                         "schema": {"id": schema_id, "tenantId": dataset_info[0]["tenant_id"], "groupCount": None,
                                    "groupFieldValue": None, "name": "click", "creator": "admin",
                                    "createTime": "2021-06-07 12:10:56", "lastModifier": "admin",
@@ -948,6 +851,7 @@ def dataset_data(data):
                                                   "encryptColumnsTemplate": [], "clusterId": "", "encryptColumns": ""},
                         "sliceTime": "", "sliceType": "H", "owner": "", "schemaVersion": 1, "timestampAsOf": "",
                         "specialField": {}, "schemaId": schema_id, "oid": "851433040017096704"}
+            new_data["schema"]["fields"].append(schema_info)
             deal_random(new_data)
             return new_data
         else:
@@ -984,7 +888,7 @@ def upddataset_data(data):
         sql = "select id,owner,name,tenant_id,resource_id from merce_dataset where name like '%s%%%%' ORDER BY create_time limit 1" % data[0]
         dataset_info = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_id = dataset_info[0]["id"]
-        schema_id, schema_resourceid,schema_name = schema_data(data[1])
+        schema_id, schema_resourceid,schema_name,schema_info,schema_hisid = schema_data(data[1])
         if 'gjb_ttest_hdfs' in data:
             new_datas = {"id": dataset_id, "name": dataset_info[0]["name"], "alias": None, "description": "",
                          "resource": None,
@@ -1061,16 +965,16 @@ def schema_data(data):
     try:
         if '&' in data:
             data = data.split('&')
-            sql = "select id,name,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time limit 1" % data[1]
+            sql = "select ms.id,ms.name,ms.resource_id,msh.schema_info,msh.id as hisid from merce_schema ms inner join merce_schema_history msh on msh.schema_id =ms.id where ms.name like '%s%%%%' limit 1"  % data[1]
             schema_info = ms.ExecuQuery(sql.encode('utf-8'))
-            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
+            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"], schema_info[0]["schema_info"], str(schema_info[0]["hisid"])
         else:
-            sql = "select id,name,resource_id from merce_schema where name like '%s%%%%' ORDER BY create_time limit 1" % data
+            sql = "select ms.id,ms.name,ms.resource_id,msh.schema_info,msh.id as hisid from merce_schema ms inner join merce_schema_history msh on msh.schema_id =ms.id where ms.name like '%s%%%%' limit 1" % data
             schema_info = ms.ExecuQuery(sql.encode('utf-8'))
-            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
+            return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"], schema_info[0]["schema_info"], str(schema_info[0]["hisid"])
     except Exception as e:
         log.error("schema_data查询出错{}".format(e))
-        return
+
 def schema_data_sink(data):
     try:
         if '&' in data:
@@ -1084,7 +988,7 @@ def schema_data_sink(data):
             return schema_info[0]["id"], schema_info[0]["resource_id"], schema_info[0]["name"]
     except Exception as e:
         log.error("schema_data查询出错{}".format(e))
-        return
+
 
 def create_schema_data(data):
     from new_api_cases.dw_deal_parameters import deal_random
@@ -1460,7 +1364,7 @@ def update_flow_data(data):
     try:
         sql = "select id,owner,tenant_id from merce_resource_dir where creator='admin' and name='Flows' and parent_id is NULL"
         resource_info = ms.ExecuQuery(sql.encode('utf-8'))
-        schema_id, schema_resourceid,schema_name = schema_data(data)
+        schema_id, schema_resourceid,schema_name,schema_info,schema_hisid = schema_data(data)
         flow_id, flow_name = flow_data(data)
         dataset_id, dataset_name = flow_dataset_data(data)
         if 'gjb_api_create_flow_dataflow' in data:

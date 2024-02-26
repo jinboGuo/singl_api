@@ -444,8 +444,8 @@ class operateKafka:
         hosts = ["192.168.1.55:9092","192.168.1.82:9094"]
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
-        self.bstrap_servers=['192.168.1.82:9094']
-        self.topic = client.topics['commander.scheduler.poseidon.flow']  #CARPO_FLOW1 CARPO_XDR commander.scheduler COMMANDER_FLOW
+        self.bstrap_servers=['192.168.1.55:9092']   #192.168.1.82:9094
+        self.topic = client.topics['commander.scheduler.xdr_compass_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka042712" #往topic发送json
     global stu_nm
@@ -473,11 +473,31 @@ class operateKafka:
     """
     def send_json_kafka(self):
      producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
-     for i in range(100000):
-        time.sleep(1)
-        data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(21,35),"stime":timestamp_utc()}
-        log.info("往kafka输入的data：%s",data)
-        producer.send(self.json_topic, data)
+     new_data = []
+     start_time = datetime.datetime.now()
+     log.info("导入-开始时间：%s" % start_time)
+     for i in range(5):
+         for j in range(0, 30000):
+             data = {"id": i, "name": fake.name(), "sex": random.choice('男女'), "age": random.randint(21, 35),
+                     "stime": timestamp_utc(), "time": timestamp_utc(), "create_time": timestamp_utc(),
+                     "update_time": timestamp_utc(), "ssn": fake.ssn(),
+                     "randoms": random.randint(22, 35), "job": fake.job(), "rand_int": random.randint(10000, 1000000),
+                     "currency_code": fake.currency_code(),
+                     "credit_card_number": fake.credit_card_number(),
+                     "credit_card_provider": fake.credit_card_provider(),
+                     "credit_card_security_code": fake.credit_card_security_code(),
+                     "postcode": fake.postcode(), "province": fake.province(), "city_suffix": fake.city_suffix(),
+                     "street_address": fake.street_address()}
+             new_data.append(data)
+         log.info("往kafka输入的data：%s", new_data)
+         #time.sleep(1)
+         for message in new_data:
+          producer.send(self.json_topic, message)
+     # 记录执行完成时间
+     end_time = datetime.datetime.now()
+     log.info("导入结束时间：%s" % end_time)
+     # 计算时间差
+     log.info("导入数据总耗时：%s" % (end_time - start_time))
      producer.close()
 
     """
@@ -485,29 +505,37 @@ class operateKafka:
     """
     def send_str_kafka(self):
         with self.str_topic.get_sync_producer() as producer:
-            for i in range(100000):
-                time.sleep(1)
-                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"stime":timestamp_now()}
+            new_data=[]
+            for i in range(10000):
+                data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"dates":timestamp_now()}
+                new_data.append(data)
+            log.info("往kafka输入的data：%s", new_data)
+            for data in new_data:
                 dat = ','.join([str(i) for i in list(data.values())])
-                log.info("往kafka输入的data：%s",dat)
                 producer.produce(str(dat).encode())
 
 
-"""
-function:send json message to kafka
-"""
 
-
-def send_manayjson_kafka(self):
-    producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                             bootstrap_servers=self.bstrap_servers)
-    for i in range(100000):
-        time.sleep(1)
-        data = {"id": i, "name": fake.name(), "sex": random.choice('男女'), "age": random.randint(21, 35),
-                "stime": timestamp_utc()}
-        log.info("往kafka输入的data：%s", data)
-        producer.send(self.json_topic, data)
-    producer.close()
+    """
+    function:send json message to kafka
+    """
+    def send_manayjson_kafka(self):
+        new_data=[]
+        producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                                 bootstrap_servers=self.bstrap_servers)
+        for i in range(10000):
+            time.sleep(1)
+            data = {"id": i, "name": fake.name(), "sex": random.choice('男女'), "age": random.randint(21, 35),
+                    "stime": timestamp_utc(), "time": timestamp_utc(), "create_time": timestamp_utc(),"update_time": timestamp_utc(),"ssn":fake.ssn(),
+            "randoms":random.randint(22,35),"job":fake.job(),"rand_int":random.randint(10000,1000000), "currency_code":fake.currency_code(),
+            "credit_card_number":fake.credit_card_number(), "credit_card_provider": fake.credit_card_provider(), "credit_card_security_code": fake.credit_card_security_code(),
+            "postcode":fake.postcode(), "province": fake.province(), "city_suffix": fake.city_suffix(), "street_address":fake.street_address()}
+            new_data.append(data)
+        #log.info("往kafka输入的data：%s", new_data)
+        #time.sleep(1)
+        for message in new_data:
+            producer.send(self.json_topic, message)
+        producer.close()
 
 if __name__ == '__main__':
 

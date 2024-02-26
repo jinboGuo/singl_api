@@ -259,6 +259,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '测试JDBC数据库连接':            
             dss_id, new_data = upddss_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new: ",new_data)
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
@@ -267,7 +268,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif 'datasetId不存在'in case_detail:
             new_data = dataset_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = httpop.api_get(url=url, headers=headers)
+            response = requests.get(url=url, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -571,14 +572,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '更新数据库驱动' == case_detail:
-            new_data = update_db_driver(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '数据标准导入文件':
             dir2 = ab_dir('sex.xls')
             files = {"file": open(dir2, 'rb')}
@@ -873,11 +866,11 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 parameter_list.append(statement_id)
                 new_url = url.format(parameter_list[0], parameter_list[1])
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 count_num = 0
                 while response.text in ('{"statement":"waiting"}', '{"statement":"running"}'):
-                    response = httpop.api_get(url=new_url, headers=headers)
+                    response = requests.get(url=new_url, headers=headers)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     count_num += 1
                     if count_num == 100:
@@ -951,7 +944,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 time.sleep(5)
                 new_url = url.format(task_id)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -960,7 +953,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 token = get_auth_token(host)
                 new_url = url.format(token)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -968,7 +961,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             elif case_detail == '查看指定id数据源':
                 new_url = url.format(data)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -977,13 +970,13 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 init_statementId = get_step_output_init_statementId(host, data)
                 new_url = url.format(init_statementId)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 count_num = 1
                 while "running" in response.text or "waiting" in response.text:
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     time.sleep(5)
-                    response = httpop.api_get(url=new_url, headers=headers)
+                    response = requests.get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 50:
                         return
@@ -994,13 +987,13 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 ensure_statementId = get_step_output_ensure_statementId(host, data)
                 new_url = url.format(ensure_statementId)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 count_num = 0
                 while "running" in response.text or "waiting" in response.text:
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     time.sleep(5)
-                    response = httpop.api_get(url=new_url, headers=headers)
+                    response = requests.get(url=new_url, headers=headers)
                     count_num += 1
                     if count_num == 50:
                         return
@@ -1010,11 +1003,11 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             elif "运行成功" in case_detail:
                 new_url=url.format(data)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url,headers=headers)
+                response = requests.get(url=new_url,headers=headers)
                 status=json.loads(response.text)["statusType"]
                 while status == "WAITTING" or status =="RUNNING" or status =="READY":
                       log.info("------进入while循环------\n")
-                      response = httpop.api_get(url=new_url,headers=headers)
+                      response = requests.get(url=new_url,headers=headers)
                       status=json.loads(response.text)["statusType"]
                       log.info("------再次查询后的状态为: %s------\n" % status)
                       time.sleep(10)
@@ -1026,7 +1019,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     log.info("flow执行状态出错")
                     return
             elif 'datasetId不存在'in case_detail:
-                response = httpop.api_get(url=url, headers=headers)
+                response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1035,7 +1028,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 statement_id, new_data = statementId_no_dataset(host, data)
                 new_url = url.format(statement_id)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1043,7 +1036,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
             elif '查询详情'in case_detail:
                 new_url = url.format(data)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1075,7 +1068,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     if len(parameters) == 1:
                         try:
                             url_new = url.format(parameters[0])
-                            response = httpop.api_get(url=url_new, headers=headers)
+                            response = requests.get(url=url_new, headers=headers)
                             log.info("response data：%s %s" % (response.status_code, response.text))
                         except Exception:
                             return
@@ -1085,14 +1078,14 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     elif len(parameters) == 2:
                         url_new = url.format(parameters[0], parameters[1])
-                        response = httpop.api_get(url=url_new, headers=headers)
+                        response = requests.get(url=url_new, headers=headers)
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     elif len(parameters) == 3:
                         url_new = url.format(parameters[0], parameters[1], parameters[2])
-                        response = httpop.api_get(url=url_new, headers=headers)
+                        response = requests.get(url=url_new, headers=headers)
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1102,7 +1095,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 else:
                     new_url = url.format(data)
                     log.info('new_url:%s' % new_url)
-                    response = httpop.api_get(url=new_url, headers=headers)
+                    response = requests.get(url=new_url, headers=headers)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1112,7 +1105,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 application_id = get_applicationId()
                 new_url = url.format(application_id)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1121,13 +1114,13 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 dataset_path = get_woven_qaoutput_dataset_path()[0]
                 new_url = url.format(dataset_path)
                 log.info('new_url:%s' % new_url)
-                response = httpop.api_get(url=new_url, headers=headers)
+                response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
-                response = httpop.api_get(url=url, headers=headers)
+                response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1172,6 +1165,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             dss_id, new_data = upddss_data(data)
             new_url = url.format(dss_id)
             new_data = json.dumps(new_data, separators=(',', ':'))
+            print("new_url: ",new_url,new_data)
             response = requests.put(url=new_url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
@@ -1230,6 +1224,14 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '启用用户':
             new_data = enable_user(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '更新数据库驱动' == case_detail:
+            new_data = update_db_driver(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.put(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))

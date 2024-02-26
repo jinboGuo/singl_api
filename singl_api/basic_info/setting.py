@@ -34,13 +34,13 @@ hdfs_url = "hdfs://into1:8020"
  Compass_MySQL_CONFIG:数据库连接信息
 """
 compass_sheet = "scheduler"
-compass_host = "http://192.168.1.95:8515"
+compass_host = "http://192.168.1.95:8031"
 Compass_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
+    'HOST': '192.168.1.85',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_156',
+    "DB": 'compass_16x',
     'case_db': 'test'}
 
 
@@ -57,7 +57,7 @@ Dsp_MySQL_CONFIG = {
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_156'  # merce-scheduler
+     "DB": 'merce_162'  # merce-scheduler
  }
 
 
@@ -74,7 +74,7 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_156',
+    "DB": 'merce_162',
     'case_db': 'test'}
 
 
@@ -109,31 +109,17 @@ MySQL_CONFIG1 = {
  HOST: "http://192.168.1.95:8515"
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
-baymax_master = "baymax_master"
+baymax_master = "842"
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_156',
+    "DB": 'merce_162',
     'case_db': 'test'}
 
-# """
-# -------65-baymax环境使用-------
-#  sheet_name:baymax_master
-#  HOST: "http://192.168.1.65:8515"
-#  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
-# """
-# baymax_master = "baymax_master"
-# host = "http://192.168.1.65:8515"
-# MySQL_CONFIG = {
-#     'HOST': '192.168.1.67',
-#     "PORT": 3306,
-#     "USER": 'merce',
-#     "PASSWORD": 'merce',
-#     "DB": 'merce_65',
-#     'case_db': 'test'}
+
 
 
 """
@@ -194,11 +180,11 @@ MY_LOGIN_INFO_dw = {
 }
 
 """
-1.5-admin账户登录信息
+1.6-admin账户登录信息
 """
 MY_LOGIN_INFO_DAM = {
     "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==', 'Accept': 'application/json'},
-    "URL": "%s/api/auth/oauth/token" % host,
+    "URL": "%s/api/auth/oauth2/token" % host,
     "DATA": {'username': 'a$a67fba7b9f50eca1677f50c0d7eb0993~', 'password': 'a$0615f89cbee023498ebc2e31cc2c8fca~', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
     "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
