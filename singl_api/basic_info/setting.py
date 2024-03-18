@@ -149,40 +149,6 @@ MY_LOGIN_INFO_compass = {
 }
 
 """
-dsp customer账户登录信息
-"""
-MY_LOGIN_INFO_dsp_customer = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==','Accept': 'application/json'},
-    "URL": "%s/api/auth/oauth/token" % dsp_host,
-    "DATA": {'username': 'a$a67fba7b9f50eca1677f50c0d7eb0993~', 'password': 'a$0615f89cbee023498ebc2e31cc2c8fca~', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
-    "DATA_ERROR_NAME": {'username': 'customer3', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default',
-                        'grant_type': 'customer_password'},
-    "HOST": "%s" % dsp_host
-}
-
-"""
-dsp admin账户登录信息
-"""
-MY_LOGIN_INFO_dsp_admin = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==','Accept': 'application/json'},
-    "URL": "%s/api/auth/oauth/token" % dsp_host,
-    "DATA": {'username': 'a$a67fba7b9f50eca1677f50c0d7eb0993~', 'password': 'a$0615f89cbee023498ebc2e31cc2c8fca~', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
-    "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
-    "HOST": "%s" % dsp_host
-}
-
-"""
-1.4-admin账户登录信息
-"""
-MY_LOGIN_INFO_dw = {
-    "HEADERS": {'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic YmF5bWF4OjEyMzQ1Ng==','Accept': 'application/json'},
-    "URL": "%s/api/auth/oauth/token" % dw_host,
-    "DATA": {'username': 'a$a67fba7b9f50eca1677f50c0d7eb0993~', 'password': 'a$0615f89cbee023498ebc2e31cc2c8fca~', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type':'manager_password'},
-    "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606','tenant': 'default', 'grant_type': 'manager_password'},
-    "HOST": "%s" % dw_host
-}
-
-"""
 1.6-admin账户登录信息
 """
 MY_LOGIN_INFO_DAM = {

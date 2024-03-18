@@ -1,10 +1,9 @@
 # coding:utf-8
-#from util.send_mail import baymax_main3
+from util.send_mail import baymax_main3
 import datetime
 from new_api_cases.execute_cases import deal_request_method
 from new_api_cases.execute_cases import CheckResult
-from basic_info.setting import host, baymax_master
-from basic_info.setting import receivers_list
+from basic_info.setting import host, baymax_master, receivers_test ,receivers_list
 from util.logs import Logger
 
 
@@ -22,4 +21,4 @@ stop_time = datetime.datetime.now()
 Log.info("结束时间：%s" % stop_time)
 Log.info("总耗时：%s" % (stop_time-start_time))
 """发送邮件"""
-#baymax_main3(host, receivers_list, baymax_master)
+baymax_main3(host, receivers_test, baymax_master)

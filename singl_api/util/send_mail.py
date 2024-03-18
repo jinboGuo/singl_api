@@ -9,12 +9,13 @@ import sys
 from smtplib import SMTP_SSL
 from openpyxl import load_workbook
 from api_test_cases.get_execution_output_json import abs_dir, GetCheckoutDataSet
-from new_api_cases.execute_cases import ab_dir
+from new_api_cases.execute_cases import cases_dir
+from util.logs import Logger
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
 sys.path.append(root_path)
-
+log = Logger().get_log()
 
 def mail_for_flow(host,receivers):
     # 163邮箱smtp服务器
@@ -134,7 +135,7 @@ def baymax_main3(host, receivers, sheet):
 
     # 邮件的正文内容----API执行结果
     # 统计api执行结果，加入到邮件正文中，失败的用例name：失败的原因
-    api_cases_table = load_workbook(ab_dir('api_cases.xlsx'))
+    api_cases_table = load_workbook(cases_dir)
     cases_sheet = api_cases_table.get_sheet_by_name(sheet)
     sheet_rows = cases_sheet.max_row
     cases_num = sheet_rows - 1
@@ -169,7 +170,7 @@ def baymax_main3(host, receivers, sheet):
         用例执行详情请查看附件《api_cases.xlsx》""" % (host, cases_num, pass_cases)
     # print(mail_content)
     # 邮件标题
-    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + "-" + sheet +'系统API用例自动化执行日报'
+    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + "-" + sheet +'系统API用例自动化执行报告'
 
     # 添加邮件正文，格式 MIMEText:
     msg.attach(MIMEText(mail_content, "plain", 'utf-8'))
@@ -177,7 +178,7 @@ def baymax_main3(host, receivers, sheet):
     # 添加api用例 excel表格
     # 添加附件，就是加上一个MIMEBase，从本地读取一个文件:
     # 添加API用例集执行报告
-    apicases_filepath = ab_dir('api_cases.xlsx')
+    apicases_filepath = cases_dir
     with open(apicases_filepath, 'rb') as a:
         # 设置附件的MIME和文件名:
         mime = MIMEBase('report', 'xlsx', filename='api_cases.xlsx')
@@ -202,5 +203,6 @@ def baymax_main3(host, receivers, sheet):
     msg["From"] = sender_163
     msg["To"] = Header("gjb,fq,wzm", 'utf-8')  # 接收者的别名
     smtp.sendmail(sender_163_mail, receivers, msg.as_string())
-    print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    #print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    log.info('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     smtp.quit()

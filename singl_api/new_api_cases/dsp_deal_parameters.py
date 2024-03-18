@@ -58,38 +58,38 @@ def deal_parameters(data):
                     try:
                         if data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 1:  # 正在运行服务，停止
                             status = "2"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         if data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 0:  # 正在运行服务，停止
                             status = "2"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         elif data_select_result[0]["status"] == 0 and data_select_result[0]["is_running"] == 0:  # 待部署服务，启用
                             status = "1"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         elif data_select_result[0]["is_running"] == 2:  # 失败服务，停用
                             status = "2"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         elif data_select_result[0]["status"] == 1 and data_select_result[0]["is_running"] == 3:  # 已成功服务，停用
                             status = "2"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         elif data_select_result[0]["status"] == 2 and data_select_result[0]["is_running"] == 5:  # 已停止服务，启用
                             status = "1"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                         else:   # 停止服务 ，启用
                             status = "1"
-                            id = str(data_select_result[0]["id"])
-                            new_data = {'status': status, 'id': id,"expiredTime":""}
+                            service_id = str(data_select_result[0]["id"])
+                            new_data = {'status': status, 'id': service_id, "expiredTime": ""}
                             return new_data
                     except Exception as e:
                         log.error("异常信息：%s" %e)
@@ -110,9 +110,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        cust_id,id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
+                        cust_id,service_id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
                         new_data.append(cust_id)
-                        new_data.append(str(id))
+                        new_data.append(str(service_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)
@@ -123,9 +123,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        cust_id,id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
+                        cust_id,service_id = data_select_result[0]["cust_id"],data_select_result[0]["id"]
                         new_data.append(cust_id)
-                        new_data.append(str(id))
+                        new_data.append(str(service_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)

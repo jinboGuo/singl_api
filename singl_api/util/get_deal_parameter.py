@@ -89,7 +89,7 @@ def get_dataset(data_source,data):
     """
     tenant_id = get_tenant_id(tenant_name)
     try:
-        sql = "select id,name from merce_dataset where  tenant_id='%s' and name ='%s' ORDER BY create_time desc limit 1" %(tenant_id,data)
+        sql = "select id,name from merce_dataset where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_id = dataset[0]["id"]
         dataset_name = dataset[0]["name"]

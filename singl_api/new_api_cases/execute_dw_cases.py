@@ -10,7 +10,7 @@ from basic_info.ready_dataflow_data import delete_autotest_dw
 from util.format_res import dict_res
 from basic_info.setting import Dw_MySQL_CONFIG, dw_host, dw_sheet
 from util.Open_DB import MYSQL
-from basic_info.get_auth_token import get_headers, get_headers_root, get_headers_dw
+from basic_info.get_auth_token import get_headers_root, get_headers
 from new_api_cases.dw_deal_parameters import deal_parameters
 import unittest
 from util.logs import Logger
@@ -33,8 +33,8 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     create_sql_asset, query_asset, sql_analyse_data, batch_create_asset, get_improt_data
 
 ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-case_table = load_workbook(ab_dir("api_cases.xlsx"))
+cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+case_table = load_workbook(cases_dir)
 case_table_sheet = case_table.get_sheet_by_name(dw_sheet)
 all_rows = case_table_sheet.max_row
 log = Logger().get_log()
@@ -64,13 +64,13 @@ def deal_request_method():
                 根据不同的请求方法，进行分发
                 """
                 if request_method_upper == 'POST':
-                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(host), data=request_data, table_sheet_name=case_table_sheet)
+                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet)
                 elif request_method_upper == 'GET':
-                    get_request_result_check(url=request_url, headers=get_headers_root(host), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
+                    get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
                 elif request_method_upper == 'PUT':
-                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root(host))
+                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root())
                 elif request_method_upper == 'DELETE':
-                    delete_request_result_check(request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root(host))
+                    delete_request_result_check(request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root())
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
             else:
@@ -78,19 +78,19 @@ def deal_request_method():
                 根据不同的请求方法，进行分发
                 """
                 if request_method_upper == 'POST':
-                    post_request_result_check(row=i,  column=8, url=request_url, headers=get_headers_dw(host), data=request_data, table_sheet_name=case_table_sheet)
+                    post_request_result_check(row=i,  column=8, url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet)
                 elif request_method_upper == 'GET':
-                    get_request_result_check(url=request_url, headers=get_headers_dw(host), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
+                    get_request_result_check(url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
                 elif request_method_upper == 'PUT':
-                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_dw(host))
+                    put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers())
                 elif request_method_upper == 'DELETE':
-                    delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_dw(host))
+                    delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers())
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
         else:
             log.info("第 %d 行请求方法为空" % i)
     """执行结束后保存表格"""
-    case_table.save(ab_dir("api_cases.xlsx"))
+    case_table.save(cases_dir)
 
 
 
@@ -100,7 +100,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
     :param row:
     :param column:
     :param url:
-    :param host:
     :param headers:
     :param data:
     :param table_sheet_name:
@@ -848,7 +847,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             log.info("request   url：%s " % new_url)
             response = requests.post(url=new_url, headers=headers, data=execte_use_params)
             count_num = 0
-            while ("waiting") in response.text or ("running") in response.text:
+            while "waiting" in response.text or "running" in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=new_url, headers=headers, data=execte_use_params)
                 time.sleep(5)
@@ -886,7 +885,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         elif "导入woven文件" in case_detail:
             new_data = get_improt_data(headers, dw_host)
             new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=get_headers_dw(host), data=new_data)
+            response = requests.post(url=url, headers=get_headers(), data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -927,7 +926,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
                     new_data = str(new_data)
                     if "'" in new_data:
                         new_data = new_data.replace("'", '"')
-                        log.info("request   data：%s " %new_data)
+                        log.info("request   data：%s " % new_data)
                         response = requests.post(url=url, headers=headers, data=new_data)
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
@@ -1007,7 +1006,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 count_num = 0
-                while ("waiting") in response.text or ("running") in response.text:
+                while "waiting" in response.text or "running" in response.text:
                     log.info("再次查询前：%s %s" % (response.status_code, response.text))
                     response = requests.get(url=new_url, headers=headers)
                     count_num += 1
@@ -1034,29 +1033,29 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                             try:
                                 select_result = ms.ExecuQuery(parameters[i])
                                 parameters[i] = select_result[0]["id"]
-                            except:
-                                log.info("第%s行参数没有返回结果" %row)
+                            except Exception as e:
+                                log.error("第%s行参数没有返回结果%s" % (row, e))
     
                         elif parameters[i].startswith('select name from'):
                             try:
                                 select_result = ms.ExecuQuery(parameters[i])
                                 parameters[i] = select_result[0]["name"]
-                            except:
-                                log.info("第%s行参数没有返回结果" %row)
+                            except Exception as e:
+                                log.error("第%s行参数没有返回结果%s" % (row, e))
                         elif parameters[i].startswith('select execution_id from'):
                             try:
                                 select_result = ms.ExecuQuery(parameters[i])
                                 parameters[i] = select_result[0]["execution_id"]
-                            except:
-                                log.info("第%s行参数没有返回结果" %row)
+                            except Exception as e:
+                                log.error("第%s行参数没有返回结果%s" % (row, e))
                     if len(parameters) == 1:
                         try:
                             url_new = url.format(parameters[0])
                             log.info("request   url：%s " %url_new)
                             response = requests.get(url=url_new, headers=headers)
                             log.info("response data：%s %s" % (response.status_code, response.text))
-                        except Exception:
-                            return
+                        except Exception as e:
+                            log.error("第%s行参数没有返回结果%s" % (row, e))
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -1444,8 +1443,8 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                     try:
                         for i in range(len(data_select_result)):
                             datas.append(data_select_result[i]["id"])
-                    except:
-                        log.info("请确认第%d行SQL语句" %row)
+                    except Exception as e:
+                                log.error("第%s行参数没有返回结果%s" % (row,e))
                     else:
                         if len(datas) == 1:
                             new_url = url.format(datas[0])
@@ -1555,7 +1554,7 @@ class CheckResult(unittest.TestCase):
                                                                     (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
                 log.info("第 %d 行 status_code为空" % row)
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
 
     def compare_text_result(self):
@@ -1589,7 +1588,7 @@ class CheckResult(unittest.TestCase):
             else:
                 log.info("请确认第 %d 行 status_code对比结果" %row)
 
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
 
     def assert_deal(self, key_word, relation, expect_text, response_text, response_text_dict, row, column):
@@ -1702,7 +1701,7 @@ class CheckResult(unittest.TestCase):
                 case_table_sheet.cell(row=row, column=column, value='请确认第 %d 行 预期expect_text和response_text的relation'%row)
         else:
             log.info("请确认第 %d 行 的key_word" % row)
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
 
     def deal_result(self):
@@ -1737,4 +1736,4 @@ class CheckResult(unittest.TestCase):
                                                                 (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
             else:
                 log.info("请确认status code或response.text对比结果")
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)

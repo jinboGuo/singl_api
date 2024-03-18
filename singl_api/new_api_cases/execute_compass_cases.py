@@ -7,7 +7,7 @@ import requests
 from util.format_res import dict_res
 from basic_info.setting import Compass_MySQL_CONFIG, compass_host, compass_sheet
 from util.Open_DB import MYSQL
-from basic_info.get_auth_token import get_headers_root, get_headers_dw
+from basic_info.get_auth_token import get_headers_root, get_headers
 from new_api_cases.compass_deal_parameters import deal_parameters, time
 import unittest
 from util.logs import Logger
@@ -19,8 +19,8 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
     qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history, delete_asset_directory
 
 ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-case_table = load_workbook(ab_dir("api_cases.xlsx"))
+cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+case_table = load_workbook(cases_dir)
 case_table_sheet = case_table.get_sheet_by_name(compass_sheet)
 all_rows = case_table_sheet.max_row
 jar_dir_push = os.path.join(os.path.abspath('.'),'attachment\Scheduler_import.xlsx')
@@ -51,18 +51,18 @@ def deal_request_method():
                 根据不同的请求方法，进行分发
                 """
                 if request_method_upper == 'POST':
-                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(host),
+                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(),
                                               data=request_data, table_sheet_name=case_table_sheet)
                 elif request_method_upper == 'GET':
-                    get_request_result_check(url=request_url, headers=get_headers_root(host), data=request_data,
+                    get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data,
                                              table_sheet_name=case_table_sheet, row=i, column=8)
                 elif request_method_upper == 'PUT':
                     put_request_result_check(url=request_url, row=i, data=request_data,
                                              table_sheet_name=case_table_sheet, column=8,
-                                             headers=get_headers_root(host))
+                                             headers=get_headers_root())
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(request_url, data=request_data, table_sheet_name=case_table_sheet,
-                                                row=i, column=8, headers=get_headers_root(host))
+                                                row=i, column=8, headers=get_headers_root())
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
             else:
@@ -70,23 +70,23 @@ def deal_request_method():
                 根据不同的请求方法，进行分发
                 """
                 if request_method_upper == 'POST':
-                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_dw(host),
+                    post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(),
                                               data=request_data, table_sheet_name=case_table_sheet)
                 elif request_method_upper == 'GET':
-                    get_request_result_check(url=request_url, headers=get_headers_dw(host), data=request_data,
+                    get_request_result_check(url=request_url, headers=get_headers(), data=request_data,
                                              table_sheet_name=case_table_sheet, row=i, column=8)
                 elif request_method_upper == 'PUT':
                     put_request_result_check(url=request_url, row=i, data=request_data,
-                                             table_sheet_name=case_table_sheet, column=8, headers=get_headers_dw(host))
+                                             table_sheet_name=case_table_sheet, column=8, headers=get_headers())
                 elif request_method_upper == 'DELETE':
                     delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet,
-                                                row=i, column=8, headers=get_headers_dw(host))
+                                                row=i, column=8, headers=get_headers())
                 else:
                     log.info("请求方法%s不在处理范围内" % request_method)
         else:
             log.info("第 %d 行请求方法为空" % i)
     """执行结束后保存表格"""
-    case_table.save(ab_dir("api_cases.xlsx"))
+    case_table.save(cases_dir)
 
 
 def post_request_result_check(row, column, url, headers, data, table_sheet_name):
@@ -95,7 +95,6 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
     :param row:
     :param column:
     :param url:
-    :param host:
     :param headers:
     :param data:
     :param table_sheet_name:
@@ -432,29 +431,26 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                         try:
                             select_result = ms.ExecuQuery(parameters[i])
                             parameters[i] = select_result[0]["id"]
-                        except:
-                            log.info("第%s行参数没有返回结果" % row)
+                        except Exception as e:
+                                log.info("第%s行参数没有返回结果%s" % (row,e))
 
                     elif parameters[i].startswith('select name from'):
                         try:
                             select_result = ms.ExecuQuery(parameters[i])
                             parameters[i] = select_result[0]["name"]
-                        except:
-                            log.info("第%s行参数没有返回结果"% row)
+                        except Exception as e:
+                                log.info("第%s行参数没有返回结果%s" % (row,e))
                     elif parameters[i].startswith('select execution_id from'):
                         try:
                             select_result = ms.ExecuQuery(parameters[i])
                             parameters[i] = select_result[0]["execution_id"]
-                        except:
-                            log.info("第%s行参数没有返回结果"% row)
+                        except Exception as e:
+                                log.info("第%s行参数没有返回结果%s" % (row,e))
                 if len(parameters) == 1:
-                    try:
-                        url_new = url.format(parameters[0])
-                        log.info("request   url：%s" % url_new)
-                        response = requests.get(url=url_new, headers=headers)
-                        log.info("response data：%s %s" % (response.status_code, response.text))
-                    except Exception:
-                        return
+                    url_new = url.format(parameters[0])
+                    log.info("request   url：%s" % url_new)
+                    response = requests.get(url=url_new, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
                     log.info("response.url %s, response.status_code %s,response.text%s " % (response.url, response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -789,7 +785,7 @@ class CheckResult(unittest.TestCase):
                                                                     (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
             else:
                 log.info("第 %d 行 status_code为空" % row)
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
 
     def compare_text_result(self):
@@ -823,7 +819,7 @@ class CheckResult(unittest.TestCase):
             else:
                 log.info("请确认第 %d 行 status_code对比结果" % row)
 
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
 
     def assert_deal(self, key_word, relation, expect_text, response_text, response_text_dict, row, column):
@@ -943,7 +939,7 @@ class CheckResult(unittest.TestCase):
                                       value='请确认第 %d 行 预期expect_text和response_text的relation' % row)
         else:
             log.info("请确认第 %d 行 的key_word" % row)
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)
 
     def deal_result(self):
         """
@@ -981,4 +977,4 @@ class CheckResult(unittest.TestCase):
                                                                  case_table_sheet.cell(row=row, column=12).value))
             else:
                 log.info("请确认status code或response.text对比结果")
-        case_table.save(ab_dir('api_cases.xlsx'))
+        case_table.save(cases_dir)

@@ -78,9 +78,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        business_id,id = data_select_result[0]["business_id"],data_select_result[0]["id"]
+                        business_id,dw_id = data_select_result[0]["business_id"],data_select_result[0]["id"]
                         new_data.append(business_id)
-                        new_data.append(str(id))
+                        new_data.append(str(dw_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)
@@ -91,9 +91,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        dataset_id,id = data_select_result[0]["dataset_id"],data_select_result[0]["id"]
+                        dataset_id,dw_id = data_select_result[0]["dataset_id"],data_select_result[0]["id"]
                         new_data.append(dataset_id)
-                        new_data.append(str(id))
+                        new_data.append(str(dw_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)
@@ -101,7 +101,6 @@ def deal_parameters(data):
                     log.info("查询结果为空！")
             if 'select project_id from' in data:
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
                 if data_select_result:
                     try:
                         data = data_select_result[0]["project_id"]
@@ -115,9 +114,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        metadata_id,id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
+                        metadata_id,dw_id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
                         new_data.append(str(metadata_id))
-                        new_data.append(str(id))
+                        new_data.append(str(dw_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)
@@ -154,9 +153,9 @@ def deal_parameters(data):
                 new_data=[]
                 if data_select_result:
                     try:
-                        project_id,id = data_select_result[0]["project_id"],data_select_result[0]["id"]
+                        project_id,dw_id = data_select_result[0]["project_id"],data_select_result[0]["id"]
                         new_data.append(str(project_id))
-                        new_data.append(str(id))
+                        new_data.append(str(dw_id))
                         return new_data
                     except Exception as e:
                         log.info("请确认SQL语句,异常信息：%s " %e)

@@ -4,34 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/get_deal_parameter.py" afterDir="false" />
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化框架">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/Download.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../singl_api.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/singl_api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/singl_api.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attachment/multi_rtc_steps.woven" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/multi_rtc_steps.woven" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attachment/mutil_sink_storage.woven" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/mutil_sink_storage.woven" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attachment/woven-common-1.4.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/woven-common-1.5.2.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic_info/get_auth_token.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/get_auth_token.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/api_cases.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/get_statementId.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/get_statementId.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/get_tenant.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/get_tenant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/get_deal_parameter.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/get_deal_parameter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +58,15 @@
         </map>
       </branch-storage>
     </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -73,16 +80,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/attachment&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.gitlab.GitLabSettingsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.HTMLTestRunner.executor": "Run",
+    "Python.compass_schedule.executor": "Run",
+    "Python.run_api_cases.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "E:/Download/singl_api/attachment",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.gitlab.GitLabSettingsConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Download\singl_api\attachment" />
@@ -93,6 +102,28 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.run_api_cases">
+    <configuration name="HTMLTestRunner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/HTMLTestRunner.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="compass_schedule" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -140,6 +171,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.run_api_cases" />
+        <item itemvalue="Python.HTMLTestRunner" />
+        <item itemvalue="Python.compass_schedule" />
+        <item itemvalue="Python.run_api_cases" />
         <item itemvalue="Python.compass_schedule" />
       </list>
     </recent_temporary>
@@ -172,5 +206,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="优化框架" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化框架" />
   </component>
 </project>
