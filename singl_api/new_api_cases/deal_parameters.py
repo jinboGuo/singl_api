@@ -1,18 +1,13 @@
 import json
 import random
-
 import requests
-
 from basic_info.get_auth_token import get_headers
 from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset
 from util.logs import Logger
-from util.timestamp_13 import *
 from basic_info.setting import MySQL_CONFIG, resource_type, host, data_source, tag_type
-#import os
 from util.Open_DB import MYSQL
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
-#ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 log = Logger().get_log()
 
 def deal_parameters(data,request_method,request_url):
@@ -76,7 +71,7 @@ def deal_parameters(data,request_method,request_url):
                         return new_data[0]
                 else:
                     try:
-                        response = requests.post(url=host+new_data[1], headers=get_headers(host), data=new_data[0])
+                        response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
                         new_data = json.loads(response.text)["content"]["list"][0]
                         log.info("查询接口响应数据:{}".format(new_data))
                         return new_data
@@ -136,8 +131,8 @@ def deal_parameters(data,request_method,request_url):
                         else:
                             new_data.append(data_select_result[0]["id"])
                             return new_data
-                    except:
-                        log.error("请确认SQL语句")
+                    except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
             else:
                 log.error("sql查询结果为空！")
         if 'select output_data_id' in data:
@@ -146,8 +141,8 @@ def deal_parameters(data,request_method,request_url):
                 try:
                     data = data_select_result[0]["output_data_id"]
                     return deal_parameters(data,request_method,request_url)
-                except:
-                    log.error("请确认第%d行SQL语句")
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
             else:
                 log.error("sql查询结果为空！")
         if 'SELECT enabled, id FROM' in data:
@@ -159,8 +154,8 @@ def deal_parameters(data,request_method,request_url):
                             data_select_result[i]["enabled"] = 0
                         else:
                             data_select_result[i]["enabled"] = 1
-                    except:
-                        log.error("请确认SQL语句")
+                    except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
                 return data_select_result
             else:
                 try:
@@ -169,8 +164,8 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         data_select_result[0]["enabled"] = 1
                     return data_select_result
-                except:
-                    log.error("请确认SQL语句")
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
         if 'select id,enabled from' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             ids = []
@@ -186,8 +181,8 @@ def deal_parameters(data,request_method,request_url):
                             ids.append(data_select_result[i]["id"])
                             new_data['ids'] = ids
                             new_data['enabled'] = 1
-                    except:
-                        log.error("请确认SQL语句")
+                    except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
                 return new_data
             else:
                 try:
@@ -200,16 +195,16 @@ def deal_parameters(data,request_method,request_url):
                         new_data['ids'] = ids
                         new_data['enabled'] = 1
                     return new_data
-                except:
-                    log.error("请确认SQL语句")
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
         if 'select name' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
                     data = data_select_result[0]["name"]
                     return deal_parameters(data,request_method,request_url)
-                except:
-                    log.error("请确认SQL语句")
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
             else:
                 log.error("sql查询结果为空！")
         if 'select execution_id' in data:
@@ -218,8 +213,8 @@ def deal_parameters(data,request_method,request_url):
                 try:
                     data = data_select_result[0]["execution_id"]
                     return deal_parameters(data,request_method,request_url)
-                except:
-                    log.error("请确认SQL语句")
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
             else:
                 log.error("sql查询结果为空！")
         else:

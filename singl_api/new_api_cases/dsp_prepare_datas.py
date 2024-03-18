@@ -1,7 +1,7 @@
 # coding:utf-8
 import os
 import requests
-from basic_info.get_auth_token import get_headers_admin, get_headers_customer
+from basic_info.get_auth_token import get_headers
 from new_api_cases.dw_deal_parameters import deal_random
 from util.format_res import dict_res
 from basic_info.setting import Dsp_MySQL_CONFIG, dsp_host
@@ -955,8 +955,7 @@ def appconfig_data(data):
     try:
         sql = "select id ,tenant_id, owner, access_key ,access_ip,cust_id ,cust_name,public_key from dsp_dc_appconfig where name like '%s%%%%' ORDER BY create_time desc limit 1" % data
         config_info = ms.ExecuQuery(sql.encode('utf-8'))
-        access_ip = []
-        access_ip.append(str(config_info[0]["access_ip"]))
+        access_ip = [str(config_info[0]["access_ip"])]
         new_data = {"accessIp": access_ip, "name": "autotest_appconfig_随机数", "enabled": 1,
                     "tenantId": config_info[0]["tenant_id"], "owner": config_info[0]["owner"], "creator": "customer3",
                     "createTime": data_now(), "lastModifier": "customer3", "lastModifiedTime": data_now(),
@@ -1015,7 +1014,7 @@ def cust_data_source(data):
 def admin_flow_id(data):
     try:
         url = '%s/api/dsp/platform/service/infoById?id=%s' % (dsp_host, data)
-        response = requests.get(url=url, headers=get_headers_admin(dsp_host))
+        response = requests.get(url=url, headers=get_headers())
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except Exception as e:
@@ -1025,7 +1024,7 @@ def admin_flow_id(data):
 def customer_flow_id(data):
     try:
         url = '%s/api/dsp/consumer/service/infoById?id=%s' % (dsp_host, data)
-        response = requests.get(url=url, headers=get_headers_customer(dsp_host))
+        response = requests.get(url=url, headers=get_headers())
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except Exception as e:
@@ -1119,7 +1118,7 @@ def pull_data_sql(data):
         log.error("异常信息：%s" % e)
 
 
-def pull_Aggs_sql(data):
+def pull_aggs_sql(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[
@@ -1174,7 +1173,7 @@ def pull_Aggs_sql(data):
         log.error("异常信息：%s" % e)
 
 
-def pull_Aggs(data):
+def pull_aggs(data):
     try:
         data = data.split("&")
         sql = "select id ,name from dsp_data_service where name like '%s%%%%' ORDER BY create_time desc limit 1" % data[
@@ -1711,10 +1710,9 @@ def update_role(data):
 
 def enable_role(data):
     try:
-        sql = "select enabled,id from merce_role where name like '%s%%%%' order by create_time desc limit 2" % data
+        sql = "select enabled,id from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
         role_info = ms.ExecuQuery(sql.encode('utf-8'))
-        ids = []
-        ids.append(str(role_info[0]["id"]))
+        ids = [str(role_info[0]["id"])]
         if role_info[0]["enabled"] == 1:
             new_data = {"enabled": 0, "ids": ids}
             return new_data

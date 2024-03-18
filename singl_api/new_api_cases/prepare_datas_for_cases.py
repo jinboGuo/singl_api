@@ -3,7 +3,7 @@ import json
 import os
 import time
 import requests
-from basic_info.get_auth_token import get_headers, get_headers_admin, get_headers_customer
+from basic_info.get_auth_token import get_headers
 from new_api_cases.compass_deal_parameters import deal_random
 from util.format_res import dict_res
 from basic_info.setting import MySQL_CONFIG
@@ -24,7 +24,7 @@ log = Logger().get_log()
 def get_job_tasks_id(job_id):
     url = '%s/api/woven/collectors/%s/tasks' % (host, job_id)
     data = {"fieldList": [], "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
-    response = requests.post(url=url, headers=get_headers(host), json=data)
+    response = requests.post(url=url, headers=get_headers(), json=data)
 
     all_task_id = []
     try:
@@ -57,7 +57,7 @@ def collector_schema_sync(data):
 def admin_flow_id(data):
     try:
         url = '%s/api/dsp/platform/service/infoById?id=%s' % (host, data)
-        response = requests.get(url=url, headers=get_headers_admin(host))
+        response = requests.get(url=url, headers=get_headers())
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except:
@@ -66,7 +66,7 @@ def admin_flow_id(data):
 def customer_flow_id(data):
     try:
         url = '%s/api/dsp/consumer/service/infoById?id=%s' % (host, data)
-        response = requests.get(url=url, headers=get_headers_customer(host))
+        response = requests.get(url=url, headers=get_headers())
         flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
         return flow_id
     except:

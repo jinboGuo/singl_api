@@ -2,8 +2,7 @@ import requests, json
 from basic_info.get_auth_token import get_headers
 from util.Open_DB import MYSQL
 from util.logs import Logger
-from basic_info.setting import tenant_id_145, tenant_id_62, tenant_id_65, MySQL_CONFIG, \
-    tenant_id_61, tenant_id_95, tenant_id_220
+from basic_info.setting import  MySQL_CONFIG
 from new_api_cases.dw_prepare_datas import sql_analyse_data
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
@@ -11,30 +10,6 @@ from util.format_res import dict_res
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 
 log = Logger().get_log()
-# 根据host信息返回tenant信息
-def get_tenant(host):
-    global tenant_id
-    if '62' in host:
-        tenant_id = tenant_id_62
-        return tenant_id
-    elif '95' in host:
-        tenant_id = tenant_id_95
-        return tenant_id
-    elif '220' in host:
-        tenant_id = tenant_id_220
-        return tenant_id
-    elif '61' in host:
-        tenant_id = tenant_id_61
-        return tenant_id
-    elif '65' in host:
-        tenant_id = tenant_id_65
-        return tenant_id
-    elif '145' in host:
-        tenant_id = tenant_id_145
-        return tenant_id
-    else:
-        log.info('使用的host不在预期中，请确认host信息')
-        return
 
 
 # datasetId存在时
@@ -44,55 +19,53 @@ def statementId(host, param):
         new_data = dataset_data(param)
         url = '%s/api/datasets/previewinit?rows=50'%(host)
         new_data = json.dumps(new_data, separators=(',', ':'))
-        res = requests.post(url=url, headers=get_headers(host), data=new_data)
-        res_statementId = json.loads(res.text)
-        statementId = res_statementId['statementId']
-        return statementId, new_data
-    except:
-        return
+        res = requests.post(url=url, headers=get_headers(), data=new_data)
+        res_statement_id = json.loads(res.text)
+        statement_id = res_statement_id['statementId']
+        return statement_id, new_data
+    except Exception as e:
+        log.info('数据集的statementID返回空%s' % e)
 
 
-def statementId_flow_use(host, datasetId):
-    url = '%s/api/datasets/%s/previewinit?rows=50' % (host,datasetId)
+def statementId_flow_use(host, dataset_id):
+    url = '%s/api/datasets/%s/previewinit?rows=50' % (host,dataset_id)
     log.info("statementId_flow_use请求url=%s" % url)
-    res = requests.get(url=url, headers=get_headers(host))
+    res = requests.get(url=url, headers=get_headers())
     log.info("response data：%s %s" % (res.status_code, res.text))
     try:
-        res_statementId = dict_res(res.text)
-        log.info('%s数据集获取的statementID信息：%s' % (datasetId, res_statementId))
-        statementId = res_statementId['statementId']
-    except:
-        log.info('数据集%s的statementID返回空' % datasetId)
-        return 1
+        res_statement_id = dict_res(res.text)
+        log.info('%s数据集获取的statementID信息：%s' % (dataset_id, res_statement_id))
+        statement_id = res_statement_id['statementId']
+    except Exception as e:
+        log.info('数据集%s的statementID返回空%s' % (dataset_id,e))
     else:
-        return statementId
+        return statement_id
 
-def statementId_flow_output_use(host, datasetId):
-    url = '%s/api/datasets/%s/previewinit?rows=50' % (host, datasetId)
-    res = requests.get(url=url, headers=get_headers(host))
+def statementId_flow_output_use(host, dataset_id):
+    url = '%s/api/datasets/%s/previewinit?rows=50' % (host, dataset_id)
+    res = requests.get(url=url, headers=get_headers())
     try:
-        res_statementId = dict_res(res.text)
-        statementId = res_statementId['statementId']
-        log.info('%s数据集获取的statementID：%s' % (datasetId, statementId))
-    except:
-        log.info('数据集%s的statementID返回空' % datasetId)
-        return 0
+        res_statement_id = dict_res(res.text)
+        statement_id = res_statement_id['statementId']
+        log.info('%s数据集获取的statementID：%s' % (dataset_id, statement_id))
+    except Exception as e:
+        log.info('数据集%s的statementID返回空%s' % (dataset_id, e))
     else:
-        return statementId
+        return statement_id
 
-def preview_result_flow_use(host, datasetId, statementID):
-    if isinstance(statementID, int):
-        url = "%s/api/datasets/%s/previewresult?statementId=%d&clusterId=cluster1" % (host, datasetId, statementID)
-        res = requests.get(url=url, headers=get_headers(host))
-        log.info('%s数据集preview_result:%s' % (datasetId, res.text))
+def preview_result_flow_use(host, dataset_id, statement_id):
+    if isinstance(statement_id, int):
+        url = "%s/api/datasets/%s/previewresult?statementId=%d&clusterId=cluster1" % (host, dataset_id, statement_id)
+        res = requests.get(url=url, headers=get_headers())
+        log.info('%s数据集preview_result:%s' % (dataset_id, res.text))
         while 'waiting' in res.text or 'running' in res.text:
-            res = requests.get(url=url, headers=get_headers(host))
+            res = requests.get(url=url, headers=get_headers())
         try:
             dataset_result = dict_res(res.text)['content']
-        except:
-            return 0
+        except KeyError as e:
+            log.error("datasetId不存在{}".format(e))
         else:
-            log.info('%s数据集dataset_result: %s ' % (datasetId, dataset_result))
+            log.info('%s数据集dataset_result: %s ' % (dataset_id, dataset_result))
             return dataset_result
     else:
         log.info('数据集返回的statementID为空')
@@ -103,11 +76,11 @@ def statementId_no_dataset(host, param):
     new_data = dataset_data(param)
     new_data = json.dumps(new_data, separators=(',', ':'))
     url = '%s/api/datasets/new/previewinit?rows=50' % host
-    res = requests.get(url=url, headers=get_headers(host))
+    res = requests.get(url=url, headers=get_headers())
     try:
-        res_statementId = json.loads(res.text)
-        statementId = res_statementId['statementId']
-        return statementId, new_data
+        res_statement_id = json.loads(res.text)
+        statement_id = res_statement_id['statementId']
+        return statement_id, new_data
     except KeyError as e:
         log.error("datasetId不存在{}".format(e))
         return
@@ -124,13 +97,13 @@ def get_sql_analyse_statement_id(host, param):
     url = ' %s/api/datasets/sql/analyzeinit' % host
     param = sql_analyse_data(param)
     new_data = json.dumps(param, separators=(',', ':'))
-    res = requests.post(url=url, headers=get_headers(host), data=new_data)
+    res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statementId = json.loads(res.text)
-        sql_analyse_statement_id = res_statementId['statementId']
+        res_statement_id = json.loads(res.text)
+        sql_analyse_statement_id = res_statement_id['statementId']
         return sql_analyse_statement_id
-    except KeyError:
-        return
+    except KeyError as e:
+        log.error("statementId不存在{}".format(e))
 
 
 
@@ -143,11 +116,11 @@ def get_sql_analyse_dataset_info(host, params):
     """
     sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
     url = ' %s/api/datasets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
-    res = requests.get(url=url, headers=get_headers(host))
+    res = requests.get(url=url, headers=get_headers())
     count_num = 0
     while "waiting" in res.text or "running" in res.text:
         log.info("再次查询前：%s %s" % (res.status_code, res.text))
-        res = requests.get(url=url, headers=get_headers(host))
+        res = requests.get(url=url, headers=get_headers())
         count_num += 1
         if count_num == 100:
             return
@@ -162,14 +135,14 @@ def get_sql_analyse_dataset_info(host, params):
 
 
 # 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
-def get_sql_execte_statement_id(HOST,param):
-    url = '%s/api/datasets/sql/executeinit' % HOST
+def get_sql_execte_statement_id(host,param):
+    url = '%s/api/datasets/sql/executeinit' % host
     param = sql_analyse_data(param)
     new_data = json.dumps(param, separators=(',', ':'))
-    res = requests.post(url=url, headers=get_headers(HOST), data=new_data)
+    res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statementId = json.loads(res.text)
-        sql_analyse_statement_id = res_statementId['statementId']
+        res_statement_id = json.loads(res.text)
+        sql_analyse_statement_id = res_statement_id['statementId']
         return sql_analyse_statement_id
     except KeyError:
         return
@@ -199,10 +172,10 @@ def get_step_output_init_statementId(host, params):
     param = step_sql_analyse_data(params)
     new_data = json.dumps(param, separators=(',', ':'))
     url = '%s/api/steps/output/fields/init?branch=output' % host
-    res = requests.post(url=url, headers=get_headers(host), data=new_data)
+    res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statementId = json.loads(res.text)
-        sql_analyse_statement_id = res_statementId['statementId']
+        res_statement_id = json.loads(res.text)
+        sql_analyse_statement_id = res_statement_id['statementId']
         return sql_analyse_statement_id
     except KeyError:
         return
@@ -218,12 +191,12 @@ def get_step_output_ensure_statementId(host, params):
     new_data = json.dumps(param, separators=(',', ':'))
     url = '%s/api/steps/validateinit/dataflow' % host
     try:
-        res = requests.post(url=url, headers=get_headers(host), data=new_data)
-        res_statementId = json.loads(res.text)
-        output_stattementid=res_statementId['statementId']
-        return output_stattementid
-    except:
-        return
+        res = requests.post(url=url, headers=get_headers(), data=new_data)
+        res_statement_id = json.loads(res.text)
+        output_statement_id=res_statement_id['statementId']
+        return output_statement_id
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 
 def step_sql_analyse_flow(params):
@@ -251,13 +224,13 @@ def steps_sql_parseinit_statemenId(host, params):
     param = step_sql_analyse_flow(params)
     new_data = json.dumps(param, separators=(',', ':'))
     url = '%s/api/steps/sql/parseinit/dataflow' % host
-    res = requests.post(url=url, headers=get_headers(host), data=new_data)
+    res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statementId = json.loads(res.text)
-        steps_sql_parseinit_statemenId = res_statementId['statementId']
-        return steps_sql_parseinit_statemenId
-    except KeyError:
-        return
+        res_statement_id = json.loads(res.text)
+        steps_sql_parseinit_statement_id = res_statement_id['statementId']
+        return steps_sql_parseinit_statement_id
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 
 
@@ -272,9 +245,9 @@ def steps_sql_analyzeinit_statementId(host,params):
     new_data = json.dumps(param, separators=(',', ':'))
     url = '%s/api/steps/sql/analyzeinit/dataflow' % host
     try:
-        res = requests.post(url=url, headers=get_headers(host), data=new_data)
-        res_statementId = json.loads(res.text)
-        steps_sql_analyzeinit_statementId = res_statementId['statementId']
-        return steps_sql_analyzeinit_statementId
-    except KeyError:
-        return
+        res = requests.post(url=url, headers=get_headers(), data=new_data)
+        res_statement_id = json.loads(res.text)
+        steps_sql_analyse_init_statement_id = res_statement_id['statementId']
+        return steps_sql_analyse_init_statement_id
+    except Exception as e:
+        log.error("异常信息：%s" % e)
