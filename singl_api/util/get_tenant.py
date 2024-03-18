@@ -1,6 +1,6 @@
 import urllib.parse
 import sys, os
-from basic_info.setting import Dw_MySQL_CONFIG
+from basic_info.setting import MySQL_CONFIG
 from util.Open_DB import MYSQL
 from util.logs import Logger
 
@@ -53,7 +53,7 @@ def get_owner():
     """
     :return: owner
     """
-    ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
     try:
       sql = "select id from merce_user where login_id='admin' and name='admin' order by create_time desc limit 1"
       owners = ms.ExecuQuery(sql)
@@ -62,5 +62,19 @@ def get_owner():
          return owner
       else:
           return "1013879801942171648"
+    except Exception as e:
+        return log.error("错误信息：%s" % e)
+
+
+def get_tenant_id(tenant_name):
+    """
+    :return: tenant_id
+    """
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
+    try:
+      sql = "select id from merce_tenant where name='%s' order by create_time desc limit 1" % tenant_name
+      tenant_id = ms.ExecuQuery(sql)
+      tenant_id = tenant_id[0]["id"]
+      return str(tenant_id)
     except Exception as e:
         return log.error("错误信息：%s" % e)

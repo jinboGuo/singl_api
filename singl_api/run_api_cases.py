@@ -1,5 +1,5 @@
 # coding:utf-8
-from util.send_mail import baymax_main3
+#from util.send_mail import baymax_main3
 import datetime
 from new_api_cases.execute_cases import deal_request_method
 from new_api_cases.execute_cases import CheckResult

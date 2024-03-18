@@ -133,7 +133,10 @@ tenant_id_82 = "926463668147716096"
 tenant_id_61 = "1056906556591271936"
 tenant_id_145 = "a5a4b81e-d2a6-498d-9ff0-3a627d3d5b5a"
 
-
+tenant_name = "default"
+resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataservice_dir","datasafe_job_dir","fileset_dir","standard_dir"]
+data_source = ["datasource_id","datasource_name","schema_id","schema_name","dataset_id","dataset_name","tenant_id","owner"]
+tag_type = ["like","EQUAL"]
 """
 compass admin账户登录信息
 """

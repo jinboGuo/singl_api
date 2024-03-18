@@ -1,31 +1,123 @@
+import json
 import random
+
+import requests
+
+from basic_info.get_auth_token import get_headers
+from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset
 from util.logs import Logger
 from util.timestamp_13 import *
-from basic_info.setting import MySQL_CONFIG
-import os
+from basic_info.setting import MySQL_CONFIG, resource_type, host, data_source, tag_type
+#import os
 from util.Open_DB import MYSQL
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+#ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 log = Logger().get_log()
 
-def deal_parameters(data):
+def deal_parameters(data,request_method,request_url):
     if data:
         if '随机数' in data:
-            data = data.replace('随机数', str(random.randint(0, 999999999999999)))
-            return deal_parameters(data)
-        if '6天前时间戳' in data:
-            data = data.replace('6天前时间戳', get_timestamp(6))
-            return deal_parameters(data)
-        if '当前时间戳' in data:
-            data = data.replace('当前时间戳', get_timestamp(0))
-            return deal_parameters(data)
-        if '监控开始时间' in data:
-            data = data.replace('监控开始时间', get_now_time()[0])
-            return deal_parameters(data)
-        if '监控结束时间' in data:
-            data = data.replace('监控结束时间', get_now_time()[1])
-            return deal_parameters(data)
+            data = data.replace('随机数', str(random.randint(0, 9999999999999)))
+            return deal_parameters(data,request_method,request_url)
+        if '数据源目录' in data:
+            data = data.replace('数据源目录', str(get_resourceid(resource_type[0])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据集目录' in data:
+            data = data.replace('数据集目录', str(get_resourceid(resource_type[1])))
+            return deal_parameters(data,request_method,request_url)
+        if '元数据目录' in data:
+            data = data.replace('元数据目录',  str(get_resourceid(resource_type[2])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据计算目录' in data:
+            data = data.replace('数据计算目录',  str(get_resourceid(resource_type[3])))
+            return deal_parameters(data,request_method,request_url)
+        if '采集机目录' in data:
+            data = data.replace('采集机目录',  str(get_resourceid(resource_type[4])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据采集目录' in data:
+            data = data.replace('数据采集目录',  str(get_resourceid(resource_type[5])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据存储目录' in data:
+            data = data.replace('数据存储目录',  str(get_resourceid(resource_type[6])))
+            return deal_parameters(data,request_method,request_url)
+        if '任务视图目录' in data:
+            data = data.replace('任务视图目录',  str(get_resourceid(resource_type[7])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资产目录' in data:
+            data = data.replace('数据资产目录',  str(get_resourceid(resource_type[8])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据共享目录' in data:
+            data = data.replace('数据共享目录',  str(get_resourceid(resource_type[9])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据安全目录' in data:
+            data = data.replace('数据安全目录',  str(get_resourceid(resource_type[10])))
+            return deal_parameters(data,request_method,request_url)
+        if '文件编目目录' in data:
+            data = data.replace('文件编目目录',  str(get_resourceid(resource_type[11])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据标准目录' in data:
+            data = data.replace('数据标准目录',  str(get_resourceid(resource_type[12])))
+            return deal_parameters(data,request_method,request_url)
+        if '&&' in data:
+            new_data = str(data).split('&&')
+            if request_method == "PUT":
+                if len(new_data)>2:
+                    if '数据源主键' in data:
+                        data = data.replace('数据源主键', str(get_datasource(data_source[0],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    elif '标签主键' in data:
+                        data = data.replace('标签主键', str(get_tags(tag_type[1],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
+                    elif '数据集主键' in data:
+                        data = data.replace('数据集主键', str(get_dataset(data_source[4],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    else:
+                        return new_data[0]
+                else:
+                    try:
+                        response = requests.post(url=host+new_data[1], headers=get_headers(host), data=new_data[0])
+                        new_data = json.loads(response.text)["content"]["list"][0]
+                        log.info("查询接口响应数据:{}".format(new_data))
+                        return new_data
+                    except Exception as e:
+                        log.error("执行过程中出错{}".format(e))
+            else:
+                if len(new_data)>2:
+                    if '数据源主键' in data:
+                        data = data.replace('数据源主键', str(get_schema(data_source[0],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据源名称' in data:
+                        data = data.replace('数据源名称', str(get_schema(data_source[1],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '元数据主键' in data:
+                        data = data.replace('元数据主键', str(get_schema(data_source[2],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '元数据名称' in data:
+                        data = data.replace('元数据名称', str(get_schema(data_source[3],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据集主键' in data:
+                        data = data.replace('数据集主键', str(get_schema(data_source[4],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据集名称' in data:
+                        data = data.replace('数据集名称', str(get_schema(data_source[5],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '租户主键' in data:
+                        data = data.replace('租户主键', str(get_schema(data_source[6],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '管理员主键' in data:
+                        data = data.replace('管理员主键', str(get_schema(data_source[7],new_data[2])))
+                        return deal_parameters(data,request_method,request_url)
+                else:
+                    if '数据源主键' in data:
+                        data = data.replace('数据源主键', str(get_datasource(data_source[0],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据源名称' in data:
+                        data = data.replace('数据源名称', str(get_datasource(data_source[1],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '标签主键' in data:
+                        data = data.replace('标签主键', str(get_tags(tag_type[0],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
         if 'select id from' in data:
             log.info("开始执行语句:{}".format(data))
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -35,88 +127,29 @@ def deal_parameters(data):
                 if len(data_select_result) > 1:
                     for i in range(len(data_select_result)):
                         new_data.append(data_select_result[i]["id"])
-                    if "select id from merce_dss" in data:
-                        return new_data
-                    elif "select id from merce_schema" in data:
-                        return new_data
-                    elif "select id from merce_flow mf" in data:
-                        return new_data
-                    elif "select id from merce_tag" in data:
-                        return new_data
-                    elif "select id from merce_udf mu" in data:
-                        return new_data
-                    elif "select id from merce_user mu" in data:
-                        return new_data
-                    elif "select id from merce_role mr" in data:
-                        return new_data
-                    elif "select id from merce_jar_package_info mjpi" in data:
-                        return new_data
-                    elif "select id from merce_dataset where name like 'gjb_test%'" in data:
-                        return new_data
-                    elif "select id from merce_tag mt" in data:
-                        return new_data
-                    else:
-                        list_data = ','.join([str(i) for i in new_data])
-                        return list_data
-                elif "select id from merce_schema where name like 'gtest_mysql_0428_training_%'" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_flow_execution mfe" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "'select id from merce_resource_dir where name like 'api_test%' ORDER BY create_time desc limit 1;'" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_user mu" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_role mr" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_fileset order by create_time limit 1" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from sync_job where name like 'collector_ftp%' order by create_time desc limit 1" in data:
-                    new_data = data_select_result[0]["id"]
-                    return new_data
-                elif "select id from sync_job where collecter_id = 'c1' ORDER BY last_modified_time desc limit 1" in data:
-                    new_data = data_select_result[0]["id"]
-                    return new_data
-                elif "select id from sync_job" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_udf mu" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_jar_package_info mjpi" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_custom_step mcs" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_flow_schedule mfs" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_sdb ms" in data:
-                    new_data.append(data_select_result[0]["id"])
-                    return new_data
-                elif "select id from merce_tag mt" in data:
-                    new_data.append(data_select_result[0]["id"])
                     return new_data
                 else:
                     try:
-                        data = data_select_result[0]["id"]
-                        return data
+                        if "{}" in request_url:
+                          data = data_select_result[0]["id"]
+                          return data
+                        else:
+                            new_data.append(data_select_result[0]["id"])
+                            return new_data
                     except:
                         log.error("请确认SQL语句")
+            else:
+                log.error("sql查询结果为空！")
         if 'select output_data_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
                     data = data_select_result[0]["output_data_id"]
-                    return deal_parameters(data)
+                    return deal_parameters(data,request_method,request_url)
                 except:
                     log.error("请确认第%d行SQL语句")
+            else:
+                log.error("sql查询结果为空！")
         if 'SELECT enabled, id FROM' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if len(data_select_result) > 1:
@@ -174,20 +207,26 @@ def deal_parameters(data):
             if data_select_result:
                 try:
                     data = data_select_result[0]["name"]
-                    return deal_parameters(data)
+                    return deal_parameters(data,request_method,request_url)
                 except:
                     log.error("请确认SQL语句")
+            else:
+                log.error("sql查询结果为空！")
         if 'select execution_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
                     data = data_select_result[0]["execution_id"]
-                    return deal_parameters(data)
+                    return deal_parameters(data,request_method,request_url)
                 except:
                     log.error("请确认SQL语句")
             else:
-                return
+                log.error("sql查询结果为空！")
         else:
-            return data
+            if '&&' in data:
+                new_data = data.split('&&')[0]
+                return new_data
+            else:
+                return data
     else:
         return data

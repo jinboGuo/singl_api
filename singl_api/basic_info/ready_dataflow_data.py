@@ -198,13 +198,11 @@ def get_dataflow_data(flow_name):
 
 def query_dataflow_data(flow_name):
     try:
-        sql = "select id,flow_type from merce_flow where name ='%s' order by create_time desc limit 1" % flow_name
+        sql = "select id from merce_flow where name ='%s' order by create_time desc limit 1" % flow_name
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        data = {"fieldList": [{"logicalOperator": "AND", "fieldName": "flowType", "comparatorOperator": "EQUAL",
-                               "fieldValue": flow_info[0]["flow_type"]},
-                              {"logicalOperator": "AND", "fieldName": "flowId", "comparatorOperator": "EQUAL",
-                               "fieldValue": flow_info[0]["id"]}],
-                "sortObject": {"field": "lastModifiedTime", "orderDirection": "DESC"}, "offset": 0, "limit": 8}
+        flow_id=[]
+        flow_id.append(flow_info[0]["id"])
+        data = {"fieldGroup":{"type":"FieldGroup","group":True,"andOr":"AND","fields":[{"type":"Field","group":False,"andOr":"AND","name":"name","oper":"LIKE","value":["%auto_apitest_df%"]},{"type":"Field","group":False,"andOr":"AND","name":"flowType","oper":"EQUAL","value":["dataflow"]},{"type":"Field","group":False,"andOr":"AND","name":"flowId","oper":"EQUAL","value":flow_id}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":20,"pageable":True}}
         return data
     except Exception as e:
         log.error("异常信息：%s" % e)

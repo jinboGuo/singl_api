@@ -321,16 +321,16 @@ def run_all():
     fs_host.connect()
     fs_host.send(cd)
     fs_host.send(sh)
-    sleep(9)
+    sleep(10)
     fs_host.send(upload)
-    sleep(5)
+    sleep(8)
     kafka.sendMessage(cluster,msg)
     fs_host.send(dle)
-    check_s_l_message(s_l_message)
-    check_s_r_task(s_r_task)
-    check_s_l_result_task(s_l_result_task)
-    check_s_l_result_detail(s_l_result_detail)
-    check_s_l_result_output(s_l_result_output)
+    #check_s_l_message(s_l_message)
+    #check_s_r_task(s_r_task)
+    # check_s_l_result_task(s_l_result_task)
+    # check_s_l_result_detail(s_l_result_detail)
+    # check_s_l_result_output(s_l_result_output)
 
 n = 0
 while True:

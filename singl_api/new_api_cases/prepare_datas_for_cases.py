@@ -865,8 +865,10 @@ def query_dataset(data):
     try:
         sql = "select id from merce_resource_dir where creator='admin' and name='Datasets' and parent_id is NULL"
         Datasets = ms.ExecuQuery(sql.encode('utf-8'))
+        resource_id=[]
+        resource_id.append(Datasets[0]["id"])
         if 'name' == data:
-            new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"name","comparatorOperator":"LIKE","fieldValue":"%gjb%"},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
+            new_data = {"fieldGroup":{"type":"FieldGroup","group":True,"andOr":"AND","fields":[{"type":"Field","group":False,"andOr":"AND","name":"name","oper":"LIKE","value":["%multi%"]},{"type":"Field","group":False,"andOr":"AND","name":"parentId","oper":"EQUAL","value":resource_id}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":20,"pageable":True}}
             return new_data
         elif 'lastModifiedTime' == data:
             new_data = {"fieldList":[{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"GREATER_THAN","fieldValue":1635696000000},{"logicalOperator":"AND","fieldName":"lastModifiedTime","comparatorOperator":"LESS_THAN","fieldValue":1704038399000},{"logicalOperator":"AND","fieldName":"parentId","comparatorOperator":"EQUAL","fieldValue":Datasets[0]["id"]}],"sortObject":{"field":"lastModifiedTime","orderDirection":"DESC"},"offset":0,"limit":8}
@@ -1745,6 +1747,15 @@ def update_custom_step(data):
     except Exception as e:
         log.error("异常信息：%s" % e)
 
+def update_rtcjob_setting(data):
+    try:
+        sql = "select id, tenant_id, owner, creator, last_modifier from merce_rtc_job_settings where name like '%s%%%%' order by create_time desc limit 1" % data
+        rtcjob_info = ms.ExecuQuery(sql.encode('utf-8'))
+        new_data = {"tenantId":rtcjob_info[0]["tenant_id"],"owner":rtcjob_info[0]["owner"],"name":"gjb_rtc随机数","enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":"","engine":"flink","debug":False,"description":"","runtimeSettings":{"driverMemory":1024,"executorMemory":1024,"kerberosKeytab":"","useLatestState":False,"executorCores":1,"parallelism":1,"clusterId":"cluster1","allowNonRestoredState":False,"flinkTableOpts":[],"savepointDir":"","kerberosJaasConf":"","master":"yarn","flinkOpts":[],"javaOpts":"","lineageEnable":True,"kerberosEnable":False,"proxyUser":"","nodeLabel":"","queue":"root.default","kerberosPrincipal":""},"checkpointSettings":{"checkpointStateBackend":"filesystem","checkpointEnable":True,"checkpointAsync":True,"checkpointInterval":10000,"checkpointUnaligned":False,"checkpointMinpause":5000,"checkpointIncremental":False,"checkpointExternalSave":True,"checkpointTimeout":600000,"checkpointMode":"exactly_once","checkpointDir":"hdfs:///tmp/flink/checkpoints"},"restartStrategySettings":{"restartDelayInterval":10,"restartStrategy":"FixedDelayRestart","restartInterval":60,"restartMaxAttempts":3},"latencyTrackingSettings":{"latencyTrackingEnable":False,"latencyTrackingInterval":60000}}
+        deal_random(new_data)
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 def get_fs(flag):
     """
