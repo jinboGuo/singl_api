@@ -2,17 +2,16 @@
 import json
 import os
 import re
+import time
 from util import myddt
 import xlrd
 from openpyxl import load_workbook
 import requests
 from util.format_res import dict_res
-from basic_info.setting import Compass_MySQL_CONFIG, compass_host, compass_sheet, compass_cases_dir
-from util.Open_DB import MYSQL
+from basic_info.setting import compass_host, compass_sheet, compass_cases_dir, log
 from basic_info.get_auth_token import get_headers_root, get_headers
-from new_api_cases.compass_deal_parameters import deal_parameters, time
+from new_api_cases.compass_deal_parameters import deal_parameters
 import unittest
-from util.logs import Logger
 from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add_job, add_jobSingle, update_jobSingle, \
     add_jobMap, update_jobMap, update_re, query_reth, add_reth, update_reth, query_rethExt, update_rethExt, add_rethExt, \
     get_asset_directory, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
@@ -20,7 +19,6 @@ from new_api_cases.compass_prepare_datas import update_job_pool, update_job, add
     dc_collecter_group, dc_collecter, dc_task, merce_dataflow, publish_flow, get_jobview_history, execution_task, \
     qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history, delete_asset_directory
 
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 cases_dir = compass_cases_dir
 case_table = load_workbook(cases_dir)
 compass_master=compass_sheet
@@ -29,7 +27,6 @@ all_rows = case_table_sheet.max_row
 jar_dir_push = os.path.join(os.path.abspath('.'),'attachment\Scheduler_import.xlsx')
 jar_dir = os.path.join(os.path.abspath('.'),'attachment\mysql-connector-java-8.0.2801.jar')
 host = compass_host
-log = Logger().get_log()
 
 
 def deal_request_method():

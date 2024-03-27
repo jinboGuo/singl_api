@@ -2,9 +2,9 @@
 import json
 from json.decoder import JSONDecodeError
 import time
-from util.logs import Logger
+from basic_info.setting import log
 
-log = Logger().get_log()
+
 # 将res从str转化为dict
 def dict_res(res):
     if res:

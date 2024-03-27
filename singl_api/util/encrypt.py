@@ -21,12 +21,8 @@ def encrypt_rf(enstr):
 def encrypt_decode(enstr):
     """解密方法：base64"""
     bytes_enstr = bytes(enstr, encoding="utf8")
-    # print('bytes_enstr:',bytes_enstr)
     test_enstr = base64.b64decode(bytes_enstr)
-    # print('test_enstr',test_enstr)
-    # print(type(test_enstr))
     str_enstr = MyEncoder().my_encoder(test_enstr)
-    # print('str_enstr',str_enstr)
     return str_enstr
 
 def parameter_ungzip(parameters):

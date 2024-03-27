@@ -2,13 +2,8 @@ import json
 import random
 import requests
 from basic_info.get_auth_token import get_headers
-from basic_info.setting import Dsp_MySQL_CONFIG, resource_type, data_source, dsp_host, tag_type
-from util.Open_DB import MYSQL
+from basic_info.setting import resource_type, data_source, dsp_host, tag_type, ms, log
 from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_dataset, get_datasource
-from util.logs import Logger
-
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"], Dsp_MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 
 def deal_parameters(data,request_method,request_url):
     if data:

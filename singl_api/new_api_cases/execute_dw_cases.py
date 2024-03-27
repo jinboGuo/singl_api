@@ -10,12 +10,10 @@ import requests
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from basic_info.ready_dataflow_data import delete_autotest_dw
 from util.format_res import dict_res
-from basic_info.setting import Dw_MySQL_CONFIG, dw_host, dw_sheet, dw_cases_dir
-from util.Open_DB import MYSQL
+from basic_info.setting import dw_host, dw_sheet, dw_cases_dir, log
 from basic_info.get_auth_token import get_headers_root, get_headers
 from new_api_cases.dw_deal_parameters import deal_parameters
 import unittest
-from util.logs import Logger
 from new_api_cases.dw_prepare_datas import update_business_data, \
     add_subject_data, update_subject_data, query_subject_data, add_projects_data, update_projects_data, update_tag_data, \
     add_taggroup_data, update_taggroup_data, update_namerule_data, rel_product_taggroup, update_model_category, \
@@ -34,13 +32,11 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     update_asset, get_sql_analyse_statement_id, get_sql_analyse_dataset_info, get_sql_execte_statement_id, \
     create_sql_asset, query_asset, sql_analyse_data, batch_create_asset, get_improt_data
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
 cases_dir = dw_cases_dir
 case_table = load_workbook(cases_dir)
 dw_master=dw_sheet
 case_table_sheet = case_table.get_sheet_by_name(dw_master)
 all_rows = case_table_sheet.max_row
-log = Logger().get_log()
 host = dw_host
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\import_autotest_api_df.woven')
 

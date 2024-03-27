@@ -6,20 +6,16 @@ import requests
 from basic_info.get_auth_token import get_headers
 from new_api_cases.compass_deal_parameters import deal_random
 from util.format_res import dict_res
-from basic_info.setting import MySQL_CONFIG
-from util.Open_DB import MYSQL
+from basic_info.setting import ms, log
 from basic_info.setting import host
 from selenium import webdriver
-import random
-from util.logs import Logger
 from util.timestamp_13 import data_now
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\import_dataflow_steps.woven')
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\mutil_sink_storage.woven')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\multi_rtc_steps.woven')
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-log = Logger().get_log()
+
 
 def get_job_tasks_id(job_id):
     url = '%s/api/woven/collectors/%s/tasks' % (host, job_id)

@@ -1,16 +1,9 @@
 import requests, json
 from basic_info.get_auth_token import get_headers
-from util.Open_DB import MYSQL
-from util.logs import Logger
-from basic_info.setting import  MySQL_CONFIG
+from basic_info.setting import log, ms
 from new_api_cases.dw_prepare_datas import sql_analyse_data
 from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
-
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
-
-log = Logger().get_log()
-
 
 # datasetId存在时
 def statementId(host, param):

@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
-from util.logs import Logger
 
-log = Logger().get_log()
+from basic_info.setting import log
+
 
 def get_host(url):
     try:

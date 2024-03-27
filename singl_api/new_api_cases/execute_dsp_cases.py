@@ -9,12 +9,10 @@ from openpyxl import load_workbook
 import requests
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res
-from basic_info.setting import Dsp_MySQL_CONFIG, dsp_sheet, dsp_cases_dir
-from util.Open_DB import MYSQL
+from basic_info.setting import dsp_sheet, dsp_cases_dir, log
 from basic_info.get_auth_token import get_headers, get_headers_root
 from new_api_cases.dsp_deal_parameters import deal_parameters
 import unittest
-from util.logs import Logger
 from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pull_data, cust_data_source, \
     appconfig_data, resource_data, push_resource_data_open, \
     resource_data_pull_es, pull_resource_data_open, \
@@ -23,14 +21,11 @@ from new_api_cases.dsp_prepare_datas import admin_flow_id, customer_flow_id, pul
     update_user, update_role, enable_role, enable_user, set_user_role, new_dir, rename_dir
 from basic_info.setting import dsp_host
 
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"],
-           Dsp_MySQL_CONFIG["PORT"])
 cases_dir = dsp_cases_dir
 case_table = load_workbook(cases_dir)
 dsp_master=dsp_sheet
 case_table_sheet = case_table.get_sheet_by_name(dsp_master)
 all_rows = case_table_sheet.max_row
-log = Logger().get_log()
 host = dsp_host
 jar_dir_pull = os.path.join(os.path.abspath('.'), 'attachment\pullService_2021.xlsx')
 jar_dir_push = os.path.join(os.path.abspath('.'), 'attachment\pushService_2021.xlsx')

@@ -1,18 +1,11 @@
 from elasticsearch import Elasticsearch
-from basic_info.setting import ES
+from basic_info.setting import ES, log
 from new_api_cases.prepare_datas_for_cases import filesets_id
-from util.logs import Logger
 
-log = Logger().get_log()
-
-# 创建elasticsearch客户端
 es = Elasticsearch(
     ES,
-    # 启动前嗅探es集群服务器
     sniff_on_start=True,
-    # es集群服务器结点连接异常时是否刷新es节点信息
     sniff_on_connection_fail=True,
-    # 每60秒刷新节点信息
     sniffer_timeout=60
 )
 

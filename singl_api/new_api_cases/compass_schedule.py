@@ -1,8 +1,7 @@
 from time import sleep
-from basic_info.setting import Compass_MySQL_CONFIG, Compass_scheduler
+from basic_info.setting import Compass_MySQL_CONFIG, Compass_scheduler, ms, log
 from util.Open_DB import MYSQL
 from util.conn_linux import Linux
-from util.logs import Logger
 from util.comm_util import operateKafka
 
 kafka =operateKafka()
@@ -18,8 +17,6 @@ fs_scheduler = {
     "PASSWORD": 'merce@9595'
 }
 
-log = Logger().get_log()
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 host = Linux(Compass_scheduler["HOST"], Compass_scheduler["USER"], Compass_scheduler["PASSWORD"])
 fs_host = Linux(fs_scheduler["HOST"], fs_scheduler["USER"], fs_scheduler["PASSWORD"])
 

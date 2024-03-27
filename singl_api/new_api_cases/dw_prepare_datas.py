@@ -5,14 +5,10 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from new_api_cases.dw_deal_parameters import deal_random
-from basic_info.setting import Dw_MySQL_CONFIG, dw_host
-from util.Open_DB import MYSQL
-from util.get_tenant import get_tenant, get_owner
+from basic_info.setting import log, ms
+from util.get_deal_parameter import get_tenant_id, get_owner
 from util.timestamp_13 import datatime_now, data_now
-from util.logs import Logger
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\import_autotest_api_df.woven')
 
 def query_subject_data(data):
@@ -30,7 +26,7 @@ def update_business_data(data):
         sql = "select id from dw_business where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         business_id = flow_info[0]["id"]
-        new_data = {"id": business_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "api_auto_business随机数", "alias": "api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
+        new_data = {"id": business_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "api_auto_business随机数", "alias": "api_business随机数","abbr":"api_auto_business随机数","description":"api_auto_business","dt":"dt","bizDate":"yyyyMMddHH","flowId":"","flowName":"","schedulerId":"","physicalStatus":"READY","deployStatus":"offline"}
         deal_random(new_data)
         return new_data, business_id
     except Exception as e:
@@ -52,7 +48,7 @@ def update_subject_data(data):
         sql = "select id,business_id from dw_subject where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         subject_id, business_id = flow_info[0]["id"], flow_info[0]["business_id"]
-        new_data = {"id": subject_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin","lastModifiedTime": datatime_now(), "name": "api_auto_subject随机数", "alias": "api_auto_subject随机数","abbr":"api_auto_subject随机数", "businessId": business_id, "parentId":"0","description":"api_auto_subject","children":[],"selfCode":"758639635533398016","parentCode":"0"}
+        new_data = {"id": subject_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin","lastModifiedTime": datatime_now(), "name": "api_auto_subject随机数", "alias": "api_auto_subject随机数","abbr":"api_auto_subject随机数", "businessId": business_id, "parentId":"0","description":"api_auto_subject","children":[],"selfCode":"758639635533398016","parentCode":"0"}
         deal_random(new_data)
         return new_data, subject_id
     except Exception as e:
@@ -74,7 +70,7 @@ def update_projects_data(data):
         sql = "select id,business_id from dw_project where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         project_id, business_id = flow_info[0]["id"], flow_info[0]["business_id"]
-        new_data = {"id": project_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin","lastModifiedTime": datatime_now(), "name": "api_auto_projects随机数", "alias": "api_projects", "abbr": "api_projects随机数", "businessId": business_id, "description": "api_auto_projects"}
+        new_data = {"id": project_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin","lastModifiedTime": datatime_now(), "name": "api_auto_projects随机数", "alias": "api_projects", "abbr": "api_projects随机数", "businessId": business_id, "description": "api_auto_projects"}
         deal_random(new_data)
         return new_data, project_id
     except Exception as e:
@@ -85,7 +81,7 @@ def update_tag_data(data):
         sql = "select id from dw_tagdef where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         tag_id = flow_info[0]["id"]
-        new_data = {"id": tag_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "api_auto_tag随机数", "alias": "api_tag随机数", "abbr": "", "parentTagOption": "", "options": [{"name":"大","alias":"big","orderNum":""},{"name":"小","alias":"small","orderNum":""},{"name":"长","alias":"long","orderNum":""}],"description":"api_auto_tag","scope":"","isSetName":1}
+        new_data = {"id": tag_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "api_auto_tag随机数", "alias": "api_tag随机数", "abbr": "", "parentTagOption": "", "options": [{"name":"大","alias":"big","orderNum":""},{"name":"小","alias":"small","orderNum":""},{"name":"长","alias":"long","orderNum":""}],"description":"api_auto_tag","scope":"","isSetName":1}
         deal_random(new_data)
         return new_data, tag_id
     except Exception as e:
@@ -107,7 +103,7 @@ def update_taggroup_data(data):
         sql = "select id,tag_ids from dw_taggroup where name like '%s%%%%' order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         taggroup_id, tag_id = flow_info[0]["id"], flow_info[0]["tag_ids"]
-        new_data = {"id": taggroup_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name":"api_auto_taggroup随机数","alias":"api_taggroup随机数", "abbr": "", "description": "", "tagIds": tag_id}
+        new_data = {"id": taggroup_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name":"api_auto_taggroup随机数","alias":"api_taggroup随机数", "abbr": "", "description": "", "tagIds": tag_id}
         deal_random(new_data)
         return new_data, taggroup_id
     except Exception as e:
@@ -118,7 +114,7 @@ def update_namerule_data(data):
         sql = "select id from dw_name_rules where alias like '%s%%%%'  order by create_time desc limit 1" % data
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         namerule_id = flow_info[0]["id"]
-        new_data = {"id": namerule_id, "tenantId": get_tenant(dw_host), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "metadata_subject", "alias": "api_auto_namerule随机数","abbr":"api_rule随机数","description":"","rules":"metadata"}
+        new_data = {"id": namerule_id, "tenantId": get_tenant_id(), "owner": get_owner(), "creator": "admin", "createTime": datatime_now(), "lastModifier": "admin", "lastModifiedTime": datatime_now(), "name": "metadata_subject", "alias": "api_auto_namerule随机数","abbr":"api_rule随机数","description":"","rules":"metadata"}
         deal_random(new_data)
         return new_data, namerule_id
     except Exception as e:
@@ -154,7 +150,7 @@ def update_model_category(data):
         model_category = "select id,business_id,project_id,parent_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data
         model_category_info = ms.ExecuQuery(model_category.encode('utf-8'))
         model_category_id = model_category_info[0]["id"]
-        new_data = {"id":model_category_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_model随机数","alias":"","abbr":"","description":"","businessId":model_category_info[0]["business_id"],"projectId":model_category_info[0]["project_id"],"subjectId":"0","parentId":model_category_info[0]["parent_id"],"categorySource":"model","order":1,"children":[],"parentCode":model_category_info[0]["parent_id"],"selfCode":model_category_info[0]["id"]}
+        new_data = {"id":model_category_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_model随机数","alias":"","abbr":"","description":"","businessId":model_category_info[0]["business_id"],"projectId":model_category_info[0]["project_id"],"subjectId":"0","parentId":model_category_info[0]["parent_id"],"categorySource":"model","order":1,"children":[],"parentCode":model_category_info[0]["parent_id"],"selfCode":model_category_info[0]["id"]}
         deal_random(new_data)
         return new_data, model_category_id
     except Exception as e:
@@ -189,7 +185,7 @@ def update_standard_category(data):
         standard_category = "select id,business_id,project_id,parent_id from dw_category where name like '%s%%%%' order by create_time desc limit 1" %data
         standard_category_info = ms.ExecuQuery(standard_category.encode('utf-8'))
         standard_category_id = standard_category_info[0]["id"]
-        new_data = {"id":standard_category_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_standard随机数","alias":"","abbr":"","description":"","businessId":standard_category_info[0]["business_id"],"projectId":standard_category_info[0]["project_id"],"subjectId":"0","parentId":standard_category_info[0]["parent_id"],"categorySource":"standard","order":1,"children":[],"parentCode":standard_category_info[0]["parent_id"],"selfCode":standard_category_info[0]["id"]}
+        new_data = {"id":standard_category_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_standard随机数","alias":"","abbr":"","description":"","businessId":standard_category_info[0]["business_id"],"projectId":standard_category_info[0]["project_id"],"subjectId":"0","parentId":standard_category_info[0]["parent_id"],"categorySource":"standard","order":1,"children":[],"parentCode":standard_category_info[0]["parent_id"],"selfCode":standard_category_info[0]["id"]}
         deal_random(new_data)
         return new_data, standard_category_id
     except Exception as e:
@@ -229,7 +225,7 @@ def update_physical_dataset(data):
         ref_dataset = "select id,business_id,project_id,subject_id,dataset_id,dataset_name,category_id from dw_ref_dataset where name like '%s%%%%' order by create_time desc limit 1" %data
         ref_dataset_info = ms.ExecuQuery(ref_dataset.encode('utf-8'))
         ref_dataset_id = ref_dataset_info[0]["id"]
-        new_data = {"id":ref_dataset_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_order_physical随机数","alias":"订单明细","businessId":ref_dataset_info[0]["business_id"],"subjectId":ref_dataset_info[0]["subject_id"],"projectId":ref_dataset_info[0]["project_id"],"datasetId":ref_dataset_info[0]["dataset_id"],"description":"","datasetName":ref_dataset_info[0]["dataset_name"],"categoryId":ref_dataset_info[0]["category_id"],"fields":[]}
+        new_data = {"id":ref_dataset_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":"api_order_physical随机数","alias":"订单明细","businessId":ref_dataset_info[0]["business_id"],"subjectId":ref_dataset_info[0]["subject_id"],"projectId":ref_dataset_info[0]["project_id"],"datasetId":ref_dataset_info[0]["dataset_id"],"description":"","datasetName":ref_dataset_info[0]["dataset_name"],"categoryId":ref_dataset_info[0]["category_id"],"fields":[]}
         deal_random(new_data)
         return new_data, ref_dataset_id
     except Exception as e:
@@ -317,7 +313,7 @@ def update_model_metadata(data):
         metadata = "select id,business_id,project_id,subject_id,current_info_id,table_spec,category_id from dw_metadata where name like '%s%%%%' order by create_time desc limit 1" %data
         metadata_info = ms.ExecuQuery(metadata.encode('utf-8'))
         metadata_id = metadata_info[0]["id"]
-        new_data = {"id":metadata_id,"name":"api_order_transaction随机数","tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"alias":"api_order_transaction随机数","abbr":"api_order_transaction随机数","businessId":metadata_info[0]["business_id"],"subjectId":metadata_info[0]["subject_id"],"projectId":metadata_info[0]["project_id"],"lastVersion":1,"currentVersion":1,"currentInfoId":metadata_info[0]["current_info_id"],"tableSpec":metadata_info[0]["table_spec"],"description":"","subjectName":"","categoryId":metadata_info[0]["category_id"]}
+        new_data = {"id":metadata_id,"name":"api_order_transaction随机数","tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"alias":"api_order_transaction随机数","abbr":"api_order_transaction随机数","businessId":metadata_info[0]["business_id"],"subjectId":metadata_info[0]["subject_id"],"projectId":metadata_info[0]["project_id"],"lastVersion":1,"currentVersion":1,"currentInfoId":metadata_info[0]["current_info_id"],"tableSpec":metadata_info[0]["table_spec"],"description":"","subjectName":"","categoryId":metadata_info[0]["category_id"]}
         deal_random(new_data)
         return new_data,metadata_id
     except Exception as e:
@@ -429,7 +425,7 @@ def update_primary(data):
         field_defined = "select id,business_id,project_id,subject_id,field_spec,category_id from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[0]
         field_defined_info = ms.ExecuQuery(field_defined.encode('utf-8'))
         field_defined_id = field_defined_info[0]["id"]
-        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":data[2],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableName":"","sourceFieldName":"","fieldSpec":field_defined_info[0]["field_spec"],"fieldType":data[3],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
+        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":data[2],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableName":"","sourceFieldName":"","fieldSpec":field_defined_info[0]["field_spec"],"fieldType":data[3],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
         deal_random(new_data)
         return new_data,field_defined_id
     except Exception as e:
@@ -474,7 +470,7 @@ def update_physical(data):
         physical = "select id,metadata_id,name,alias,relation_id,table_spec,dataset_id,dataset_name,flow_id,flow_name from dw_metadata_to_physical where name like '%s%%%%' order by create_time desc limit 1" %data[0]
         physical_info = ms.ExecuQuery(physical.encode('utf-8'))
         physical_id,metadata_id = physical_info[0]["id"],physical_info[0]["metadata_id"]
-        new_data = {"id":physical_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":physical_info[0]["name"],"alias":physical_info[0]["alias"],"metadataId":physical_info[0]["metadata_id"],"datasetId":physical_info[0]["dataset_id"],"datasetName":physical_info[0]["dataset_name"],"flowId":physical_info[0]["flow_id"],"flowName":physical_info[0]["flow_name"],"relationId":physical_info[0]["relation_id"],"partitionGrain":"300","partitionField":"","storageEngine":"hdfs","physicalCycle":"M_5","description":"","enabled":0,"tableSpec":physical_info[0]["table_spec"]}
+        new_data = {"id":physical_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":physical_info[0]["name"],"alias":physical_info[0]["alias"],"metadataId":physical_info[0]["metadata_id"],"datasetId":physical_info[0]["dataset_id"],"datasetName":physical_info[0]["dataset_name"],"flowId":physical_info[0]["flow_id"],"flowName":physical_info[0]["flow_name"],"relationId":physical_info[0]["relation_id"],"partitionGrain":"300","partitionField":"","storageEngine":"hdfs","physicalCycle":"M_5","description":"","enabled":0,"tableSpec":physical_info[0]["table_spec"]}
         deal_random(new_data)
         return new_data,metadata_id,physical_id
     except Exception as e:
@@ -577,7 +573,7 @@ def update_dimension(data):
         field_defined = "select id,alias,business_id,project_id,subject_id,field_spec,category_id,source_table_id,source_table_name,source_field_name,field_type from dw_field_defined where name like '%s%%%%' order by create_time desc limit 1" %data[0]
         field_defined_info = ms.ExecuQuery(field_defined.encode('utf-8'))
         field_defined_id = field_defined_info[0]["id"]
-        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant(dw_host),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":field_defined_info[0]["alias"],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableId":field_defined_info[0]["source_table_id"],"sourceTableName":field_defined_info[0]["source_table_name"],"sourceFieldName":field_defined_info[0]["source_field_name"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
+        new_data = {"id":field_defined_info[0]["id"],"tenantId":get_tenant_id(),"owner":get_owner(),"creator":"admin","createTime":datatime_now(),"lastModifier":"admin","lastModifiedTime":datatime_now(),"name":data[1],"alias":field_defined_info[0]["alias"],"businessId":field_defined_info[0]["business_id"],"subjectId":field_defined_info[0]["subject_id"],"projectId":field_defined_info[0]["project_id"],"sourceTableId":field_defined_info[0]["source_table_id"],"sourceTableName":field_defined_info[0]["source_table_name"],"sourceFieldName":field_defined_info[0]["source_field_name"],"fieldSpec":field_defined_info[0]["field_spec"],"fieldType":field_defined_info[0]["field_type"],"description":"","categoryId":field_defined_info[0]["category_id"],"categorySource":"standard","length":22}
         deal_random(new_data)
         return new_data,field_defined_id
     except Exception as e:

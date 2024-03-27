@@ -1,19 +1,13 @@
 import json
 import random
-
 import requests
-
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema
-from basic_info.setting import Compass_MySQL_CONFIG, resource_type, tag_type, data_source, compass_host
+from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms
+from basic_info.setting import resource_type, tag_type, data_source, compass_host, log
 import os
-from util.Open_DB import MYSQL
-from util.logs import Logger
 
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-log = Logger().get_log()
 
 def deal_parameters(data,request_method,request_url):
     if data:

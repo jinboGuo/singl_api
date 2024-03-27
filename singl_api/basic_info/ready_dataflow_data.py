@@ -1,11 +1,7 @@
 # coding:utf-8
-from util.Open_DB import MYSQL
-from basic_info.setting import MySQL_CONFIG
-from util.logs import Logger
+from basic_info.setting import ms, log
 from util.timestamp_13 import get_now, data_now, timestamp_utc
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 
 def get_dataflow_data(flow_name):
 

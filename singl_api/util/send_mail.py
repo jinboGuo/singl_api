@@ -8,14 +8,12 @@ from email.mime.base import MIMEBase
 import sys
 from smtplib import SMTP_SSL
 from openpyxl import load_workbook
-from basic_info.setting import result_path, email_user, host_server, pwd
+from basic_info.setting import result_path, email_user, host_server, pwd ,log
 from new_api_cases.execute_cases import cases_dir
-from util.logs import Logger
 
 current_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(current_path)[0]
 sys.path.append(root_path)
-log = Logger().get_log()
 
 
 

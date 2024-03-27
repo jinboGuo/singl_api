@@ -4,15 +4,11 @@ import requests
 from basic_info.get_auth_token import get_headers
 from new_api_cases.dw_deal_parameters import deal_random
 from util.format_res import dict_res
-from basic_info.setting import Dsp_MySQL_CONFIG, dsp_host
-from util.Open_DB import MYSQL
+from basic_info.setting import dsp_host, ms, log
 from util.logs import Logger
 from util.timestamp_13 import get_now, get_tomorrow, data_now
 
-ms = MYSQL(Dsp_MySQL_CONFIG["HOST"], Dsp_MySQL_CONFIG["USER"], Dsp_MySQL_CONFIG["PASSWORD"], Dsp_MySQL_CONFIG["DB"],
-           Dsp_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-log = Logger().get_log()
 
 
 def resource_data_save(data):

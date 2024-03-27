@@ -3,13 +3,9 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from basic_info.setting import Dw_MySQL_CONFIG, resource_type, data_source, tag_type, dw_host
-from util.Open_DB import MYSQL
-from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset
-from util.logs import Logger
+from basic_info.setting import resource_type, data_source, tag_type, dw_host, log
+from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset, ms
 
-ms = MYSQL(Dw_MySQL_CONFIG["HOST"], Dw_MySQL_CONFIG["USER"], Dw_MySQL_CONFIG["PASSWORD"], Dw_MySQL_CONFIG["DB"], Dw_MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 
 def deal_parameters(data,request_method,request_url):
         if data:

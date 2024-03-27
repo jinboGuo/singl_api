@@ -1,10 +1,39 @@
 from basic_info.setting import MySQL_CONFIG ,tenant_name
 from util.Open_DB import MYSQL
-from util.get_tenant import get_tenant_id
 from util.logs import Logger
 
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
 log = Logger().get_log()
+
+
+
+def get_tenant_id():
+    """
+    :return: tenant_id
+    """
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
+    try:
+      sql = "select id from merce_tenant where name='%s' order by create_time desc limit 1" % tenant_name
+      tenant_id = ms.ExecuQuery(sql)
+      tenant_id = tenant_id[0]["id"]
+      return str(tenant_id)
+    except Exception as e:
+        return log.error("没有查询到租户id：%s" % e)
+
+
+def get_owner():
+    """
+    :return: 管理员的id
+    """
+    tenant_id = get_tenant_id()
+    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
+    try:
+      sql = "select id from merce_user where tenant_id='%s' order by create_time desc" % tenant_id
+      user = ms.ExecuQuery(sql)
+      owner = user[0]["id"]
+      return str(owner)
+    except Exception as e:
+        return log.error("没有查询到管理员id：%s" % e)
 
 def get_resourceid(resource_type):
     """
@@ -12,7 +41,7 @@ def get_resourceid(resource_type):
     若确少resource_type,可以在setting配置文件里resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir",
     "poseidon_collect_dir","poseidon_task_dir"....]添加。
     """
-    tenant_id = get_tenant_id(tenant_name)
+    tenant_id = get_tenant_id()
     try:
         sql = "select id from merce_resource_dir where  tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL"%(tenant_id,resource_type)
         resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
@@ -25,7 +54,7 @@ def get_datasource(data_source,data):
     """
     获取数据源id、name
     """
-    tenant_id = get_tenant_id(tenant_name)
+    tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dss where  tenant_id='%s' and name ='%s' ORDER BY create_time desc" %(tenant_id,data)
         datasource = ms.ExecuQuery(sql.encode('utf-8'))
@@ -45,7 +74,7 @@ def get_schema(data_source,data):
     """
     获取数据源id、数据源name、元数据id、元数据name、数据集id、数据集name、租户id、owner
     """
-    tenant_id = get_tenant_id(tenant_name)
+    tenant_id = get_tenant_id()
     try:
         sql = "SELECT ms.id as schema_id, ms.name as schema_name, ms.data_source_ids,ms.data_source_names ,ms.tenant_id,ms.owner,md.id as dataset_id,md.name as dataset_name FROM merce_schema ms left join merce_dataset md on ms.id = md.schema_id where  ms.tenant_id ='%s' and ms.name ='%s' order by md.create_time limit 1" %(tenant_id,data)
         schema = ms.ExecuQuery(sql.encode('utf-8'))
@@ -87,7 +116,7 @@ def get_dataset(data_source,data):
     """
     获取数据源id、name
     """
-    tenant_id = get_tenant_id(tenant_name)
+    tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dataset where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
@@ -107,7 +136,7 @@ def get_tags(tag_type,data):
     """
     获取数据源id、name
     """
-    tenant_id = get_tenant_id(tenant_name)
+    tenant_id = get_tenant_id()
     try:
         sql = "select id from merce_tag where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         tag = ms.ExecuQuery(sql.encode('utf-8'))
@@ -131,3 +160,5 @@ def get_tags(tag_type,data):
             log.error("标签没有数据！")
     except Exception as e:
         log.error("没有获取到标签id：%s" % e)
+
+

@@ -1,7 +1,10 @@
 # coding:utf-8
 import os
+from util.logs import Logger
+from util.Open_DB import MYSQL
 from util.encrypt import encrypt_rf
 
+log = Logger().get_log()
 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
@@ -109,9 +112,14 @@ MySQL_CONFIG1 = {
     "DB": 'test',
     'case_db': 'test'}
 
+"""获取数据库连接"""
+ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"], MySQL_CONFIG1["PORT"])
+
+
 """
 -------95-baymax环境使用-------
- sheet_name:baymax_master
+ baymax_cases_dir:case文件的地址
+ baymax_sheet:case文件的sheet页名称
  HOST: "http://192.168.1.95:8515"
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
@@ -126,7 +134,8 @@ MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'merce_162',
     'case_db': 'test'}
-
+"""获取数据库连接"""
+ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 
 
 
@@ -181,4 +190,4 @@ MY_LOGIN_INFO_ROOT = {
 """
 elasticsearch集群服务器的地址
 """
-#ES = ['http://192.168.1.95:9200/']
+ES = ['http://192.168.1.95:9200/']

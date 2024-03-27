@@ -5,11 +5,8 @@ from util.send_mail import baymax_main
 import datetime
 from new_api_cases.execute_dw_cases import deal_request_method
 from new_api_cases.execute_dw_cases import CheckResult
-from basic_info.setting import dw_host, dw_sheet, receivers_test
-#from basic_info.setting import receivers_list
-from util.logs import Logger
+from basic_info.setting import dw_host, dw_sheet, receivers_test,log,receivers_list
 
-log = Logger().get_log()
 
 if __name__ == '__main__':
     """
@@ -17,11 +14,10 @@ if __name__ == '__main__':
     可自动更具测试目录start_dir匹配查找测试用例文件（test*.py），
     并将查找到的测试用例组装到测试套件
     """
-    Log = Logger().get_log()
-    Log.info("--------开始执行用例-------")
+    log.info("--------开始执行用例-------")
     start_time = datetime.datetime.now()
-    Log.info("开始时间：%s" % start_time)
-    Log.info("--------开始执行api case-------")
+    log.info("开始时间：%s" % start_time)
+    log.info("--------开始执行api case-------")
 
     """执行API用例并对比结果"""
     deal_request_method()
@@ -30,9 +26,9 @@ if __name__ == '__main__':
     result = BeautifulReport(test_suite)
     result.report(filename='api_result', description='自动化测试结果汇总', report_dir='Reports',theme='theme_cyan')
     stop_time = datetime.datetime.now()
-    Log.info("结束时间：%s" % stop_time)
+    log.info("结束时间：%s" % stop_time)
     total_time = stop_time - start_time
-    Log.info("总耗时：%s" % total_time)
+    log.info("总耗时：%s" % total_time)
 
     """发送邮件"""
     baymax_main(dw_host, receivers_test, dw_sheet, start_time,total_time)

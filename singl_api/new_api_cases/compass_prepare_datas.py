@@ -2,15 +2,11 @@
 import json
 import os
 from new_api_cases.compass_deal_parameters import deal_random
-from basic_info.setting import Compass_MySQL_CONFIG, MySQL_CONFIG1, hdfs_url
-from util.Open_DB import MYSQL
+from basic_info.setting import MySQL_CONFIG1, hdfs_url, ms, log
 from util.encrypt import parameter_ungzip
 from util.timestamp_13 import data_now
-from util.logs import Logger
 
-ms = MYSQL(Compass_MySQL_CONFIG["HOST"], Compass_MySQL_CONFIG["USER"], Compass_MySQL_CONFIG["PASSWORD"], Compass_MySQL_CONFIG["DB"], Compass_MySQL_CONFIG["PORT"])
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-log = Logger().get_log()
 
 def update_job_pool(data):
     try:

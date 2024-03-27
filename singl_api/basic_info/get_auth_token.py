@@ -1,10 +1,8 @@
 # coding:utf-8
 import requests
-from basic_info.setting import MY_LOGIN_INFO_compass, MY_LOGIN_INFO_DAM, MY_LOGIN_INFO_ROOT
+from basic_info.setting import MY_LOGIN_INFO_compass, MY_LOGIN_INFO_DAM, MY_LOGIN_INFO_ROOT, log
 from util.format_res import dict_res
-from util.logs import Logger
 
-log = Logger().get_log()
 def get_auth_token():
     """
     :return: 获取登录后返回的token

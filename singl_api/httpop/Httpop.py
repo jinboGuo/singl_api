@@ -1,8 +1,8 @@
 import time
 import requests
-from util.logs import Logger
 
-log = Logger().get_log()
+from basic_info.setting import log
+
 
 def failrun(n=3):
     def decorator(func):

@@ -2,9 +2,7 @@ import os
 import socket
 import time
 from kafka import KafkaProducer
-from util.logs import Logger
-from basic_info.setting import MySQL_CONFIG1
-from util.Open_DB import MYSQL
+from basic_info.setting import log, ms_conn, MySQL_CONFIG1
 import base64
 import xmltodict
 from pykafka import KafkaClient
@@ -13,8 +11,6 @@ import requests
 from faker import Faker
 from util.timestamp_13 import data_now, hour_stamp, hour_slice, timestamp_now, timestamp_utc
 
-log = Logger().get_log()
-ms = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"], MySQL_CONFIG1["PORT"])
 fake = Faker("zh_CN")  # 初始化，可生成中文数据
 
 
@@ -195,7 +191,7 @@ def batch_create_table():
           `street2` text,
           `street` text
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8'''.format(name)
-        ms.ExecuNoQuery(sql)
+        ms_conn.ExecuNoQuery(sql)
     record_end_time = datetime.datetime.now()
     # 表记录生成时间
     log.info("表生成结束时间：%s" % record_end_time)
@@ -227,7 +223,7 @@ def batch_insert_table():
     start_time = datetime.datetime.now()
     log.info("数据插入开始时间：%s" % start_time)
     log.info("批量数据插入中.....")
-    ms.ExecutManyInsert(sql, values_list)
+    ms_conn.ExecutManyInsert(sql, values_list)
     # 记录执行完成时间
     end_time = datetime.datetime.now()
     log.info("数据插入结束时间：%s" % end_time)

@@ -3,12 +3,8 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset
-from util.logs import Logger
-from basic_info.setting import MySQL_CONFIG, resource_type, host, data_source, tag_type
-from util.Open_DB import MYSQL
+from basic_info.setting import resource_type, host, data_source, tag_type, ms, log
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 
 def deal_parameters(data,request_method,request_url):
     if data:

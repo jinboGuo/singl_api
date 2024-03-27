@@ -11,7 +11,7 @@ from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from basic_info.get_auth_token import get_headers, get_headers_root, get_auth_token
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, query_dataflow_data, \
     get_schedulers_data
-from basic_info.setting import MySQL_CONFIG, baymax_sheet, host, baymax_cases_dir
+from basic_info.setting import baymax_sheet, host, baymax_cases_dir, log
 from httpop.Httpop import Httpop
 from new_api_cases.deal_parameters import deal_parameters
 from new_api_cases.dw_prepare_datas import sql_analyse_data, woven_dir, get_improt_data
@@ -25,14 +25,11 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
     update_user, enable_user, enable_role, query_flow_data, update_db_driver, update_custom_step, get_improt_dataflow, \
     query_schema, update_rtcjob_setting
 from util import myddt
-from util.Open_DB import MYSQL
 from util.comm_util import operateKafka
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
-from util.logs import Logger
 
 
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 cases_dir = baymax_cases_dir
 case_table = load_workbook(cases_dir)
 baymax_master=baymax_sheet
@@ -45,7 +42,6 @@ jar_custom = os.path.join(os.path.abspath('.'),'attachment\merce-custom-rtc-step
 woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\import_dataflow_steps.woven')
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\mutil_sink_storage.woven')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\multi_rtc_steps.woven')
-log = Logger().get_log()
 minio_data = []
 httpop = Httpop()
 host = host
