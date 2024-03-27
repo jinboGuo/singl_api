@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化框架，邮件发送" />
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化框架，邮件发送">
+      <change afterPath="$PROJECT_DIR$/util/myddt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

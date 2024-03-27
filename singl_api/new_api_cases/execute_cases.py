@@ -4,12 +4,10 @@ import os
 import re
 import time
 import unittest
-import ddt
 import requests
 import xlrd
 from openpyxl import load_workbook
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
-
 from basic_info.get_auth_token import get_headers, get_headers_root, get_auth_token
 from basic_info.ready_dataflow_data import get_dataflow_data, get_executions_data, query_dataflow_data, \
     get_schedulers_data
@@ -26,9 +24,9 @@ from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_sc
     update_flow_data, filesets_data, get_old_id_name, get_collector_data, tag_data, set_user_role, update_role, \
     update_user, enable_user, enable_role, query_flow_data, update_db_driver, update_custom_step, get_improt_dataflow, \
     query_schema, update_rtcjob_setting
+from util import myddt
 from util.Open_DB import MYSQL
 from util.comm_util import operateKafka
-# from util.elasticsearch7 import get_es_data, get_es_data_for_thumbnailMode
 from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 from util.logs import Logger
@@ -1242,7 +1240,7 @@ def read_data():
 testdata = read_data()
 
 
-@ddt.ddt
+@myddt.ddt
 class CheckResult(unittest.TestCase):
 
     def compare_code_result(self):
@@ -1457,7 +1455,7 @@ class CheckResult(unittest.TestCase):
         case_table.save(cases_dir)
 
 
-    @ddt.data(*testdata)
+    @myddt.data(*testdata)
     def test_api(self,data):
         self.case_name = data['case_detail']
         self.url=host+data['url']

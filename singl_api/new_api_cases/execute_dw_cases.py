@@ -3,7 +3,7 @@ import json
 import os
 import re
 import time
-import ddt
+from util import myddt
 import xlrd
 from openpyxl import load_workbook
 import requests
@@ -1439,7 +1439,7 @@ def read_data():
 testdata = read_data()
 
 
-@ddt.ddt
+@myddt.ddt
 class CheckResult(unittest.TestCase):
 
     def compare_code_result(self):
@@ -1654,7 +1654,7 @@ class CheckResult(unittest.TestCase):
         case_table.save(cases_dir)
 
 
-    @ddt.data(*testdata)
+    @myddt.data(*testdata)
     def test_api(self,data):
         self.case_name = data['case_detail']
         self.url=host+data['url']
