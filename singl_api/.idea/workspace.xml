@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化框架，邮件发送">
-      <change beforePath="$PROJECT_DIR$/../.idea/Download.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../singl_api.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_info/check_result.py" beforeDir="false" />
-    </list>
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化框架，邮件发送" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,6 +39,13 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+      </list>
+    </option>
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
   </component>
@@ -62,22 +61,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python 测试.Python 测试 (use_excel.py 内).executor": "Run",
-    "Python 测试.use_excel.test_excel 的 Python 测试.executor": "Run",
-    "Python.HTMLTestRunner.executor": "Run",
-    "Python.compass_schedule.executor": "Run",
-    "Python.run.executor": "Run",
-    "Python.run_api_cases.executor": "Run",
-    "Python.use_excel.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "E:/Download/singl_api/util",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python 测试.Python 测试 (use_excel.py 内).executor&quot;: &quot;Run&quot;,
+    &quot;Python 测试.use_excel.test_excel 的 Python 测试.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HTMLTestRunner.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/util&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Download\singl_api\util" />
@@ -230,7 +229,23 @@
       <option name="project" value="LOCAL" />
       <updated>1711455468854</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="优化框架，邮件发送">
+      <option name="closed" value="true" />
+      <created>1711455584761</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1711455584761</updated>
+    </task>
+    <task id="LOCAL-00004" summary="优化框架，邮件发送">
+      <option name="closed" value="true" />
+      <created>1711502910594</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1711502910594</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
