@@ -1,6 +1,6 @@
 # coding:utf-8
 import unittest
-from BeautifulReport import BeautifulReport
+from util.BeautifulReport import BeautifulReport
 from basic_info.setting import compass_host, compass_sheet, receivers_test, log
 from util.send_mail import  baymax_main
 import datetime

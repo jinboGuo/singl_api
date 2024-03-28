@@ -1,6 +1,6 @@
 # coding:utf-8
 import unittest
-from BeautifulReport import BeautifulReport
+from util.BeautifulReport import BeautifulReport
 from util.send_mail import baymax_main
 import datetime
 from new_api_cases.execute_dw_cases import deal_request_method
