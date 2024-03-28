@@ -1,9 +1,5 @@
-from basic_info.setting import MySQL_CONFIG ,tenant_name
+from basic_info.setting import MySQL_CONFIG, tenant_name, log, ms
 from util.Open_DB import MYSQL
-from util.logs import Logger
-
-ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],MySQL_CONFIG["PORT"])
-log = Logger().get_log()
 
 
 
@@ -11,7 +7,6 @@ def get_tenant_id():
     """
     :return: tenant_id
     """
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
     try:
       sql = "select id from merce_tenant where name='%s' order by create_time desc limit 1" % tenant_name
       tenant_id = ms.ExecuQuery(sql)
@@ -19,7 +14,6 @@ def get_tenant_id():
       return str(tenant_id)
     except Exception as e:
         return log.error("没有查询到租户id：%s" % e)
-
 
 def get_owner():
     """
@@ -140,14 +134,7 @@ def get_tags(tag_type,data):
     try:
         sql = "select id from merce_tag where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         tag = ms.ExecuQuery(sql.encode('utf-8'))
-        new_data = []
         if tag:
-
-        #     for i in range(len(tag)):
-        #         new_data.append(str(tag[i]["id"]))
-        #     tags_id =",".join(new_data)
-        #     return tags_id
-        # elif len(tag)==1:
            if tag_type == "EQUAL":
                tag_id=tag[0]["id"]
                return tag_id
