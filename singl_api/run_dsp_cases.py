@@ -23,7 +23,7 @@ if __name__ == '__main__':
     CheckResult().deal_result()
     test_suite = unittest.defaultTestLoader.discover('new_api_cases', pattern='execute_dsp_cases.py')
     result = BeautifulReport(test_suite)
-    result.report(filename='api_result', description='自动化测试结果汇总', report_dir='Reports',theme='theme_cyan')
+    result.report(filename='api_result', description=dsp_host, report_dir='Reports',theme='theme_cyan')
     stop_time = datetime.datetime.now()
     log.info("结束时间：%s" % stop_time)
     total_time = stop_time - start_time
