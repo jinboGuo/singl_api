@@ -15,6 +15,7 @@ import base64
 from distutils.sysconfig import get_python_lib
 import traceback
 from functools import wraps
+from basic_info.setting import begin_times
 
 __all__ = ['BeautifulReport']
 
@@ -110,7 +111,7 @@ class ReportTestResult(unittest.TestResult):
     def __init__(self, suite, stream=sys.stdout):
         """ pass """
         super(ReportTestResult, self).__init__()
-        self.begin_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        self.begin_time = begin_times
         self.start_time = 0
         self.stream = stream
         self.end_time = 0

@@ -1,11 +1,13 @@
 # coding:utf-8
 import os
+import time
+
 from util.logs import Logger
 from util.Open_DB import MYSQL
 from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
-
+begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
 result_path = os.path.join(REPORT_PATH, "api_result.html")

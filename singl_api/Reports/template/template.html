@@ -7035,16 +7035,16 @@ body.skin-3 {
                                         <span class="form-control text-warning" id="testSkip"></span>
                                     </div>
                                 </div>
-                                <div class="form-group" style="display:none">
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label text-info">开始时间:</label>
                                     <div class="col-sm-5">
-                                        <span class="form-control" id="beginTime" style="display:none"></span>
+                                        <span class="form-control" id="beginTime"></span>
                                     </div>
                                 </div>
-                                <div class="form-group" style="display:none">
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label text-info">运行时间:</label>
                                     <div class="col-sm-5">
-                                        <span class="form-control" id="totalTime" style="display:none"></span>
+                                        <span class="form-control" id="totalTime"></span>
                                     </div>
                                 </div>
                             </form>
@@ -7101,9 +7101,7 @@ body.skin-3 {
                         <tr>
                             <th>编号</th>
                             <th>测试类</th>
-                            <th>测试方法</th>
                             <th>用例名称</th>
-                            <th>运行时长</th>
                             <th>测试结果</th>
                             <th>操作</th>
                         </tr>
@@ -7239,9 +7237,7 @@ body.skin-3 {
                     var tr = "<tr style='font-family: Consolas'>" +
                         "<td>" + (i + 1) + "</td>" +
                         "<td>" + n["className"] + "</td>" +
-                        "<td>" + n["methodName"] + "</td>" +
                         "<td>"+n["description"] + "</td>" +
-                        "<td>" + n["spendTime"] + "</td>" +
                         status + "<td><button type='button' onclick='details(this)' buttonIndex='" + i + "' class='btn btn-primary btn-xs' style='margin-bottom: 0px'>展开</button></td></tr>"
                     $("#detailBody").append(tr);
                 }
