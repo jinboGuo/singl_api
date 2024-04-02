@@ -47,21 +47,20 @@ def baymax_main3(host, receivers, sheet, start_time,total_time):
         本次用例执行环境：%s
         开始时间: %s
         合计耗时: %s
-        API用例共执行：%d 条
+        用例总数: %d 条
         执行成功: %d 条
         执行失败: %d 条
         没有执行: %d 条
         通过率: %s
         用例执行详情请查看附件《api_cases.xlsx》
-        失败用例名称如下：
-        %s
-        """ % (host,start_time,total_time, cases_num, pass_cases, failed_cases, non_cases, failed_cases_name,str(float(pass_cases+non_cases)/cases_num*100)+'%')
+        失败用例名称如下：%s
+        """ % (host,start_time,total_time, cases_num, pass_cases, failed_cases, non_cases,str(float(pass_cases+non_cases)/cases_num*100)+'%', failed_cases_name)
     else:
         mail_content = """各位好:
         本次用例执行环境：%s
         开始时间: %s
         合计耗时: %s
-        API用例共执行：%d 条
+        用例总数: %d 条
         执行成功: %d 条
         没有执行: %d 条
         通过率: %s
@@ -133,21 +132,20 @@ def baymax_main(host, receivers, sheet, start_time,total_time):
         本次用例执行环境：%s
         开始时间: %s
         合计耗时: %s
-        API用例共执行：%d 条
+        用例总数: %d 条
         用例成功: %d 条
         用例失败: %d 条
         用例跳过: %d 条
         通过率: %s
         用例执行详情请查看附件报告！
-        失败用例名称如下：
-        %s
-        """ % (host,start_time,total_time, cases_num, pass_cases, failed_cases, non_cases, failed_cases_name,str(float(pass_cases+non_cases)/cases_num*100)+'%')
+        失败用例名称如下：%s
+        """ % (host,start_time,total_time, cases_num, pass_cases, failed_cases, non_cases,str(float(pass_cases+non_cases)/cases_num*100)+'%', failed_cases_name)
     else:
         mail_content = """各位好:
         本次用例执行环境：%s
         开始时间: %s
         合计耗时: %s
-        API用例共执行：%d 条
+        用例总数: %d 条
         用例成功: %d 条
         用例跳过: %d 条
         通过率: %s
