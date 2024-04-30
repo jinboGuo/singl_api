@@ -127,7 +127,7 @@ def batch_create_table():
     # 记录生成时间
     record_start_time = datetime.datetime.now()
     log.info("创建表开始时间：%s" % record_start_time)
-    for name in range(2023010101, 2023010201):
+    for name in range(2024010101, 2023040201):
         sql = '''CREATE TABLE `cutomer`{} (
           `user_id` bigint(20) DEFAULT NULL,
           `name` text,
@@ -412,7 +412,7 @@ def csv_import_table():
     # 表名
     # 如果不存在表，则自动创建
     table_name = []
-    for i in range(2023010101,2023010201):
+    for i in range(2024010101,2024010201):
         name ="cutomer"+ str(i)
         table_name.append(name)
     for table in table_name:
@@ -441,7 +441,7 @@ class operateKafka:
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.55:9092']   #192.168.1.82:9094
-        self.topic = client.topics['commander.scheduler.xdr_compass_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW
+        self.topic = client.topics['commander.scheduler.xdr_95_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka042712" #往topic发送json
     global stu_nm
@@ -533,10 +533,10 @@ class operateKafka:
             producer.send(self.json_topic, message)
         producer.close()
 
-if __name__ == '__main__':
-
-    while True:
-     operateKafka().send_str_kafka()
+# if __name__ == '__main__':
+#
+#     while True:
+#      operateKafka().send_str_kafka()
 
 
 
@@ -546,9 +546,9 @@ def pdfTodoc():
     """
     function:pdf转换doc**
     """
-    fileset_dir=os.path.join(os.path.abspath('.'),'TempoAI帮助手册_V6.6.pdf')
+    fileset_dir=os.path.join(os.path.abspath('.'),'InfoMover安装配置手册V1.6.pdf')
     pdf_file ='sTempoAI帮助手册_V6.6 - 副本.pdf'
-    docx_file ='TempoAI帮助手册_V6.6.docx'
+    docx_file ='InfoMover安装配置手册V1.6.docx'
     # convert pdf to docx
     cv = Converter(fileset_dir)
     cv.convert(docx_file, start=0, end=None)

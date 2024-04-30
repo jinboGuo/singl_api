@@ -99,6 +99,23 @@ def deal_parameters(data,request_method,request_url):
                     if '管理员主键' in data:
                         data = data.replace('管理员主键', str(get_schema(data_source[7],new_data[2])))
                         return deal_parameters(data,request_method,request_url)
+                    if   '/api/sys/meta/datasets/previewinit?rows=50' == new_data[2]:
+                        try:
+                            response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
+                            new_data1 = response.json()["content"]["list"][0]
+                            response1 = requests.post(url=host+new_data[2], headers=get_headers(), data=json.dumps(new_data1))
+                            statement_id = response1.json()["content"]["statementId"]
+                            cluster_id = response1.json()["content"]["clusterId"]
+                            session_id = response1.json()["content"]["sessionId"]
+                            log.info("preview_ init接口响应数据:{}".format(response1.text))
+                            new_data2 = []
+                            new_data2.append(new_data1)
+                            new_data2.append(statement_id)
+                            new_data2.append(cluster_id)
+                            new_data2.append(session_id)
+                            return new_data2
+                        except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
                 else:
                     if '数据源主键' in data:
                         data = data.replace('数据源主键', str(get_datasource(data_source[0],new_data[1])))
@@ -109,6 +126,14 @@ def deal_parameters(data,request_method,request_url):
                     if '标签主键' in data:
                         data = data.replace('标签主键', str(get_tags(tag_type[0],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
+                    if   '/api/sys/meta/datasets/query' == new_data[1]:
+                      try:
+                        response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
+                        new_data = response.json()["content"]["list"][0]
+                        log.info("QUERY查询接口响应数据:{}".format(new_data))
+                        return new_data
+                      except Exception as e:
+                        log.error("执行过程中出错{}".format(e))
         if 'select id from' in data:
             log.info("开始执行语句:{}".format(data))
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))

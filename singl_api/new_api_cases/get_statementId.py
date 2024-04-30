@@ -1,3 +1,5 @@
+import time
+
 import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import log, ms
@@ -76,7 +78,6 @@ def statementId_no_dataset(host, param):
         return statement_id, new_data
     except KeyError as e:
         log.error("datasetId不存在{}".format(e))
-        return
 
 
 
@@ -87,14 +88,17 @@ def get_sql_analyse_statement_id(host, param):
     :param param:
     :return:
     """
-    url = ' %s/api/datasets/sql/analyzeinit' % host
+    url = ' %s/api/sys/meta/datasets/sql/analyzeinit' % host
     param = sql_analyse_data(param)
     new_data = json.dumps(param, separators=(',', ':'))
     res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statement_id = json.loads(res.text)
-        sql_analyse_statement_id = res_statement_id['statementId']
-        return sql_analyse_statement_id
+        time.sleep(2)
+        res_statement_id = res.json()["content"]
+        statement_id = res_statement_id['statementId']
+        sessionId = res_statement_id['sessionId']
+        clusterId = res_statement_id['clusterId']
+        return statement_id,sessionId,clusterId
     except KeyError as e:
         log.error("statementId不存在{}".format(e))
 
@@ -107,38 +111,31 @@ def get_sql_analyse_dataset_info(host, params):
     :param params:
     :return:
     """
-    sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
-    url = ' %s/api/datasets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
-    res = requests.get(url=url, headers=get_headers())
-    count_num = 0
-    while "waiting" in res.text or "running" in res.text:
-        log.info("再次查询前：%s %s" % (res.status_code, res.text))
+    try:
+        statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, params)
+        url = ' %s/api/sys/meta/datasets/sql/analyzeresult?statementId=%s&sessionId=%s&clusterId=%s&retryTimes=undefined' % (host, statement_id,sessionId,clusterId)
         res = requests.get(url=url, headers=get_headers())
-        count_num += 1
-        if count_num == 100:
-            return
-    # 返回的是str类型
-    if '"statement":"available"' in res.text:
-        text_dict = json.loads(res.text)
-        text_dict_content = text_dict["content"]
-        return text_dict_content
-    else:
-        log.info('获取数据集输出字段失败')
-        return
+        text_dict = res.json()["content"]["content"]
+        return text_dict
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 
 # 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
 def get_sql_execte_statement_id(host,param):
-    url = '%s/api/datasets/sql/executeinit' % host
+    url = '%s/api/sys/meta/datasets/sql/executeinit' % host
     param = sql_analyse_data(param)
     new_data = json.dumps(param, separators=(',', ':'))
     res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        res_statement_id = json.loads(res.text)
-        sql_analyse_statement_id = res_statement_id['statementId']
-        return sql_analyse_statement_id
-    except KeyError:
-        return
+        time.sleep(2)
+        res_statement_id = res.json()["content"]
+        statement_id = res_statement_id['statementId']
+        sessionId = res_statement_id['sessionId']
+        clusterId = res_statement_id['clusterId']
+        return statement_id,sessionId,clusterId
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 
 def step_sql_analyse_data(data):
@@ -170,8 +167,8 @@ def get_step_output_init_statementId(host, params):
         res_statement_id = json.loads(res.text)
         sql_analyse_statement_id = res_statement_id['statementId']
         return sql_analyse_statement_id
-    except KeyError:
-        return
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 def get_step_output_ensure_statementId(host, params):
     """

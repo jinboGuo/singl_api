@@ -329,9 +329,13 @@ def run_all():
     # check_s_l_result_detail(s_l_result_detail)
     # check_s_l_result_output(s_l_result_output)
 
-n = 0
+# n = 0
+# while True:
+#  run_all()
+#  n += 1
+#  if n == 1:
+#      break
+
 while True:
  run_all()
- n += 1
- if n == 1:
-     break
+ sleep(600)
