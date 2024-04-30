@@ -144,22 +144,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif '创建schema' in case_detail:
-            new_data = create_schema_data(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            #log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询schema' in case_detail:
-            new_data = query_schema(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            #log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif "上传dataflow-woven文件" == case_detail:
             fs = {"file": open(woven_dataflow, 'rb')}
             headers.pop('Content-Type')
@@ -431,13 +415,6 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         elif case_detail == '停止一个采集器任务的执行':
             task_id = get_job_tasks_id(data)
             response = requests.post(url=url, headers=headers, json=task_id)
-            #log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '删除schema'in case_detail:
-            new_data = json.dumps(data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
             #log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -984,15 +961,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
     try:
         if case_detail == '项目目录改名':
             response = requests.put(url=url, headers=headers, data=data)
-            #log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(table_sheet_name, row, column, response.status_code)
-            write_result(table_sheet_name, row, column+4, response.text)
-        elif case_detail == '更新schema':
-            schema_id, new_data = updschema_data(data)
-            new_url = url.format(schema_id)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=new_url, headers=headers, data=new_data)
             #log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)

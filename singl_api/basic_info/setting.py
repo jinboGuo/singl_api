@@ -127,7 +127,7 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 """
 
 baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-baymax_sheet = "842"
+baymax_sheet = "baymax_master"
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',

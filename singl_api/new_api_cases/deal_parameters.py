@@ -108,11 +108,7 @@ def deal_parameters(data,request_method,request_url):
                             cluster_id = response1.json()["content"]["clusterId"]
                             session_id = response1.json()["content"]["sessionId"]
                             log.info("preview_ init接口响应数据:{}".format(response1.text))
-                            new_data2 = []
-                            new_data2.append(new_data1)
-                            new_data2.append(statement_id)
-                            new_data2.append(cluster_id)
-                            new_data2.append(session_id)
+                            new_data2 = [new_data1, statement_id, cluster_id, session_id]
                             return new_data2
                         except Exception as e:
                             log.error("执行过程中出错{}".format(e))
@@ -127,6 +123,14 @@ def deal_parameters(data,request_method,request_url):
                         data = data.replace('标签主键', str(get_tags(tag_type[0],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
                     if   '/api/sys/meta/datasets/query' == new_data[1]:
+                      try:
+                        response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
+                        new_data = response.json()["content"]["list"][0]
+                        log.info("QUERY查询接口响应数据:{}".format(new_data))
+                        return new_data
+                      except Exception as e:
+                        log.error("执行过程中出错{}".format(e))
+                    if   '/api/sys/meta/schemas/query' == new_data[1]:
                       try:
                         response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
                         new_data = response.json()["content"]["list"][0]

@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="修复邮件异常结果统计">
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="调试数据集预览接口">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_schedule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/deal_parameters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/get_statementId.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/get_statementId.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/comm_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/comm_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +39,7 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="master" />
+        <entry key="$PROJECT_DIR$/.." value="1.6.x" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -73,24 +69,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python 测试.Python 测试 (use_excel.py 内).executor": "Run",
-    "Python 测试.use_excel.test_excel 的 Python 测试.executor": "Run",
-    "Python.HTMLTestRunner.executor": "Run",
-    "Python.comm_util.executor": "Run",
-    "Python.compass_schedule.executor": "Run",
-    "Python.deal_parameters.executor": "Run",
-    "Python.run.executor": "Run",
-    "Python.run_api_cases.executor": "Run",
-    "Python.use_excel.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "E:/Download/singl_api/Reports",
-    "settings.editor.selected.configurable": "preferences.pathVariables"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python 测试.Python 测试 (use_excel.py 内).executor&quot;: &quot;Run&quot;,
+    &quot;Python 测试.use_excel.test_excel 的 Python 测试.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HTMLTestRunner.executor&quot;: &quot;Run&quot;,
+    &quot;Python.comm_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
+    &quot;Python.deal_parameters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/Reports&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pathVariables&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Download\singl_api\Reports" />
