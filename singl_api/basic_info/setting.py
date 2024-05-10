@@ -1,16 +1,17 @@
 # coding:utf-8
 import os
 import time
-
 from util.logs import Logger
 from util.Open_DB import MYSQL
 from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
+'''执行api脚本用例py'''
+pattern=["execute_cases.py","execute_dsp_cases.py","execute_dw_cases.py","execute_compass_cases.py"]
 begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
-result_path = os.path.join(REPORT_PATH, "api_result.html")
+result_path = os.path.join(REPORT_PATH, "api_cases_report.html")
 '''发送者账号'''
 email_user = 'ruifan_apitest@163.com'
 '''发送者密码'''
@@ -49,7 +50,7 @@ Compass_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'compass_16x',
+    "DB": 'merce_166',
     'case_db': 'test'}
 
 
@@ -67,7 +68,7 @@ Dsp_MySQL_CONFIG = {
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_162'  # merce-scheduler
+     "DB": 'merce_166'  # merce-scheduler
  }
 
 
@@ -85,7 +86,7 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_162',
+    "DB": 'merce_166',
     'case_db': 'test'}
 
 
@@ -127,14 +128,14 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 """
 
 baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-baymax_sheet = "baymax_master"
+baymax_sheet = "842"
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_162',
+    "DB": 'merce_166',
     'case_db': 'test'}
 """获取数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])

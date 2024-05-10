@@ -413,7 +413,7 @@ def csv_import_table():
     # 如果不存在表，则自动创建
     table_name = []
     for i in range(2024010101,2024010201):
-        name ="cutomer"+ str(i)
+        name ="customer"+ str(i)
         table_name.append(name)
     for table in table_name:
         engine = create_engine("mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}".format(**MySQL_CONFIG1), max_overflow=5)
@@ -444,8 +444,7 @@ class operateKafka:
         self.topic = client.topics['commander.scheduler.xdr_95_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka042712" #往topic发送json
-    global stu_nm
-    stu_nm = ['张三','李四','王五','赵六','黄七','陈八']
+
 
     """
     function:send 调度message to kafka
@@ -540,18 +539,18 @@ class operateKafka:
 
 
 
-from pdf2docx import Converter
-
-def pdfTodoc():
-    """
-    function:pdf转换doc**
-    """
-    fileset_dir=os.path.join(os.path.abspath('.'),'InfoMover安装配置手册V1.6.pdf')
-    pdf_file ='sTempoAI帮助手册_V6.6 - 副本.pdf'
-    docx_file ='InfoMover安装配置手册V1.6.docx'
-    # convert pdf to docx
-    cv = Converter(fileset_dir)
-    cv.convert(docx_file, start=0, end=None)
-    cv.close()
+# from pdf2docx import Converter
+#
+# def pdfTodoc():
+#     """
+#     function:pdf转换doc**
+#     """
+#     fileset_dir=os.path.join(os.path.abspath('.'),'InfoMover安装配置手册V1.6.pdf')
+#     pdf_file ='sTempoAI帮助手册_V6.6 - 副本.pdf'
+#     docx_file ='InfoMover安装配置手册V1.6.docx'
+#     # convert pdf to docx
+#     cv = Converter(fileset_dir)
+#     cv.convert(docx_file, start=0, end=None)
+#     cv.close()
 
 #pdfTodoc()
