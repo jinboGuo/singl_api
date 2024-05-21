@@ -148,7 +148,7 @@ ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"],
 tenant_name = "default"
 
 """ 资源目录类型"""
-resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataservice_dir","datasafe_job_dir","fileset_dir","standard_dir"]
+resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataresource_dir","datasafe_job_dir","fileset_dir","standard_dir"]
 
 """元数据相关信息"""
 data_source = ["datasource_id","datasource_name","schema_id","schema_name","dataset_id","dataset_name","tenant_id","owner"]

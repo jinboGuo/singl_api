@@ -1,7 +1,7 @@
 # coding:utf-8
 from util.api_result_report import get_result_report
 from util.send_mail import baymax_main
-from new_api_cases.execute_cases import deal_request_method
+from new_api_cases.execute_cases import deal_request_method, cases_dir
 from new_api_cases.execute_cases import CheckResult
 from basic_info.setting import host, baymax_sheet, receivers_test, receivers_list, log, begin_times, pattern
 
@@ -15,4 +15,4 @@ if __name__ == '__main__':
     total_time = get_result_report(host,pattern[0])
 
     """发送邮件"""
-    baymax_main(host, receivers_test, baymax_sheet, begin_times,total_time)
+    baymax_main(cases_dir,host, receivers_test, baymax_sheet, begin_times,total_time)

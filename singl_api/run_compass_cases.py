@@ -2,7 +2,7 @@
 from basic_info.setting import compass_host, compass_sheet, receivers_test, log, begin_times, pattern
 from util.api_result_report import get_result_report
 from util.send_mail import  baymax_main
-from new_api_cases.execute_compass_cases import deal_request_method
+from new_api_cases.execute_compass_cases import deal_request_method, cases_dir
 from new_api_cases.execute_compass_cases import CheckResult
 
 if __name__ == '__main__':
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     total_time = get_result_report(compass_host, pattern[3])
 
     """发送邮件"""
-    baymax_main(compass_host, receivers_test, compass_sheet, begin_times,total_time)
+    baymax_main(cases_dir,compass_host, receivers_test, compass_sheet, begin_times,total_time)
 
 
 

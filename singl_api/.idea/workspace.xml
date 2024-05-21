@@ -4,20 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="调试元数据接口">
-      <change afterPath="$PROJECT_DIR$/util/api_result_report.py" afterDir="false" />
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="封装生成测试报告函数">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reports/template/template.html" beforeDir="false" afterPath="$PROJECT_DIR$/Reports/template/template.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_compass_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dsp_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dw_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/BeautifulReport.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/BeautifulReport.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/comm_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/comm_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/get_host.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/timestamp_13.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/timestamp_13.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,25 +74,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python 测试.Python 测试 (use_excel.py 内).executor": "Run",
-    "Python 测试.use_excel.test_excel 的 Python 测试.executor": "Run",
-    "Python.HTMLTestRunner.executor": "Run",
-    "Python.comm_util.executor": "Run",
-    "Python.compass_schedule.executor": "Run",
-    "Python.deal_parameters.executor": "Run",
-    "Python.run.executor": "Run",
-    "Python.run_api_cases.executor": "Run",
-    "Python.timestamp_13.executor": "Run",
-    "Python.use_excel.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "E:/Download/singl_api/Reports",
-    "settings.editor.selected.configurable": "preferences.pathVariables"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python 测试.Python 测试 (use_excel.py 内).executor&quot;: &quot;Run&quot;,
+    &quot;Python 测试.use_excel.test_excel 的 Python 测试.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HTMLTestRunner.executor&quot;: &quot;Run&quot;,
+    &quot;Python.comm_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
+    &quot;Python.deal_parameters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.timestamp_13.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/Reports&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Download\singl_api\Reports" />
