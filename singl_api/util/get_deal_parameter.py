@@ -40,11 +40,18 @@ def get_resourceid(resource_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_resource_dir where  tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL" % (
-            tenant_id, resource_type)
-        resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
-        resource_id = resource_dir[0]["id"]
-        return resource_id
+        if resource_type == 'schema_name_rule_dir' or resource_type == 'schema_collect_task_dir':
+            sql = "select id from merce_resource_dir where  tenant_id='%s'  and res_type='%s' and parent_id is NULL" % (
+                tenant_id, resource_type)
+            resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
+            resource_id = resource_dir[0]["id"]
+            return resource_id
+        else:
+            sql = "select id from merce_resource_dir where  tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL" % (
+                tenant_id, resource_type)
+            resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
+            resource_id = resource_dir[0]["id"]
+            return resource_id
     except Exception as e:
         log.error("没有获取到目录id：%s" % e)
 
@@ -264,6 +271,8 @@ def get_sink_schema_name_and_random():
         return schema_name_and_random
     except Exception as e:
         log.error("没有获取到输出端元数据名称：%s" % e)
+
+
 def get_sink_dataset_name_and_random():
     try:
         dataset_name = ' test_api_wjp_schema-output-'
@@ -310,7 +319,7 @@ def get_sink_node_id():
         log.error("没有获取到输出端数据源uuid：%s" % e)
 
 
-def get_task_id():
+def get_collect_task_id():
     """获取采集任务id‘"""
     tenant_id = get_tenant_id()
     try:
@@ -321,7 +330,17 @@ def get_task_id():
         return task_id
     except Exception as e:
         log.error("没有获取到采集任务id：%s" % e)
-
+def get_collect_schema_task_id():
+    """获取元数据采集任务id‘"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from schema_collect_task  where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'api_wjp_schema-collect')
+        query_data = ms.ExecuQuery(sql.encode('utf-8'))
+        task_id = query_data[0]["id"]
+        return task_id
+    except Exception as e:
+        log.error("没有获取到采集任务id：%s" % e)
 
 def get_sink_dataset_name():
     """获取采集输出端数据集名称"""
@@ -340,11 +359,24 @@ def get_source_dataset_name():
     """获取采集输入端数据集名称"""
     tenant_id = get_tenant_id()
     try:
-        sql = "SELECT name from merce_dataset  where tenant_id={} and name like 'test_api_wjp_schema%input%' ORDER BY create_time desc".format(
+        sql = "SELECT name from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset_ftp%' ORDER BY create_time desc limit 1".format(
             tenant_id)
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_name = query_data[0]["name"]
         return dataset_name
+    except Exception as e:
+        log.error("没有获取到输入端数据集名称：%s" % e)
+
+
+def get_source_dataset_id():
+    """获取采集输入端数据集id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "SELECT id from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset_ftp%' ORDER BY create_time desc limit 1".format(
+            tenant_id)
+        query_data = ms.ExecuQuery(sql.encode('utf-8'))
+        dataset_id = query_data[0]["id"]
+        return dataset_id
     except Exception as e:
         log.error("没有获取到输入端数据集名称：%s" % e)
 
@@ -391,8 +423,85 @@ def get_user_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from merce_user where tenant_id={} and name = 'admin'".format(tenant_id)
-        get_collector_id = ms.ExecuQuery(sql.encode('utf-8'))
-        user_id = get_collector_id[0]["id"]
+        get_user_id = ms.ExecuQuery(sql.encode('utf-8'))
+        user_id = get_user_id[0]["id"]
         return user_id
     except Exception as e:
         log.error("没有获取到采集机id：%s" % e)
+
+
+def get_global_variable():
+    """获取变量id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from poseidon_global_variable where tenant_id='%s' and name like '%s%%%%'GROUP BY create_time desc limit 1" % (
+            tenant_id, 'test_collect_time_variable')
+        get_collector_id = ms.ExecuQuery(sql.encode('utf-8'))
+        collector_id = get_collector_id[0]["id"]
+        return collector_id
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)
+
+
+def get_dss_mysql_id():
+    """获取mysql数据源id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_dss where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'test_api_wjp_mysql')
+        get_dss_mysql_id = ms.ExecuQuery(sql.encode('utf-8'))
+        dss_mysql_id = get_dss_mysql_id[0]["id"]
+        return dss_mysql_id
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)
+
+
+def get_dss_mysql_name():
+    """获取mysql数据源名称"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select name from merce_dss where tenant_id='%s' and  name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'test_api_wjp_mysql')
+        get_dss_mysql_name = ms.ExecuQuery(sql.encode('utf-8'))
+        dss_mysql_name = get_dss_mysql_name[0]["name"]
+        return dss_mysql_name
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)
+
+
+def get_rule_name():
+    """获取元数据采集命名规则名称"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select name from schema_collect_name_rule where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'api_wjp_schema-collect')
+        get_rule_name = ms.ExecuQuery(sql.encode('utf-8'))
+        get_rule_name = get_rule_name[0]["name"]
+        return get_rule_name
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)
+
+
+def get_rule_id():
+    """获取元数据采集命名规则id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from schema_collect_name_rule where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'api_wjp_schema-collect')
+        get_rule_id = ms.ExecuQuery(sql.encode('utf-8'))
+        get_rule_id = get_rule_id[0]["id"]
+        return get_rule_id
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)
+
+def get_schema_collect_task_name():
+    """获取元数据采集任务名称"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select name from schema_collect_task  where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
+            tenant_id, 'api_wjp_schema-collect')
+        get_schema_collect_task_name = ms.ExecuQuery(sql.encode('utf-8'))
+        schema_collect_task_name = get_schema_collect_task_name[0]["name"]
+        return schema_collect_task_name
+    except Exception as e:
+        log.error("没有获取到获取变量id：%s" % e)

@@ -20,7 +20,8 @@ from new_api_cases.collect_prepare_datas import admin_flow_id, customer_flow_id,
     resource_data_dss, resource_data_push, update_customer, \
     update_user, update_role, enable_role, enable_user, set_user_role, new_dir, rename_dir
 from basic_info.setting import collect_host
-from util.get_deal_parameter import get_draft_id, get_collector_id, get_task_id, get_collector_group_id
+from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
+    get_global_variable
 
 cases_dir = collect_cases_dir
 case_table = load_workbook(cases_dir)
@@ -39,8 +40,8 @@ def deal_request_method():
     判断请求方法，并根据不同的请求方法调用不同的处理方式
     :return:
     """
-
-    for i in range(2, all_rows + 1):
+    # for i in range(2, all_rows + 1):
+    for i in range(14, 15):
         request_method = case_table_sheet.cell(row=i, column=4).value
         request_method_upper = request_method.upper()
         request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -224,7 +225,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '任务上线':
+        elif '任务上线' in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -241,6 +242,62 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         elif case_detail == '创建目录':
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '任务执行' in case_detail:
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '进入变量页面':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '新建时间变量':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查采集审批方式':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '删除采集任务':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建命名规则':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询时间变量':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建元数据采集任务':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -265,7 +322,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif '获取任务画布信息' in case_detail:
-                new_url = url.format(get_task_id())
+                new_url = url.format(get_collect_task_id())
                 log.info("request   url：%s" % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -273,7 +330,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif '打开画布' in case_detail:
-                new_url = url.format(get_task_id())
+                new_url = url.format(get_collect_task_id())
                 log.info("request   url：%s" % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -313,7 +370,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '任务输入端节点信息':
-                new_url = url.format(get_task_id(),get_draft_id())
+                new_url = url.format(get_collect_task_id(), get_draft_id())
                 log.info("request   url：%s" % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -335,8 +392,8 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail =='获取配置信息':
-                new_url = url.format(get_task_id(),get_draft_id(),get_draft_id(),get_task_id())
+            elif case_detail == '获取配置信息':
+                new_url = url.format(get_collect_task_id(), get_draft_id(), get_draft_id(), get_collect_task_id())
                 log.info("request   url：%s" % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -361,11 +418,10 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '启用角色':
+            elif case_detail == '修改时间变量':
+                new_url = url.format(get_global_variable())
                 log.info("request   url：%s" % url)
-                new_data = enable_role(data)
-                new_data = json.dumps(new_data, separators=(',', ':'))
-                response = requests.put(url=url, headers=headers, data=new_data)
+                response = requests.put(url=new_url, headers=headers, data=data)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -389,7 +445,7 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
-                response = requests.delete(url=url, headers=headers, data=json.dumps(data))
+                response = requests.delete(url=url, headers=headers, data=data)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(table_sheet_name, row, column, response.status_code)
