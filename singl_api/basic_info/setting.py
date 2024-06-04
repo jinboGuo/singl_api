@@ -33,7 +33,7 @@ Compass_scheduler = {
     "PASSWORD": 'Inf0refiner'
 }
 hdfs_url = "hdfs://into1:8020"
-#hdfs_url = "hdfs://mycluster"
+datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 
 
 """
@@ -43,14 +43,14 @@ hdfs_url = "hdfs://into1:8020"
  Compass_MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-compass_sheet = "scheduler"
-compass_host = "http://192.168.1.95:8031"
+compass_sheet = "842"  #scheduler
+compass_host = "http://192.168.1.95:8515"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.85',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_166',
+    "DB": 'merce_167',
     'case_db': 'test'}
 
 
@@ -68,7 +68,7 @@ Dsp_MySQL_CONFIG = {
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_166'  # merce-scheduler
+     "DB": 'merce_167'  # merce-scheduler
  }
 
 
@@ -86,7 +86,7 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_166',
+    "DB": 'merce_167',
     'case_db': 'test'}
 
 
@@ -135,7 +135,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_166',
+    "DB": 'merce_167',
     'case_db': 'test'}
 """获取数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
@@ -148,13 +148,25 @@ ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"],
 tenant_name = "default"
 
 """ 资源目录类型"""
-resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataresource_dir","datasafe_job_dir","fileset_dir","standard_dir"]
+resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataresource_dir","datasafe_job_dir","fileset_dir","standard_dir","schema_collect_task_dir","qa_job_dir"]
 
 """元数据相关信息"""
 data_source = ["datasource_id","datasource_name","schema_id","schema_name","dataset_id","dataset_name","tenant_id","owner"]
 
 """标签检索类型"""
 tag_type = ["like","EQUAL"]
+
+"""任务视图名称"""
+job_view_name = "gjb_scheduler"
+
+"""元数据采集任务名称"""
+schema_collect_name = "gjb_schema_collect"
+
+"""数据采集任务名称"""
+collect_task_name = "gjb_collect_task"
+
+"""数据质量任务名称"""
+qa_task_name = "gjb_qa_task"
 
 """
 compass admin账户登录信息

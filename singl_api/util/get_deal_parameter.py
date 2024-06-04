@@ -1,6 +1,4 @@
-from basic_info.setting import MySQL_CONFIG, tenant_name, log, ms
-from util.Open_DB import MYSQL
-
+from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, qa_task_name
 
 
 def get_tenant_id():
@@ -20,7 +18,6 @@ def get_owner():
     :return: 管理员的id
     """
     tenant_id = get_tenant_id()
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
     try:
       sql = "select id from merce_user where tenant_id='%s' order by create_time desc" % tenant_id
       user = ms.ExecuQuery(sql)
@@ -31,13 +28,13 @@ def get_owner():
 
 def get_resourceid(resource_type):
     """
-    获取数据源目录、数据集目录、元数据目录、flow目录、采集机、数据采集、数据存储、任务视图、数据资产、数据共享、数据安全、文件编目、数据标准根目录id
+    获取数据源目录、数据集目录、元数据目录、flow目录、采集机、数据采集、数据存储、任务视图、数据资产、数据共享、数据安全、文件编目、数据标准根目录id、schema_collect_task_dir
     若确少resource_type,可以在setting配置文件里resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir",
     "poseidon_collect_dir","poseidon_task_dir"....]添加。
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_resource_dir where  tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL"%(tenant_id,resource_type)
+        sql = "select id from merce_resource_dir where tenant_id='%s' and res_type='%s' and parent_id is NULL"%(tenant_id,resource_type)
         resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
         resource_id = resource_dir[0]["id"]
         return resource_id
@@ -50,7 +47,7 @@ def get_datasource(data_source,data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name ='%s' ORDER BY create_time desc" %(tenant_id,data)
+        sql = "select id,name from merce_dss where tenant_id='%s' and name ='%s' ORDER BY create_time desc" %(tenant_id,data)
         datasource = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = datasource[0]["id"]
         dss_name = datasource[0]["name"]
@@ -108,11 +105,11 @@ def get_schema(data_source,data):
 
 def get_dataset(data_source,data):
     """
-    获取数据源id、name
+    获取数据集id、name
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dataset where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
+        sql = "select id,name from merce_dataset where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_id = dataset[0]["id"]
         dataset_name = dataset[0]["name"]
@@ -128,11 +125,11 @@ def get_dataset(data_source,data):
 
 def get_tags(tag_type,data):
     """
-    获取数据源id、name
+    获取标签
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_tag where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
+        sql = "select id from merce_tag where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         tag = ms.ExecuQuery(sql.encode('utf-8'))
         if tag:
            if tag_type == "EQUAL":
@@ -149,3 +146,55 @@ def get_tags(tag_type,data):
         log.error("没有获取到标签id：%s" % e)
 
 
+def get_job_view_id():
+    """
+    获取视图任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from s_v_job_view where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,job_view_name)
+        job_view = ms.ExecuQuery(sql.encode('utf-8'))
+        job_view_id = job_view[0]["id"]
+        return str(job_view_id)
+    except Exception as e:
+        log.error("没有获取到视图任务id：%s" % e)
+
+def get_schema_collect_id():
+    """
+    获取元数据采集任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from schema_collect_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,schema_collect_name)
+        schema_collect = ms.ExecuQuery(sql.encode('utf-8'))
+        schema_collect_id = schema_collect[0]["id"]
+        return str(schema_collect_id)
+    except Exception as e:
+        log.error("没有获取到元数据采集任务id：%s" % e)
+
+def get_collect_task_id():
+    """
+    获取数据采集任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from poseidon_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,collect_task_name)
+        poseidon_task = ms.ExecuQuery(sql.encode('utf-8'))
+        collect_id = poseidon_task[0]["id"]
+        return str(collect_id)
+    except Exception as e:
+        log.error("没有获取到数据采集任务id：%s" % e)
+
+
+def get_qa_task_id():
+    """
+    获取质检任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from qa_job where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,qa_task_name)
+        qa_task = ms.ExecuQuery(sql.encode('utf-8'))
+        qa_task_id = qa_task[0]["id"]
+        return str(qa_task_id)
+    except Exception as e:
+        log.error("没有获取到数据质量任务id：%s" % e)

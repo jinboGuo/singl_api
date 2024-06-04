@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="封装生成测试报告函数">
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_compass_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dsp_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dw_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/get_deal_parameter.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/get_deal_parameter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +43,7 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="1.6.x" />
+        <entry key="$PROJECT_DIR$/.." value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -82,15 +81,17 @@
     &quot;Python.comm_util.executor&quot;: &quot;Run&quot;,
     &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
     &quot;Python.deal_parameters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.encrypt.executor&quot;: &quot;Run&quot;,
     &quot;Python.run.executor&quot;: &quot;Run&quot;,
     &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_compass_cases.executor&quot;: &quot;Run&quot;,
     &quot;Python.timestamp_13.executor&quot;: &quot;Run&quot;,
     &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/Reports&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.控制台字体&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -107,7 +108,7 @@
       <recent name="E:\Download\singl_api\attachment" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_api_cases">
+  <component name="RunManager" selected="Python.run_compass_cases">
     <configuration name="compass_schedule" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -130,7 +131,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="deal_parameters" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="encrypt" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -139,11 +140,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_api_cases" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_api_cases/deal_parameters.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/encrypt.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -174,6 +175,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="run_compass_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_compass_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="timestamp_13" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -196,28 +219,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="util.readExcel 的 Python 测试" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="singl_api" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;util.readExcel&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run_compass_cases" />
+        <item itemvalue="Python.encrypt" />
         <item itemvalue="Python.run_api_cases" />
         <item itemvalue="Python.timestamp_13" />
         <item itemvalue="Python.compass_schedule" />
-        <item itemvalue="Python.deal_parameters" />
-        <item itemvalue="Python 测试.util.readExcel 的 Python 测试" />
       </list>
     </recent_temporary>
   </component>
@@ -309,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714473094311</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。">
+      <option name="closed" value="true" />
+      <created>1716263382024</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1716263382024</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -331,6 +347,7 @@
     <MESSAGE value="优化报告" />
     <MESSAGE value="修复邮件异常结果统计" />
     <MESSAGE value="调试元数据接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="调试元数据接口" />
+    <MESSAGE value="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。" />
   </component>
 </project>
