@@ -2,26 +2,17 @@
 import json
 import os
 import re
-import time
 from util import myddt
-import xlrd
 from openpyxl import load_workbook
 import requests
-from util.encrypt import encrypt_rf
 from util.format_res import dict_res
 from basic_info.setting import collect_sheet, collect_cases_dir, log
 from basic_info.get_auth_token import get_headers, get_headers_root
 from new_api_cases.collect_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.collect_prepare_datas import admin_flow_id, customer_flow_id, pull_data, cust_data_source, \
-    appconfig_data, resource_data, push_resource_data_open, \
-    resource_data_pull_es, pull_resource_data_open, \
-    pull_aggs, application_push_approval, application_pull_approval, pull_data_sql, pull_aggs_sql, resource_data_save, \
-    resource_data_dss, resource_data_push, update_customer, \
-    update_user, update_role, enable_role, enable_user, set_user_role, new_dir, rename_dir
 from basic_info.setting import collect_host
 from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
-    get_global_variable
+    get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id
 
 cases_dir = collect_cases_dir
 case_table = load_workbook(cases_dir)
@@ -41,7 +32,7 @@ def deal_request_method():
     :return:
     """
     # for i in range(2, all_rows + 1):
-    for i in range(14, 15):
+    for i in range(57, 60):
         request_method = case_table_sheet.cell(row=i, column=4).value
         request_method_upper = request_method.upper()
         request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -170,7 +161,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '创建离线采集任务':
+        elif '创建采集任务' in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -232,7 +223,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '查询离线采集任务列表':
+        elif '查询采集任务列表' in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -296,6 +287,49 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '创建元数据采集任务':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '获取派生字段批量处理页面':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询批量派生字段的所有数据':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询当前选中元数据的批量派生字段':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '批量添加派生字段':
+            new_url = url.format(get_draft_id())
+            log.info("request   url：%s" % new_url)
+            response = requests.post(url=new_url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询执行历史':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询执行历史详情':
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -396,6 +430,46 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 new_url = url.format(get_collect_task_id(), get_draft_id(), get_draft_id(), get_collect_task_id())
                 log.info("request   url：%s" % new_url)
                 response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '获取输出端元数据':
+                new_url = url.format(get_sink_node_id())
+                log.info("request   url：%s" % new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '获取输入端元数据字段':
+                new_url = url.format(get_source_node_id())
+                log.info("request   url：%s" % new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '获取输入端元数据信息':
+                new_url = url.format(get_source_node_id())
+                log.info("request   url：%s" % new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '获取输入端元数据历史信息':
+                new_url = url.format(get_source_schema_id())
+                log.info("request   url：%s" % new_url)
+                response = requests.get(url=new_url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '查询执行历史输入输出详情':
+                url = url.format(data)
+                log.info("request   url：%s" % url)
+                response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

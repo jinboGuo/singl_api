@@ -1,7 +1,6 @@
 import json
 import random
-import requests
-from basic_info.get_auth_token import get_headers
+
 from basic_info.setting import resource_type, data_source, dsp_host, tag_type, ms, log
 from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_dataset, get_datasource, \
     get_source_dss_id, get_source_dss_name, \
@@ -119,13 +118,13 @@ def deal_parameters(data, request_method, request_url):
             log.info("sql查询结果为:{}".format(data_select_result))
             data_select_result = data_select_result[0]['id']
             request_data = data.split('&&')[1]
-            request_data = str(request_data).replace('输入', data_select_result)
+            request_data = str(request_data).replace('输入', str(data_select_result))
             return request_data
         if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入画布id' in data or '输入任务id' in data or '输入元数据命名规则名称' in data or '输入元数据采集任务id' in data:
-            request_data = data.replace('输入输入数据源id', get_source_dss_id())
+            request_data = data.replace('输入输入数据源id', str(get_source_dss_id()))
             request_data = request_data.replace('输入输入数据源名称', get_source_dss_name())
             request_data = request_data.replace('输入画布id', str(get_draft_id()))
-            request_data = request_data.replace('输入输入元数据id', get_source_schema_id())
+            request_data = request_data.replace('输入输入元数据id', str(get_source_schema_id()))
             request_data = request_data.replace('输入输入元数据名称', get_source_schema_name())
             request_data = request_data.replace('输入输出元数据名称', get_sink_schema_name())
             request_data = request_data.replace('输入输出数据源id', str(get_sink_dss_id()))
