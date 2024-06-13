@@ -172,10 +172,10 @@ def get_tags(tag_type, data):
 def get_source_dss_id():
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp_ftp')
+        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
+            tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_id = query_data[0]["id"]
+        dss_id = query_data[1]["id"]
         return dss_id
     except Exception as e:
         log.error("没有获取到输入端数据源id：%s" % e)
@@ -184,10 +184,10 @@ def get_source_dss_id():
 def get_source_dss_name():
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp_ftp')
+        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
+            tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_name = query_data[0]["name"]
+        dss_name = query_data[1]["name"]
         return dss_name
     except Exception as e:
         log.error("没有获取到输入端数据源名称：%s" % e)
@@ -197,7 +197,7 @@ def get_sink_dss_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp_hdfs')
+            tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = query_data[0]["id"]
         return dss_id
@@ -209,7 +209,7 @@ def get_sink_dss_name():
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp_hdfs')
+            tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
         dss_name = query_data[0]["name"]
         return dss_name
