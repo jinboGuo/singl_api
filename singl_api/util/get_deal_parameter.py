@@ -1,6 +1,7 @@
 from basic_info.setting import MySQL_CONFIG, tenant_name, log, ms
 from util.Open_DB import MYSQL
 import random
+import time
 
 
 def get_tenant_id():
@@ -330,6 +331,8 @@ def get_collect_task_id():
         return task_id
     except Exception as e:
         log.error("没有获取到采集任务id：%s" % e)
+
+
 def get_collect_schema_task_id():
     """获取元数据采集任务id‘"""
     tenant_id = get_tenant_id()
@@ -341,6 +344,7 @@ def get_collect_schema_task_id():
         return task_id
     except Exception as e:
         log.error("没有获取到采集任务id：%s" % e)
+
 
 def get_sink_dataset_name():
     """获取采集输出端数据集名称"""
@@ -494,6 +498,7 @@ def get_rule_id():
     except Exception as e:
         log.error("没有获取到获取变量id：%s" % e)
 
+
 def get_schema_collect_task_name():
     """获取元数据采集任务名称"""
     tenant_id = get_tenant_id()
@@ -505,3 +510,8 @@ def get_schema_collect_task_name():
         return schema_collect_task_name
     except Exception as e:
         log.error("没有获取到获取变量id：%s" % e)
+
+
+def get_current_time():
+    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    return current_time

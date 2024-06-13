@@ -9,7 +9,7 @@ from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_da
     get_sink_dataset_name, \
     get_source_dataset_name, get_collector_group_id, get_collector_group_name, get_tenant_id, get_owner, get_user_id, \
     get_sink_schema_name_and_random, get_sink_dataset_name_and_random, get_source_dataset_id, get_dss_mysql_id, \
-    get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name
+    get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name,get_current_time
 
 
 def deal_parameters(data, request_method, request_url):
@@ -120,7 +120,7 @@ def deal_parameters(data, request_method, request_url):
             request_data = data.split('&&')[1]
             request_data = str(request_data).replace('输入', str(data_select_result))
             return request_data
-        if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入画布id' in data or '输入任务id' in data or '输入元数据命名规则名称' in data or '输入元数据采集任务id' in data:
+        if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入画布id' in data or '输入采集任务id' in data or '输入元数据命名规则名称' in data or '输入元数据采集任务id' in data:
             request_data = data.replace('输入输入数据源id', str(get_source_dss_id()))
             request_data = request_data.replace('输入输入数据源名称', get_source_dss_name())
             request_data = request_data.replace('输入画布id', str(get_draft_id()))
@@ -133,7 +133,7 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入输入端uuid', str(get_source_node_id()))
             request_data = request_data.replace('输入输出端uuid', str(get_sink_node_id()))
             request_data = request_data.replace('输入输出数据集名称', get_sink_dataset_name())
-            request_data = request_data.replace('输入输入数据集名称', get_source_dataset_name())
+            request_data = request_data.replace('输入输出数据集id', str(get_source_dataset_id()))
             request_data = request_data.replace('输入输出元数据id', str(get_sink_schema_id()))
             request_data = request_data.replace('输入采集组id', str(get_collector_group_id()))
             request_data = request_data.replace('输入采集组名称', get_collector_group_name())
@@ -151,6 +151,7 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入元数据命名规则id', str(get_rule_id()))
             request_data = request_data.replace('输入元数据采集任务id', str(get_collect_schema_task_id()))
             request_data = request_data.replace('输入元数据采集任务名称', str(get_schema_collect_task_name()))
+            request_data = request_data.replace('获取当前时间', str(get_current_time()))
             return request_data
         if 'SELECT name,id from' in data and '输入名称' in data and '输入id' in data:
             select_data = data.split('&&')[0]
