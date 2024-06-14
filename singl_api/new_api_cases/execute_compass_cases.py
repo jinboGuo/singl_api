@@ -12,12 +12,13 @@ from basic_info.setting import compass_host, compass_sheet, compass_cases_dir, l
 from basic_info.get_auth_token import get_headers_root, get_headers
 from new_api_cases.compass_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.compass_prepare_datas import update_job, add_job, add_jobSingle, update_jobSingle, \
-    add_jobMap, update_jobMap, add_reth, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
-    update_asset_directory, dc_collecter_group, publish_flow, get_jobview_history, execution_task, \
-    qa_rule_task, approval_qa_task, publish_qa_flow, get_qa_jobview_history, delete_asset_directory, query_re_th, \
+from new_api_cases.compass_prepare_datas import update_job, add_job, add_jobSingle, \
+    add_jobMap, update_jobMap, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
+    update_asset_directory, publish_flow, get_jobview_history, execution_task, \
+    qa_rule_task, publish_qa_flow, get_qa_jobview_history, delete_asset_directory, query_re_th, \
     query_re_th_ext, get_job_view, get_input_dataset, get_output_dataset, save_node_prop, \
-    update_draft, update_info_list, update_setting, get_job_view_exec, add_re_th_ext, update_re_th_ext, update_re_th
+    update_draft, update_info_list, update_setting, get_job_view_exec, add_re_th_ext, update_re_th_ext, update_re_th, \
+    dc_collect_group, add_re_th, publish_dsp_flow, get_dsp_jobview_history, update_job_single
 
 cases_dir = compass_cases_dir
 case_table = load_workbook(cases_dir)
@@ -131,7 +132,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '新增数据资源参数' == case_detail:
-            new_data = add_reth(data)
+            new_data = add_re_th(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             log.info("new_data：%s" % new_data)
             response = requests.post(url=url, headers=headers, data=new_data)
@@ -200,7 +201,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '创建采集组':
-            new_data = dc_collecter_group(data)
+            new_data = dc_collect_group(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -252,6 +253,22 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail=='监控订阅资源服务执行状态成功':
+            log.info("new_data：%s" % data)
+            response = requests.post(url=url, headers=headers, data=data)
+            count_num = 0
+            time.sleep(6)
+            while '"isRunning":0' in response.text or '"list":[]' in response.text or '"isRunning":1' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=data)
+                time.sleep(6)
+                count_num += 1
+                if count_num == 60:
+                    return
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '创建质量分析任务':
             new_data = qa_rule_task(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -260,10 +277,18 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '质量任务审核通过' in case_detail:
-            new_data = approval_qa_task(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
+        elif case_detail=='监控质检任务执行状态成功':
+            log.info("new_data：%s" % data)
+            response = requests.post(url=url, headers=headers, data=data)
+            count_num = 0
+            time.sleep(6)
+            while '"statusType":"READY"' in response.text or '"list":[]' in response.text or '"statusType":"RUNNING"' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=data)
+                time.sleep(6)
+                count_num += 1
+                if count_num == 60:
+                    return
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -284,6 +309,14 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '新建视图任务版本-数据共享':
+            new_data = get_dsp_jobview_history(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '监控采集任务执行状态运行成功':
             new_data = execution_task(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -292,11 +325,11 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             while '"runningStatus":"RUNNING"' in response.text or '"runningStatus":"CREATED"' in response.text or '"list":[]' in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
-                time.sleep(5)
+                time.sleep(6)
                 count_num += 1
-                if count_num == 30:
+                if count_num == 50:
                     return
-            #log.info("response data：%s %s" % (response.status_code, response.text))
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -306,15 +339,15 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             log.info("new_data：%s" % new_data)
             response = requests.post(url=url, headers=headers, data=new_data)
             count_num = 0
-            time.sleep(5)
+            time.sleep(6)
             while '"status":1' in response.text or '"list":[]' in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
-                time.sleep(5)
+                time.sleep(6)
                 count_num += 1
-                if count_num == 50:
+                if count_num == 60:
                     return
-            #log.info("response data：%s %s" % (response.status_code, response.text))
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -423,7 +456,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '编辑立即执行任务':
-                    new_data = update_jobSingle(data)
+                    new_data = update_job_single(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     response = requests.put(url=url, headers=headers, data=new_data)
                     log.info("response data：%s %s" % (response.status_code, response.text))
@@ -478,7 +511,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     draft_id, new_data = update_setting(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     new_url = url.format(draft_id)
-                    print("new-data: ",new_data)
                     response = requests.put(url=new_url, headers=headers, data=new_data)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
@@ -495,6 +527,15 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif case_detail == '发布调度质量flow':
                     job_id, new_data = publish_qa_flow(data)
+                    new_data = json.dumps(new_data, separators=(',', ':'))
+                    new_url = url.format(job_id)
+                    response = requests.put(url=new_url, headers=headers, data=new_data)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif case_detail == '发布调度共享flow':
+                    job_id, new_data = publish_dsp_flow(data)
                     new_data = json.dumps(new_data, separators=(',', ':'))
                     new_url = url.format(job_id)
                     response = requests.put(url=new_url, headers=headers, data=new_data)
@@ -873,6 +914,7 @@ class CheckResult(unittest.TestCase):
         self.expect_text = data['expect_text']
         self.extract_data=data['response_text']
         self.readData_code =data["response__status_code"]
+        self.fail_detail = data['fail_detail']
         print("******* 执行用例 ->{0} *********".format(self.case_name))
         print("请求URL: {0}".format(self.url))
         print("请求方式: {0}".format(self.method))
@@ -882,4 +924,4 @@ class CheckResult(unittest.TestCase):
             print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{}".format(str(self.readData_code)))
+             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{} 失败详情fail_detail:{}".format(str(self.readData_code),self.fail_detail))

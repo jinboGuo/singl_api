@@ -93,7 +93,7 @@ def get_sql_analyse_statement_id(host, param):
     new_data = json.dumps(param, separators=(',', ':'))
     res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        time.sleep(2)
+        time.sleep(5)
         res_statement_id = res.json()["content"]
         statement_id = res_statement_id['statementId']
         sessionId = res_statement_id['sessionId']
@@ -113,7 +113,7 @@ def get_sql_analyse_dataset_info(host, params):
     """
     try:
         statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, params)
-        url = ' %s/api/sys/meta/datasets/sql/analyzeresult?statementId=%s&sessionId=%s&clusterId=%s&retryTimes=undefined' % (host, statement_id,sessionId,clusterId)
+        url = ' %s/api/sys/meta/datasets/sql/analyzeresult?statementId=%s&sessionId=%s&clusterId=%s&retryTimes=0' % (host, statement_id,sessionId,clusterId)
         res = requests.get(url=url, headers=get_headers())
         text_dict = res.json()["content"]["content"]
         return text_dict

@@ -1,4 +1,5 @@
-from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, qa_task_name
+from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, \
+    qa_task_name, dsp_data_source_name, asset_name
 
 
 def get_tenant_id():
@@ -19,7 +20,7 @@ def get_owner():
     """
     tenant_id = get_tenant_id()
     try:
-      sql = "select id from merce_user where tenant_id='%s' order by create_time desc" % tenant_id
+      sql = "select id from merce_user where tenant_id='%s' and login_id='admin'" % tenant_id
       user = ms.ExecuQuery(sql)
       owner = user[0]["id"]
       return str(owner)
@@ -47,7 +48,7 @@ def get_datasource(data_source,data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where tenant_id='%s' and name ='%s' ORDER BY create_time desc" %(tenant_id,data)
+        sql = "select id,name from merce_dss where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         datasource = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = datasource[0]["id"]
         dss_name = datasource[0]["name"]
@@ -67,7 +68,7 @@ def get_schema(data_source,data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "SELECT ms.id as schema_id, ms.name as schema_name, ms.data_source_ids,ms.data_source_names ,ms.tenant_id,ms.owner,md.id as dataset_id,md.name as dataset_name FROM merce_schema ms left join merce_dataset md on ms.id = md.schema_id where  ms.tenant_id ='%s' and ms.name ='%s' order by md.create_time limit 1" %(tenant_id,data)
+        sql = "SELECT ms.id as schema_id, ms.name as schema_name, ms.data_source_ids,ms.data_source_names ,ms.tenant_id,ms.owner,md.id as dataset_id,md.name as dataset_name FROM merce_schema ms left join merce_dataset md on ms.id = md.schema_id where ms.tenant_id ='%s' and ms.name ='%s' order by md.create_time limit 1" %(tenant_id,data)
         schema = ms.ExecuQuery(sql.encode('utf-8'))
         schema_id = schema[0]["schema_id"]
         schema_name = schema[0]["schema_name"]
@@ -109,7 +110,7 @@ def get_dataset(data_source,data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dataset where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
+        sql = "select id,name,datasource_id,datasource_name from merce_dataset where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_id = dataset[0]["id"]
         dataset_name = dataset[0]["name"]
@@ -117,6 +118,10 @@ def get_dataset(data_source,data):
             return dataset_id
         elif data_source == "dataset_name":
             return dataset_name
+        elif data_source == "datasource_id":
+            return dataset[0]["datasource_id"]
+        elif data_source == "datasource_name":
+            return dataset[0]["datasource_name"]
         else:
             log.error("数据集没有数据！")
     except Exception as e:
@@ -198,3 +203,90 @@ def get_qa_task_id():
         return str(qa_task_id)
     except Exception as e:
         log.error("没有获取到数据质量任务id：%s" % e)
+
+
+def get_dsp_data_resource(dsp_data_source):
+    """
+    获取数据资源id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id,name from dsp_data_resource where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dsp_data_source_name)
+        dsp_data_resource = ms.ExecuQuery(sql.encode('utf-8'))
+        dsp_data_resource_id = dsp_data_resource[0]["id"]
+        dsp_data_resource_name = dsp_data_resource[0]["name"]
+        if dsp_data_source=="data_source_id":
+           return str(dsp_data_resource_id)
+        if dsp_data_source=="data_source_name":
+           return str(dsp_data_resource_name)
+    except Exception as e:
+        log.error("没有获取到数据资源id：%s" % e)
+
+
+def get_dsp_data_application():
+    """
+    获取数据资源申请工单id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from dsp_data_application where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dsp_data_source_name)
+        dsp_data_application = ms.ExecuQuery(sql.encode('utf-8'))
+        dsp_data_application_id = dsp_data_application[0]["id"]
+        return str(dsp_data_application_id)
+    except Exception as e:
+        log.error("没有获取到数据资源申请工单id：%s" % e)
+
+def get_sys_approval_target(approval_type):
+    """
+    获取审批模块id
+    若确少code"....]添加。
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from sys_approval_target where tenant_id='%s' and code='%s' and type ='INTERNAL'" % (tenant_id, approval_type)
+        approval_type = ms.ExecuQuery(sql.encode('utf-8'))
+        approval_type_id = approval_type[0]["id"]
+        return str(approval_type_id)
+    except Exception as e:
+        log.error("没有获取到审批模块id：%s" % e)
+
+
+def get_organization():
+    """
+    :return: 组织机构的id
+    """
+    tenant_id = get_tenant_id()
+    try:
+      sql = "select id from sys_organization where tenant_id='%s' and code='ROOT'" % tenant_id
+      sys_organization = ms.ExecuQuery(sql)
+      sys_organization_id = sys_organization[0]["id"]
+      return str(sys_organization_id)
+    except Exception as e:
+        return log.error("没有查询组织机构id：%s" % e)
+
+def get_asset_id():
+    """
+    获取资产id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
+        assets_info = ms.ExecuQuery(sql.encode('utf-8'))
+        assets_info_id = assets_info[0]["id"]
+        return str(assets_info_id)
+    except Exception as e:
+        log.error("没有获取到资产id：%s" % e)
+
+
+def get_approval_record():
+    """
+    获取资产审批id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
+        assets_info = ms.ExecuQuery(sql.encode('utf-8'))
+        assets_info_id = assets_info[0]["id"]
+        return str(assets_info_id)
+    except Exception as e:
+        log.error("没有获取到资产审核id：%s" % e)

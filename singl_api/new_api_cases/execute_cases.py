@@ -1064,7 +1064,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
                 write_result(table_sheet_name, row, column + 4, response.text)
             else:
                 response = requests.put(url=url, headers=headers, json=dict_res(data))
-                #log.info("response data：%s %s" % (response.status_code, response.text))
+                log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(table_sheet_name, row, column, response.status_code)
                 write_result(table_sheet_name, row, column + 4, response.text)
@@ -1114,18 +1114,22 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 response = requests.delete(url=url, headers=headers,data=json.dumps(data))
-                #log.info("response data：%s %s" % (response.status_code, response.text))
+                log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(table_sheet_name, row, column, response.status_code)
                 write_result(table_sheet_name, row, column + 4, response.text)
         elif isinstance(data,list):
             response = requests.delete(url=url, headers=headers,data=json.dumps(data))
-            #log.info("response data：%s %s" % (response.status_code, response.text))
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
-            log.error("测试用例：{} 执行过程中出错".format(case_detail))
+            response = requests.delete(url=url, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("测试用例：{} 执行过程中出错{}".format(case_detail,e))
 

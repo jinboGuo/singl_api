@@ -4,9 +4,12 @@ import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
 from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms, \
-    get_job_view_id, get_schema_collect_id, get_collect_task_id, get_qa_task_id
-from basic_info.setting import resource_type, tag_type, data_source, compass_host, log
+    get_job_view_id, get_schema_collect_id, get_collect_task_id, get_qa_task_id, get_dsp_data_application, \
+    get_dsp_data_resource
+from basic_info.setting import resource_type, tag_type, data_source, compass_host, log, dsp_data_source
 import os
+
+from util.timestamp_13 import data_now
 
 ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
@@ -14,6 +17,9 @@ def deal_parameters(data,request_method,request_url):
     if data:
         if '随机数' in data:
             data = data.replace('随机数', str(random.randint(0, 9999999999999)))
+            return deal_parameters(data,request_method,request_url)
+        if '创建时间' in data:
+            data = data.replace('创建时间', data_now())
             return deal_parameters(data,request_method,request_url)
         if '数据源目录' in data:
             data = data.replace('数据源目录', str(get_resourceid(resource_type[0])))
@@ -72,6 +78,15 @@ def deal_parameters(data,request_method,request_url):
         if '质检任务主键' in data:
             data = data.replace('质检任务主键',  str(get_qa_task_id()))
             return deal_parameters(data,request_method,request_url)
+        if '数据资源主键' in data:
+            data = data.replace('数据资源主键',  str(get_dsp_data_resource(dsp_data_source[0])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资源名称' in data:
+            data = data.replace('数据资源名称',  str(get_dsp_data_resource(dsp_data_source[1])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资源申请工单主键' in data:
+            data = data.replace('数据资源申请工单主键',  str(get_dsp_data_application()))
+            return deal_parameters(data,request_method,request_url)
         if '&&' in data:
             new_data = str(data).split('&&')
             if request_method == "PUT":
@@ -128,6 +143,12 @@ def deal_parameters(data,request_method,request_url):
                     if '数据源名称' in data:
                         data = data.replace('数据源名称', str(get_datasource(data_source[1],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
+                    if '数据集主键' in data:
+                        data = data.replace('数据集主键', str(get_dataset(data_source[4],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据集名称' in data:
+                        data = data.replace('数据集名称', str(get_dataset(data_source[5],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
                     if '标签主键' in data:
                         data = data.replace('标签主键', str(get_tags(tag_type[0],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
@@ -137,7 +158,7 @@ def deal_parameters(data,request_method,request_url):
                         new_data = response.json()["content"]["list"][0]
                         table_names= ["NewTable_time_1"]
                         new_data["tableNames"]=table_names
-                        print("type: ",type(new_data))
+                        #print("type: ",type(new_data))
                         log.info("QUERY查询接口响应数据:{}".format(new_data))
                         return new_data
                       except Exception as e:

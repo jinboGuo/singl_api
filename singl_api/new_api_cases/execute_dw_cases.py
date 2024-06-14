@@ -3,6 +3,8 @@ import json
 import os
 import re
 import time
+from new_api_cases.get_statementId import get_sql_analyse_dataset_info, get_sql_analyse_statement_id, \
+    get_sql_execte_statement_id
 from util import myddt
 import xlrd
 from openpyxl import load_workbook
@@ -28,9 +30,7 @@ from new_api_cases.dw_prepare_datas import update_business_data, \
     query_metadata_model, update_dimension, add_physical_field, \
     del_physical_field, get_target_metadata, new_data_model, publish_data_model, get_asset_directory, \
     update_asset_directory, move_asset_directory, duplicate_asset_directory, duplicate_move_asset_directory, \
-    delete_asset_directory, query_data_tier, query_subject_domain, query_tags, create_asset, approval_asset, \
-    update_asset, get_sql_analyse_statement_id, get_sql_analyse_dataset_info, get_sql_execte_statement_id, \
-    create_sql_asset, query_asset, sql_analyse_data, batch_create_asset, get_improt_data
+    delete_asset_directory,update_asset,create_sql_asset, sql_analyse_data, batch_create_asset, get_improt_data
 
 cases_dir = dw_cases_dir
 case_table = load_workbook(cases_dir)
@@ -781,48 +781,8 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '按照数仓分层检索资产数据':
-            new_data = query_data_tier()
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '按照主题域检索资产数据':
-            new_data = query_subject_domain()
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '按照标签检索资产数据':
-            new_data = query_tags()
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '创建数据集资产':
-            new_data = create_asset(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '创建服务视图资产' in case_detail:
             new_data = create_sql_asset(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '数据资产审核' in case_detail:
-            new_data = approval_asset(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -833,35 +793,24 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             new_data = sql_analyse_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '获取SQL执行' in case_detail:
-            """先获取接口需要使用的statement id 和 数据集分析字段"""
-            execte_use_params = get_sql_analyse_dataset_info(host, data)  # 数据集分析字段
-            execte_use_params = json.dumps(execte_use_params, separators=(',', ':'))
-            log.info("request   data：%s " % execte_use_params)
-            execte_statement_id = get_sql_execte_statement_id(host, data)
-            new_url = url.format(execte_statement_id)
+        elif case_detail == '获取SQL执行任务结果':
+            exec_use_params = get_sql_analyse_dataset_info(host, data)
+            exec_use_params = json.dumps(exec_use_params, separators=(',', ':'))
+            statement_id, session_id, cluster_id = get_sql_execte_statement_id(host, data)
+            new_url = url.format(statement_id, session_id, cluster_id)
             log.info("request   url：%s " % new_url)
-            response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+            response = requests.post(url=new_url, headers=headers, data=exec_use_params)
             count_num = 0
             while "waiting" in response.text or "running" in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
-                response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+                response = requests.post(url=new_url, headers=headers, data=exec_use_params)
                 time.sleep(5)
                 count_num += 1
-                if count_num == 100:
+                if count_num == 50:
                     return
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询关联数据集资产' in case_detail:
-            new_data = query_asset(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -969,11 +918,10 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '根据statement id,获取Sql Analyze结果(获取输出字段)':
-                sql_analyse_statement_id = get_sql_analyse_statement_id(host, data)
-                new_url = url.format(sql_analyse_statement_id)
-                log.info("request   url：%s " % new_url)
+                statement_id, sessionId, clusterId = get_sql_analyse_statement_id(host, data)
+                new_url = url.format(statement_id, sessionId, clusterId)
+                log.info('new_url:%s' % new_url)
                 response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
                 count_num = 0
                 while "waiting" in response.text or "running" in response.text:
                     log.info("再次查询前：%s %s" % (response.status_code, response.text))
@@ -1342,7 +1290,7 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)# 字典形式作为参数，如{"id":"7135cf6e-2b12-4282-90c4-bed9e2097d57","name":"gbj_for_jdbcDatasource_create_0301_1_0688","creator":"admin"}
-            elif "删除资产目录" in case_detail:
+            elif "删除资产目录" == case_detail:
                 asset_id, new_data = delete_asset_directory(data)
                 log.info("request   data：%s " % new_data)
                 new_url = url.format(asset_id)
@@ -1564,8 +1512,7 @@ class CheckResult(unittest.TestCase):
         elif key_word in ('query', 'update', 'delete'):
             if relation == '=':
                 compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', '%s' % (response_text))
-                response_text_list = []
-                response_text_list.append(response_text)
+                response_text_list = [response_text]
                 if compare_result == response_text_list:
                     try:
                         self.assertEqual(expect_text, len(response_text), '第%d行expect_text和response_text不相等' % row)
@@ -1662,6 +1609,7 @@ class CheckResult(unittest.TestCase):
         self.expect_text = data['expect_text']
         self.extract_data=data['response_text']
         self.readData_code =data["response__status_code"]
+        self.fail_detail = data['fail_detail']
         print("******* 执行用例 ->{0} *********".format(self.case_name))
         print("请求URL: {0}".format(self.url))
         print("请求方式: {0}".format(self.method))
@@ -1671,4 +1619,4 @@ class CheckResult(unittest.TestCase):
             print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{}".format(str(self.readData_code)))
+             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{} 失败详情fail_detail:{}".format(str(self.readData_code),self.fail_detail))

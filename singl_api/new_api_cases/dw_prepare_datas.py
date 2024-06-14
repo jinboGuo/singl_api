@@ -745,7 +745,7 @@ def duplicate_move_asset_directory(data):
 
 def delete_asset_directory(data):
     try:
-        asset_directory = "select id from merce_resource_dir mrd where res_type ='%s' and creator='admin' and name like'%s%%%%' order by create_time desc limit 1" % (data[1], data[0])
+        asset_directory = "select id from merce_resource_dir where res_type ='assets_dir' and name like'%s%%%%' order by create_time desc limit 1" % data
         asset_directory_info = ms.ExecuQuery(asset_directory.encode('utf-8'))
         new_data = {"data": str(asset_directory_info[0]["id"])}
         return asset_directory_info[0]["id"], new_data
@@ -782,33 +782,6 @@ def query_subject_domain():
     except Exception as e:
         log.error("异常信息：%s" % e)
 
-def query_tags():
-    try:
-        merce_tag = "SELECT id FROM merce_tag order by create_time desc limit 1"
-        merce_tag = ms.ExecuQuery(merce_tag.encode('utf-8'))
-        if len(merce_tag) == 0:
-            data = ["123456"]
-            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"tagIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":2,"pageSize":8,"pageable":True}}
-            return new_data
-        else:
-            data = [str(merce_tag[0]["id"])]
-            new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"tagIds","oper":"EQUAL","value":data}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":2,"pageSize":8,"pageable":True}}
-            return new_data
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-def create_asset(data):
-    try:
-        data = data.split("&")
-        asset_directory = "select id,name,owner,creator from merce_resource_dir where res_type ='assets_dir' and name like'%s%%%%' order by create_time desc limit 1" %data[1]
-        asset_directory_info = ms.ExecuQuery(asset_directory.encode('utf-8'))
-        dataset = "select id,name from merce_dataset where name like'%s%%%%' order by create_time desc limit 1" %data[0]
-        dataset = ms.ExecuQuery(dataset.encode('utf-8'))
-        new_data = {"assetModel":0,"storage":"HDFS","resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"name":"test_asset_gjb随机数","isShare":0,"updateFrequency":"","datasetName":dataset[0]["name"],"datasetId":dataset[0]["id"],"description":"创建数据集资产","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]}
-        deal_random(new_data)
-        return new_data
-    except Exception as e:
-        log.error("异常信息：%s" % e)
 
 def create_sql_asset(data):
     try:
@@ -817,7 +790,7 @@ def create_sql_asset(data):
         asset_directory_info = ms.ExecuQuery(asset_directory.encode('utf-8'))
         dataset = "select id,name from merce_dataset where name like'%s%%%%' order by create_time desc limit 1" %data[0]
         dataset = ms.ExecuQuery(dataset.encode('utf-8'))
-        new_data = {"assetModel":1,"resourceId":asset_directory_info[0]["id"],"updateFrequency":"","resourceName":asset_directory_info[0]["name"],"name":"test_sql_asset_gjb随机数","sqlStr":"select * from `gjb_ttest_hdfs042219`","isShare":0,"datasetName":dataset[0]["name"],"datasetId":dataset[0]["id"],"description":"","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"],"isSave":True}
+        new_data = {"assetModel":1,"resourceId":asset_directory_info[0]["id"],"updateFrequency":"","resourceName":asset_directory_info[0]["name"],"name":"gjb_test_asset_sql随机数","sqlStr":"select * from `gjb_ttest_hdfs042219`","isShare":0,"datasetName":dataset[0]["name"],"datasetId":dataset[0]["id"],"description":"","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"],"isSave":True}
         deal_random(new_data)
         return new_data
     except Exception as e:
@@ -832,24 +805,10 @@ def batch_create_asset(data):
         dataset1 = ms.ExecuQuery(dataset1.encode('utf-8'))
         dataset2 = "select id,name from merce_dataset where name like'%s%%%%' order by create_time desc limit 1" %data[1]
         dataset2 = ms.ExecuQuery(dataset2.encode('utf-8'))
-        new_data = [{"assetModel":0,"resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"updateFrequency":"","name":"training","isShare":0,"datasetName":dataset2[0]["name"],"datasetId":dataset2[0]["id"],"description":None,"tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"JDBC","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]},{"assetModel":0,"resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"updateFrequency":"","name":"gjb_ttest_hdfs042219","isShare":0,"datasetName":dataset1[0]["name"],"datasetId":dataset1[0]["id"],"description":None,"tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]}]
+        new_data = [{"assetModel":0,"resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"updateFrequency":"","name":"gjb_test_asset随机数","isShare":0,"datasetName":dataset2[0]["name"],"datasetId":dataset2[0]["id"],"description":None,"tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"JDBC","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]},{"assetModel":0,"resourceId":asset_directory_info[0]["id"],"resourceName":asset_directory_info[0]["name"],"updateFrequency":"","name":"gjb_test_asset随机数","isShare":0,"datasetName":dataset1[0]["name"],"datasetId":dataset1[0]["id"],"description":None,"tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":asset_directory_info[0]["creator"],"approverId":asset_directory_info[0]["owner"]}]
+        for data in new_data:
+         deal_random(data)
         return new_data
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-def approval_asset(data):
-    try:
-        data = data.split("&")
-        assets_approval_record = "select id from assets_approval_record where approval_type='%s' and approval_status ='PENDING' and target_name like '%s%%%%' order by create_time desc limit 1" % (data[2], data[0])
-        assets_approval_record = ms.ExecuQuery(assets_approval_record.encode('utf-8'))
-        ids = [str(assets_approval_record[0]["id"])]
-        if "PASS" in data:
-            new_data = {"approvalComments":"通过","ids": ids,"approvalType":data[2],"approvalStatus":data[1],"targetType":"ASSETS_DIRECTORY"}
-            return new_data
-        else:
-            new_data = {"approvalComments": "不通过", "ids": ids, "approvalType": data[2], "approvalStatus": data[1],
-                        "targetType": "ASSETS_DIRECTORY"}
-            return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
 
@@ -857,12 +816,12 @@ def update_asset(data):
     try:
         assets_info = "select asset_model,id,resource_id,resource_name,dataset_id,dataset_name,tenant_id,owner,status,approver_name,approver_id,creator,last_modifier from assets_info where status in('OFFLINE','SAVED') and name like '%s%%%%' order by create_time desc limit 1" %data
         assets_info = ms.ExecuQuery(assets_info.encode('utf-8'))
-        if "test_asset_gjb" in data:
-            new_data = {"assetModel":assets_info[0]["asset_model"],"storage":"HDFS","resourceId":assets_info[0]["resource_id"],"resourceName":assets_info[0]["resource_name"],"name":"test_asset_gjb随机数","isShare":0,"updateFrequency":None,"datasetName":assets_info[0]["dataset_name"],"datasetId":assets_info[0]["dataset_id"],"description":"创建数据集资产","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":assets_info[0]["approver_name"],"approverId":assets_info[0]["approver_id"],"id":assets_info[0]["id"],"tenantId":assets_info[0]["tenant_id"],"owner":assets_info[0]["owner"],"enabled":None,"creator":assets_info[0]["creator"],"createTime":data_now(),"lastModifier":assets_info[0]["last_modifier"],"lastModifiedTime":data_now(),"visibleToAll":False,"approverRemarks":"","approvalRecordId":None,"approvalComments":"","status":assets_info[0]["status"],"publishTime":None,"sqlStr":"","order":None,"expiredPeriod":0,"recordNumber":0,"byteSize":0,"type":"FLOW","resource":None,"isHide":0,"scheduleType":"","serviceMode":None,"dataTierIds":[],"dataTierName":"","domainIds":[],"domainNames":[],"lifeCycleType":"","shareStatus":None,"assetsShareId":None,"assetsShare":None,"shareMode":"","collectionTimes":0,"shareTimes":0,"departmentTimes":0,"organizationName":"","keywords":"","isCollection":0,"viewNum":1,"readNum":0,"dataPullNum":0,"dataPushNum":0,"dataShareNum":None,"recentViewNum":0}
+        if "gjb_test_asset" == data:
+            new_data = {"assetModel":assets_info[0]["asset_model"],"storage":"HDFS","resourceId":assets_info[0]["resource_id"],"resourceName":assets_info[0]["resource_name"],"name":"gjb_test_asset随机数","isShare":0,"updateFrequency":None,"datasetName":assets_info[0]["dataset_name"],"datasetId":assets_info[0]["dataset_id"],"description":"创建数据集资产","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":"FILE","approverName":assets_info[0]["approver_name"],"approverId":assets_info[0]["approver_id"],"id":assets_info[0]["id"],"tenantId":assets_info[0]["tenant_id"],"owner":assets_info[0]["owner"],"enabled":None,"creator":assets_info[0]["creator"],"createTime":data_now(),"lastModifier":assets_info[0]["last_modifier"],"lastModifiedTime":data_now(),"visibleToAll":False,"approverRemarks":"","approvalRecordId":None,"approvalComments":"","status":assets_info[0]["status"],"publishTime":None,"sqlStr":"","order":None,"expiredPeriod":0,"recordNumber":0,"byteSize":0,"type":"FLOW","resource":None,"isHide":0,"scheduleType":"","serviceMode":None,"dataTierIds":[],"dataTierName":"","domainIds":[],"domainNames":[],"lifeCycleType":"","shareStatus":None,"assetsShareId":None,"assetsShare":None,"shareMode":"","collectionTimes":0,"shareTimes":0,"departmentTimes":0,"organizationName":"","keywords":"","isCollection":0,"viewNum":1,"readNum":0,"dataPullNum":0,"dataPushNum":0,"dataShareNum":None,"recentViewNum":0}
             deal_random(new_data)
             return assets_info[0]["id"], new_data
-        elif "test_sql_asset_gjb" in data:
-            new_data = {"assetModel":assets_info[0]["asset_model"],"resourceId":assets_info[0]["resource_id"],"updateFrequency":None,"resourceName":assets_info[0]["resource_name"],"name":"test_sql_asset_gjb随机数","sqlStr":"select * from `gjb_ttest_hdfs042219`","isShare":0,"datasetName":assets_info[0]["dataset_name"],"datasetId":assets_info[0]["dataset_id"],"description":"","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":None,"approverName":assets_info[0]["approver_name"],"approverId":assets_info[0]["approver_id"],"isSave":True,"id":assets_info[0]["id"],"tenantId":assets_info[0]["tenant_id"],"owner":assets_info[0]["owner"],"enabled":None,"creator":assets_info[0]["creator"],"createTime":data_now(),"lastModifier":assets_info[0]["last_modifier"],"lastModifiedTime":data_now(),"visibleToAll":False,"approverRemarks":"","approvalRecordId":None,"approvalComments":"","status":assets_info[0]["status"],"publishTime":None,"order":None,"expiredPeriod":0,"recordNumber":0,"byteSize":0,"storage":"HDFS","type":"FLOW","resource":None,"isHide":0,"scheduleType":"","serviceMode":None,"dataTierIds":[],"dataTierName":"","domainIds":[],"domainNames":[],"lifeCycleType":"","shareStatus":None,"assetsShareId":None,"assetsShare":None,"shareMode":"","collectionTimes":0,"shareTimes":0,"departmentTimes":0,"organizationName":"","keywords":"","isCollection":0,"viewNum":1,"readNum":0,"dataPullNum":0,"dataPushNum":0,"dataShareNum":None,"recentViewNum":0}
+        elif "gjb_test_asset_sql" == data:
+            new_data = {"assetModel":assets_info[0]["asset_model"],"resourceId":assets_info[0]["resource_id"],"updateFrequency":None,"resourceName":assets_info[0]["resource_name"],"name":"gjb_test_asset_sql随机数","sqlStr":"select * from `gjb_ttest_hdfs042219`","isShare":0,"datasetName":assets_info[0]["dataset_name"],"datasetId":assets_info[0]["dataset_id"],"description":"","tags":[],"tagIds":[],"tagsList":[],"providerDepartment":"","businessDirector":"","businessTelephone":"","technicalDepartment":"","technicalDirector":"","technicalTelephone":"","resourceFormat":None,"approverName":assets_info[0]["approver_name"],"approverId":assets_info[0]["approver_id"],"isSave":True,"id":assets_info[0]["id"],"tenantId":assets_info[0]["tenant_id"],"owner":assets_info[0]["owner"],"enabled":None,"creator":assets_info[0]["creator"],"createTime":data_now(),"lastModifier":assets_info[0]["last_modifier"],"lastModifiedTime":data_now(),"visibleToAll":False,"approverRemarks":"","approvalRecordId":None,"approvalComments":"","status":assets_info[0]["status"],"publishTime":None,"order":None,"expiredPeriod":0,"recordNumber":0,"byteSize":0,"storage":"HDFS","type":"FLOW","resource":None,"isHide":0,"scheduleType":"","serviceMode":None,"dataTierIds":[],"dataTierName":"","domainIds":[],"domainNames":[],"lifeCycleType":"","shareStatus":None,"assetsShareId":None,"assetsShare":None,"shareMode":"","collectionTimes":0,"shareTimes":0,"departmentTimes":0,"organizationName":"","keywords":"","isCollection":0,"viewNum":1,"readNum":0,"dataPullNum":0,"dataPushNum":0,"dataShareNum":None,"recentViewNum":0}
             deal_random(new_data)
             return assets_info[0]["id"], new_data
         else:
@@ -878,71 +837,6 @@ def sql_analyse_data(data):
         return new_data
     except Exception as e:
         log.error("异常信息：%s" %e)
-
-# 初始化Sql Analyze(解析数据集输出字段)，返回statement id，获取数据集字段给分析任务使用
-def get_sql_analyse_statement_id(host, param):
-    url = ' %s/api/assets/sqlAssets/sql/analyzeinit' % host
-    param = sql_analyse_data(param)
-    new_data = json.dumps(param, separators=(',', ':'))
-    res = requests.post(url=url, headers=get_headers(), data=new_data)
-    try:
-        res_statement_id = json.loads(res.text)
-        sql_analyse_statement_id = res_statement_id['statementId']
-        log.info("statmentid：%s" % sql_analyse_statement_id)
-        return sql_analyse_statement_id
-    except KeyError:
-        return
-
-# 根据初始化SQL Analyze返回的statement id,获取数据集字段(获取输出字段)
-def get_sql_analyse_dataset_info(host, params):
-    sql_analyse_statement_id = get_sql_analyse_statement_id(host, params)
-    url = ' %s/api/assets/sqlAssets/sql/analyzeresult?statementId=%s&clusterId=cluster1' % (host, sql_analyse_statement_id)
-    res = requests.get(url=url, headers=get_headers())
-    count_num = 0
-    while "waiting" in res.text or "running" in res.text:
-        log.info("再次查询前：%s %s" % (res.status_code, res.text))
-        res = requests.get(url=url, headers=get_headers())
-        count_num += 1
-        if count_num == 100:
-            return
-    # 返回的是str类型
-    log.info("查询：%s %s" % (res.status_code, res.text))
-    if '"statement":"available"' in res.text:
-        text_dict = json.loads(res.text)
-        text_dict_content = text_dict["content"]
-        return text_dict_content
-    else:
-        print('获取数据集输出字段失败')
-        return
-
-# 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
-def get_sql_execte_statement_id(host,param):
-    url = '%s/api/assets/sqlAssets/sql/executeinit' % host
-    param = sql_analyse_data(param)
-    new_data = json.dumps(param, separators=(',', ':'))
-    res = requests.post(url=url, headers=get_headers(), data=new_data)
-    try:
-        res_statement_id = json.loads(res.text)
-        sql_analyse_statement_id = res_statement_id['statementId']
-        return sql_analyse_statement_id
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-def query_asset(data):
-    try:
-        data = data.split("&")
-        assets_info = "select dataset_id from assets_info where status in('OFFLINE','SAVED') and name like '%s%%%%' order by create_time desc limit 1" % data[1]
-        assets_info=ms.ExecuQuery(assets_info.encode('utf-8'))
-        asset_directory = "select parent_id from merce_resource_dir mrd where res_type ='assets_dir' and creator='admin' and name like'%s%%%%' order by create_time desc limit 1" % data[0]
-        asset_directory = ms.ExecuQuery(asset_directory.encode('utf-8'))
-        resource_id = []
-        dataset_id = []
-        resource_id.append(str(asset_directory[0]["parent_id"]))
-        dataset_id.append(str(assets_info[0]["dataset_id"]))
-        new_data = {"fieldGroup":{"fields":[{"andOr":"AND","name":"resourceId","oper":"EQUAL","value":resource_id},{"andOr":"AND","name":"datasetId","oper":"EQUAL","value":dataset_id},{"andOr":"AND","name":"assetModel","oper":"EQUAL","value":[0]}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":8,"pageable":True}}
-        return new_data
-    except Exception as e:
-        log.error("异常信息：%s" % e)
 
 # 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
 def get_improt_data(headers, host):

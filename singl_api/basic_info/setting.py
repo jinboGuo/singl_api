@@ -43,7 +43,7 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
  Compass_MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-compass_sheet = "842"  #scheduler
+compass_sheet = "scheduler"  #scheduler
 compass_host = "http://192.168.1.95:8515"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.85',
@@ -79,7 +79,7 @@ Dsp_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-dw_sheet = "dw-asset"
+dw_sheet = "dw-asset"   #dw-asset
 dw_host = "http://192.168.1.95:8515"
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
@@ -128,7 +128,7 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 """
 
 baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
-baymax_sheet = "842"
+baymax_sheet = "baymax_master"
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
@@ -148,7 +148,7 @@ ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"],
 tenant_name = "default"
 
 """ 资源目录类型"""
-resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","dataassets_dir","dataresource_dir","datasafe_job_dir","fileset_dir","standard_dir","schema_collect_task_dir","qa_job_dir"]
+resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir","poseidon_collect_dir","poseidon_task_dir","storage_dir","jobview_dir","assets_dir","dataresource_dir","datasafe_job_dir","fileset_dir","standard_dir","schema_collect_task_dir","qa_job_dir"]
 
 """元数据相关信息"""
 data_source = ["datasource_id","datasource_name","schema_id","schema_name","dataset_id","dataset_name","tenant_id","owner"]
@@ -167,6 +167,19 @@ collect_task_name = "gjb_collect_task"
 
 """数据质量任务名称"""
 qa_task_name = "gjb_qa_task"
+
+"""数据资源名称"""
+dsp_data_source_name = "gjb_dsp_push_datasource"
+
+"""数据资源相关信息"""
+dsp_data_source = ["data_source_id","data_source_name"]
+
+""" 审批类型"""
+approval_type = ["ASSETS_DIRECTORY","DIMENSION_TABLE","DATA_APPLICATION","POSEIDON_TASK","DATA_GRANT_RECORD","SDS_JOB","STANDARD_JOB","INDICATOR","SUPPLEMENT","DATATIER","SUBJECTDOMAIN","META_MODEL","DATA_DATARES","QUALITY_JOB","SCHEMA_COLLECT_TASK"]
+
+"""数据资产名称"""
+asset_name = "gjb_test_asset"
+
 
 """
 compass admin账户登录信息
