@@ -9,7 +9,8 @@ from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_da
     get_sink_dataset_name, \
     get_source_dataset_name, get_collector_group_id, get_collector_group_name, get_tenant_id, get_owner, get_user_id, \
     get_sink_schema_name_and_random, get_sink_dataset_name_and_random, get_source_dataset_id, get_dss_mysql_id, \
-    get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name,get_current_time
+    get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name, \
+    get_current_time, get_table_name, get_sink_dataset_id
 
 
 def deal_parameters(data, request_method, request_url):
@@ -132,8 +133,7 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入采集任务id', str(get_collect_task_id()))
             request_data = request_data.replace('输入输入端uuid', str(get_source_node_id()))
             request_data = request_data.replace('输入输出端uuid', str(get_sink_node_id()))
-            request_data = request_data.replace('输入输出数据集名称', get_sink_dataset_name())
-            request_data = request_data.replace('输入输出数据集id', str(get_source_dataset_id()))
+            request_data = request_data.replace('输入输出数据集id', str(get_sink_dataset_id()))
             request_data = request_data.replace('输入输出元数据id', str(get_sink_schema_id()))
             request_data = request_data.replace('输入采集组id', str(get_collector_group_id()))
             request_data = request_data.replace('输入采集组名称', get_collector_group_name())
@@ -152,6 +152,7 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入元数据采集任务id', str(get_collect_schema_task_id()))
             request_data = request_data.replace('输入元数据采集任务名称', str(get_schema_collect_task_name()))
             request_data = request_data.replace('获取当前时间', str(get_current_time()))
+            request_data = request_data.replace('输入输出数据集名称', get_sink_dataset_name())
             return request_data
         if 'SELECT name,id from' in data and '输入名称' in data and '输入id' in data:
             select_data = data.split('&&')[0]
@@ -213,3 +214,9 @@ def deal_parameters(data, request_method, request_url):
                 log.error("sql查询结果为空！")
         else:
             return data
+
+
+def deal_storage_parameters(data):
+    if '获取表名' in data:
+        request_data = data.replace('获取表名', str(get_table_name()))
+        return request_data

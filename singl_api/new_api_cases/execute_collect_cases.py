@@ -8,7 +8,7 @@ import requests
 from util.format_res import dict_res
 from basic_info.setting import collect_sheet, collect_cases_dir, log
 from basic_info.get_auth_token import get_headers, get_headers_root
-from new_api_cases.collect_deal_parameters import deal_parameters
+from new_api_cases.collect_deal_parameters import deal_parameters, deal_storage_parameters
 import unittest
 from basic_info.setting import collect_host
 from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
@@ -32,7 +32,7 @@ def deal_request_method():
     :return:
     """
     # for i in range(2, all_rows + 1):
-    for i in range(56, all_rows + 1):
+    for i in range(82, all_rows + 1):
         request_method = case_table_sheet.cell(row=i, column=4).value
         request_method_upper = request_method.upper()
         request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -154,7 +154,22 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '创建dataset-FTP':
+        elif case_detail == '创建DM存储':
+            request_data = deal_storage_parameters(data)
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=request_data.encode('utf8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '存储物化':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '创建dataset' in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -202,7 +217,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         elif case_detail == '保存输出端数据集':
             new_url = url.format(get_draft_id())
             log.info("request   url：%s" % new_url)
-            response = requests.post(url=new_url, headers=headers, data=data)
+            response = requests.post(url=new_url, headers=headers, data=data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

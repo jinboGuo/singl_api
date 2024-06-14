@@ -276,7 +276,7 @@ def get_sink_schema_name_and_random():
 
 def get_sink_dataset_name_and_random():
     try:
-        dataset_name = ' test_api_wjp_schema-output-'
+        dataset_name = 'test_api_wjp_dataset-output-'
         random_data = str(random.randint(0, 9999999999999))
         dataset_name_and_random = dataset_name + random_data
         return dataset_name_and_random
@@ -351,10 +351,28 @@ def get_sink_dataset_name():
     tenant_id = get_tenant_id()
     try:
         sql = "SELECT name from merce_dataset  where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
-            tenant_id, 'test_api_wjp_schema%output%')
+            tenant_id, 'test_api_wjp_dataset%output%')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dataset_name = query_data[0]["name"]
+        if len(query_data) == 0:
+            dataset_name = ''
+            return dataset_name
+        else:
+            dataset_name = query_data[0]["name"]
         return dataset_name
+
+    except Exception as e:
+        log.error("没有获取到输出端数据集名称：%s" % e)
+
+
+def get_sink_dataset_id():
+    """获取采集输出端数据集id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "SELECT id from merce_dataset  where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
+            tenant_id, 'test_api_wjp_dataset%output%')
+        query_data = ms.ExecuQuery(sql.encode('utf-8'))
+        dataset_id = query_data[0]["id"]
+        return dataset_id
     except Exception as e:
         log.error("没有获取到输出端数据集名称：%s" % e)
 
@@ -363,7 +381,7 @@ def get_source_dataset_name():
     """获取采集输入端数据集名称"""
     tenant_id = get_tenant_id()
     try:
-        sql = "SELECT name from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset_ftp%' ORDER BY create_time desc limit 1".format(
+        sql = "SELECT name from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset%' ORDER BY create_time desc limit 1".format(
             tenant_id)
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_name = query_data[0]["name"]
@@ -376,7 +394,7 @@ def get_source_dataset_id():
     """获取采集输入端数据集id"""
     tenant_id = get_tenant_id()
     try:
-        sql = "SELECT id from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset_ftp%' ORDER BY create_time desc limit 1".format(
+        sql = "SELECT id from merce_dataset  where tenant_id= {} and name like 'test_wjp_dataset%' ORDER BY create_time desc limit 1".format(
             tenant_id)
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
         dataset_id = query_data[0]["id"]
@@ -515,3 +533,15 @@ def get_schema_collect_task_name():
 def get_current_time():
     current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     return current_time
+
+
+import json
+
+
+def get_table_name():
+    """获取采集输出端表名"""
+    sql = "select properties from poseidon_draft_node_prop where  task_id =(select task_id FROM poseidon_task_draft WHERE  name like '%s%%%%' ORDER BY create_time desc LIMIT 1) and draft_id ='0' and type = 1" % (
+        'test_api_wjp_collect')
+    properties = ms.ExecuQuery(sql.encode('utf-8'))
+    table_name = json.loads(properties[0]['properties'])
+    return table_name
