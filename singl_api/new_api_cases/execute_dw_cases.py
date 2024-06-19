@@ -38,7 +38,7 @@ dw_master=dw_sheet
 case_table_sheet = case_table.get_sheet_by_name(dw_master)
 all_rows = case_table_sheet.max_row
 host = dw_host
-woven_dir = os.path.join(os.path.abspath('.'),'attachment\import_autotest_api_df.woven')
+woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_autotest_api_df.woven').replace('\\', '/')
 
 
 def deal_request_method():
@@ -823,17 +823,19 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif "上传woven文件" in case_detail:
+        elif "上传woven文件" == case_detail:
             fs = {"file": open(woven_dir, 'rb')}
             headers.pop('Content-Type')
+            log.info("request data： %s" % woven_dir)
             response = requests.post(url=url, headers=headers, files=fs)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif "导入woven文件" in case_detail:
+        elif "导入woven文件" == case_detail:
             new_data = get_improt_data(headers, dw_host)
             new_data = json.dumps(new_data, separators=(',', ':'))
+            log.info("request data： %s" % new_data)
             response = requests.post(url=url, headers=get_headers(), data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
@@ -1619,4 +1621,4 @@ class CheckResult(unittest.TestCase):
             print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{} 失败详情fail_detail:{}".format(str(self.readData_code),self.fail_detail))
+             self.assertIn(self.expect_text,self.extract_data,"失败详情fail_detail:{}".format(self.fail_detail))

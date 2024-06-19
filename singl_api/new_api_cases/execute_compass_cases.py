@@ -924,4 +924,4 @@ class CheckResult(unittest.TestCase):
             print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-             self.assertEqual(self.readData_code, 200,"返回状态码status_code:{} 失败详情fail_detail:{}".format(str(self.readData_code),self.fail_detail))
+             self.assertIn(self.expect_text,self.extract_data,"失败详情fail_detail:{}".format(self.fail_detail))

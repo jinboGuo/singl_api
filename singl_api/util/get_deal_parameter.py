@@ -1,3 +1,5 @@
+import time
+
 from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, \
     qa_task_name, dsp_data_source_name, asset_name
 
@@ -112,6 +114,7 @@ def get_dataset(data_source,data):
     try:
         sql = "select id,name,datasource_id,datasource_name from merce_dataset where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
+        time.sleep(5)
         dataset_id = dataset[0]["id"]
         dataset_name = dataset[0]["name"]
         if data_source == "dataset_id":

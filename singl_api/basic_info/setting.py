@@ -42,7 +42,7 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
  HOST: "http://192.168.1.95:8515"
  Compass_MySQL_CONFIG:数据库连接信息
 """
-compass_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+compass_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 compass_sheet = "scheduler"  #scheduler
 compass_host = "http://192.168.1.95:8515"
 Compass_MySQL_CONFIG = {
@@ -60,7 +60,7 @@ Compass_MySQL_CONFIG = {
  HOST: "http://192.168.1.95:8515"
  Dsp_MySQL_CONFIG:数据库连接信息
 """
-dsp_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+dsp_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
 dsp_host = "http://192.168.1.95:8515"
 Dsp_MySQL_CONFIG = {
@@ -78,7 +78,7 @@ Dsp_MySQL_CONFIG = {
  HOST: "http://192.168.1.95:8515"
  Dw_MySQL_CONFIG:数据库连接信息
 """
-dw_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+dw_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dw_sheet = "dw-asset"   #dw-asset
 dw_host = "http://192.168.1.95:8515"
 Dw_MySQL_CONFIG = {
@@ -127,7 +127,7 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
 
-baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx')
+baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 baymax_sheet = "baymax_master"
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {

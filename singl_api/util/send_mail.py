@@ -60,7 +60,7 @@ def baymax_main(cases_dir,host, receivers, sheet, start_time,total_time):
         通过率: %s
         用例执行详情请查看附件报告！""" % (host, start_time,total_time,cases_num, pass_cases, non_cases,str(float(pass_cases+non_cases)/cases_num*100)+'%')
     """ 邮件标题"""
-    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + "号-" + sheet +'环境API自动化测试报告'
+    mail_title = time.strftime("%Y-%m-%d", time.localtime()) + "号-" + sheet +'模块API自动化测试报告'
 
     body = MIMEText(mail_content,"plain", "utf-8")
     msg["Subject"] = Header(mail_title, "utf-8")

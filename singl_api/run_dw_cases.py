@@ -1,7 +1,4 @@
 # coding:utf-8
-import time
-import unittest
-from util.BeautifulReport import BeautifulReport
 from util.api_result_report import get_result_report
 from util.send_mail import baymax_main
 from new_api_cases.execute_dw_cases import deal_request_method, cases_dir

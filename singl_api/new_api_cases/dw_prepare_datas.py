@@ -9,7 +9,7 @@ from basic_info.setting import log, ms
 from util.get_deal_parameter import get_tenant_id, get_owner
 from util.timestamp_13 import datatime_now, data_now
 
-woven_dir = os.path.join(os.path.abspath('.'),'attachment\import_autotest_api_df.woven')
+woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_autotest_api_df.woven').replace('\\','/')
 
 def query_subject_data(data):
     try:
@@ -840,10 +840,6 @@ def sql_analyse_data(data):
 
 # 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
 def get_improt_data(headers, host):
-    dataset_sql = "delete from merce_dataset where name like 'gjb_ttest_hdfs042219%' or  name like 'training%'"
-    ms.ExecuNoQuery(dataset_sql)
-    schema_sql = "delete from merce_schema where name like 'gjb_ttest_mysql0420_training%' or  name like 'training%'"
-    ms.ExecuNoQuery(schema_sql)
     url = '%s/api/mis/upload' % host
     fs = {"file": open(woven_dir, 'rb')}
     headers.pop('Content-Type')
