@@ -43,7 +43,7 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
  Compass_MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-compass_sheet = "scheduler"  #scheduler
+compass_sheet = "scheduler"
 compass_host = "http://192.168.1.95:8515"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.85',
@@ -61,14 +61,14 @@ Compass_MySQL_CONFIG = {
  Dsp_MySQL_CONFIG:数据库连接信息
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-dsp_sheet = "842"
+dsp_sheet = "dsp"
 dsp_host = "http://192.168.1.95:8515"
 Dsp_MySQL_CONFIG = {
      'HOST': '192.168.1.67',
      "PORT": 3306,
      "USER": 'merce',
      "PASSWORD": 'merce',
-     "DB": 'merce_167'  # merce-scheduler
+     "DB": 'merce_167'
  }
 
 
@@ -79,7 +79,7 @@ Dsp_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-dw_sheet = "dw-asset"   #dw-asset
+dw_sheet = "dw-asset"
 dw_host = "http://192.168.1.95:8515"
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
@@ -88,20 +88,6 @@ Dw_MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'merce_167',
     'case_db': 'test'}
-
-
-"""
--------k8s环境使用-------
-sheet name baymax_sheet = "k8s_149"
-host = "http://192.168.1.145:40001"
-MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'baymax_test',
-    'case_db': 'test'}
-"""
 
 
 """
@@ -126,9 +112,8 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
  HOST: "http://192.168.1.95:8515"
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
-
 baymax_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-baymax_sheet = "baymax_master"
+baymax_sheet = "baymax_master" #baymax_master
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
@@ -137,14 +122,14 @@ MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'merce_167',
     'case_db': 'test'}
+
 """获取数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"], MySQL_CONFIG["PORT"])
 
+"""elasticsearch集群服务器的地址"""
+ES = ['http://192.168.1.95:9200/']
 
-
-"""
-租户信息
-"""
+"""租户信息"""
 tenant_name = "default"
 
 """ 资源目录类型"""
@@ -213,9 +198,3 @@ MY_LOGIN_INFO_ROOT = {
     "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
 }
-
-
-"""
-elasticsearch集群服务器的地址
-"""
-ES = ['http://192.168.1.95:9200/']

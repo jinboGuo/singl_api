@@ -1,13 +1,10 @@
 # coding:utf-8
 import json
 import os
-import random
 import requests
-from basic_info.get_auth_token import get_headers
 from new_api_cases.dw_deal_parameters import deal_random
 from basic_info.setting import log, ms
-from util.get_deal_parameter import get_tenant_id, get_owner
-from util.timestamp_13 import datatime_now, data_now
+from util.timestamp_13 import data_now
 
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_autotest_api_df.woven').replace('\\','/')
 
@@ -162,7 +159,7 @@ def sql_analyse_data(data):
     except Exception as e:
         log.error("异常信息：%s" %e)
 
-# 解析SQL字段后，初始化Sql任务，返回statement id，执行SQL语句使用
+
 def get_improt_data(headers, host):
     url = '%s/api/mis/upload' % host
     fs = {"file": open(woven_dir, 'rb')}

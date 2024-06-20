@@ -16,7 +16,7 @@ if __name__ == '__main__':
     total_time = get_result_report(compass_host, pattern[3])
 
     """发送邮件"""
-    baymax_main(cases_dir,compass_host, receivers_test, compass_sheet, begin_times,total_time)
+    baymax_main(cases_dir,compass_host,receivers_test,compass_sheet,begin_times,total_time)
 
 
 

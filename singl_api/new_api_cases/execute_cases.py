@@ -14,14 +14,10 @@ from basic_info.setting import baymax_sheet, host, baymax_cases_dir, log
 from httpop.Httpop import Httpop
 from new_api_cases.deal_parameters import deal_parameters
 from new_api_cases.dw_prepare_datas import sql_analyse_data, woven_dir, get_improt_data
-from new_api_cases.get_statementId import statementId, statementId_no_dataset, get_sql_analyse_statement_id, \
-    get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
+from new_api_cases.get_statementId import get_sql_analyse_statement_id, get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
     steps_sql_analyzeinit_statementId, get_step_output_init_statementId, get_step_output_ensure_statementId, \
     step_sql_analyse_data, step_sql_analyse_flow
-from new_api_cases.prepare_datas_for_cases import get_job_tasks_id, collector_schema_sync, dataset_data, create_schema_data, \
-    updschema_data, create_flow_data, update_flow_data, filesets_data, get_old_id_name, get_collector_data, tag_data, set_user_role,\
-    update_role, update_user, enable_user, enable_role, query_flow_data, update_db_driver, update_custom_step, get_improt_dataflow,\
-    query_schema, update_rtcjob_setting
+from new_api_cases.prepare_datas_for_cases import filesets_data, get_import_dataflow,update_db_driver
 from util import myddt
 from util.comm_util import operateKafka
 from util.encrypt import encrypt_rf
@@ -115,18 +111,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
         log.info("请求url：%s" % url)
-        if 'Id不存在' in case_detail:
-            '''先获取statementId,然后格式化URL，再发送请求'''
-            statement = statementId_no_dataset(host, dict_res(data))
-            new_url = url.format(statement)
-            data = data.encode('utf-8')
-            response = requests.post(url=new_url, headers=headers, data=data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            '''将返回的status_code和response.text分别写入第10列和第14列'''
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif "上传woven文件" == case_detail:
+        if "上传woven文件" == case_detail:
             fs = {"file": open(woven_dir, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, headers=headers, files=fs)
@@ -146,13 +131,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             fs = {"file": open(woven_dataflow, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, headers=headers, files=fs)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif "导入dataflow-woven文件" == case_detail:
-            new_data = get_improt_dataflow(headers, host, data)
+            new_data = get_import_dataflow(headers, host, data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=get_headers(), data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
@@ -160,13 +147,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             fs = {"file": open(multi_sink_steps, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, headers=headers, files=fs)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif "导入multi-sink_steps文件" == case_detail:
-            new_data = get_improt_dataflow(headers, host, data)
+            new_data = get_import_dataflow(headers, host, data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=get_headers(), data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
@@ -174,13 +163,15 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             fs = {"file": open(multi_rtc_steps, 'rb')}
             headers.pop('Content-Type')
             response = requests.post(url=url, headers=headers, files=fs)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif "导入multi-rtc_steps文件" == case_detail:
-            new_data = get_improt_dataflow(headers, host, data)
+            new_data = get_import_dataflow(headers, host, data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=get_headers(), data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
@@ -340,6 +331,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             new_data = sql_analyse_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -366,6 +358,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             files = {"file": ('mysql-connector-java-8.0.2801.jar',open(jar_driver, 'rb'),"application/octet-stream"),"dbType":(None,"Mysql",None)}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -373,6 +366,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             files = {"file": ('woven-common-1.5.2.jar',open(jar_dir, 'rb'),"application/octet-stream")}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -380,6 +374,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             files = {"file": ('merce-custom-rtc-steps-1.2.4-Filter.jar',open(jar_custom, 'rb'),"application/octet-stream")}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -496,24 +491,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
     log.info("请求url：%s" % url)
     try:
         if data:
-            if 'Id存在' in case_detail:
-                statement_id = statementId(host, data)
-                parameter_list = [data, statement_id]
-                new_url = url.format(parameter_list[0], parameter_list[1])
-                log.info('new_url:%s' % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                count_num = 0
-                while response.text in ('{"statement":"waiting"}', '{"statement":"running"}'):
-                    response = requests.get(url=new_url, headers=headers)
-                    log.info("response data：%s %s" % (response.status_code, response.text))
-                    count_num += 1
-                    if count_num == 100:
-                        return
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '根据statement id,获取Sql Analyze结果(获取输出字段)':
+            if case_detail == '根据statement id,获取Sql Analyze结果(获取输出字段)':
                 statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, data)
                 new_url = url.format(statement_id,sessionId,clusterId)
                 log.info('new_url:%s' % new_url)
@@ -639,6 +617,7 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 new_url=url.format(data)
                 log.info('new_url:%s' % new_url)
                 response = requests.get(url=new_url,headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
                 status=json.loads(response.text)["statusType"]
                 while status == "WAITTING" or status =="RUNNING" or status =="READY":
                       #log.info("------进入while循环------\n")
@@ -770,6 +749,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             new_data = update_db_driver(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -778,6 +758,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             new_url = url.format(step_id)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.put(url=new_url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -785,6 +766,7 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             new_data = update_rtcjob_setting(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.put(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -840,6 +822,7 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
     try:
         if case_detail == '删除非结构化文件集合':
             response = requests.delete(url=url, headers=headers,json=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)

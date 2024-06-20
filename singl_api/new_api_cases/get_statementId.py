@@ -1,26 +1,9 @@
 import time
-
 import requests, json
 from basic_info.get_auth_token import get_headers
 from basic_info.setting import log, ms
 from new_api_cases.dw_prepare_datas import sql_analyse_data
-from new_api_cases.prepare_datas_for_cases import dataset_data
 from util.format_res import dict_res
-
-# datasetId存在时
-def statementId(host, param):
-    from new_api_cases.prepare_datas_for_cases import dataset_data
-    try:
-        new_data = dataset_data(param)
-        url = '%s/api/datasets/previewinit?rows=50'%(host)
-        new_data = json.dumps(new_data, separators=(',', ':'))
-        res = requests.post(url=url, headers=get_headers(), data=new_data)
-        res_statement_id = json.loads(res.text)
-        statement_id = res_statement_id['statementId']
-        return statement_id, new_data
-    except Exception as e:
-        log.info('数据集的statementID返回空%s' % e)
-
 
 def statementId_flow_use(host, dataset_id):
     url = '%s/api/datasets/%s/previewinit?rows=50' % (host,dataset_id)
@@ -66,21 +49,6 @@ def preview_result_flow_use(host, dataset_id, statement_id):
         log.info('数据集返回的statementID为空')
 
 
-# datasetId不存在时
-def statementId_no_dataset(host, param):
-    new_data = dataset_data(param)
-    new_data = json.dumps(new_data, separators=(',', ':'))
-    url = '%s/api/datasets/new/previewinit?rows=50' % host
-    res = requests.get(url=url, headers=get_headers())
-    try:
-        res_statement_id = json.loads(res.text)
-        statement_id = res_statement_id['statementId']
-        return statement_id, new_data
-    except KeyError as e:
-        log.error("datasetId不存在{}".format(e))
-
-
-
 def get_sql_analyse_statement_id(host, param):
     """
     初始化Sql Analyze(解析数据集输出字段)，返回statement id，获取数据集字段给分析任务使用
@@ -96,9 +64,9 @@ def get_sql_analyse_statement_id(host, param):
         time.sleep(5)
         res_statement_id = res.json()["content"]
         statement_id = res_statement_id['statementId']
-        sessionId = res_statement_id['sessionId']
-        clusterId = res_statement_id['clusterId']
-        return statement_id,sessionId,clusterId
+        session_id = res_statement_id['sessionId']
+        cluster_id = res_statement_id['clusterId']
+        return statement_id,session_id,cluster_id
     except KeyError as e:
         log.error("statementId不存在{}".format(e))
 
@@ -112,8 +80,8 @@ def get_sql_analyse_dataset_info(host, params):
     :return:
     """
     try:
-        statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, params)
-        url = ' %s/api/sys/meta/datasets/sql/analyzeresult?statementId=%s&sessionId=%s&clusterId=%s&retryTimes=0' % (host, statement_id,sessionId,clusterId)
+        statement_id,session_id,cluster_id = get_sql_analyse_statement_id(host, params)
+        url = ' %s/api/sys/meta/datasets/sql/analyzeresult?statementId=%s&sessionId=%s&clusterId=%s&retryTimes=0' % (host, statement_id,session_id,cluster_id)
         res = requests.get(url=url, headers=get_headers())
         text_dict = res.json()["content"]["content"]
         return text_dict
@@ -131,9 +99,9 @@ def get_sql_execte_statement_id(host,param):
         time.sleep(2)
         res_statement_id = res.json()["content"]
         statement_id = res_statement_id['statementId']
-        sessionId = res_statement_id['sessionId']
-        clusterId = res_statement_id['clusterId']
-        return statement_id,sessionId,clusterId
+        session_id = res_statement_id['sessionId']
+        cluster_id = res_statement_id['clusterId']
+        return statement_id,session_id,cluster_id
     except Exception as e:
         log.error("异常信息：%s" % e)
 

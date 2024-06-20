@@ -1,19 +1,26 @@
 # coding:utf-8
 import json
 import os
-import time
 import requests
-from basic_info.get_auth_token import get_headers
 from new_api_cases.compass_deal_parameters import deal_random
-from util.format_res import dict_res
 from basic_info.setting import ms, log
-from basic_info.setting import host
-from selenium import webdriver
 from util.timestamp_13 import data_now
 
 woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\\import_dataflow_steps.woven').replace('\\','/')
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\\mutil_sink_storage.woven').replace('\\','/')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_rtc_steps.woven').replace('\\','/')
+
+def update_db_driver(data):
+    try:
+        sql = "select id, owner, tenant_id, creator, enabled, name, class_name, db_type, jar_name, parameterlist, process_config_type from merce_udf where name like '%s%%%%' order by create_time desc limit 1" % data
+        job_info = ms.ExecuQuery(sql.encode('utf-8'))
+        parameterlist = job_info[0]["parameterlist"]
+        attr_dict = json.loads(parameterlist)
+        new_data = {"jarName":job_info[0]["jar_name"],"processConfigType":job_info[0]["process_config_type"],"name":job_info[0]["name"],"dbType":job_info[0]["db_type"],"className":job_info[0]["class_name"],"parameterlist":{"defaultPort":3306,"driver":"com.mysql.jdbc.Driver","name":"Mysql","paraPrefix":"?","comment":"DriverManager.getConnection(url);","paraSep":"&","url":"jdbc:mysql://[HOST]:[PORT]/[DB]","example":"jdbc:mysql://localhost:3306/test?user=root&password=&useUnicode=true&characterEncoding=gbk&autoReconnect=true&failOverReadOnly=false"},"tenantId":job_info[0]["tenant_id"],"owner":job_info[0]["owner"],"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":job_info[0]["id"],"version":1,"groupCount":None,"groupFieldValue":None,"returnType":None,"aliasName":None,"settings":None,"expiredPeriod":0}
+        new_data['parameterlist'] = attr_dict
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 
 def filesets_data(data):
@@ -143,14 +150,15 @@ def get_fs(flag):
         log.error("异常信息：%s" % e)
 
 
-def get_improt_dataflow(headers, HOST, flag):
+def get_import_dataflow(headers, host, flag):
     """
     返回导入dataflow文件的请求体参数
     :param headers:
-    :param HOST:
+    :param host:
+    :param flag:
     :return:
     """
-    url = '%s/api/mis/upload' % HOST
+    url = '%s/api/mis/upload' % host
     fs = get_fs(flag)
     headers.pop('Content-Type')
     res = requests.post(url=url, headers=headers, files=fs)
@@ -162,7 +170,8 @@ def get_improt_dataflow(headers, HOST, flag):
         for csm_id in res['csm']:
          csm_list.append(csm_id["id"])
         cdf_list.append(res['cfd'][0]['id'])
-        new_data = {"cfd": cdf_list, "cds": cds_list, "csm": csm_list, "tag":[], "uploadDirectory": res["uploadDir"],"overWrite":True,"flowResourceId":"","datasetResourceId":"","schemaResourceId":""}
+        new_data = {"cfd": cdf_list, "cds": cds_list, "cmt": csm_list,"csm": csm_list, "tag":[], "uploadDirectory": res["uploadDir"],"overWrite":True,"flowResourceId":"","datasetResourceId":"","schemaResourceId":""}
+        print("new_data:",new_data)
         return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
