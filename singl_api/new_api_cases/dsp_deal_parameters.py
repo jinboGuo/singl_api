@@ -121,7 +121,7 @@ def deal_parameters(data,request_method,request_url):
                 else:
                     try:
                         if "{}" in request_url:
-                          data = data_select_result[0]["id"]
+                          data = str(data_select_result[0]["id"])
                           return data
                         else:
                             new_data.append(data_select_result[0]["id"])

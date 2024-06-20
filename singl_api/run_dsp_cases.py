@@ -15,4 +15,4 @@ if __name__ == '__main__':
     total_time = get_result_report(dsp_host,pattern[1])
 
     """发送邮件"""
-    baymax_main(cases_dir,dsp_host, receivers_test, dsp_sheet, begin_times,total_time)
+    #baymax_main(cases_dir,dsp_host, receivers_test, dsp_sheet, begin_times,total_time)

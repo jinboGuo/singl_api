@@ -3,15 +3,10 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms, \
-    get_job_view_id, get_schema_collect_id, get_collect_task_id, get_qa_task_id, get_dsp_data_application, \
-    get_dsp_data_resource
+from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms, get_job_view_id, \
+    get_schema_collect_id, get_collect_task_id, get_qa_task_id, get_dsp_data_application, get_dsp_data_resource
 from basic_info.setting import resource_type, tag_type, data_source, compass_host, log, dsp_data_source
-import os
-
 from util.timestamp_13 import data_now
-
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 def deal_parameters(data,request_method,request_url):
     if data:

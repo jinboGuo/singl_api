@@ -9,14 +9,18 @@
       <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/ready_dataflow_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_info/setting.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_info/setting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/compass_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_prepare_datas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_deal_parameters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dw_prepare_datas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_compass_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dw_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_api_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_api_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_dw_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dw_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/get_deal_parameter.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/get_deal_parameter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/send_mail.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/send_mail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_dsp_cases.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +94,7 @@
     "Python.run.executor": "Run",
     "Python.run_api_cases.executor": "Run",
     "Python.run_compass_cases.executor": "Run",
+    "Python.run_dsp_cases.executor": "Run",
     "Python.run_dw_cases.executor": "Run",
     "Python.timestamp_13.executor": "Run",
     "Python.use_excel.executor": "Run",
@@ -114,7 +119,7 @@
       <recent name="E:\Download\singl_api\attachment" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_api_cases">
+  <component name="RunManager" selected="Python.run_dsp_cases">
     <configuration name="Httpop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -181,6 +186,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="run_dsp_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_dsp_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="run_dw_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -203,35 +230,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="timestamp_13" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="singl_api" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/timestamp_13.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.run_api_cases" />
         <item itemvalue="Python.run_compass_cases" />
         <item itemvalue="Python.run_dw_cases" />
         <item itemvalue="Python.Httpop" />
-        <item itemvalue="Python.timestamp_13" />
       </list>
     </recent_temporary>
   </component>

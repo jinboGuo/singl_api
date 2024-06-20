@@ -61,7 +61,7 @@ Compass_MySQL_CONFIG = {
  Dsp_MySQL_CONFIG:数据库连接信息
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-dsp_sheet = "dsp"
+dsp_sheet = "842"
 dsp_host = "http://192.168.1.95:8515"
 Dsp_MySQL_CONFIG = {
      'HOST': '192.168.1.67',

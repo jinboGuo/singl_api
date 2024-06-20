@@ -67,64 +67,6 @@ def get_executions_data(flow_name):
         log.error("异常信息：%s" % e)
 
 
-#删除测试数据
-def delete_autotest_datas():
-    log.info("------开始删除测试数据-------")
-    try:
-        flow_sql = "delete from merce_flow where name like 'test%' or name like 'gjb%' or  name like 'auto_api_test_%' or name like 'lq%' or name like 'partition%'"
-        flow_execution_sql = "delete from merce_flow_execution where name like 'lq%'"
-        dataset_sql = "delete from merce_dataset where name like 'test%' or  name like 'merce%' or  name like 'sink%' or  name like 'gjb_test_%' or name like 'lq%'"
-        schema_sql = "delete from merce_schema where name like 'test%' or  name like 'apitest%' or  name like  'gtest%' or name like 'lq%'"
-        tenant_sql = "delete from merce_tenant where name like 'api_tenants%' order by create_time desc limit 1"
-        filesets_sql="DELETE from merce_fileset"
-        filesets_dir ="DELETE FROM merce_resource_dir where name like 'lq_fileset%'"
-        dss_sql="DELETE FROM merce_dss where name like 'lq%'"
-        log.info("删除flow表测试数据%s: " % flow_sql)
-        ms.ExecuNoQuery(flow_sql.encode('utf-8'))
-        log.info("删除flow_execution表测试数据%s: " % flow_execution_sql)
-        ms.ExecuNoQuery(flow_execution_sql.encode('utf-8'))
-        log.info("删除dataset表测试数据%s: " % dataset_sql)
-        ms.ExecuNoQuery(dataset_sql.encode('utf-8'))
-        log.info("删除schema表测试数据%s: " % schema_sql)
-        ms.ExecuNoQuery(schema_sql.encode('utf-8'))
-        log.info("删除tenant表测试数据%s: " % tenant_sql)
-        ms.ExecuNoQuery(tenant_sql.encode('utf-8'))
-        log.info("删除filesets表测试数据%s: " % filesets_sql)
-        ms.ExecuNoQuery(filesets_sql.encode('utf-8'))
-        log.info("删除filesets_dir表测试数据%s: " % filesets_dir)
-        ms.ExecuNoQuery(filesets_dir.encode('utf-8'))
-        ms.ExecuQuery(dss_sql.encode('utf-8'))
-        log.info("删除dss表测试数据%s: " % dss_sql)
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-def delete_autotest_dw():
-    try:
-        dw_field_defined = "delete from dw_field_defined where name like 'id%' or name like 'dt%' or name like 'item%' or name like 'order%' or name like 'avgi%' or name like 'maxi%' or name like 'count%'"
-        dw_ref_dataset = "delete from dw_ref_dataset where name like 'api_order%'"
-        dw_metadata = "delete from dw_metadata where name like 'api_order%' or name like 'api_aggr%'"
-        dw_model = "delete from dw_model where name like 'api_aggr%' or name like 'api_order%'"
-        dw_category = "delete from dw_category where name like 'api_model%' or name like 'api_standard%'"
-        dw_name_rules = "delete from dw_name_rules where alias like 'api_auto_namerule%'"
-        dw_tagdef = "delete from dw_tagdef where name like 'api_auto_tag%'"
-        dw_taggroup = "delete from dw_taggroup where name like 'api_auto_taggroup%'"
-        dw_business = "delete from dw_business where name like 'api_auto_business%'"
-        dw_project = "delete from dw_project where name like 'api_auto_projects%'"
-        dw_subject = "delete from dw_subject where name like 'api_auto_subject%'"
-        ms.ExecuNoQuery(dw_field_defined.encode('utf-8'))
-        ms.ExecuNoQuery(dw_ref_dataset.encode('utf-8'))
-        ms.ExecuNoQuery(dw_metadata.encode('utf-8'))
-        ms.ExecuNoQuery(dw_model.encode('utf-8'))
-        ms.ExecuNoQuery(dw_category.encode('utf-8'))
-        ms.ExecuNoQuery(dw_name_rules.encode('utf-8'))
-        ms.ExecuNoQuery(dw_tagdef.encode('utf-8'))
-        ms.ExecuNoQuery(dw_taggroup.encode('utf-8'))
-        ms.ExecuNoQuery(dw_business.encode('utf-8'))
-        ms.ExecuNoQuery(dw_project.encode('utf-8'))
-        ms.ExecuNoQuery(dw_subject.encode('utf-8'))
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
 def get_schedulers_data(flow_name):
     try:
         data =flow_name.split("&")

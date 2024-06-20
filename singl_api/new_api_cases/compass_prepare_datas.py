@@ -8,8 +8,6 @@ from util.encrypt import parameter_ungzip
 from util.get_deal_parameter import get_tenant_id, get_resourceid
 from util.timestamp_13 import data_now
 
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
-
 def update_job(data):
     try:
         sql = "select job_oid,job_name,job_pool_oid,re_oid,handle_oid,flow_name,flow_id,again_re_oid,cluster_name from s_c_job where job_name like '%s%%%%' order by create_time desc limit 1" % data
