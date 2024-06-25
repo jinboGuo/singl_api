@@ -225,7 +225,7 @@ def get_draft_id():
         draft_id = query_data[0]["id"]
         return draft_id
     except Exception as e:
-        log.error("没有获取到输入端元数据id：%s" % e)
+        log.error("没有获取到画布id：%s" % e)
 
 
 def get_source_schema_id():
@@ -498,8 +498,8 @@ def get_rule_name():
         sql = "select name from schema_collect_name_rule where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
             tenant_id, 'api_wjp_schema-collect')
         get_rule_name = ms.ExecuQuery(sql.encode('utf-8'))
-        get_rule_name = get_rule_name[0]["name"]
-        return get_rule_name
+        rule_name = get_rule_name[0]["name"]
+        return rule_name
     except Exception as e:
         log.error("没有获取到获取变量id：%s" % e)
 
@@ -511,8 +511,8 @@ def get_rule_id():
         sql = "select id from schema_collect_name_rule where tenant_id='%s' and name like '%s%%%%' order by create_time desc limit 1" % (
             tenant_id, 'api_wjp_schema-collect')
         get_rule_id = ms.ExecuQuery(sql.encode('utf-8'))
-        get_rule_id = get_rule_id[0]["id"]
-        return get_rule_id
+        rule_id = get_rule_id[0]["id"]
+        return rule_id
     except Exception as e:
         log.error("没有获取到获取变量id：%s" % e)
 
@@ -543,5 +543,25 @@ def get_table_name():
     sql = "select properties from poseidon_draft_node_prop where  task_id =(select task_id FROM poseidon_task_draft WHERE  name like '%s%%%%' ORDER BY create_time desc LIMIT 1) and draft_id ='0' and type = 1" % (
         'test_api_wjp_collect')
     properties = ms.ExecuQuery(sql.encode('utf-8'))
-    table_name = json.loads(properties[0]['properties'])
+    table_name = json.loads(properties[0]['properties'])["tableName"]
     return table_name
+
+
+def get_HDFS_id():
+    """获取最新创建的HDFS数据源id"""
+    tenant_id = get_tenant_id()
+    sql = "SELECT id from merce_dss where tenant_id='%s' and name like '%s%%%%' GROUP BY create_time desc limit 1" % (
+        tenant_id, 'test_api_wjp_hdfs')
+    hdfs_ids = ms.ExecuQuery(sql.encode('utf-8'))
+    hdfs_id = hdfs_ids[0]["id"]
+    return hdfs_id
+
+
+def get_HDFS_name():
+    """获取最新创建的HDFS数据源名称"""
+    tenant_id = get_tenant_id()
+    sql = "SELECT name from merce_dss where tenant_id='%s' and name like '%s%%%%' GROUP BY create_time desc limit 1" % (
+        tenant_id, 'test_api_wjp_hdfs')
+    hdfs_names = ms.ExecuQuery(sql.encode('utf-8'))
+    hdfs_name = hdfs_names[0]["name"]
+    return hdfs_name

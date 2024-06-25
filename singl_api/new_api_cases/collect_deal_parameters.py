@@ -10,7 +10,7 @@ from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_da
     get_source_dataset_name, get_collector_group_id, get_collector_group_name, get_tenant_id, get_owner, get_user_id, \
     get_sink_schema_name_and_random, get_sink_dataset_name_and_random, get_source_dataset_id, get_dss_mysql_id, \
     get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name, \
-    get_current_time, get_table_name, get_sink_dataset_id
+    get_current_time, get_table_name, get_sink_dataset_id, get_HDFS_id, get_HDFS_name
 
 
 def deal_parameters(data, request_method, request_url):
@@ -62,6 +62,9 @@ def deal_parameters(data, request_method, request_url):
             return deal_parameters(data, request_method, request_url)
         if '元数据采集任务目录' in data:
             data = data.replace('元数据采集任务目录', str(get_resourceid(resource_type[14])))
+            return deal_parameters(data, request_method, request_url)
+        if '标签管理目录' in data:
+            data = data.replace('标签管理目录', str(get_resourceid(resource_type[15])))
             return deal_parameters(data, request_method, request_url)
         if '&&' in data:
             new_data = str(data).split('&&')
@@ -153,6 +156,8 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入元数据采集任务名称', str(get_schema_collect_task_name()))
             request_data = request_data.replace('获取当前时间', str(get_current_time()))
             request_data = request_data.replace('输入输出数据集名称', get_sink_dataset_name())
+            request_data = request_data.replace('获取hdfs主键', str(get_HDFS_id()))
+            request_data = request_data.replace('获取hdfs名称', str(get_HDFS_name()))
             return request_data
         if 'SELECT name,id from' in data and '输入名称' in data and '输入id' in data:
             select_data = data.split('&&')[0]
@@ -217,6 +222,15 @@ def deal_parameters(data, request_method, request_url):
 
 
 def deal_storage_parameters(data):
-    if '获取表名' in data:
-        request_data = data.replace('获取表名', str(get_table_name()))
-        return request_data
+    if data:
+        if '获取表名' in data:
+            request_data = data.replace('获取表名', str(get_table_name()))
+            return request_data
+        if '获取hdfs主键' in data:
+            request_data = data.replace('获取hdfs主键', str(get_HDFS_id()))
+            request_data = request_data.replace('获取hdfs名称', str(get_HDFS_name()))
+            return request_data
+        else:
+            return data
+    else:
+        return data

@@ -10,6 +10,7 @@ from basic_info.setting import collect_sheet, collect_cases_dir, log
 from basic_info.get_auth_token import get_headers, get_headers_root
 from new_api_cases.collect_deal_parameters import deal_parameters, deal_storage_parameters
 import unittest
+import time
 from basic_info.setting import collect_host
 from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
     get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id
@@ -20,7 +21,6 @@ collect_master = collect_sheet
 case_table_sheet = case_table.get_sheet_by_name(collect_master)
 all_rows = case_table_sheet.max_row
 host = collect_host
-driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\mysql-connector-java-8.0.2801.jar')
 request_url = ''
 for i in range(2, all_rows + 1):
     request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -31,8 +31,7 @@ def deal_request_method():
     判断请求方法，并根据不同的请求方法调用不同的处理方式
     :return:
     """
-    # for i in range(2, all_rows + 1):
-    for i in range(82, all_rows + 1):
+    for i in range(2, all_rows + 1):
         request_method = case_table_sheet.cell(row=i, column=4).value
         request_method_upper = request_method.upper()
         request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -94,7 +93,8 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
-        if case_detail == '上传驱动包':
+        if case_detail == '上传驱动包-mysql':
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\mysql-connector-java-8.0.28_driver.jar')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'Mysql'),  # 非文件字段，用于指定数据库类型
@@ -105,7 +105,19 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '创建数据库驱动':
+        if case_detail == '上传驱动包-hive':
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\hive-jdbc-3.1.0.3.1.5.0-152_driver.jar')
+            files = {
+                'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
+                'dbType': (None, 'HIVE'),  # 非文件字段，用于指定数据库类型
+            }
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '创建数据库驱动' in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -154,10 +166,10 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '创建DM存储':
+        elif '创建存储' in case_detail:
             request_data = deal_storage_parameters(data)
             log.info("request   url：%s" % url)
-            response = requests.post(url=url, headers=headers, data=request_data.encode('utf8'))
+            response = requests.post(url=url, headers=headers, data=request_data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -166,6 +178,15 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '存储分区':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            log.info("等待存储建表建分区，等待时间60s")
+            time.sleep(60)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
