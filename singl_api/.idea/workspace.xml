@@ -7,8 +7,8 @@
     <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="去除冗余用例~">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_cases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/prepare_datas_for_cases.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +107,7 @@
       <recent name="E:\Download\singl_api\attachment" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_api_cases">
+  <component name="RunManager" selected="Python.run_dsp_cases">
     <configuration name="Httpop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -220,10 +220,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.run_api_cases" />
         <item itemvalue="Python.run_compass_cases" />
         <item itemvalue="Python.run_dw_cases" />
-        <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.Httpop" />
       </list>
     </recent_temporary>
@@ -340,7 +340,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718853148867</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="调试驱动报错脚本">
+      <option name="closed" value="true" />
+      <created>1719385150855</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1719385150855</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -365,6 +373,7 @@
     <MESSAGE value="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。" />
     <MESSAGE value="调试资产管理模块接口。" />
     <MESSAGE value="去除冗余用例~" />
-    <option name="LAST_COMMIT_MESSAGE" value="去除冗余用例~" />
+    <MESSAGE value="调试驱动报错脚本" />
+    <option name="LAST_COMMIT_MESSAGE" value="调试驱动报错脚本" />
   </component>
 </project>
