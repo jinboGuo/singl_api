@@ -622,7 +622,6 @@ def read_data():
         for row in range(2, nrows + 1):  # 从第二行开始，因为第一行被认为是标题行
             values = [cell.value for cell in table[row]]
             api_dict = dict(zip(keys, values))
-            list_api_data.append(api_dict)
             """ keys，values组合转换为字典"""
             if api_dict['is_run'] == "y" or api_dict['is_run'] == "Y":
                 list_api_data.append(api_dict)
