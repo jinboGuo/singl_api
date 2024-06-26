@@ -126,7 +126,24 @@ def cluster_data():
     except Exception as e:
         log.error("cluster_data出错{}".format(e))
 
+def update_custom_step(data):
+    try:
+        sql = "select id, tenant_id, owner, name, creator, last_modifier, `type`,step_group, step_setting_class, step_class_name from merce_custom_step where name like '%s%%%%' order by create_time desc limit 1" % data
+        step_info = ms.ExecuQuery(sql.encode('utf-8'))
+        new_data = {"jarName":"merce-custom-rtc-steps-1.2.4-Filter.jar","libs":["merce-custom-rtc-steps-1.2.4-Filter.jar"],"stepClassName":"com.inforefiner.example.rtcflow.steps.filter.FilterStep","name":step_info[0]["name"],"tags":["Custom","dataflow","streamflow","rtcflow","workflow"],"id":step_info[0]["id"],"type":step_info[0]["type"],"stepSettingClass":"com.inforefiner.example.rtcflow.steps.filter.FilterSettings","tenantId":step_info[0]["tenant_id"],"owner":step_info[0]["owner"],"enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"version":1,"groupCount":None,"groupFieldValue":None,"uiConfigurations":{"output":["output"],"input":["input"]},"otherConfigurations":None,"inputConfigurations":{"input":[]},"outputConfigurations":{"output":[]},"group":"Custom","inputCount":"1","icon":"default.png","implementation":None,"outputCount":"1","settings":[{"name":"stepClassName","type":"String","defaultValue":"com.inforefiner.example.rtcflow.steps.filter.FilterStep","description":"step full class name","values":None,"required":True,"advanced":False,"hidden":False,"noTrim":False,"scope":None,"bind":None,"select":None,"selectType":None,"format":None},{"name":"keyIndex","type":"int","defaultValue":None,"description":"key","values":None,"required":True,"advanced":False,"hidden":False,"noTrim":True,"scope":None,"bind":None,"select":None,"selectType":None,"format":None},{"name":"keyValue","type":"String","defaultValue":None,"description":"key value","values":None,"required":True,"advanced":False,"hidden":False,"noTrim":True,"scope":None,"bind":None,"select":None,"selectType":None,"format":None}],"expiredPeriod":0}
+        return new_data, step_info[0]["id"]
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
+def update_rtcjob_setting(data):
+    try:
+        sql = "select id, tenant_id, owner, creator, last_modifier from merce_rtc_job_settings where name like '%s%%%%' order by create_time desc limit 1" % data
+        rtcjob_info = ms.ExecuQuery(sql.encode('utf-8'))
+        new_data = {"tenantId":rtcjob_info[0]["tenant_id"],"owner":rtcjob_info[0]["owner"],"name":"gjb_rtc随机数","enabled":1,"creator":"admin","createTime":data_now(),"lastModifier":"admin","lastModifiedTime":data_now(),"id":"","engine":"flink","debug":False,"description":"","runtimeSettings":{"driverMemory":1024,"executorMemory":1024,"kerberosKeytab":"","useLatestState":False,"executorCores":1,"parallelism":1,"clusterId":"cluster1","allowNonRestoredState":False,"flinkTableOpts":[],"savepointDir":"","kerberosJaasConf":"","master":"yarn","flinkOpts":[],"javaOpts":"","lineageEnable":True,"kerberosEnable":False,"proxyUser":"","nodeLabel":"","queue":"root.default","kerberosPrincipal":""},"checkpointSettings":{"checkpointStateBackend":"filesystem","checkpointEnable":True,"checkpointAsync":True,"checkpointInterval":10000,"checkpointUnaligned":False,"checkpointMinpause":5000,"checkpointIncremental":False,"checkpointExternalSave":True,"checkpointTimeout":600000,"checkpointMode":"exactly_once","checkpointDir":"hdfs:///tmp/flink/checkpoints"},"restartStrategySettings":{"restartDelayInterval":10,"restartStrategy":"FixedDelayRestart","restartInterval":60,"restartMaxAttempts":3},"latencyTrackingSettings":{"latencyTrackingEnable":False,"latencyTrackingInterval":60000}}
+        deal_random(new_data)
+        return new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)
 
 def get_fs(flag):
     """

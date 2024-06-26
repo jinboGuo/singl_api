@@ -17,7 +17,7 @@ from new_api_cases.dw_prepare_datas import sql_analyse_data, woven_dir, get_impr
 from new_api_cases.get_statementId import get_sql_analyse_statement_id, get_sql_analyse_dataset_info, get_sql_execte_statement_id, steps_sql_parseinit_statemenId, \
     steps_sql_analyzeinit_statementId, get_step_output_init_statementId, get_step_output_ensure_statementId, \
     step_sql_analyse_data, step_sql_analyse_flow
-from new_api_cases.prepare_datas_for_cases import filesets_data, get_import_dataflow,update_db_driver
+from new_api_cases.prepare_datas_for_cases import filesets_data, get_import_dataflow,update_db_driver,update_rtcjob_setting,update_custom_step
 from util import myddt
 from util.comm_util import operateKafka
 from util.encrypt import encrypt_rf
