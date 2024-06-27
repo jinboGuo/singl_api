@@ -58,13 +58,13 @@ def deal_parameters(data, request_method, request_url):
             data = data.replace('数据标准目录', str(get_resourceid(resource_type[12])))
             return deal_parameters(data, request_method, request_url)
         if '元数据名称规则目录' in data:
-            data = data.replace('元数据名称规则目录', str(get_resourceid(resource_type[13])))
+            data = data.replace('元数据名称规则目录', str(get_resourceid(resource_type[15])))
             return deal_parameters(data, request_method, request_url)
         if '元数据采集任务目录' in data:
-            data = data.replace('元数据采集任务目录', str(get_resourceid(resource_type[14])))
+            data = data.replace('元数据采集任务目录', str(get_resourceid(resource_type[13])))
             return deal_parameters(data, request_method, request_url)
         if '标签管理目录' in data:
-            data = data.replace('标签管理目录', str(get_resourceid(resource_type[15])))
+            data = data.replace('标签管理目录', str(get_resourceid(resource_type[16])))
             return deal_parameters(data, request_method, request_url)
         if '&&' in data:
             new_data = str(data).split('&&')
