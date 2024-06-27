@@ -74,7 +74,7 @@ class Linux(object):
 
     '''
     发送文件
-    @:param upload_files上传文件路径 例如：/tmp/test.py
+    @:param upload_files上传文件路径 例如：/tmp/upload_driver.py
     @:param upload_path 上传到目标路径 例如：/tmp/test_new.py
     '''
     def upload_file(self,upload_files,upload_path):
