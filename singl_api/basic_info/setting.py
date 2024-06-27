@@ -87,6 +87,24 @@ Dw_MySQL_CONFIG = {
     'case_db': 'test'}
 
 """
+-------95-collect环境使用-------
+ sheet_name:dw-asset
+ HOST: "http://192.168.1.95:8515"
+ Dw_MySQL_CONFIG:数据库连接信息
+"""
+collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
+collect_sheet = "collect"
+collect_host = "http://192.168.1.95:8515"
+collect_MySQL_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_167',
+    'case_db': 'test'}
+
+
+"""
 测试数据库的连接配置
 """
 MySQL_CONFIG1 = {

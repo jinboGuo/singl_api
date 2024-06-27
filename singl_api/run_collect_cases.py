@@ -21,7 +21,7 @@ if __name__ == '__main__':
     CheckResult().deal_result()
     test_suite = unittest.defaultTestLoader.discover('new_api_cases', pattern='execute_collect_cases.py')
     result = BeautifulReport(test_suite)
-    result.report(filename='api_result', description=collect_host, report_dir='Reports', theme='theme_cyan')
+    result.report(filename='api_result_collect', description=collect_host, report_dir='Reports', theme='theme_cyan')
     stop_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     log.info("结束时间：%s" % stop_time)
     total_time = str(int(time.time()) - int(time.mktime(time.strptime(begin_times, '%Y-%m-%d %H:%M:%S')))) + 's'
