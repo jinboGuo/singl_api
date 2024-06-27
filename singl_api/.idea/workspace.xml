@@ -39,7 +39,7 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="master" />
+        <entry key="$PROJECT_DIR$/.." value="1.6.x" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -84,6 +84,7 @@
     &quot;Python.run_compass_cases.executor&quot;: &quot;Run&quot;,
     &quot;Python.run_dsp_cases.executor&quot;: &quot;Run&quot;,
     &quot;Python.run_dw_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_qa_cases.executor&quot;: &quot;Run&quot;,
     &quot;Python.timestamp_13.executor&quot;: &quot;Run&quot;,
     &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
@@ -101,35 +102,14 @@
       <recent name="E:\Download\singl_api\all_version_cases" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Download\singl_api\attachment" />
+      <recent name="E:\Download\singl_api\new_api_cases" />
+      <recent name="E:\Download\singl_api" />
       <recent name="E:\Download\singl_api\util" />
       <recent name="E:\Download\singl_api\basic_info" />
-      <recent name="E:\Download\singl_api\lib" />
-      <recent name="E:\Download\singl_api\attachment" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_dsp_cases">
-    <configuration name="Httpop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="singl_api" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/httpop" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/httpop/Httpop.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.run_qa_cases">
     <configuration name="run_api_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
       <option name="ENV_FILES" value="" />
@@ -218,13 +198,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="run_qa_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_qa_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run_qa_cases" />
+        <item itemvalue="Python.run_dw_cases" />
         <item itemvalue="Python.run_dsp_cases" />
         <item itemvalue="Python.run_api_cases" />
         <item itemvalue="Python.run_compass_cases" />
-        <item itemvalue="Python.run_dw_cases" />
-        <item itemvalue="Python.Httpop" />
       </list>
     </recent_temporary>
   </component>
