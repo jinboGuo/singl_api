@@ -7,7 +7,7 @@ from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
 '''执行api脚本用例py'''
-pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py"]
+pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py", "execute_qa_cases.py", "execute_collect_cases.py"]
 begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
@@ -88,7 +88,7 @@ Dw_MySQL_CONFIG = {
 
 """
 -------95-collect环境使用-------
- sheet_name:dw-asset
+ sheet_name:collect
  HOST: "http://192.168.1.95:8515"
  Dw_MySQL_CONFIG:数据库连接信息
 """
@@ -103,6 +103,22 @@ collect_MySQL_CONFIG = {
     "DB": 'merce_167',
     'case_db': 'test'}
 
+"""
+-------95-quality环境使用-------
+ sheet_name:quality
+ HOST: "http://192.168.1.95:8515"
+ quality_MySQL_CONFIG:数据库连接信息
+"""
+quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
+quality_sheet = "quality"
+quality_host = "http://192.168.1.95:8515"
+quality_MySQL_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_162',
+    'case_db': 'test'}
 
 """
 测试数据库的连接配置
@@ -205,7 +221,7 @@ MY_LOGIN_INFO_DAM = {
                 'Accept': 'application/json'},
     "URL": "%s/api/auth/oauth2/token" % host,
     "DATA": {'username': 'a$a67fba7b9f50eca1677f50c0d7eb0993~', 'password': 'a$0615f89cbee023498ebc2e31cc2c8fca~',
-             'version': 'Baymax-3.0.0.23-20180606', 'tenant': 'default', 'grant_type': 'manager_password'},
+             'version': 'Baymax-3.0.0.23-20180606', 'tenant': tenant_name, 'grant_type': 'manager_password'},
     "DATA_ERROR_NAME": {'username': 'adminm', 'password': '123456', 'version': 'Baymax-3.0.0.23-20180606',
                         'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
