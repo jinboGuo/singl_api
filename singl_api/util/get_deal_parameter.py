@@ -1,7 +1,9 @@
-from basic_info.setting import MySQL_CONFIG, tenant_name, log, ms
-from util.Open_DB import MYSQL
 import random
+
 import time
+
+from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, \
+    qa_task_name, dsp_data_source_name, asset_name
 
 
 def get_tenant_id():
@@ -22,20 +24,18 @@ def get_owner():
     :return: 管理员的id
     """
     tenant_id = get_tenant_id()
-    ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],
-               MySQL_CONFIG["PORT"])
     try:
-        sql = "select id from merce_user where tenant_id='%s' order by create_time desc" % tenant_id
-        user = ms.ExecuQuery(sql)
-        owner = user[0]["id"]
-        return str(owner)
+      sql = "select id from merce_user where tenant_id='%s' and login_id='admin'" % tenant_id
+      user = ms.ExecuQuery(sql)
+      owner = user[0]["id"]
+      return str(owner)
     except Exception as e:
         return log.error("没有查询到管理员id：%s" % e)
 
 
 def get_resourceid(resource_type):
     """
-    获取数据源目录、数据集目录、元数据目录、flow目录、采集机、数据采集、数据存储、任务视图、数据资产、数据共享、数据安全、文件编目、数据标准根目录id
+    获取数据源目录、数据集目录、元数据目录、flow目录、采集机、数据采集、数据存储、任务视图、数据资产、数据共享、数据安全、文件编目、数据标准根目录id、schema_collect_task_dir
     若确少resource_type,可以在setting配置文件里resource_type = ["datasource_dir","dataset_dir","schema_dir","flow_dir",
     "poseidon_collect_dir","poseidon_task_dir"....]添加。
     """
@@ -123,19 +123,24 @@ def get_schema(data_source, data):
 
 def get_dataset(data_source, data):
     """
-    获取数据源id、name
+    获取数据集id、name
     """
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dataset where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
             tenant_id, data)
         dataset = ms.ExecuQuery(sql.encode('utf-8'))
+        time.sleep(5)
         dataset_id = dataset[0]["id"]
         dataset_name = dataset[0]["name"]
         if data_source == "dataset_id":
             return dataset_id
         elif data_source == "dataset_name":
             return dataset_name
+        elif data_source == "datasource_id":
+            return dataset[0]["datasource_id"]
+        elif data_source == "datasource_name":
+            return dataset[0]["datasource_name"]
         else:
             log.error("数据集没有数据！")
     except Exception as e:
@@ -144,7 +149,7 @@ def get_dataset(data_source, data):
 
 def get_tags(tag_type, data):
     """
-    获取数据源id、name
+    获取标签
     """
     tenant_id = get_tenant_id()
     try:
@@ -165,6 +170,44 @@ def get_tags(tag_type, data):
     except Exception as e:
         log.error("没有获取到标签id：%s" % e)
 
+def get_job_view_id():
+    """
+    获取视图任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from s_v_job_view where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,job_view_name)
+        job_view = ms.ExecuQuery(sql.encode('utf-8'))
+        job_view_id = job_view[0]["id"]
+        return str(job_view_id)
+    except Exception as e:
+        log.error("没有获取到视图任务id：%s" % e)
+
+def get_schema_collect_id():
+    """
+    获取元数据采集任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from schema_collect_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,schema_collect_name)
+        schema_collect = ms.ExecuQuery(sql.encode('utf-8'))
+        schema_collect_id = schema_collect[0]["id"]
+        return str(schema_collect_id)
+    except Exception as e:
+        log.error("没有获取到元数据采集任务id：%s" % e)
+
+def get_collect_task_id():
+    """
+    获取数据采集任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from poseidon_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,collect_task_name)
+        poseidon_task = ms.ExecuQuery(sql.encode('utf-8'))
+        collect_id = poseidon_task[0]["id"]
+        return str(collect_id)
+    except Exception as e:
+        log.error("没有获取到数据采集任务id：%s" % e)
 
 """获取采集的各种参数"""
 
@@ -565,3 +608,102 @@ def get_HDFS_name():
     hdfs_names = ms.ExecuQuery(sql.encode('utf-8'))
     hdfs_name = hdfs_names[0]["name"]
     return hdfs_name
+def get_qa_task_id():
+    """
+    获取质检任务id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from qa_job where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,qa_task_name)
+        qa_task = ms.ExecuQuery(sql.encode('utf-8'))
+        qa_task_id = qa_task[0]["id"]
+        return str(qa_task_id)
+    except Exception as e:
+        log.error("没有获取到数据质量任务id：%s" % e)
+
+
+def get_dsp_data_resource(dsp_data_source):
+    """
+    获取数据资源id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id,name from dsp_data_resource where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dsp_data_source_name)
+        dsp_data_resource = ms.ExecuQuery(sql.encode('utf-8'))
+        dsp_data_resource_id = dsp_data_resource[0]["id"]
+        dsp_data_resource_name = dsp_data_resource[0]["name"]
+        if dsp_data_source=="data_source_id":
+           return str(dsp_data_resource_id)
+        if dsp_data_source=="data_source_name":
+           return str(dsp_data_resource_name)
+    except Exception as e:
+        log.error("没有获取到数据资源id：%s" % e)
+
+
+def get_dsp_data_application():
+    """
+    获取数据资源申请工单id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from dsp_data_application where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dsp_data_source_name)
+        dsp_data_application = ms.ExecuQuery(sql.encode('utf-8'))
+        dsp_data_application_id = dsp_data_application[0]["id"]
+        return str(dsp_data_application_id)
+    except Exception as e:
+        log.error("没有获取到数据资源申请工单id：%s" % e)
+
+def get_sys_approval_target(approval_type):
+    """
+    获取审批模块id
+    若确少code"....]添加。
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from sys_approval_target where tenant_id='%s' and code='%s' and type ='INTERNAL'" % (tenant_id, approval_type)
+        approval_type = ms.ExecuQuery(sql.encode('utf-8'))
+        approval_type_id = approval_type[0]["id"]
+        return str(approval_type_id)
+    except Exception as e:
+        log.error("没有获取到审批模块id：%s" % e)
+
+
+def get_organization():
+    """
+    :return: 组织机构的id
+    """
+    tenant_id = get_tenant_id()
+    try:
+      sql = "select id from sys_organization where tenant_id='%s' and code='ROOT'" % tenant_id
+      sys_organization = ms.ExecuQuery(sql)
+      sys_organization_id = sys_organization[0]["id"]
+      return str(sys_organization_id)
+    except Exception as e:
+        return log.error("没有查询组织机构id：%s" % e)
+
+def get_asset_id():
+    """
+    获取资产id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
+        assets_info = ms.ExecuQuery(sql.encode('utf-8'))
+        assets_info_id = assets_info[0]["id"]
+        return str(assets_info_id)
+    except Exception as e:
+        log.error("没有获取到资产id：%s" % e)
+
+
+def get_approval_record():
+    """
+    获取资产审批id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
+        assets_info = ms.ExecuQuery(sql.encode('utf-8'))
+        assets_info_id = assets_info[0]["id"]
+        return str(assets_info_id)
+    except Exception as e:
+        log.error("没有获取到资产审核id：%s" % e)

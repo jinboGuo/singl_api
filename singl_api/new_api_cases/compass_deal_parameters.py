@@ -3,16 +3,18 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms
-from basic_info.setting import resource_type, tag_type, data_source, compass_host, log
-import os
-
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
+from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms, get_job_view_id, \
+    get_schema_collect_id, get_collect_task_id, get_qa_task_id, get_dsp_data_application, get_dsp_data_resource
+from basic_info.setting import resource_type, tag_type, data_source, compass_host, log, dsp_data_source
+from util.timestamp_13 import data_now
 
 def deal_parameters(data,request_method,request_url):
     if data:
         if '随机数' in data:
             data = data.replace('随机数', str(random.randint(0, 9999999999999)))
+            return deal_parameters(data,request_method,request_url)
+        if '创建时间' in data:
+            data = data.replace('创建时间', data_now())
             return deal_parameters(data,request_method,request_url)
         if '数据源目录' in data:
             data = data.replace('数据源目录', str(get_resourceid(resource_type[0])))
@@ -52,6 +54,33 @@ def deal_parameters(data,request_method,request_url):
             return deal_parameters(data,request_method,request_url)
         if '数据标准目录' in data:
             data = data.replace('数据标准目录',  str(get_resourceid(resource_type[12])))
+            return deal_parameters(data,request_method,request_url)
+        if '元数据任务采集目录' in data:
+            data = data.replace('元数据任务采集目录',  str(get_resourceid(resource_type[13])))
+            return deal_parameters(data,request_method,request_url)
+        if '元数据采集任务主键' in data:
+            data = data.replace('元数据采集任务主键',  str(get_schema_collect_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '离线采集任务主键' in data:
+            data = data.replace('离线采集任务主键',  str(get_collect_task_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '任务视图主键' in data:
+            data = data.replace('任务视图主键',  str(get_job_view_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '质检任务目录' in data:
+            data = data.replace('质检任务目录',  str(get_resourceid(resource_type[14])))
+            return deal_parameters(data,request_method,request_url)
+        if '质检任务主键' in data:
+            data = data.replace('质检任务主键',  str(get_qa_task_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资源主键' in data:
+            data = data.replace('数据资源主键',  str(get_dsp_data_resource(dsp_data_source[0])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资源名称' in data:
+            data = data.replace('数据资源名称',  str(get_dsp_data_resource(dsp_data_source[1])))
+            return deal_parameters(data,request_method,request_url)
+        if '数据资源申请工单主键' in data:
+            data = data.replace('数据资源申请工单主键',  str(get_dsp_data_application()))
             return deal_parameters(data,request_method,request_url)
         if '&&' in data:
             new_data = str(data).split('&&')
@@ -109,9 +138,26 @@ def deal_parameters(data,request_method,request_url):
                     if '数据源名称' in data:
                         data = data.replace('数据源名称', str(get_datasource(data_source[1],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
+                    if '数据集主键' in data:
+                        data = data.replace('数据集主键', str(get_dataset(data_source[4],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
+                    if '数据集名称' in data:
+                        data = data.replace('数据集名称', str(get_dataset(data_source[5],new_data[1])))
+                        return deal_parameters(data,request_method,request_url)
                     if '标签主键' in data:
                         data = data.replace('标签主键', str(get_tags(tag_type[0],new_data[1])))
                         return deal_parameters(data,request_method,request_url)
+                    if   '/api/schema-collect/schema/task/query' == new_data[1]:
+                      try:
+                        response = requests.post(url=compass_host+new_data[1], headers=get_headers(), data=new_data[0])
+                        new_data = response.json()["content"]["list"][0]
+                        table_names= ["NewTable_time_1"]
+                        new_data["tableNames"]=table_names
+                        #print("type: ",type(new_data))
+                        log.info("QUERY查询接口响应数据:{}".format(new_data))
+                        return new_data
+                      except Exception as e:
+                        log.error("执行过程中出错{}".format(e))
         if 'select id from' in data:
             log.info("开始执行语句:{}".format(data))
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -145,7 +191,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select job_pool_oid from s_c_job_pool where pool_name like 'autotest%' limit 1":
                             job_pool_oid = str(data_select_result[0]["job_pool_oid"])
-                            return deal_parameters(job_pool_oid)
+                            return deal_parameters(job_pool_oid,request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["job_pool_oid"]))
                             return new_data
@@ -156,7 +202,7 @@ def deal_parameters(data,request_method,request_url):
                 if data_select_result:
                     try:
                         data = data_select_result[0]["cluster_name"]
-                        return deal_parameters(data)
+                        return deal_parameters(data,request_method,request_url)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
@@ -214,7 +260,7 @@ def deal_parameters(data,request_method,request_url):
                 if data_select_result:
                     try:
                         data = data_select_result[0]["dataflow_oid"]
-                        return deal_parameters(str(data))
+                        return deal_parameters(str(data),request_method,request_url)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
                 else:
@@ -230,7 +276,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select single_oid from s_r_job_single where task_name like 'test_cover%' order by create_time desc limit 1":
                             single_oid = str(data_select_result[0]["single_oid"])
-                            return deal_parameters(single_oid)
+                            return deal_parameters(single_oid,request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["single_oid"]))
                             return new_data
@@ -247,7 +293,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select job_map_oid from s_c_job_map where job_name like 'autotest%' limit 1":
                             job_map_oid = str(data_select_result[0]["job_map_oid"])
-                            return deal_parameters(job_map_oid)
+                            return deal_parameters(job_map_oid,request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["job_map_oid"]))
                             return new_data
@@ -264,7 +310,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select re_th_ext_oid from s_c_re_th_ext where re_th_oid in(select t.re_th_oid from s_c_re_th as t where re_oid in(select s.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as s)) limit 1":
                             re_th_ext_oid = str(data_select_result[0]["re_th_ext_oid"])
-                            return deal_parameters(re_th_ext_oid)
+                            return deal_parameters(re_th_ext_oid,request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["re_th_ext_oid"]))
                             return new_data
@@ -281,7 +327,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select re_th_oid from s_c_re_th where re_oid in(select t.re_oid from (select * from s_c_re where re_name like 'autotest%' limit 1) as t) limit 1":
                             re_th_oid = str(data_select_result[0]["re_th_oid"])
-                            return deal_parameters(re_th_oid)
+                            return deal_parameters(re_th_oid,request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["re_th_oid"]))
                             return new_data
@@ -298,7 +344,7 @@ def deal_parameters(data,request_method,request_url):
                     else:
                         if data == "select re_oid from s_c_re where re_name like 'autotest%' limit 1":
                             re_oid = str(data_select_result[0]["re_oid"])
-                            return deal_parameters(str(re_oid))
+                            return deal_parameters(str(re_oid),request_method,request_url)
                         else:
                             new_data.append(str(data_select_result[0]["re_oid"]))
                             return new_data

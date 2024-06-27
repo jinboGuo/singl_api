@@ -3,14 +3,19 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from basic_info.setting import resource_type, data_source, tag_type, dw_host, log
-from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset, ms
+from basic_info.setting import resource_type, data_source, tag_type, dw_host, log, approval_type
+from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset, ms, \
+    get_sys_approval_target, get_organization, get_asset_id, get_owner, get_tenant_id, get_approval_record
+from util.timestamp_13 import data_now
 
 
 def deal_parameters(data,request_method,request_url):
         if data:
             if '随机数' in data:
                 data = data.replace('随机数', str(random.randint(0, 9999999999999)))
+                return deal_parameters(data, request_method, request_url)
+            if '创建时间' in data:
+                data = data.replace('创建时间', str(data_now()))
                 return deal_parameters(data, request_method, request_url)
             if '数据源目录' in data:
                 data = data.replace('数据源目录', str(get_resourceid(resource_type[0])))
@@ -50,6 +55,33 @@ def deal_parameters(data,request_method,request_url):
                 return deal_parameters(data, request_method, request_url)
             if '数据标准目录' in data:
                 data = data.replace('数据标准目录', str(get_resourceid(resource_type[12])))
+                return deal_parameters(data, request_method, request_url)
+            if '资产管理审批主键' in data:
+                data = data.replace('资产管理审批主键', str(get_sys_approval_target(approval_type[0])))
+                return deal_parameters(data, request_method, request_url)
+            if '数仓分层审批主键' in data:
+                data = data.replace('数仓分层审批主键', str(get_sys_approval_target(approval_type[9])))
+                return deal_parameters(data, request_method, request_url)
+            if '主题域审批主键' in data:
+                data = data.replace('主题域审批主键', str(get_sys_approval_target(approval_type[10])))
+                return deal_parameters(data, request_method, request_url)
+            if '元模型审批主键' in data:
+                data = data.replace('元模型审批主键', str(get_sys_approval_target(approval_type[11])))
+                return deal_parameters(data, request_method, request_url)
+            if '组织机构主键' in data:
+                data = data.replace('组织机构主键', str(get_organization()))
+                return deal_parameters(data, request_method, request_url)
+            if '数据资产主键' in data:
+                data = data.replace('数据资产主键', str(get_asset_id()))
+                return deal_parameters(data, request_method, request_url)
+            if '资产管理审批工单主键' in data:
+                data = data.replace('资产管理审批工单主键', str(get_approval_record()))
+                return deal_parameters(data, request_method, request_url)
+            if '租户主键' in data:
+                data = data.replace('租户主键', str(get_tenant_id()))
+                return deal_parameters(data, request_method, request_url)
+            if '管理员主键' in data:
+                data = data.replace('管理员主键', str(get_owner()))
                 return deal_parameters(data, request_method, request_url)
             if '&&' in data:
                 new_data = str(data).split('&&')
@@ -110,6 +142,12 @@ def deal_parameters(data,request_method,request_url):
                         if '标签主键' in data:
                             data = data.replace('标签主键', str(get_tags(tag_type[0], new_data[1])))
                             return deal_parameters(data, request_method, request_url)
+                        if '数据集主键' in data:
+                            data = data.replace('数据集主键', str(get_dataset(data_source[4], new_data[1])))
+                            return deal_parameters(data, request_method, request_url)
+                        if '数据集名称' in data:
+                            data = data.replace('数据集名称', str(get_dataset(data_source[5], new_data[1])))
+                            return deal_parameters(data, request_method, request_url)
             if 'select id from' in data:
                 log.info("开始执行语句:{}".format(data))
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -140,104 +178,6 @@ def deal_parameters(data,request_method,request_url):
                         return deal_parameters(data, request_method, request_url)
                     except Exception as e:
                         log.error("异常信息：%s" %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select current_info_id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                if data_select_result:
-                    try:
-                        data = data_select_result[0]["current_info_id"]
-                        return str(data)
-                    except Exception as e:
-                        log.error("异常信息：%s" %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select business_id,id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        business_id,dw_id = data_select_result[0]["business_id"],data_select_result[0]["id"]
-                        new_data.append(business_id)
-                        new_data.append(str(dw_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select dataset_id,id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        dataset_id,dw_id = data_select_result[0]["dataset_id"],data_select_result[0]["id"]
-                        new_data.append(dataset_id)
-                        new_data.append(str(dw_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select project_id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                if data_select_result:
-                    try:
-                        data = data_select_result[0]["project_id"]
-                        return str(data)
-                    except Exception as e:
-                        log.error("异常信息：%s" %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select metadata_id,id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        metadata_id,dw_id = data_select_result[0]["metadata_id"],data_select_result[0]["id"]
-                        new_data.append(str(metadata_id))
-                        new_data.append(str(dw_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select id,current_info_id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        metadata_id,current_info_id = data_select_result[0]["id"],data_select_result[0]["current_info_id"]
-                        new_data.append(str(metadata_id))
-                        new_data.append(str(current_info_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select name,project_id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        name,project_id = data_select_result[0]["name"],data_select_result[0]["project_id"]
-                        new_data.append(name)
-                        new_data.append(str(project_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
-                else:
-                    log.info("查询结果为空！")
-            if 'select project_id,id from' in data:
-                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-                new_data=[]
-                if data_select_result:
-                    try:
-                        project_id,dw_id = data_select_result[0]["project_id"],data_select_result[0]["id"]
-                        new_data.append(str(project_id))
-                        new_data.append(str(dw_id))
-                        return new_data
-                    except Exception as e:
-                        log.info("请确认SQL语句,异常信息：%s " %e)
                 else:
                     log.info("查询结果为空！")
             else:

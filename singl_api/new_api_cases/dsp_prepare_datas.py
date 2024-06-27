@@ -5,10 +5,7 @@ from basic_info.get_auth_token import get_headers
 from new_api_cases.dw_deal_parameters import deal_random
 from util.format_res import dict_res
 from basic_info.setting import dsp_host, ms, log
-from util.logs import Logger
 from util.timestamp_13 import get_now, get_tomorrow, data_now
-
-ab_dir = lambda n: os.path.abspath(os.path.join(os.path.dirname(__file__), n))
 
 
 def resource_data_save(data):
@@ -1016,17 +1013,6 @@ def admin_flow_id(data):
     except Exception as e:
         log.error("异常信息：%s" % e)
 
-
-def customer_flow_id(data):
-    try:
-        url = '%s/api/dsp/consumer/service/infoById?id=%s' % (dsp_host, data)
-        response = requests.get(url=url, headers=get_headers())
-        flow_id = dict_res(response.text)["content"]["jobInfo"]['flowId']
-        return flow_id
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
 def pull_data(data):
     try:
         data = data.split("&")
@@ -1654,108 +1640,6 @@ def application_push_approval(data):
             return
     except Exception as e:
         log.error("异常信息：%s" % e)
-
-
-def update_customer(data):
-    try:
-        sql = "select id,owner,tenant_id,username from dsp_customer where enabled=0 and name like '%s%%%%' order by create_time desc limit 1" % data
-        customer_info = ms.ExecuQuery(sql.encode('utf-8'))
-        if 'gjb_test009_' in data:
-            new_data = {"username": customer_info[0]["username"], "name": "gjb_test009_随机数",
-                        "password": "e10adc3949ba59abbe56e057f20f883e",
-                        "checkPassword": "e10adc3949ba59abbe56e057f20f883e", "enabled": 0,
-                        "tenantId": customer_info[0]["tenant_id"], "owner": customer_info[0]["owner"],
-                        "creator": "admin", "createTime": data_now(), "lastModifier": "admin",
-                        "lastModifiedTime": data_now(), "id": customer_info[0]["id"], "expiredPeriod": "0"}
-            deal_random(new_data)
-            return new_data
-        else:
-            return
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
-def update_user(data):
-    try:
-        sql = "select id from merce_user where  name like '%s%%%%' order by create_time desc limit 1" % data
-        user_info = ms.ExecuQuery(sql.encode('utf-8'))
-        if 'dsp' in data:
-            new_data = {"name": "dsp随机数", "loginId": "dsp随机数", "phone": "15801232688", "email": "15801232688@139.com",
-                        "id": user_info[0]["id"], "resourceQueues": ["default"], "disable": "true"}
-            deal_random(new_data)
-            return new_data
-        else:
-            return
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
-def update_role(data):
-    try:
-        sql = "select id,name from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
-        role_info = ms.ExecuQuery(sql.encode('utf-8'))
-        if 'dsp' in data:
-            new_data = {"name": "dsp随机数", "permissions": [], "id": role_info[0]["id"]}
-            deal_random(new_data)
-            return new_data
-        else:
-            return
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
-def enable_role(data):
-    try:
-        sql = "select enabled,id from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
-        role_info = ms.ExecuQuery(sql.encode('utf-8'))
-        ids = [str(role_info[0]["id"])]
-        if role_info[0]["enabled"] == 1:
-            new_data = {"enabled": 0, "ids": ids}
-            return new_data
-        elif role_info[0]["enabled"] == 0:
-            new_data = {"enabled": 1, "ids": ids}
-            return new_data
-        else:
-            return
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
-def enable_user(data):
-    try:
-        sql = "select enabled,id from merce_user where name like '%s%%%%' order by create_time desc limit 2" % data
-        user_info = ms.ExecuQuery(sql.encode('utf-8'))
-        ids = []
-        new_data = {}
-        for i in range(len(user_info)):
-            ids.append(str(user_info[i]["id"]))
-            if user_info[i]["enabled"] == 1:
-                new_data = {"enabled": 0, "ids": ids}
-            elif user_info[i]["enabled"] == 0:
-                new_data = {"enabled": 1, "ids": ids}
-            else:
-                return
-        return new_data
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
-
-def set_user_role(data):
-    try:
-        user, role = [], []
-        user_sql = "select id from merce_user where name like '%s%%%%' order by create_time desc limit 1" % data
-        user_info = ms.ExecuQuery(user_sql.encode('utf-8'))
-        user.append(str(user_info[0]["id"]))
-        sql = "select id from merce_role where name like '%s%%%%' order by create_time desc limit 1" % data
-        role_info = ms.ExecuQuery(sql.encode('utf-8'))
-        role.append(str(role_info[0]["id"]))
-        user.append(role)
-        data = {"accountExpiredTime": "2022-07-21", "id": user_info[0]["id"], "pwdExpiredTime": "2022-04-21"}
-        user.append(data)
-        return user
-    except Exception as e:
-        log.error("异常信息：%s" % e)
-
 
 def new_dir(data):
     from new_api_cases.dw_deal_parameters import deal_random

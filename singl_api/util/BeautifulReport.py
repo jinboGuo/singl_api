@@ -3,7 +3,6 @@
 @File: __init__.py.py
 @License: MIT
 """
-
 import os
 import sys
 from io import StringIO as StringIO
@@ -16,8 +15,11 @@ from distutils.sysconfig import get_python_lib
 import traceback
 from functools import wraps
 from basic_info.setting import begin_times
+from util.timestamp_13 import change_time
 
 __all__ = ['BeautifulReport']
+
+
 
 HTML_IMG_TEMPLATE = """
     <a href="data:image/png;base64, {}">
@@ -210,7 +212,7 @@ class ReportTestResult(unittest.TestResult):
         self.fields['beginTime'] = self.begin_time
         end_time = int(time.time())
         start_time = int(time.mktime(time.strptime(self.begin_time, '%Y-%m-%d %H:%M:%S')))
-        self.fields['totalTime'] = str(end_time - start_time) + 's'
+        self.fields['totalTime'] = change_time(end_time - start_time)
         self.fields['testError'] = self.error_count
         self.fields['testSkip'] = self.skipped
         return self.fields

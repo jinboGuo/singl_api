@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="优化日志、数据库连接参数调用">
-      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/singl_api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/singl_api.iml" afterDir="false" />
+    <list default="true" id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="去除冗余用例~">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/all_version_cases/api_cases_1.6.x.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/dsp_deal_parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" beforeDir="false" afterPath="$PROJECT_DIR$/new_api_cases/execute_dsp_cases.py" afterDir="false" />
     </list>
-    <list id="f6ea0cf1-6795-45a5-8ed5-29071bee88d5" name="no_commit" comment="no_commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +19,6 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
-        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -47,51 +44,23 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
-  </component>
-  <component name="GitToolBoxStore">
-    <option name="projectConfigVersion" value="5" />
-    <option name="recentBranches">
-      <RecentBranches>
-        <option name="branchesForRepo">
-          <list>
-            <RecentBranchesForRepo>
-              <option name="branches">
-                <list>
-                  <RecentBranch>
-                    <option name="branchName" value="wjp_collect" />
-                    <option name="lastUsedInstant" value="1716788766" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="master" />
-                    <option name="lastUsedInstant" value="1716778038" />
-                  </RecentBranch>
-                </list>
-              </option>
-              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$/.." />
-            </RecentBranchesForRepo>
-          </list>
-        </option>
-      </RecentBranches>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+      </list>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="1b7f7b4f-8190-4e64-93de-dba813a720b0" />
-        <option name="url" value="https://github.com/wujinpeng1995/singl_api.git" />
-      </UrlAndAccount>
-    </option>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/new_api_cases/execute_cases.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2czLhanfLjBBHNshbj62huX1ZUR" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -100,45 +69,59 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../kafka_test" />
-    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python 测试.Python 测试 (use_excel.py 内).executor&quot;: &quot;Run&quot;,
+    &quot;Python 测试.use_excel.test_excel 的 Python 测试.executor&quot;: &quot;Run&quot;,
+    &quot;Python.HTMLTestRunner.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Httpop.executor&quot;: &quot;Run&quot;,
+    &quot;Python.comm_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.compass_schedule.executor&quot;: &quot;Run&quot;,
+    &quot;Python.deal_parameters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.encrypt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_api_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_compass_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_dsp_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_dw_cases.executor&quot;: &quot;Run&quot;,
+    &quot;Python.timestamp_13.executor&quot;: &quot;Run&quot;,
+    &quot;Python.use_excel.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Download/singl_api/Reports&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.控制台字体&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\pycharm_code\api\singl_api\all_version_cases" />
-      <recent name="E:\pycharm_code\api\singl_api\new_api_cases" />
-      <recent name="E:\pycharm_code\api\singl_api" />
       <recent name="E:\Download\singl_api\Reports" />
       <recent name="E:\Download\singl_api\util" />
+      <recent name="E:\Download\singl_api\attachment" />
+      <recent name="E:\Download\singl_api\all_version_cases" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\pycharm_code\api\singl_api\attachment" />
-      <recent name="E:\pycharm_code\api\singl_api\all_version_cases" />
-      <recent name="E:\pycharm_code\api\singl_api\new_api_cases" />
-      <recent name="E:\Download\singl_api\basic_info" />
       <recent name="E:\Download\singl_api\util" />
+      <recent name="E:\Download\singl_api\basic_info" />
+      <recent name="E:\Download\singl_api\lib" />
+      <recent name="E:\Download\singl_api\attachment" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_collect_cases">
-    <configuration name="collect_deal_parameters" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.run_dsp_cases">
+    <configuration name="Httpop" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_api_cases" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/httpop" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/new_api_cases/collect_deal_parameters.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/httpop/Httpop.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -147,30 +130,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="get_deal_parameter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="run_api_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/util" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/util/get_deal_parameter.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="run_collect_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -181,8 +143,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_collect_cases.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_api_cases.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,8 +152,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="run_compass_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -203,8 +165,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_compass_cases.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -213,28 +174,57 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in execute_collect_cases.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="run_dsp_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_api_cases" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/new_api_cases/execute_collect_cases.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_dsp_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="run_dw_cases" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="singl_api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_dw_cases.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.run_collect_cases" />
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python tests.Python tests in execute_collect_cases.py" />
-        <item itemvalue="Python.get_deal_parameter" />
-        <item itemvalue="Python.collect_deal_parameters" />
+        <item itemvalue="Python.run_dsp_cases" />
+        <item itemvalue="Python.run_api_cases" />
+        <item itemvalue="Python.run_compass_cases" />
+        <item itemvalue="Python.run_dw_cases" />
+        <item itemvalue="Python.Httpop" />
       </list>
     </recent_temporary>
   </component>
@@ -249,17 +239,10 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
       <changelist id="62896e77-aa11-4f88-9fff-d15e37411c8d" name="更改" comment="" />
-      <changelist id="f6ea0cf1-6795-45a5-8ed5-29071bee88d5" name="no_commit" comment="" />
       <created>1709109581527</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1709109581527</updated>
-      <workItem from="1714025050410" duration="14293000" />
-      <workItem from="1715826973232" duration="24643000" />
-      <workItem from="1715909309920" duration="94534000" />
-      <workItem from="1716514842193" duration="39005000" />
-      <workItem from="1716777835368" duration="132234000" />
-      <workItem from="1718242057785" duration="88230000" />
     </task>
     <task id="LOCAL-00001" summary="优化框架">
       <option name="closed" value="true" />
@@ -317,121 +300,60 @@
       <option name="project" value="LOCAL" />
       <updated>1711618641401</updated>
     </task>
-    <task id="LOCAL-00008" summary="新增采集模块从创建数据源到任务上线代码">
-      <created>1716783802288</created>
+    <task id="LOCAL-00008" summary="修复邮件异常结果统计">
+      <option name="closed" value="true" />
+      <created>1712029989729</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1716783802288</updated>
+      <updated>1712029989729</updated>
     </task>
-    <task id="LOCAL-00009" summary="添加元数据采集的代码">
-      <created>1717147309641</created>
+    <task id="LOCAL-00009" summary="调试元数据接口">
+      <option name="closed" value="true" />
+      <created>1714473094311</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1717147309642</updated>
+      <updated>1714473094311</updated>
     </task>
-    <task id="LOCAL-00010" summary="添加查询输入输出和查询历史">
-      <created>1717473715656</created>
+    <task id="LOCAL-00010" summary="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。">
+      <option name="closed" value="true" />
+      <created>1716263382024</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1717473715656</updated>
+      <updated>1716263382024</updated>
     </task>
-    <task id="LOCAL-00011" summary="优化数据集改造后的代码">
-      <created>1718242651588</created>
+    <task id="LOCAL-00011" summary="调试资产管理模块接口。">
+      <option name="closed" value="true" />
+      <created>1718357432557</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1718242651588</updated>
+      <updated>1718357432557</updated>
     </task>
-    <task id="LOCAL-00012" summary="添加流式kafka到localfs的代码">
-      <created>1718262559416</created>
+    <task id="LOCAL-00012" summary="去除冗余用例~">
+      <option name="closed" value="true" />
+      <created>1718853148867</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1718262559416</updated>
+      <updated>1718853148867</updated>
     </task>
-    <task id="LOCAL-00013" summary="添加创建dm数据源代码，采集mysql输出到dm的代码，元数据采集mysql代码，存储物化dm表的代码">
-      <created>1718338791738</created>
+    <task id="LOCAL-00013" summary="调试驱动报错脚本">
+      <option name="closed" value="true" />
+      <created>1719385150855</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1718338791738</updated>
+      <updated>1719385150855</updated>
     </task>
-    <task id="LOCAL-00014" summary="采集增加rest输出到hbase场景，存储增加创建hbase配置、物化hbase表和创建hbase分区">
-      <created>1719284116545</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1719284116545</updated>
-    </task>
-    <task id="LOCAL-00015" summary="优化测试用例执行一遍但是测试报告有两条结果">
-      <created>1719395529550</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1719395529550</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
+    <option name="localTasksCounter" value="14" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
-        <entry key="1c48738a-8bd4-4645-bd81-28125105c506">
-          <value>
-            <State>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="structure">
-                    <value>
-                      <list>
-                        <option value="dir:E:/pycharm_code/api/singl_api" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-        <entry key="619e7678-57c0-413c-9663-8b32963f85d6">
-          <value>
-            <State>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="structure">
-                    <value>
-                      <list>
-                        <option value="dir:E:/pycharm_code/api/singl_api" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
         <entry key="MAIN">
           <value>
             <State />
@@ -439,7 +361,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="优化框架" />
@@ -447,40 +368,12 @@
     <MESSAGE value="优化测试报告用例为null的问题。" />
     <MESSAGE value="优化报告名称" />
     <MESSAGE value="优化报告" />
-    <MESSAGE value="新增采集模块从创建数据源到任务上线代码" />
-    <MESSAGE value="添加元数据采集的代码" />
-    <MESSAGE value="添加查询输入输出和查询历史" />
-    <MESSAGE value="优化数据集改造后的代码" />
-    <MESSAGE value="添加流式kafka到localfs的代码" />
-    <MESSAGE value="添加创建dm数据源代码，采集mysql输出到dm的代码，元数据采集mysql代码，存储物化dm表的代码" />
-    <MESSAGE value="采集增加rest输出到hbase场景，存储增加创建hbase配置、物化hbase表和创建hbase分区" />
-    <MESSAGE value="优化测试用例执行一遍但是测试报告有两条结果" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化测试用例执行一遍但是测试报告有两条结果" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="response.content" />
-        <watch expression="data" />
-      </configuration>
-    </watches-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/singl_api$.coverage" NAME=" Coverage Results" MODIFIED="1718589290885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$run_collect_cases.coverage" NAME="run_collect_cases Coverage Results" MODIFIED="1719383243106" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/singl_api$get_deal_parameter.coverage" NAME="get_deal_parameter Coverage Results" MODIFIED="1718337717793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/util" />
-    <SUITE FILE_PATH="coverage/singl_api$collect_deal_parameters.coverage" NAME="collect_deal_parameters Coverage Results" MODIFIED="1716530016102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$upload_driver.coverage" NAME="upload_driver Coverage Results" MODIFIED="1715933091848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/new_api_cases" />
-    <SUITE FILE_PATH="coverage/singl_api$tttt.coverage" NAME="tttt Coverage Results" MODIFIED="1715933221958" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/singl_api$test.coverage" NAME="test Coverage Results" MODIFIED="1719280354501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <MESSAGE value="修复邮件异常结果统计" />
+    <MESSAGE value="调试元数据接口" />
+    <MESSAGE value="优化数据共享数据资源目录type变更，支持不同文件调用发送邮件接口。" />
+    <MESSAGE value="调试资产管理模块接口。" />
+    <MESSAGE value="去除冗余用例~" />
+    <MESSAGE value="调试驱动报错脚本" />
+    <option name="LAST_COMMIT_MESSAGE" value="调试驱动报错脚本" />
   </component>
 </project>

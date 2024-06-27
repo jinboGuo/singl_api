@@ -1,16 +1,17 @@
 # coding:utf-8
 import os
 import time
-
 from util.logs import Logger
 from util.Open_DB import MYSQL
 from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
+'''执行api脚本用例py'''
+pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py"]
 begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
-result_path = os.path.join(REPORT_PATH, "api_result.html")
+result_path = os.path.join(REPORT_PATH, "api_cases_report.html")
 '''发送者账号'''
 email_user = 'ruifan_apitest@163.com'
 '''发送者密码'''
@@ -32,8 +33,7 @@ Compass_scheduler = {
     "PASSWORD": 'Inf0refiner'
 }
 hdfs_url = "hdfs://into1:8020"
-# hdfs_url = "hdfs://mycluster"
-
+datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 
 """
 -------95-comapss环境使用-------
@@ -41,15 +41,15 @@ hdfs_url = "hdfs://into1:8020"
  HOST: "http://192.168.1.95:8515"
  Compass_MySQL_CONFIG:数据库连接信息
 """
-compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx')
+compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 compass_sheet = "scheduler"
-compass_host = "http://192.168.1.95:8031"
+compass_host = "http://192.168.1.95:8515"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.85',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'compass_16x',
+    "DB": 'merce_167',
     'case_db': 'test'}
 
 """
@@ -58,26 +58,10 @@ Compass_MySQL_CONFIG = {
  HOST: "http://192.168.1.95:8515"
  Dsp_MySQL_CONFIG:数据库连接信息
 """
-dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx')
+dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
 dsp_host = "http://192.168.1.95:8515"
 Dsp_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_162'  # merce-scheduler
-}
-"""
--------95-collect环境使用-------
- sheet_name:collect
- HOST: "http://192.168.1.95:8515"
- Collect_MySQL_CONFIG:数据库连接信息
-"""
-collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx')
-collect_sheet = "collect"
-collect_host = "http://192.168.1.95:8515"
-Collect_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
@@ -91,7 +75,7 @@ Collect_MySQL_CONFIG = {
  HOST: "http://192.168.1.95:8515"
  Dw_MySQL_CONFIG:数据库连接信息
 """
-dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx')
+dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dw_sheet = "dw-asset"
 dw_host = "http://192.168.1.95:8515"
 Dw_MySQL_CONFIG = {
@@ -99,21 +83,8 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_162',
+    "DB": 'merce_167',
     'case_db': 'test'}
-
-"""
--------k8s环境使用-------
-sheet name baymax_sheet = "k8s_149"
-host = "http://192.168.1.145:40001"
-MySQL_CONFIG = {
-    'HOST': '192.168.1.145',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'baymax_test',
-    'case_db': 'test'}
-"""
 
 """
 测试数据库的连接配置
@@ -137,9 +108,8 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
  HOST: "http://192.168.1.95:8515"
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
-
-baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx')
-baymax_sheet = "842"
+baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
+baymax_sheet = "baymax_master"  # baymax_master
 host = "http://192.168.1.95:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
@@ -148,19 +118,21 @@ MySQL_CONFIG = {
     "PASSWORD": 'merce',
     "DB": 'merce_167',
     'case_db': 'test'}
+
 """获取数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],
            MySQL_CONFIG["PORT"])
 
-"""
-租户信息
-"""
+"""elasticsearch集群服务器的地址"""
+ES = ['http://192.168.1.95:9200/']
+
+"""租户信息"""
 tenant_name = "default"
 
 """ 资源目录类型"""
 resource_type = ["datasource_dir", "dataset_dir", "schema_dir", "flow_dir", "poseidon_collect_dir", "poseidon_task_dir",
-                 "storage_dir", "jobview_dir", "dataassets_dir", "dataservice_dir", "datasafe_job_dir", "fileset_dir",
-                 "standard_dir", "schema_name_rule_dir", "schema_collect_task_dir", "tag_dir"]
+                 "storage_dir", "jobview_dir", "assets_dir", "dataresource_dir", "datasafe_job_dir", "fileset_dir",
+                 "standard_dir",  "schema_collect_task_dir", "qa_job_dir","schema_name_rule_dir", "tag_dir"]
 
 """元数据相关信息"""
 data_source = ["datasource_id", "datasource_name", "schema_id", "schema_name", "dataset_id", "dataset_name",
@@ -168,6 +140,31 @@ data_source = ["datasource_id", "datasource_name", "schema_id", "schema_name", "
 
 """标签检索类型"""
 tag_type = ["like", "EQUAL"]
+
+"""任务视图名称"""
+job_view_name = "gjb_scheduler"
+
+"""元数据采集任务名称"""
+schema_collect_name = "gjb_schema_collect"
+
+"""数据采集任务名称"""
+collect_task_name = "gjb_collect_task"
+
+"""数据质量任务名称"""
+qa_task_name = "gjb_qa_task"
+
+"""数据资源名称"""
+dsp_data_source_name = "gjb_dsp_push_datasource"
+
+"""数据资源相关信息"""
+dsp_data_source = ["data_source_id","data_source_name"]
+
+""" 审批类型"""
+approval_type = ["ASSETS_DIRECTORY","DIMENSION_TABLE","DATA_APPLICATION","POSEIDON_TASK","DATA_GRANT_RECORD","SDS_JOB","STANDARD_JOB","INDICATOR","SUPPLEMENT","DATATIER","SUBJECTDOMAIN","META_MODEL","DATA_DATARES","QUALITY_JOB","SCHEMA_COLLECT_TASK"]
+
+"""数据资产名称"""
+asset_name = "gjb_test_asset"
+
 
 """
 compass admin账户登录信息
@@ -209,8 +206,3 @@ MY_LOGIN_INFO_ROOT = {
                         'tenant': 'default', 'grant_type': 'manager_password'},
     "HOST": "%s" % host
 }
-
-"""
-elasticsearch集群服务器的地址
-"""
-ES = ['http://192.168.1.95:9200/']

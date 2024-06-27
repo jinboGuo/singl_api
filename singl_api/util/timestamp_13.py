@@ -1,5 +1,6 @@
+# coding:utf8
 import time
-
+import math
 
 def timestamp_to_13(digits=13):
     time_stamp1 = time.strftime('%a %b %d %H:%M:%S %Y')
@@ -50,8 +51,8 @@ def timestamp_now():
     :return: 获取%Y-%m-%dT%H:%M:%S.%f
     """
     now_time = datetime.now().isoformat()
-    time = datetime.strptime(now_time, "%Y-%m-%dT%H:%M:%S.%f")
-    times = str(time)[:-3]
+    times = datetime.strptime(now_time, "%Y-%m-%dT%H:%M:%S.%f")
+    times = str(times)[:-3]
     return times
 
 
@@ -71,8 +72,8 @@ def datatime_now():
     import datetime
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%dT%H:%M:%S')
-    time =str(now_time_nyr) + '.000+0000'
-    return str(time)
+    times =str(now_time_nyr) + '.000+0000'
+    return str(times)
 
 
 def data_now():
@@ -133,3 +134,26 @@ def day_now():
     now_time = datetime.datetime.now()
     now_time_nyr = now_time.strftime('%Y-%m-%d')
     return str(now_time_nyr)
+
+
+def change_time(all_time):
+    """
+    @alltime时间转换min、hour
+    """
+    day = 24 * 60 * 60
+    hour = 60 * 60
+    minute = 60
+    if all_time < 60:
+        return "%d秒" % math.ceil(all_time)
+    elif all_time > day:
+        days = divmod(all_time, day)
+        return "%d天%s" % (int(days[0]), change_time(days[1]))
+    elif all_time > hour:
+        hours = divmod(all_time, hour)
+        return '%d小时%s' % (int(hours[0]), change_time(hours[1]))
+    else:
+        minutes = divmod(all_time, minute)
+        return "%d分钟%d秒" % (int(minutes[0]), math.ceil(minutes[1]))
+
+
+
