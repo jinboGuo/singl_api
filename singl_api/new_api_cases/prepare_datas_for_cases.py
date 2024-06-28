@@ -188,7 +188,6 @@ def get_import_dataflow(headers, host, flag):
          csm_list.append(csm_id["id"])
         cdf_list.append(res['cfd'][0]['id'])
         new_data = {"cfd": cdf_list, "cds": cds_list, "cmt": csm_list,"csm": csm_list, "tag":[], "uploadDirectory": res["uploadDir"],"overWrite":True,"flowResourceId":"","datasetResourceId":"","schemaResourceId":""}
-        print("new_data:",new_data)
         return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)

@@ -20,7 +20,6 @@ from new_api_cases.get_statementId import get_sql_analyse_statement_id, get_sql_
 from new_api_cases.prepare_datas_for_cases import filesets_data, get_import_dataflow,update_db_driver,update_rtcjob_setting,update_custom_step
 from util import myddt
 from util.comm_util import operateKafka
-from util.encrypt import encrypt_rf
 from util.format_res import dict_res, get_time
 
 
@@ -175,33 +174,17 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif '创建flow' in case_detail:
-            new_data = create_flow_data(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '查询flow' in case_detail:
-            new_data = query_flow_data(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '获取SQL执行任务结果':
-            execte_use_params = get_sql_analyse_dataset_info(host, data)
-            execte_use_params = json.dumps(execte_use_params, separators=(',', ':'))
-            statement_id,sessionId,clusterId = get_sql_execte_statement_id(host, data)
-            new_url = url.format(statement_id,sessionId,clusterId)
+            exec_use_params = get_sql_analyse_dataset_info(host, data)
+            exec_use_params = json.dumps(exec_use_params, separators=(',', ':'))
+            statement_id,session_id,cluster_id = get_sql_execte_statement_id(host, data)
+            new_url = url.format(statement_id,session_id,cluster_id)
             log.info("request   url：%s " % new_url)
-            response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+            response = requests.post(url=new_url, headers=headers, data=exec_use_params)
             count_num = 0
             while "waiting" in response.text or "running" in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
-                response = requests.post(url=new_url, headers=headers, data=execte_use_params)
+                response = requests.post(url=new_url, headers=headers, data=exec_use_params)
                 time.sleep(5)
                 count_num += 1
                 if count_num == 50:
@@ -378,23 +361,8 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == "获取令牌":
-            headers["Content-Type"] = "application/x-www-form-urlencoded"
-            headers.pop('X-AUTH-TOKEN')
-            response = requests.post(url, headers=headers, data=dict_res(data))
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '创建非结构化文件集合' in case_detail:
             new_data = filesets_data(data)
-            response=requests.post(url=url, headers=headers, json=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '提交flow' in case_detail:
-            new_data=get_old_id_name(data)
             response=requests.post(url=url, headers=headers, json=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
@@ -492,8 +460,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
     try:
         if data:
             if case_detail == '根据statement id,获取Sql Analyze结果(获取输出字段)':
-                statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, data)
-                new_url = url.format(statement_id,sessionId,clusterId)
+                statement_id,session_id,cluster_id = get_sql_analyse_statement_id(host, data)
+                new_url = url.format(statement_id,session_id,cluster_id)
                 log.info('new_url:%s' % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -509,8 +477,8 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '结束指定statementId对应的查询任务':
-                statement_id,sessionId,clusterId = get_sql_analyse_statement_id(host, data)
-                new_url = url.format(statement_id,sessionId,clusterId)
+                statement_id,session_id,cluster_id = get_sql_analyse_statement_id(host, data)
+                new_url = url.format(statement_id,session_id,cluster_id)
                 log.info('new_url:%s' % new_url)
                 response = requests.get(url=new_url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -548,17 +516,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                     count_num += 1
                     if count_num == 50:
                         return
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail in ('查看元数据同步任务的日志进度','拉取元数据同步任务的日志','根据tasks id 查看完整log'):
-                time.sleep(10)
-                task_id = collector_schema_sync(data)
-                time.sleep(5)
-                new_url = url.format(task_id)
-                log.info('new_url:%s' % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
@@ -638,15 +595,6 @@ def get_request_result_check(url, headers, host, data, table_sheet_name, row, co
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif '根据statementId取Dataset数据'in case_detail:
-                statement_id, new_data = statementId_no_dataset(host, data)
-                new_url = url.format(statement_id)
-                log.info('new_url:%s' % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif '查询详情'in case_detail:
                 new_url = url.format(data)
                 log.info('new_url:%s' % new_url)
@@ -695,56 +643,6 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
             clean_vaule(table_sheet_name, row, column)
             write_result(table_sheet_name, row, column, response.status_code)
             write_result(table_sheet_name, row, column+4, response.text)
-        elif '更新flow'in case_detail:
-            dataset_id, new_data = update_flow_data(data)
-            new_url = url.format(dataset_id)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=new_url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(table_sheet_name, row, column, response.status_code)
-            write_result(table_sheet_name, row, column+4, response.text)
-        elif '修改记录' in case_detail:
-            types=case_detail.split("_")[1]
-            url = url.format(data)
-            tag_data_result=tag_data(types,data)
-            response = requests.put(url=url, headers=headers, json=tag_data_result)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(table_sheet_name, row, column, response.status_code)
-            write_result(table_sheet_name, row, column+4, response.text)
-        elif case_detail == '禁用角色':
-            new_data = enable_role(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '启用角色':
-            new_data = enable_role(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '禁用用户':
-            new_data = enable_user(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '启用用户':
-            new_data = enable_user(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            response = requests.put(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '更新数据库驱动' == case_detail:
             new_data = update_db_driver(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
