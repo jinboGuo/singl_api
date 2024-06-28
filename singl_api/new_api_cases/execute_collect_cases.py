@@ -2,6 +2,7 @@
 import json
 import os
 import re
+from openpyxl.styles import PatternFill, colors
 from util import myddt
 from openpyxl import load_workbook
 import requests
@@ -634,12 +635,12 @@ def read_data():
 testdata = read_data()
 
 
+
 @myddt.ddt
 class CheckResult(unittest.TestCase):
-
     def compare_code_result(self):
         """1.对比预期code和接口响应返回的status code"""
-        for row in range(2, all_rows + 1):
+        for row in range(2, all_rows+1):
             is_run = case_table_sheet.cell(row=row, column=16).value
             """预期status code和接口返回status code"""
             ex_status_code = case_table_sheet.cell(row=row, column=7).value
@@ -648,23 +649,22 @@ class CheckResult(unittest.TestCase):
             if is_run == 'Y' or is_run == 'y':
                 if ex_status_code and ac_status_code != '':
                     if ex_status_code == ac_status_code:
-                        case_table_sheet.cell(row=row, column=9, value='pass')
+                        case_table_sheet.cell(row=row, column=9, value='pass').fill = PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                     else:
-                        case_table_sheet.cell(row=row, column=9, value='fail')  # code不等时，用例结果直接判断为失败
+                        case_table_sheet.cell(row=row, column=9, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2]) # code不等时，用例结果直接判断为失败
+                        case_table_sheet.cell(row=row, column=13, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2]) # code不等时，用例结果直接判断为失败
                         case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
-                                                                        (case_table_sheet.cell(row=row, column=2).value,
-                                                                         case_table_sheet.cell(row=row, column=7).value,
-                                                                         case_table_sheet.cell(row=row,
-                                                                                               column=8).value))
+                                                                        (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
                 else:
-                    log.info("第 %d 行 status_code为空" % row)
+                    log.error("第 %d 行 status_code为空" %row)
             else:
-                log.info("第 %d 行脚本未执行，请查看isRun是否为Y或者y！" % row)
+                log.error("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
         case_table.save(cases_dir)
+
 
     def compare_text_result(self):
         """对比预期response和实际返回的response.text，根据预期和实际结果的关系进行处理"""
-        for row in range(2, all_rows + 1):
+        for row in range(2, all_rows+1):
             """接口返回的response.text"""
             response_text = case_table_sheet.cell(row=row, column=12).value
             response_text_dict = dict_res(response_text)
@@ -686,19 +686,18 @@ class CheckResult(unittest.TestCase):
                     if key_word in ('create', 'query', 'update', 'delete'):
                         self.assert_deal(key_word, relation, expect_text, response_text, response_text_dict, row, 13)
                     else:
-                        log.info("请确认第%d行的key_word" % row)
+                        log.error("请确认第%d行的key_word" % row)
                 elif code_result == 'fail':
-                    case_table_sheet.cell(row=row, column=14, value='fail')
+                    case_table_sheet.cell(row=row, column=14, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回status_code对比失败,预期为%s,实际为%s' %
-                                                                    (case_table_sheet.cell(row=row, column=2).value,
-                                                                     case_table_sheet.cell(row=row, column=7).value,
-                                                                     case_table_sheet.cell(row=row, column=8).value))
+                                                                    (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
                 else:
-                    log.info("请确认第 %d 行 status_code对比结果" % row)
+                    log.error("请确认第 %d 行 status_code对比结果" % row)
             else:
-                log.info("第 %d 行脚本未执行，请查看isRun是否为Y或者y！" % row)
+                log.error("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
 
         case_table.save(cases_dir)
+
 
     def assert_deal(self, key_word, relation, expect_text, response_text, response_text_dict, row, column):
         """
@@ -716,108 +715,102 @@ class CheckResult(unittest.TestCase):
                 if isinstance(response_text_dict, dict):
                     if response_text_dict.get("id"):
                         try:
-                            self.assertEqual(expect_text, len(response_text_dict['id']),
-                                             '第%d行的response_text长度和预期不一致' % row)
+                            self.assertEqual(expect_text, len(response_text_dict['id']), '第%d行的response_text长度和预期不一致' % row)
                         except:
-                            log.info("第 %d 行 response_text返回的id和预期id长度不一致" % row)
-                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            #log.info("第 %d 行 response_text返回的id和预期id长度不一致" %row)
+                            case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                         else:
-                            case_table_sheet.cell(row=row, column=column, value='pass')
+                            case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                     else:
                         try:
-                            self.assertEqual(expect_text, response_text, '第%d行的expect_text:%s和response_text:%s不相等' % (
-                                row, expect_text, response_text))
+                            self.assertEqual(expect_text, response_text, '第%d行的expect_text:%s和response_text:%s不相等' % (row,expect_text, response_text))
                         except:
-                            log.info("第%d行的expect_text:%s和response_text:%s不相等" % (row, expect_text, response_text))
-                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            #log.info("第%d行的expect_text:%s和response_text:%s不相等" %(row,expect_text, response_text))
+                            case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                         else:
-                            case_table_sheet.cell(row=row, column=column, value='pass')
+                            case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                 else:
                     '''只返回一个id串的情况下，判断预期长度和id长度一致'''
                     try:
                         self.assertEqual(expect_text, len(response_text), '第%d行的response_text长度和预期不一致' % row)
                     except:
-                        log.info("第 %d 行 response_text和预期text不相等" % row)
-                        case_table_sheet.cell(row=row, column=column, value='fail')
+                        #log.info("第 %d 行 response_text和预期text不相等" %row)
+                        case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     else:
-                        case_table_sheet.cell(row=row, column=column, value='pass')
+                        case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
 
             elif relation == 'in':
                 """返回多内容时，断言多个值可以用&连接，并且expect_text包含在response_text中"""
                 if "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
-                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' % (row, i))
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
                         except:
-                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, i))
-                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            #log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,i))
+                            case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                             break
                         else:
-                            case_table_sheet.cell(row=row, column=column, value='pass')
+                            case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                 else:
                     try:
-                        self.assertIn(expect_text, response_text,
-                                      '第 %d 行 预期结果：%s没有包含在response_text中' % (row, expect_text))
+                        self.assertIn(expect_text, response_text, '第 %d 行 预期结果：%s没有包含在response_text中'%(row,expect_text))
                     except:
-                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, expect_text))
-                        case_table_sheet.cell(row=row, column=column, value='fail')
+                        #log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     else:
-                        case_table_sheet.cell(row=row, column=column, value='pass')
+                        case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
             else:
-                log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" % row)
-                case_table_sheet.cell(row=row, column=column, value='请确认%d行 的预期text和接口response.text的relatrion' % row)
+                #log.info("请确认第 %d 行 预期expect_text和response_text的relatrion" %row)
+                case_table_sheet.cell(row=row, column=column, value='请确认%d行 的预期text和接口response.text的relatrion'%row)
         elif key_word in ('query', 'update', 'delete'):
             if relation == '=':
-                compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}',
-                                            '%s' % (response_text))
+                compare_result = re.findall('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', '%s' % (response_text))
                 response_text_list = []
                 response_text_list.append(response_text)
                 if compare_result == response_text_list:
                     try:
                         self.assertEqual(expect_text, len(response_text), '第%d行expect_text和response_text不相等' % row)
                     except:
-                        case_table_sheet.cell(row=row, column=column, value='fail')
+                        case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     else:
-                        case_table_sheet.cell(row=row, column=column, value='pass')
+                        case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                 elif expect_text == None and response_text == "":
-                    case_table_sheet.cell(row=row, column=column, value='pass')
+                    case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                 else:
                     try:
-                        self.assertEqual(expect_text, response_text,
-                                         '第%d行expect_text:%s和response_text:%s不相等' % (row, expect_text, response_text))
+                        self.assertEqual(expect_text, response_text, '第%d行expect_text:%s和response_text:%s不相等' % (row,expect_text,response_text))
                     except:
-                        log.info("第 %d 行 response_text和预期text不相等" % row)
-                        case_table_sheet.cell(row=row, column=column, value='fail')
+                        #log.info("第 %d 行 response_text和预期text不相等" %row)
+                        case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     else:
-                        case_table_sheet.cell(row=row, column=column, value='pass')
+                        case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
 
             elif relation == 'in':
                 if "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
-                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' % (row, i))
+                            self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
                         except:
-                            log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, i))
-                            case_table_sheet.cell(row=row, column=column, value='fail')
+                            #log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,i))
+                            case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                             break
                         else:
-                            case_table_sheet.cell(row=row, column=column, value='pass')
+                            case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                 else:
                     try:
-                        self.assertIn(expect_text, response_text,
-                                      '第 %d 行 预期结果：%s没有包含在response_text中' % (row, expect_text))
+                        self.assertIn(expect_text, response_text, '第 %d 行 预期结果：%s没有包含在response_text中'%(row,expect_text))
                     except:
-                        log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" % (row, expect_text))
-                        case_table_sheet.cell(row=row, column=column, value='fail')
+                        #log.info("第 %d 行 预期结果：%s没有包含在response_text中， 结果对比失败" %(row,expect_text))
+                        case_table_sheet.cell(row=row, column=column, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     else:
-                        case_table_sheet.cell(row=row, column=column, value='pass')
+                        case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
             else:
-                log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
-                case_table_sheet.cell(row=row, column=column,
-                                      value='请确认第 %d 行 预期expect_text和response_text的relation' % row)
+                #log.info("请确认第 %d 行 预期expect_text和response_text的relation" % row)
+                case_table_sheet.cell(row=row, column=column, value='请确认第 %d 行 预期expect_text和response_text的relation'%row)
         else:
-            log.info("请确认第 %d 行 的key_word" % row)
+            log.error("请确认第 %d 行 的key_word" % row)
         case_table.save(cases_dir)
+
 
     def deal_result(self):
         """
@@ -834,52 +827,50 @@ class CheckResult(unittest.TestCase):
             is_run = case_table_sheet.cell(row=row, column=16).value
             status_code_result = case_table_sheet.cell(row=row, column=9).value
             response_text_result = case_table_sheet.cell(row=row, column=13).value
-            if is_run == 'Y' or is_run == 'y':
+            if is_run=='Y' or is_run=='y':
                 if status_code_result == 'pass' and response_text_result == 'pass':
-                    log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
-                    case_table_sheet.cell(row=row, column=14, value='pass')
+                    #log.info("测试用例-%s pass" % case_table_sheet.cell(row=row, column=2).value)
+                    case_table_sheet.cell(row=row, column=14, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
                     case_table_sheet.cell(row=row, column=15, value='')
                 elif status_code_result == 'fail':
-                    log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
-                    case_table_sheet.cell(row=row, column=14, value='fail')
+                    #log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
+                    case_table_sheet.cell(row=row, column=14, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     case_table_sheet.cell(row=row, column=15, value='')
                     case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：status code对比失败,预期为%s,实际为%s' \
-                                                                    % (case_table_sheet.cell(row=row, column=2).value,
-                                                                       case_table_sheet.cell(row=row, column=7).value,
-                                                                       case_table_sheet.cell(row=row, column=8).value))
+                                                                    % (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=7).value, case_table_sheet.cell(row=row, column=8).value))
                 elif status_code_result == 'pass' and response_text_result == 'fail':
-                    log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
-                    case_table_sheet.cell(row=row, column=14, value='fail')
+                    #log.info("测试用例-%s fail" % case_table_sheet.cell(row=row, column=2).value)
+                    case_table_sheet.cell(row=row, column=14, value='fail').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[2])
                     case_table_sheet.cell(row=row, column=15, value='')
                     case_table_sheet.cell(row=row, column=15, value='%s--->失败原因：返回内容对比失败,预期为%s,实际为%s' %
-                                                                    (case_table_sheet.cell(row=row, column=2).value,
-                                                                     case_table_sheet.cell(row=row, column=10).value,
-                                                                     case_table_sheet.cell(row=row, column=12).value))
+                                                                    (case_table_sheet.cell(row=row, column=2).value, case_table_sheet.cell(row=row, column=10).value, case_table_sheet.cell(row=row, column=12).value))
                 else:
-                    log.info("请确认status code或response.text对比结果")
+                    log.error("请确认status code或response.text对比结果")
             else:
-                log.info("第 %d 行脚本未执行，请查看isRun是否为Y或者y！" % row)
+                log.error("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
         case_table.save(cases_dir)
 
+
     @myddt.data(*testdata)
-    def test_api(self, data):
+    def test_api(self,data):
         self.case_name = data['case_detail']
-        self.url = host + data['url']
-        self.method = data['method']
+        self.url=host+data['url']
+        self.method=data['method']
         self.case_result = data['case_result']
         self.result2 = data['result2']
-        self.header = get_headers()
-        self.body = data['parameters']
+        self.header=get_headers()
+        self.body=data['parameters']
         self.expect_text = data['expect_text']
-        self.extract_data = data['response_text']
-        self.readData_code = data["response__status_code"]
+        self.extract_data=data['response_text']
+        self.readData_code =data["response__status_code"]
         print("******* 执行用例 ->{0} *********".format(self.case_name))
         print("请求URL: {0}".format(self.url))
         print("请求方式: {0}".format(self.method))
         print("请求header:{0}".format(self.header))
         print("请求body:{0}".format(self.body))
         if self.case_result == 'pass':
+            print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
+            self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
+        else:
             print("返回状态码：%d 响应信息：%s" % (self.readData_code, self.extract_data))
             self.assertIn(self.expect_text, self.extract_data, "返回实际结果是->:%s" % self.extract_data)
-        else:
-            self.assertEqual(self.readData_code, 200, "返回状态码status_code:{}".format(str(self.readData_code)))
