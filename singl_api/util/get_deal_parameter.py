@@ -196,7 +196,7 @@ def get_schema_collect_id():
     except Exception as e:
         log.error("没有获取到元数据采集任务id：%s" % e)
 
-def get_collect_task_id():
+def get_offline_collect_task_id():
     """
     获取数据采集任务id
     """

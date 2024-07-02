@@ -4,7 +4,7 @@ import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
 from util.get_deal_parameter import get_resourceid, get_datasource, get_tags, get_dataset, get_schema, ms, get_job_view_id, \
-    get_schema_collect_id, get_collect_task_id, get_qa_task_id, get_dsp_data_application, get_dsp_data_resource
+    get_schema_collect_id, get_offline_collect_task_id, get_qa_task_id, get_dsp_data_application, get_dsp_data_resource
 from basic_info.setting import resource_type, tag_type, data_source, compass_host, log, dsp_data_source
 from util.timestamp_13 import data_now
 
@@ -62,7 +62,7 @@ def deal_parameters(data,request_method,request_url):
             data = data.replace('元数据采集任务主键',  str(get_schema_collect_id()))
             return deal_parameters(data,request_method,request_url)
         if '离线采集任务主键' in data:
-            data = data.replace('离线采集任务主键',  str(get_collect_task_id()))
+            data = data.replace('离线采集任务主键',  str(get_offline_collect_task_id()))
             return deal_parameters(data,request_method,request_url)
         if '任务视图主键' in data:
             data = data.replace('任务视图主键',  str(get_job_view_id()))
