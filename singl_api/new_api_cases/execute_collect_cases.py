@@ -106,7 +106,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        if case_detail == '上传驱动包-hive':
+        elif case_detail == '上传驱动包-hive':
             driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\hive-jdbc-3.1.0.3.1.5.0-152_driver.jar')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
