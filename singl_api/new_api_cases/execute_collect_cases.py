@@ -32,8 +32,7 @@ def deal_request_method():
     判断请求方法，并根据不同的请求方法调用不同的处理方式
     :return:
     """
-    # for i in range(2, all_rows + 1):
-    for i in range(193, all_rows + 1):
+    for i in range(2, all_rows + 1):
         request_method = case_table_sheet.cell(row=i, column=4).value
         request_method_upper = request_method.upper()
         request_url = host + case_table_sheet.cell(row=i, column=5).value
@@ -154,7 +153,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '删除数据源':
+        elif '删除数据源'in case_detail:
             log.info("request   url：%s" % url)
             response = requests.post(url=url, headers=headers, data=data)
             log.info("response data：%s %s" % (response.status_code, response.text))
