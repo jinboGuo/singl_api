@@ -9,7 +9,7 @@ from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_da
     get_source_dataset_name, get_collector_group_id, get_collector_group_name, get_tenant_id, get_owner, get_user_id, \
     get_sink_schema_name_and_random, get_sink_dataset_name_and_random, get_source_dataset_id, get_dss_mysql_id, \
     get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name, \
-    get_current_time, get_table_name, get_sink_dataset_id, get_HDFS_id, get_HDFS_name
+    get_current_time, get_table_name, get_sink_dataset_id, get_HDFS_id, get_HDFS_name, get_driver_name
 
 
 def deal_parameters(data, request_method, request_url):
@@ -122,6 +122,9 @@ def deal_parameters(data, request_method, request_url):
             data_select_result = data_select_result[0]['id']
             request_data = data.split('&&')[1]
             request_data = str(request_data).replace('输入', str(data_select_result))
+            return request_data
+        if '输入驱动名称' in data:
+            request_data = data.replace('输入驱动名称', str(get_driver_name()))
             return request_data
         if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入画布id' in data or '输入采集任务id' in data or '输入元数据命名规则名称' in data or '输入元数据采集任务id' in data:
             request_data = data.replace('输入输入数据源id', str(get_source_dss_id()))
