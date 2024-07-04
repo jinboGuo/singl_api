@@ -608,6 +608,16 @@ def get_HDFS_name():
     hdfs_names = ms.ExecuQuery(sql.encode('utf-8'))
     hdfs_name = hdfs_names[0]["name"]
     return hdfs_name
+
+def get_driver_name():
+    """获取最新创建的HDFS数据源名称"""
+    tenant_id = get_tenant_id()
+    sql = "SELECT name from merce_udf where tenant_id='%s' and name like '%s%%%%' GROUP BY create_time desc limit 1" % (
+        tenant_id, 'test_api_wjp')
+    driver_names = ms.ExecuQuery(sql.encode('utf-8'))
+    driver_name = driver_names[0]["name"]
+    return driver_name
+
 def get_qa_task_id():
     """
     获取质检任务id
