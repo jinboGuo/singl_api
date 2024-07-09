@@ -63,7 +63,7 @@ def get_datasource(data_source, data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s' ORDER BY create_time desc" % (
+        sql = "select id,name from merce_dss where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
             tenant_id, data)
         datasource = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = datasource[0]["id"]
