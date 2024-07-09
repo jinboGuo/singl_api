@@ -196,7 +196,7 @@ def deal_parameters(data, request_method, request_url):
                         return new_data
                 else:
                     try:
-                        if "{}" in request_url:
+                        if "{}" in request_url and '/meta/poseidon/metrics/summary/exec/' in request_url:
                             data = data_select_result[0]["id"]
                             return data
                         else:

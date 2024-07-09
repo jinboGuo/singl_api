@@ -434,6 +434,14 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '删除节点' in case_detail:
+            new_url = url.format(get_draft_id())
+            log.info("request   url：%s" % new_url)
+            response = requests.post(url=new_url, headers=headers,data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("测试用例{}执行过程中出错{}".format(case_detail, e))
 
