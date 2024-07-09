@@ -14,7 +14,7 @@ import unittest
 import time
 from basic_info.setting import collect_host
 from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
-    get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id
+    get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id, get_collect_dir_id
 
 cases_dir = collect_cases_dir
 case_table = load_workbook(cases_dir)
@@ -434,10 +434,32 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '停止调度':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '启用调度':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '删除节点' in case_detail:
             new_url = url.format(get_draft_id())
             log.info("request   url：%s" % new_url)
-            response = requests.post(url=new_url, headers=headers,data=data.encode('utf-8'))
+            response = requests.post(url=new_url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '移动采集任务':
+            new_url = url.format(get_collect_dir_id())
+            log.info("request   url：%s" % new_url)
+            response = requests.post(url=new_url, headers=headers, data=data.encode('utf-8'))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -785,7 +807,7 @@ class CheckResult(unittest.TestCase):
                     else:
                         try:
                             self.assertEqual(expect_text, response_text, '第%d行的expect_text:%s和response_text:%s不相等' % (
-                            row, expect_text, response_text))
+                                row, expect_text, response_text))
                         except:
                             # log.info("第%d行的expect_text:%s和response_text:%s不相等" %(row,expect_text, response_text))
                             case_table_sheet.cell(row=row, column=column, value='fail').fill = PatternFill('solid',
