@@ -936,8 +936,8 @@ class CheckResult(unittest.TestCase):
         print("请求header:{0}".format(self.header))
         print("请求body:{0}".format(self.body))
         if self.case_result == 'pass':
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code, self.extract_data))
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code, self.extract_data))
             self.assertIn(self.expect_text, self.extract_data, "返回实际结果是->:%s" % self.extract_data)
