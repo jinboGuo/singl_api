@@ -32,62 +32,64 @@ def deal_request_method():
     判断请求方法，并根据不同的请求方法调用不同的处理方式
     :return:
     """
-    for i in range(2, all_rows + 1):
-        request_method = case_table_sheet.cell(row=i, column=4).value
-        request_method_upper = request_method.upper()
-        request_url = host + case_table_sheet.cell(row=i, column=5).value
-        old_data = case_table_sheet.cell(row=i, column=6).value
-        request_data = deal_parameters(old_data, request_method_upper, request_url)
-        log.info("request  data：%s" % request_data)
-        api_name = case_table_sheet.cell(row=i, column=1).value
-        is_run = case_table_sheet.cell(row=i, column=16).value
-        if request_method_upper:
-            if is_run == 'Y' or is_run == 'y':
-                if api_name == 'tenants':
-                    """
-                    租户的用例需要使用root用户登录后操作
-                    根据不同的请求方法，进行分发
-                    """
-                    if request_method_upper == 'POST':
-                        post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(),
-                                                  data=request_data, table_sheet_name=case_table_sheet)
-                    elif request_method_upper == 'GET':
-                        get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data,
-                                                 table_sheet_name=case_table_sheet, row=i, column=8)
-                    elif request_method_upper == 'PUT':
-                        put_request_result_check(url=request_url, row=i, data=request_data,
-                                                 table_sheet_name=case_table_sheet, column=8,
-                                                 headers=get_headers_root())
-                    elif request_method_upper == 'DELETE':
-                        delete_request_result_check(url=request_url, data=request_data,
-                                                    table_sheet_name=case_table_sheet, row=i, column=8,
-                                                    headers=get_headers_root())
+    try:
+        for i in range(2, all_rows + 1):
+            request_method = case_table_sheet.cell(row=i, column=4).value
+            request_method_upper = request_method.upper()
+            request_url = host + case_table_sheet.cell(row=i, column=5).value
+            old_data = case_table_sheet.cell(row=i, column=6).value
+            request_data = deal_parameters(old_data, request_method_upper, request_url)
+            log.info("request  data：%s" % request_data)
+            api_name = case_table_sheet.cell(row=i, column=1).value
+            is_run = case_table_sheet.cell(row=i, column=16).value
+            if request_method_upper:
+                if is_run == 'Y' or is_run == 'y':
+                    if api_name == 'tenants':
+                        """
+                        租户的用例需要使用root用户登录后操作
+                        根据不同的请求方法，进行分发
+                        """
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(),
+                                                      data=request_data, table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data,
+                                                     table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url, row=i, data=request_data,
+                                                     table_sheet_name=case_table_sheet, column=8,
+                                                     headers=get_headers_root())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url, data=request_data,
+                                                        table_sheet_name=case_table_sheet, row=i, column=8,
+                                                        headers=get_headers_root())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
                     else:
-                        log.info("请求方法%s不在处理范围内" % request_method)
+                        """根据不同的请求方法，进行分发"""
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(),
+                                                      data=request_data, table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url, headers=get_headers(), data=request_data,
+                                                     table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url, row=i, data=request_data,
+                                                     table_sheet_name=case_table_sheet, column=8, headers=get_headers())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url, data=request_data,
+                                                        table_sheet_name=case_table_sheet, row=i, column=8,
+                                                        headers=get_headers())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
                 else:
-                    """根据不同的请求方法，进行分发"""
-                    if request_method_upper == 'POST':
-                        post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(),
-                                                  data=request_data, table_sheet_name=case_table_sheet)
-                    elif request_method_upper == 'GET':
-                        get_request_result_check(url=request_url, headers=get_headers(), data=request_data,
-                                                 table_sheet_name=case_table_sheet, row=i, column=8)
-                    elif request_method_upper == 'PUT':
-                        put_request_result_check(url=request_url, row=i, data=request_data,
-                                                 table_sheet_name=case_table_sheet, column=8, headers=get_headers())
-                    elif request_method_upper == 'DELETE':
-                        delete_request_result_check(url=request_url, data=request_data,
-                                                    table_sheet_name=case_table_sheet, row=i, column=8,
-                                                    headers=get_headers())
-                    else:
-                        log.info("请求方法%s不在处理范围内" % request_method)
+                    log.info(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！" % i)
             else:
-                log.info(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！" % i)
-        else:
-            log.info("第 %d 行请求方法为空" % i)
-    '''执行结束后保存表格'''
-    case_table.save(cases_dir)
-
+                log.info("第 %d 行请求方法为空" % i)
+        '''执行结束后保存表格'''
+        case_table.save(cases_dir)
+    except Exception as e:
+        log.error("{}执行过程中出错{}".format(i, e))
 
 # POST请求
 def post_request_result_check(row, column, url, headers, data, table_sheet_name):

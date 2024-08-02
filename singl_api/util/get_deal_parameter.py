@@ -1,9 +1,7 @@
 import random
-
 import time
-
 from basic_info.setting import tenant_name, log, ms, job_view_name, schema_collect_name, collect_task_name, \
-    qa_task_name, dsp_data_source_name, asset_name
+    qa_task_name, dsp_data_source_name, dataflow_name, dw_name
 
 
 def get_tenant_id():
@@ -42,13 +40,13 @@ def get_resourceid(resource_type):
     tenant_id = get_tenant_id()
     try:
         if resource_type == 'schema_name_rule_dir' or resource_type == 'schema_collect_task_dir':
-            sql = "select id from merce_resource_dir where  tenant_id='%s'  and res_type='%s' and parent_id is NULL" % (
+            sql = "select id from merce_resource_dir where tenant_id='%s' and res_type='%s' and parent_id is NULL" % (
                 tenant_id, resource_type)
             resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
             resource_id = resource_dir[0]["id"]
             return resource_id
         else:
-            sql = "select id from merce_resource_dir where  tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL" % (
+            sql = "select id from merce_resource_dir where tenant_id='%s' and creator='admin' and res_type='%s' and parent_id is NULL" % (
                 tenant_id, resource_type)
             resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
             resource_id = resource_dir[0]["id"]
@@ -63,7 +61,7 @@ def get_datasource(data_source, data):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s' ORDER BY create_time desc" % (
+        sql = "select id,name from merce_dss where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
             tenant_id, data)
         datasource = ms.ExecuQuery(sql.encode('utf-8'))
         dss_id = datasource[0]["id"]
@@ -697,23 +695,130 @@ def get_asset_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
+        sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[0])
         assets_info = ms.ExecuQuery(sql.encode('utf-8'))
         assets_info_id = assets_info[0]["id"]
         return str(assets_info_id)
     except Exception as e:
         log.error("没有获取到资产id：%s" % e)
 
-
-def get_approval_record():
+def get_dw_data_tier_id(dw_type):
     """
-    获取资产审批id
+    获取数仓分层id
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,asset_name)
-        assets_info = ms.ExecuQuery(sql.encode('utf-8'))
-        assets_info_id = assets_info[0]["id"]
-        return str(assets_info_id)
+        sql = "select id,name from dw_data_tier where tenant_id='%s' and abbr like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
+        dw_data_tier_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_data_tier_info_id = dw_data_tier_info[0]["id"]
+        dw_data_tier_info_name = dw_data_tier_info[0]["name"]
+        if dw_type == "dw_datatier_id":
+            return str(dw_data_tier_info_id)
+        if dw_type == "dw_datatier_name":
+            return str(dw_data_tier_info_name)
     except Exception as e:
-        log.error("没有获取到资产审核id：%s" % e)
+        log.error("没有获取到数仓分层id：%s" % e)
+
+def get_dw_subject_domain_id(dw_type):
+    """
+    获取数仓主题域id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id,name from dw_subject_domain where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[2])
+        dw_subject_domain_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_subject_domain_info_id = dw_subject_domain_info[0]["id"]
+        dw_subject_domain_info_name = dw_subject_domain_info[0]["name"]
+        if dw_type == "dw_subjectdomain_id":
+            return str(dw_subject_domain_info_id)
+        if dw_type == "dw_subjectdomain_name":
+            return str(dw_subject_domain_info_name)
+    except Exception as e:
+        log.error("没有获取到数仓主题域id：%s" % e)
+
+def get_dw_dic_group_id(dw_type):
+    """
+    获取字典集id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id,name from dw_dic_group where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[3])
+        dw_dic_group_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_dic_group_info_id = dw_dic_group_info[0]["id"]
+        dw_dic_group_info_name = dw_dic_group_info[0]["name"]
+        if dw_type == "dic_group_id":
+          return str(dw_dic_group_info_id)
+        if dw_type == "dic_group_name":
+          return str(dw_dic_group_info_name)
+    except Exception as e:
+        log.error("没有获取到字典集id：%s" % e)
+
+def get_dw_dic_id(dw_type):
+    """
+    获取字典名称
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id,name from dw_dic where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[4])
+        dw_dic_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_dic_info_id = dw_dic_info[0]["id"]
+        dw_dic_info_name = dw_dic_info[0]["name"]
+        if dw_type == "dic_id":
+          return str(dw_dic_info_id)
+        if dw_type == "dic_name":
+          return str(dw_dic_info_name)
+    except Exception as e:
+        log.error("没有获取到字典名称：%s" % e)
+
+def get_dw_metadata_id():
+    """
+    获取数仓主元模型id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from dw_metadata where tenant_id='%s' and data_tier_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
+        dw_metadata_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_metadata_info_id = dw_metadata_info[0]["id"]
+        return str(dw_metadata_info_id)
+    except Exception as e:
+        log.error("没有获取到数仓元模型id：%s" % e)
+
+
+def get_approval_record(dwname):
+    """
+    获取数仓资产审批id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dwname)
+        approval_record_info = ms.ExecuQuery(sql.encode('utf-8'))
+        approval_record_info_id = approval_record_info[0]["id"]
+        return str(approval_record_info_id)
+    except Exception as e:
+        log.error("没有获取到数仓资产审核id：%s" % e)
+
+def get_dw_subject_domain():
+    """
+    获取数仓主题域目录
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from dw_subject_domain where tenant_id='%s' and name = '主题域' ORDER BY create_time desc limit 1" %tenant_id
+        dw_subject_domain_info = ms.ExecuQuery(sql.encode('utf-8'))
+        dw_subject_domain_info_id = dw_subject_domain_info[0]["id"]
+        return str(dw_subject_domain_info_id)
+    except Exception as e:
+        log.error("没有获取到数仓主题域目录：%s" % e)
+
+def get_dataflow_id():
+    """
+    获取dataflow id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name)
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_info_id = flow_info[0]["id"]
+        return str(flow_info_id)
+    except Exception as e:
+        log.error("没有获取dataflow的id：%s" % e)

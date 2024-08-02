@@ -33,51 +33,53 @@ def deal_request_method():
     判断请求方法，并根据不同的请求方法调用不同的处理方式
     :return:
     """
-    for i in range(2, all_rows+1):
-        request_method = case_table_sheet.cell(row=i, column=4).value
-        request_method_upper = request_method.upper()
-        request_url = host+case_table_sheet.cell(row=i, column=5).value
-        old_data = case_table_sheet.cell(row=i, column=6).value
-        request_data = deal_parameters(old_data,request_method_upper,request_url)
-        log.info("request  data：%s" % request_data)
-        api_name = case_table_sheet.cell(row=i, column=1).value
-        is_run = case_table_sheet.cell(row=i, column=16).value
-
-        if request_method_upper:
-            if is_run =='Y' or is_run=='y':
-                if api_name == 'tenants':
-                    """
-                    租户的用例需要使用root用户登录后操作
-                    根据不同的请求方法，进行分发
-                    """
-                    if request_method_upper == 'POST':
-                        post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet)
-                    elif request_method_upper == 'GET':
-                        get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
-                    elif request_method_upper == 'PUT':
-                        put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root())
-                    elif request_method_upper == 'DELETE':
-                        delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root())
+    try:
+        for i in range(2, all_rows+1):
+            request_method = case_table_sheet.cell(row=i, column=4).value
+            request_method_upper = request_method.upper()
+            request_url = host+case_table_sheet.cell(row=i, column=5).value
+            old_data = case_table_sheet.cell(row=i, column=6).value
+            request_data = deal_parameters(old_data,request_method_upper,request_url)
+            log.info("request  data：%s" % request_data)
+            api_name = case_table_sheet.cell(row=i, column=1).value
+            is_run = case_table_sheet.cell(row=i, column=16).value
+            if request_method_upper:
+                if is_run =='Y' or is_run=='y':
+                    if api_name == 'tenants':
+                        """
+                        租户的用例需要使用root用户登录后操作
+                        根据不同的请求方法，进行分发
+                        """
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
                     else:
-                        log.info("请求方法%s不在处理范围内" % request_method)
+                        """根据不同的请求方法，进行分发"""
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
                 else:
-                    """根据不同的请求方法，进行分发"""
-                    if request_method_upper == 'POST':
-                        post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet)
-                    elif request_method_upper == 'GET':
-                        get_request_result_check(url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
-                    elif request_method_upper == 'PUT':
-                        put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers())
-                    elif request_method_upper == 'DELETE':
-                        delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers())
-                    else:
-                        log.info("请求方法%s不在处理范围内" % request_method)
+                    log.info(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
             else:
-                log.info(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
-        else:
-            log.info("第 %d 行请求方法为空" % i)
-    '''执行结束后保存表格'''
-    case_table.save(cases_dir)
+                log.info("第 %d 行请求方法为空" % i)
+        '''执行结束后保存表格'''
+        case_table.save(cases_dir)
+    except Exception as e:
+        log.error("{}执行过程中出错{}".format(i, e))
 
 
 
@@ -184,10 +186,26 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "创建元模型" == case_detail:
+            log.info("request data： %s" % data)
+            response = requests.post(url=url, headers=get_headers(), data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         else:
             if data:
                 data = str(data)
-                if data.startswith('{') and data.endswith('}'):
+                if "{}" in url:
+                    data = data.split("##")
+                    new_url = url.format(data[1])
+                    log.info("请求new_url：%s" % new_url)
+                    response = requests.post(url=new_url, headers=headers, data=data[0].encode('utf-8'))
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif data.startswith('{') and data.endswith('}'):
                     data_dict = dict_res(data)
                     response = requests.post(url=url, headers=headers, json=data_dict)
                     log.info("response data：%s %s" % (response.status_code, response.text))
@@ -296,69 +314,68 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
         log.info("开始执行：%s " %case_detail)
         log.info("请求url：%s" % url)
         if data :
-                if data.startswith('{') and data.endswith('}'):
-                    response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
+            if case_detail == '资产目录重命名':
+                new_data = update_asset_directory(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif case_detail == '资产目录重命名-名称重复':
+                new_data = duplicate_move_asset_directory(data)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '更新资产' in case_detail:
+                asset_id, new_data = update_asset(data)
+                url = url.format(asset_id)
+                log.info("new_url：%s " % url)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.put(url=url, headers=headers, data=new_data)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            elif '&&' in str(data):
+                '''分隔参数'''
+                parameters = data.split('&&')
+                '''拼接URL'''
+                new_url = url.format(parameters[0])
+                log.info("new_url：%s" % new_url)
+                '''发送的参数体'''
+                parameters_data = parameters[1]
+                if parameters_data.startswith('{'):
+                    response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
-                elif case_detail == '资产目录重命名':
-                    new_data = update_asset_directory(data)
-                    new_data = json.dumps(new_data, separators=(',', ':'))
-                    response = requests.put(url=url, headers=headers, data=new_data)
-                    log.info("response data：%s %s" % (response.status_code, response.text))
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif case_detail == '资产目录重命名-名称重复':
-                    new_data = duplicate_move_asset_directory(data)
-                    new_data = json.dumps(new_data, separators=(',', ':'))
-                    response = requests.put(url=url, headers=headers, data=new_data)
-                    log.info("response data：%s %s" % (response.status_code, response.text))
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif '更新资产' in case_detail:
-                    asset_id, new_data = update_asset(data)
-                    url = url.format(asset_id)
-                    log.info("new_url：%s " % url)
-                    new_data = json.dumps(new_data, separators=(',', ':'))
-                    response = requests.put(url=url, headers=headers, data=new_data)
-                    log.info("response data：%s %s" % (response.status_code, response.text))
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif '&&' in str(data):
-                    '''分隔参数'''
-                    parameters = data.split('&&')
-                    '''拼接URL'''
-                    new_url = url.format(parameters[0])
-                    log.info("new_url：%s" % new_url)
-                    '''发送的参数体'''
-                    parameters_data = parameters[1]
-                    if parameters_data.startswith('{'):
-                        response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
-                        log.info("response data：%s %s" % (response.status_code, response.text))
-                        clean_vaule(table_sheet_name, row, column)
-                        write_result(table_sheet_name, row, column, response.status_code)
-                        write_result(table_sheet_name, row, column + 4, response.text)
-                    else:
-                        log.info('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
                 else:
-                    if "{}" in url:
-                        new_url = url.format(data["id"])
-                        log.info("new_url：%s" % new_url)
-                        response = requests.put(url=new_url, headers=headers, data=json.dumps(data))
-                        log.info("response data：%s %s" % (response.status_code, response.text))
-                        clean_vaule(table_sheet_name, row, column)
-                        write_result(table_sheet_name, row, column, response.status_code)
-                        write_result(table_sheet_name, row, column + 4, response.text)
-                    else:
-                        response = requests.put(url=url, headers=headers, json=dict_res(data))
-                        log.info("response data：%s %s" % (response.status_code, response.text))
-                        clean_vaule(table_sheet_name, row, column)
-                        write_result(table_sheet_name, row, column, response.status_code)
-                        write_result(table_sheet_name, row, column + 4, response.text)
+                    log.info('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
+            elif "{}" in url:
+                new_url = url.format(data["id"])
+                log.info("new_url：%s" % new_url)
+                response = requests.put(url=new_url, headers=headers, data=json.dumps(data))
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(table_sheet_name, row, column, response.status_code)
+                write_result(table_sheet_name, row, column + 4, response.text)
+            elif data.startswith('{') and data.endswith('}'):
+                response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(table_sheet_name, row, column, response.status_code)
+                write_result(table_sheet_name, row, column + 4, response.text)
+            else:
+                response = requests.put(url=url, headers=headers, json=dict_res(data))
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(table_sheet_name, row, column, response.status_code)
+                write_result(table_sheet_name, row, column + 4, response.text)
     except Exception as e:
             log.error("{}执行过程中出错{}".format(case_detail, e))
         
@@ -705,8 +722,8 @@ class CheckResult(unittest.TestCase):
         print("请求header:{0}".format(self.header))
         print("请求body:{0}".format(self.body))
         if self.case_result == 'pass':
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code,self.extract_data))
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code,self.extract_data))
             self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code, self.extract_data))
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code, self.extract_data))
             self.assertIn(self.expect_text, self.extract_data, "返回实际结果是->:%s" % self.extract_data)

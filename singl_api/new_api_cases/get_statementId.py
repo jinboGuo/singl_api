@@ -61,7 +61,7 @@ def get_sql_analyse_statement_id(host, param):
     new_data = json.dumps(param, separators=(',', ':'))
     res = requests.post(url=url, headers=get_headers(), data=new_data)
     try:
-        time.sleep(5)
+        time.sleep(25)
         res_statement_id = res.json()["content"]
         statement_id = res_statement_id['statementId']
         session_id = res_statement_id['sessionId']

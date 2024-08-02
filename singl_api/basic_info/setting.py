@@ -43,13 +43,13 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 compass_sheet = "scheduler"
-compass_host = "http://192.168.1.95:8515"
+compass_host = "http://192.168.1.62:8881"
 Compass_MySQL_CONFIG = {
-    'HOST': '192.168.1.85',
+    'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167',
+    "DB": 'merce_167_62',
     'case_db': 'test'}
 
 """
@@ -60,13 +60,13 @@ Compass_MySQL_CONFIG = {
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
-dsp_host = "http://192.168.1.95:8515"
+dsp_host = "http://192.168.1.62:8881"
 Dsp_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167'
+    "DB": 'merce_167_62'
 }
 
 """
@@ -76,14 +76,14 @@ Dsp_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-dw_sheet = "dw-asset"
-dw_host = "http://192.168.1.95:8515"
+dw_sheet = "dw-asset"  #dw-asset
+dw_host = "http://192.168.1.62:8881"
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167',
+    "DB": 'merce_167_62',
     'case_db': 'test'}
 
 """
@@ -94,13 +94,13 @@ Dw_MySQL_CONFIG = {
 """
 collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 collect_sheet = "collect"
-collect_host = "http://192.168.1.95:8515"
+collect_host = "http://192.168.1.62:8881"
 collect_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167',
+    "DB": 'merce_167_62',
     'case_db': 'test'}
 
 """
@@ -111,13 +111,13 @@ collect_MySQL_CONFIG = {
 """
 quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 quality_sheet = "quality"
-quality_host = "http://192.168.1.95:8515"
+quality_host = "http://192.168.1.62:8881"
 quality_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_162',
+    "DB": 'merce_167_62',
     'case_db': 'test'}
 
 """
@@ -144,13 +144,13 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 """
 baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 baymax_sheet = "baymax_master"  # baymax_master
-host = "http://192.168.1.95:8515"
+host = "http://192.168.1.62:8881"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167',
+    "DB": 'merce_167_62',
     'case_db': 'test'}
 
 """获取数据库连接"""
@@ -196,9 +196,14 @@ dsp_data_source = ["data_source_id","data_source_name"]
 """ 审批类型"""
 approval_type = ["ASSETS_DIRECTORY","DIMENSION_TABLE","DATA_APPLICATION","POSEIDON_TASK","DATA_GRANT_RECORD","SDS_JOB","STANDARD_JOB","INDICATOR","SUPPLEMENT","DATATIER","SUBJECTDOMAIN","META_MODEL","DATA_DATARES","QUALITY_JOB","SCHEMA_COLLECT_TASK"]
 
-"""数据资产名称"""
-asset_name = "gjb_test_asset"
+"""数仓资产名称"""
+dw_name = ["gjb_test_asset","gjb_dw_datatier","gjb_dw_subjectdomain","gjb_dw_dicgroup","gjb_dw_dic"]
 
+"""数仓资产类型"""
+dw_type= ["dic_group_id","dic_group_name","dw_datatier_id","dw_datatier_name","dw_subjectdomain_id","dw_subjectdomain_name","dic_id","dic_name","meta_data_id"]
+
+"""dataflow名称"""
+dataflow_name = "gjb_type_dataflow"
 
 """
 compass admin账户登录信息

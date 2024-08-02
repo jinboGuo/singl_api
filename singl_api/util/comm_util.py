@@ -440,8 +440,8 @@ class operateKafka:
         hosts = ["192.168.1.55:9092","192.168.1.82:9094"]
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
-        self.bstrap_servers=['192.168.1.55:9092']   #192.168.1.82:9094
-        self.topic = client.topics['commander.scheduler.xdr_95_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
+        self.bstrap_servers=['192.168.1.55:9092']   #192.168.1.82:9094 192.168.1.55:9092
+        self.topic = client.topics['commander.scheduler.xdr_62_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka042712" #往topic发送json
 
