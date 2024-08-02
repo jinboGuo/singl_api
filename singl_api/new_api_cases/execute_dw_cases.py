@@ -3,6 +3,7 @@ import json
 import os
 import re
 import time
+import random
 from openpyxl.styles import PatternFill, colors
 from new_api_cases.get_statementId import get_sql_analyse_dataset_info, get_sql_analyse_statement_id, get_sql_execte_statement_id
 from util import myddt
@@ -11,13 +12,14 @@ from openpyxl import load_workbook
 import requests
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from util.format_res import dict_res
-from basic_info.setting import dw_host, dw_sheet, dw_cases_dir, log
+from basic_info.setting import dw_host, dw_sheet, dw_cases_dir, log, resource_type
 from basic_info.get_auth_token import get_headers_root, get_headers
 from new_api_cases.dw_deal_parameters import deal_parameters
 import unittest
 from new_api_cases.dw_prepare_datas import get_asset_directory, update_asset_directory, move_asset_directory, \
     duplicate_asset_directory, duplicate_move_asset_directory, delete_asset_directory,update_asset,create_sql_asset, \
     sql_analyse_data, batch_create_asset, get_improt_data
+from util.get_deal_parameter import get_resourceid
 
 cases_dir = dw_cases_dir
 case_table = load_workbook(cases_dir)
@@ -25,7 +27,7 @@ dw_master=dw_sheet
 case_table_sheet = case_table.get_sheet_by_name(dw_master)
 all_rows = case_table_sheet.max_row
 host = dw_host
-woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_autotest_api_df.woven').replace('\\', '/')
+woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_df.woven').replace('\\', '/')
 
 
 def deal_request_method():
@@ -168,24 +170,35 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif "上传woven文件" == case_detail:
-            fs = {"file": open(woven_dir, 'rb')}
-            headers.pop('Content-Type')
-            log.info("request data： %s" % woven_dir)
-            response = requests.post(url=url, headers=headers, files=fs)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif "导入woven文件" == case_detail:
-            new_data = get_improt_data(headers, dw_host)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            log.info("request data： %s" % new_data)
-            response = requests.post(url=url, headers=get_headers(), data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "创建模型woven导入任务" == case_detail:
+                files = {"file": ('import_auto_apitest_df.woven', open(woven_dir, 'rb'), "application/octet-stream"),
+                         "name": (None, "gjb_type_df_import" + str(random.randint(0, 999999)), None),
+                         "remark": (None, "gjb_type_df_import", None), "taskType": (None, "offlineDev", None),
+                         "flowResourceId": (None, str(get_resourceid(resource_type[3])), None),
+                         "flowResourcePath": (None, "Flows;", None),
+                         "datasetResourceId": (None, str(get_resourceid(resource_type[1])), None),
+                         "datasetResourcePath": (None, "Datasets;", None),
+                         "datasourceResourceId": (None, str(get_resourceid(resource_type[0])), None),
+                         "datasourceResourcePath": (None, "Datasources;", None),
+                         "schemaResourceId": (None, str(get_resourceid(resource_type[2])), None),
+                         "schemaResourcePath": (None, "Schemas;", None)}
+                headers.pop('Content-Type')
+                response = requests.post(url=url, files=files, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif "导入模型woven文件" == case_detail:
+                flow_import_task_info_id, new_data = get_improt_data(data)
+                new_url = url.format(flow_import_task_info_id)
+                log.info("请求url：%s" % new_url)
+                new_data = json.dumps(new_data, separators=(',', ':'))
+                response = requests.post(url=new_url, headers=get_headers(), data=new_data)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4,
+                             value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif "创建元模型" == case_detail:
             log.info("request data： %s" % data)
             response = requests.post(url=url, headers=get_headers(), data=data.encode('utf-8'))
