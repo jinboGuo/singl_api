@@ -12,7 +12,6 @@ from basic_info.setting import dsp_sheet, dsp_cases_dir, log, ms
 from basic_info.get_auth_token import get_headers, get_headers_root
 from new_api_cases.dsp_deal_parameters import deal_parameters
 import unittest
-from new_api_cases.dsp_prepare_datas import rename_dir
 from basic_info.setting import dsp_host
 
 cases_dir = dsp_cases_dir
@@ -100,21 +99,24 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '服务-数据推送1/2' in case_detail:
-            log.info("request   url：%s" % url)
-            select_data1 = "select id from merce_dss where name = 'test_wmd_py-mysql'"
-            select_data2 = "select id from dsp_data_resource where name = 'test_py_向导_数据集_推送'"
-            data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
-            data_select_result2 = ms.ExecuQuery(select_data2.encode('utf-8'))
-            data_select_result1 = data_select_result1[0]['id']
-            data_select_result2 = data_select_result2[0]['id']
-            new_data = str(data).replace('数据源ID',str(data_select_result1))
-            new_data = str(new_data).replace('数据服务ID', str(data_select_result2))
-            response = requests.post(url=url, headers=headers, data=new_data.encode('utf-8'))
-            new_code = json.loads(response.text)["content"]
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            try:
+                log.info("request   url：%s" % url)
+                select_data1 = "select id from merce_dss where name = 'test_wmd_py-mysql'"
+                select_data2 = "select id from dsp_data_resource where name = 'test_py_向导_数据集_推送'"
+                data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
+                data_select_result2 = ms.ExecuQuery(select_data2.encode('utf-8'))
+                data_select_result1 = data_select_result1[0]['id']
+                data_select_result2 = data_select_result2[0]['id']
+                new_data = str(data).replace('数据源ID',str(data_select_result1))
+                new_data = str(new_data).replace('数据服务ID', str(data_select_result2))
+                response = requests.post(url=url, headers=headers, data=new_data.encode('utf-8'))
+                new_code = json.loads(response.text)["content"]
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            except Exception as e:
+                log.error("没有获取到id：%s" % e)
         elif '服务-数据推送2/2' in case_detail:
             log.info("request   url：%s" % url)
             new_data = str(data).replace('old_code',new_code)
@@ -123,51 +125,125 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
         elif '策略管理添加IP' in case_detail:
-            select_data1 = "select * from dsp_dc_appconfig where name like '%test_wmd_py_策略_%' order by create_time desc"
-            select_data2 = "select * from dsp_data_resource where name = 'test_py_向导_数据源_API'"
-            select_data3 = "select * from merce_tenant where name ='default'"
-            select_data4 = "select * from merce_user where name = 'admin' and tenant_id = (select id from merce_tenant where name ='default')"
-            log.info("开始执行语句:{}{}{}{}".format(select_data1,select_data2,select_data3, select_data4))
-            data_select_result_sql1 = ms.ExecuQuery(select_data1.encode('utf-8'))
-            data_select_result_sql2 = ms.ExecuQuery(select_data2.encode('utf-8'))
-            data_select_result_sql3 = ms.ExecuQuery(select_data3.encode('utf-8'))
-            data_select_result_sql4 = ms.ExecuQuery(select_data4.encode('utf-8'))
-            data_select_result1 = data_select_result_sql1[0]['name']
-            data_select_result2 = data_select_result_sql1[0]['id']
-            data_select_result3 = data_select_result_sql2[0]['id']
-            data_select_result4 = data_select_result_sql3[0]['id']
-            data_select_result5 = data_select_result_sql4[0]['id']
-            log.info("sql查询结果为:{}{}{}{}{}".format(data_select_result1,data_select_result2,data_select_result3,data_select_result4,data_select_result5))
-            log.info("request   url：%s" % url)
-            new_data = str(data).replace('策略名称', str(data_select_result1))
-            new_data = str(new_data).replace('策略ID', str(data_select_result2))
-            new_data = str(new_data).replace('服务ID', str(data_select_result3))
-            new_data = str(new_data).replace('租户主键', str(data_select_result4))
-            new_data = str(new_data).replace('管理员主键', str(data_select_result5))
-            response = requests.post(url=url, headers=headers, data=new_data.encode('utf-8'))
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            try:
+                select_data1 = "select * from dsp_dc_appconfig where name like '%test_wmd_py_策略_%' order by create_time desc"
+                select_data2 = "select * from dsp_data_resource where name = 'test_py_向导_数据源_API'"
+                select_data3 = "select * from merce_tenant where name ='default'"
+                select_data4 = "select * from merce_user where name = 'admin' and tenant_id = (select id from merce_tenant where name ='default')"
+                log.info("开始执行语句:{}{}{}{}".format(select_data1,select_data2,select_data3, select_data4))
+                data_select_result_sql1 = ms.ExecuQuery(select_data1.encode('utf-8'))
+                data_select_result_sql2 = ms.ExecuQuery(select_data2.encode('utf-8'))
+                data_select_result_sql3 = ms.ExecuQuery(select_data3.encode('utf-8'))
+                data_select_result_sql4 = ms.ExecuQuery(select_data4.encode('utf-8'))
+                data_select_result1 = data_select_result_sql1[0]['name']
+                data_select_result2 = data_select_result_sql1[0]['id']
+                data_select_result3 = data_select_result_sql2[0]['id']
+                data_select_result4 = data_select_result_sql3[0]['id']
+                data_select_result5 = data_select_result_sql4[0]['id']
+                log.info("sql查询结果为:{}{}{}{}{}".format(data_select_result1,data_select_result2,data_select_result3,data_select_result4,data_select_result5))
+                log.info("request   url：%s" % url)
+                new_data = str(data).replace('策略名称', str(data_select_result1))
+                new_data = str(new_data).replace('策略ID', str(data_select_result2))
+                new_data = str(new_data).replace('服务ID', str(data_select_result3))
+                new_data = str(new_data).replace('租户主键', str(data_select_result4))
+                new_data = str(new_data).replace('管理员主键', str(data_select_result5))
+                response = requests.post(url=url, headers=headers, data=new_data.encode('utf-8'))
+                print(123,response.text)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            except Exception as e:
+                log.error("错误信息：%s" % e)
         elif 'api申请记录-调用明细2/2' in case_detail:
-            select_data = "select * from dsp_data_service where name like '%test_py_向导_数据源_API%' order by create_time desc"
-            log.info("开始执行语句:{}".format(select_data))
-            data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-            data_select_result = data_select_result[0]['id']
-            log.info("sql查询结果为:{}".format(data_select_result))
-            new_url = url.format(str(data_select_result))
-            log.info("request   url：%s" % new_url)
-            response = requests.post(url=new_url, headers=headers,data=data)
+            try:
+                select_data = "select * from dsp_data_service where name like '%test_py_向导_数据源_API%' order by create_time desc"
+                log.info("开始执行语句:{}".format(select_data))
+                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                data_select_result = data_select_result[0]['id']
+                log.info("sql查询结果为:{}".format(data_select_result))
+                new_url = url.format(str(data_select_result))
+                log.info("request   url：%s" % new_url)
+                response = requests.post(url=new_url, headers=headers,data=data)
+                print('123',response.status_code, response.text)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            except Exception as e:
+                log.error("错误信息：%s" % e)
+
+        elif 'oracle数据源-API申请1/2' in case_detail:
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            new_code = json.loads(response.text)["content"]
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif 'oracle数据源-API申请2/2' in case_detail:
+            log.info("request   url：%s" % url)
+            new_data = str(data).replace('old_code',new_code)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
+        elif 'oracle数据集-数据推送1/2' in case_detail:
+            try:
+                log.info("request   url：%s" % url)
+                select_data1 = "select id from merce_dss where name = 'test_wmd_py-mysql'"
+                select_data2 = "select id from dsp_data_resource where name = 'test_py_向导_数据集_oracle_推送API'"
+                data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
+                data_select_result2 = ms.ExecuQuery(select_data2.encode('utf-8'))
+                data_select_result1 = data_select_result1[0]['id']
+                data_select_result2 = data_select_result2[0]['id']
+                print(data_select_result1,data_select_result2)
+                new_data = str(data).replace('数据源ID',str(data_select_result1))
+                new_data = str(new_data).replace('数据服务ID', str(data_select_result2))
+                response = requests.post(url=url, headers=headers, data=new_data.encode('utf-8'))
+                new_code = json.loads(response.text)["content"]
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+            except Exception as e:
+                log.error("错误信息：%s" % e)
+        elif 'oracle数据集-数据推送2/2' in case_detail:
+            log.info("request   url：%s" % url)
+            new_data = str(data).replace('old_code',new_code)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
+        elif 'oracle数据集-API申请1/2' in case_detail:
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            new_code = json.loads(response.text)["content"]
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif 'oracle数据集-API申请2/2' in case_detail:
+            log.info("request   url：%s" % url)
+            new_data = str(data).replace('old_code',new_code)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
         else:
                 if str(data):
                     data = str(data)
                     if data.startswith('{') and data.endswith('}'):
                         data_dict = dict_res(data)
+                        print(data_dict)
                         response = requests.post(url=url, headers=headers, json=data_dict)
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
@@ -202,15 +278,19 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
         # GET请求需要从parameter中获取参数,并把参数拼装到URL中，
         if data:
             if 'k' in case_detail:
-                select_data = "select id from dsp_data_resource where name = 'test_py_向导_数据源_API'"
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select id from dsp_data_resource where name = 'test_py_向导_数据源_API'"
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    new_url = url.format(data_select_result)
+                    print(f"wwwww{new_url}")
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             else:
                 new_url = url.format(data)
                 log.info('new_url:%s' % new_url)
@@ -219,156 +299,202 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
         elif not data:
             if '查看服务详情' in case_detail:
-                select_data = "select * from dsp_data_resource where name = 'test_py_向导_数据源_API'"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_resource where name = 'test_py_向导_数据源_API'"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '操作(api工单详情)' in case_detail:
-                select_data = "select * from dsp_data_application where name like 'test_wmd_py_工单_%' and transfer_type = '0' ORDER BY create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_application where name like 'test_wmd_py_工单_%' and transfer_type = '0' ORDER BY create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
+
             elif '操作(API服务-服务详情)' in case_detail:
-                select_data = "select * from dsp_data_resource where name like 'test_py_向导_数据源_API%' ORDER BY create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_resource where name like 'test_py_向导_数据源_API%' ORDER BY create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
+
             elif '操作(API服务-在线测试)' in case_detail:
-                select_data = "select * from dsp_data_service where name like 'test_py_向导_数据源_API%' ORDER BY create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_service where name like 'test_py_向导_数据源_API%' ORDER BY create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
+
             elif '操作(推送工单详情)' in case_detail:
-                select_data = "select * from dsp_data_application  where name like 'test_wmd_py_工单_%' and transfer_type = '1' ORDER BY create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_application  where name like 'test_wmd_py_工单_%' and transfer_type = '1' ORDER BY create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '操作(推送任务)1/2' in case_detail:
-                select_data = "select * from dsp_data_application  where name like 'test_wmd_py_工单_%' and transfer_type = '1' ORDER BY create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_application  where name like 'test_wmd_py_工单_%' and transfer_type = '1' ORDER BY create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '操作(推送任务-执行历史)' in case_detail:
-                select_data = "select * from dsp_data_service where name like '%test_py_向导_数据集_推送%' order by create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_service where name like '%test_py_向导_数据集_推送%' order by create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    # print(f"查询数据为{data_select_result}")
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '操作(推送任务-服务详情)' in case_detail:
-                select_data = "select * from dsp_data_resource where name like '%test_py_向导_数据集_推送%' order by create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_resource where name like '%test_py_向导_数据集_推送%' order by create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '工单统计(操作-工单详情)' in case_detail:
-                select_data = "select * from dsp_data_application where name like '%test_wmd_py%' order by create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_application where name like '%test_wmd_py%' order by create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif '数据推送记录-历史记录' in case_detail:
-                select_data = "select * from dsp_data_service where name like '%test_py_向导_数据集_推送%' order by create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_service where name like '%test_py_向导_数据集_推送%' order by create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             elif 'api申请记录-调试' in case_detail:
-                select_data = "select * from dsp_data_service where name like '%test_py_向导_数据源_API%' order by create_time desc"
-                log.info("开始执行语句:{}".format(select_data))
-                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-                data_select_result = data_select_result[0]['id']
-                log.info("sql查询结果为:{}".format(data_select_result))
-                new_url = url.format(data_select_result)
-                log.info("request   url：%s" % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                try:
+                    select_data = "select * from dsp_data_service where name like '%test_py_向导_数据源_API%' order by create_time desc"
+                    log.info("开始执行语句:{}".format(select_data))
+                    data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                    data_select_result = data_select_result[0]['id']
+                    log.info("sql查询结果为:{}".format(data_select_result))
+                    new_url = url.format(data_select_result)
+                    log.info("request   url：%s" % new_url)
+                    response = requests.get(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                except Exception as e:
+                    log.error("错误信息：%s" % e)
             else:
                 response = requests.get(url=url, headers=headers)
+                print('123',response.text)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
     except Exception as e:
         log.error("{}执行过程中出错{}".format(case_detail, e))
 
@@ -379,15 +505,31 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
         if data:
-                if case_detail == '重命名目录':
+                if '数据共享-数据工单_关闭审批' in case_detail:
+                    print(123)
                     log.info("request   url：%s" % url)
-                    new_data = rename_dir(data)
-                    new_data = json.dumps(new_data, separators=(',', ':'))
-                    response = requests.put(url=url, headers=headers, data=new_data)
+                    select_data1 = "select * from sys_approval_target where module ='数据共享' and tenant_id = (select id from merce_tenant where name ='default') and name ='数据工单'"
+                    data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
+                    data_select_result1 = data_select_result1[0]['id']
+                    new_data = str(data).replace('审批数据工单ID', str(data_select_result1))
+                    response = requests.put(url=url, headers=headers, data=new_data.encode('utf-8'))
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif '数据共享-数据资源_关闭审批' in case_detail:
+                    print(456)
+                    log.info("request   url：%s" % url)
+                    select_data1 = "select * from sys_approval_target where module ='数据共享' and tenant_id = (select id from merce_tenant where name ='default') and name ='数据资源'"
+                    data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
+                    data_select_result1 = data_select_result1[0]['id']
+                    new_data = str(data).replace('审批数据资源ID', str(data_select_result1))
+                    response = requests.put(url=url, headers=headers, data=new_data.encode('utf-8'))
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+
                 elif '&&' in str(data):
                     '''分隔参数'''
                     parameters = data.split('&&')
