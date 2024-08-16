@@ -7,7 +7,7 @@ from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
 '''执行api脚本用例py'''
-pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py", "execute_qa_cases.py", "execute_collect_cases.py"]
+pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py", "execute_qa_cases.py", "execute_collect_cases.py", "execute_alarm_cases.py"]
 begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
@@ -42,15 +42,32 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
  Compass_MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-compass_sheet = "scheduler"
+compass_sheet = "scheduler" #scheduler
 compass_host = "http://192.168.1.62:8881"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62',
+    "DB": 'merce_168',
     'case_db': 'test'}
+
+"""
+-------95-alarm环境使用-------
+ sheet_name:alarm
+ HOST: "http://192.168.1.95:8515"
+ alarm_MySQL_CONFIG:数据库连接信息
+"""
+alarm_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
+alarm_sheet = "alarm"
+alarm_host = "http://192.168.1.62:8881"
+Alarm_MySQL_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_168'
+}
 
 """
 -------95-dsp环境使用-------
@@ -66,7 +83,7 @@ Dsp_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62'
+    "DB": 'merce_168'
 }
 
 """
@@ -83,7 +100,7 @@ Dw_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """
@@ -100,7 +117,7 @@ collect_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """
@@ -117,7 +134,7 @@ quality_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """
@@ -150,7 +167,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167_62',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """获取数据库连接"""
