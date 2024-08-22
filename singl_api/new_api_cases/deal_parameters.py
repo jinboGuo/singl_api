@@ -2,8 +2,10 @@ import json
 import random
 import requests
 from basic_info.get_auth_token import get_headers
-from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset
+from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset, get_dataflow_id, \
+    get_tenant_id, get_owner
 from basic_info.setting import resource_type, host, data_source, tag_type, ms, log
+from util.timestamp_13 import data_now
 
 
 def deal_parameters(data,request_method,request_url):
@@ -11,6 +13,9 @@ def deal_parameters(data,request_method,request_url):
         if '随机数' in data:
             data = data.replace('随机数', str(random.randint(0, 9999999999999)))
             return deal_parameters(data,request_method,request_url)
+        if '创建时间' in data:
+            data = data.replace('创建时间', str(data_now()))
+            return deal_parameters(data, request_method, request_url)
         if '数据源目录' in data:
             data = data.replace('数据源目录', str(get_resourceid(resource_type[0])))
             return deal_parameters(data,request_method,request_url)
@@ -50,6 +55,24 @@ def deal_parameters(data,request_method,request_url):
         if '数据标准目录' in data:
             data = data.replace('数据标准目录',  str(get_resourceid(resource_type[12])))
             return deal_parameters(data,request_method,request_url)
+        if 'dataflow主键' in data:
+            data = data.replace('dataflow主键',  str(get_dataflow_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '租户主键' in data:
+            data = data.replace('租户主键', str(get_tenant_id()))
+            return deal_parameters(data, request_method, request_url)
+        if '管理员主键' in data:
+            data = data.replace('管理员主键', str(get_owner()))
+            return deal_parameters(data, request_method, request_url)
+        if '/api/flowComment/detail' in data:
+            try:
+                data=data.format(str(get_dataflow_id()))
+                response = requests.get(url=host + data, headers=get_headers())
+                new_data = response.json()["content"][0]
+                log.info("QUERY查询接口响应数据:{}".format(new_data))
+                return new_data
+            except Exception as e:
+                log.error("执行过程中出错{}".format(e))
         if '&&' in data:
             new_data = str(data).split('&&')
             if request_method == "PUT":
@@ -133,6 +156,16 @@ def deal_parameters(data,request_method,request_url):
                     if   '/api/sys/meta/schemas/query' == new_data[1]:
                       try:
                         response = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
+                        new_data = response.json()["content"]["list"][0]
+                        log.info("QUERY查询接口响应数据:{}".format(new_data))
+                        return new_data
+                      except Exception as e:
+                        log.error("执行过程中出错{}".format(e))
+                    if   '/api/flowComment/detail?id={}' == new_data[1]:
+                      try:
+                        data_select_result = ms.ExecuQuery(new_data[0].encode('utf-8'))
+                        new_data[1].format(data_select_result[0]["id"])
+                        response = requests.get(url=host+new_data[1], headers=get_headers())
                         new_data = response.json()["content"]["list"][0]
                         log.info("QUERY查询接口响应数据:{}".format(new_data))
                         return new_data

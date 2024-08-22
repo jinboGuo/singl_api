@@ -4,6 +4,7 @@ import os
 import requests
 from new_api_cases.dw_deal_parameters import deal_random
 from basic_info.setting import log, ms
+from util.get_deal_parameter import get_tenant_id
 from util.timestamp_13 import data_now
 
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_autotest_api_df.woven').replace('\\','/')
@@ -160,20 +161,13 @@ def sql_analyse_data(data):
         log.error("异常信息：%s" %e)
 
 
-def get_improt_data(headers, host):
-    url = '%s/api/mis/upload' % host
-    fs = {"file": open(woven_dir, 'rb')}
-    headers.pop('Content-Type')
-    res = requests.post(url=url, headers=headers, files=fs)
+def get_improt_data(data):
     try:
-        cdf_list, cds_list, csm_list = [], [], []
-        res = json.loads(res.text)
-        for cds_id in res['cds']:
-         cds_list.append(cds_id["id"])
-        for csm_id in res['csm']:
-         csm_list.append(csm_id["id"])
-        cdf_list.append(res['cfd'][0]['id'])
-        new_data = {"cfd": cdf_list, "cds": cds_list, "csm": csm_list, "tag":[], "uploadDirectory": res["uploadDir"],"overWrite":True,"flowResourceId":"","datasetResourceId":"","schemaResourceId":""}
-        return new_data
-    except KeyError:
-        return
+        tenant_id = get_tenant_id()
+        sql = "select id,name,owner,tenant_id,creator,import_status,task_type from merce_flow_import_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,data)
+        merce_flow_import_task_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_import_task_info_id = merce_flow_import_task_info[0]["id"]
+        new_data ={"tenantId":tenant_id,"owner":merce_flow_import_task_info[0]["owner"],"name":merce_flow_import_task_info[0]["name"],"enabled":None,"creator":merce_flow_import_task_info[0]["creator"],"createTime":data_now(),"lastModifier":merce_flow_import_task_info[0]["creator"],"lastModifiedTime":data_now(),"id":merce_flow_import_task_info[0]["id"],"flowCount":1,"importStatus":merce_flow_import_task_info[0]["import_status"],"remark":"gjb_type_df_import","flowImportParse":None,"taskType":merce_flow_import_task_info[0]["task_type"],"offlineDevCount":1,"realTimeDevCount":0,"workflowCount":0,"enable":False}
+        return flow_import_task_info_id,new_data
+    except Exception as e:
+        log.error("异常信息：%s" % e)

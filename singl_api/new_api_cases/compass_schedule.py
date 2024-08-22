@@ -338,4 +338,4 @@ def run_all():
 
 while True:
  run_all()
- sleep(600)
+ sleep(60)

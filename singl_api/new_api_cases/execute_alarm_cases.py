@@ -3,31 +3,25 @@ import json
 import os
 import re
 import time
-import random
-from openpyxl.styles import PatternFill, colors
-from new_api_cases.get_statementId import get_sql_analyse_dataset_info, get_sql_analyse_statement_id, get_sql_execte_statement_id
 from util import myddt
 import xlrd
 from openpyxl import load_workbook
+from openpyxl.styles import  colors,PatternFill
 import requests
-from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from util.format_res import dict_res
-from basic_info.setting import dw_host, dw_sheet, dw_cases_dir, log, resource_type
-from basic_info.get_auth_token import get_headers_root, get_headers
-from new_api_cases.dw_deal_parameters import deal_parameters
+from basic_info.setting import alarm_host, alarm_sheet, log, alarm_cases_dir
+from basic_info.get_auth_token import get_headers_root, get_headers,get_auth_token_root
+from new_api_cases.alarm_deal_parameters import deal_parameters
+from new_api_cases.alarm_prepare_datas import alarm_config,alarm_job,alarm_jap,alarm_handle
 import unittest
-from new_api_cases.dw_prepare_datas import get_asset_directory, update_asset_directory, move_asset_directory, \
-    duplicate_asset_directory, duplicate_move_asset_directory, delete_asset_directory,update_asset,create_sql_asset, \
-    sql_analyse_data, batch_create_asset, get_improt_data
-from util.get_deal_parameter import get_resourceid
 
-cases_dir = dw_cases_dir
+
+cases_dir = alarm_cases_dir
 case_table = load_workbook(cases_dir)
-dw_master=dw_sheet
-case_table_sheet = case_table.get_sheet_by_name(dw_master)
+alarm_master=alarm_sheet
+case_table_sheet = case_table.get_sheet_by_name(alarm_master)
 all_rows = case_table_sheet.max_row
-host = dw_host
-woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_df.woven').replace('\\', '/')
+host = alarm_host
 
 
 def deal_request_method():
@@ -42,16 +36,14 @@ def deal_request_method():
             request_url = host+case_table_sheet.cell(row=i, column=5).value
             old_data = case_table_sheet.cell(row=i, column=6).value
             request_data = deal_parameters(old_data,request_method_upper,request_url)
+
             log.info("request  data：%s" % request_data)
             api_name = case_table_sheet.cell(row=i, column=1).value
             is_run = case_table_sheet.cell(row=i, column=16).value
+
             if request_method_upper:
                 if is_run =='Y' or is_run=='y':
                     if api_name == 'tenants':
-                        """
-                        租户的用例需要使用root用户登录后操作
-                        根据不同的请求方法，进行分发
-                        """
                         if request_method_upper == 'POST':
                             post_request_result_check(row=i, column=8, url=request_url, headers=get_headers_root(), data=request_data, table_sheet_name=case_table_sheet)
                         elif request_method_upper == 'GET':
@@ -60,6 +52,29 @@ def deal_request_method():
                             put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers_root())
                         elif request_method_upper == 'DELETE':
                             delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
+                    elif isinstance(request_data, list) and len(request_data)>1:
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url.format(request_data[1]), headers=get_headers_root(), data=request_data[0], table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url.format(request_data[1]), headers=get_headers_root(), data=request_data[0], table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url.format(request_data[1]), row=i, data=request_data[0], table_sheet_name=case_table_sheet, column=8, headers=get_headers_root())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url.format(request_data[1]), data=request_data[0], table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers_root())
+                        else:
+                            log.info("请求方法%s不在处理范围内" % request_method)
+                    elif  len(request_data)==1 and isinstance(request_data, str):
+                        """根据不同的请求方法，进行分发"""
+                        if request_method_upper == 'POST':
+                            post_request_result_check(row=i, column=8, url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet)
+                        elif request_method_upper == 'GET':
+                            get_request_result_check(url=request_url, headers=get_headers(), data=request_data, table_sheet_name=case_table_sheet, row=i, column=8)
+                        elif request_method_upper == 'PUT':
+                            put_request_result_check(url=request_url, row=i, data=request_data, table_sheet_name=case_table_sheet, column=8, headers=get_headers())
+                        elif request_method_upper == 'DELETE':
+                            delete_request_result_check(url=request_url, data=request_data, table_sheet_name=case_table_sheet, row=i, column=8, headers=get_headers())
                         else:
                             log.info("请求方法%s不在处理范围内" % request_method)
                     else:
@@ -84,7 +99,6 @@ def deal_request_method():
         log.error("{}执行过程中出错{}".format(i, e))
 
 
-
 def post_request_result_check(row, column, url, headers, data, table_sheet_name):
     """
     POST接口请求，脚本里post请求的处理
@@ -99,126 +113,67 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s " % case_detail)
-        log.info("请求url：%s" % url)
-        if case_detail == '添加资产目录':
-            new_data = get_asset_directory(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+        if  case_detail == '监控管理-配置告警':
+            mid,new_data = alarm_config(0)
+            response = requests.post(url=url.format(mid), headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif  case_detail == '监控管理-编辑':
+            new_data = alarm_config(1)
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '资产目录移动':
-            parent_id, new_data = move_asset_directory(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
-            new_url = url.format(parent_id)
-            log.info("new_url：%s " % new_url)
-            response = requests.post(url=new_url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '添加重名资产目录':
-            new_data = duplicate_asset_directory(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+
+        elif  case_detail == '监控管理-新建':
+            new_data = alarm_job()
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '创建服务视图资产' in case_detail:
-            new_data = create_sql_asset(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+        elif case_detail=='元数据采集跳转':
+            new_data = alarm_jap(data,0)
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif '初始化Sql' in case_detail:
-            new_data = sql_analyse_data(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+        elif case_detail=='数据采集跳转':
+            new_data = alarm_jap(data,1)
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '获取SQL执行任务结果':
-            exec_use_params = get_sql_analyse_dataset_info(host, data)
-            exec_use_params = json.dumps(exec_use_params, separators=(',', ':'))
-            statement_id, session_id, cluster_id = get_sql_execte_statement_id(host, data)
-            new_url = url.format(statement_id, session_id, cluster_id)
-            log.info("new_url：%s " % new_url)
-            response = requests.post(url=new_url, headers=headers, data=exec_use_params)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            count_num = 0
-            while "waiting" in response.text or "running" in response.text:
-                log.info("再次查询前：%s %s" % (response.status_code, response.text))
-                response = requests.post(url=new_url, headers=headers, data=exec_use_params)
-                time.sleep(5)
-                count_num += 1
-                if count_num == 50:
-                    return
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif case_detail == '批量创建数据集资产':
-            new_data = batch_create_asset(data)
-            new_data = json.dumps(new_data, separators=(',', ':'))
+        elif case_detail=='数据计算跳转':
+            new_data = alarm_jap(data,2)
             response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif "创建模型woven导入任务" == case_detail:
-                files = {"file": ('import_auto_apitest_df.woven', open(woven_dir, 'rb'), "application/octet-stream"),
-                         "name": (None, "gjb_type_df_import" + str(random.randint(0, 999999)), None),
-                         "remark": (None, "gjb_type_df_import", None), "taskType": (None, "offlineDev", None),
-                         "flowResourceId": (None, str(get_resourceid(resource_type[3])), None),
-                         "flowResourcePath": (None, "Flows;", None),
-                         "datasetResourceId": (None, str(get_resourceid(resource_type[1])), None),
-                         "datasetResourcePath": (None, "Datasets;", None),
-                         "datasourceResourceId": (None, str(get_resourceid(resource_type[0])), None),
-                         "datasourceResourcePath": (None, "Datasources;", None),
-                         "schemaResourceId": (None, str(get_resourceid(resource_type[2])), None),
-                         "schemaResourcePath": (None, "Schemas;", None)}
-                headers.pop('Content-Type')
-                response = requests.post(url=url, files=files, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif "导入模型woven文件" == case_detail:
-                flow_import_task_info_id, new_data = get_improt_data(data)
-                new_url = url.format(flow_import_task_info_id)
-                log.info("请求url：%s" % new_url)
-                new_data = json.dumps(new_data, separators=(',', ':'))
-                response = requests.post(url=new_url, headers=get_headers(), data=new_data)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4,
-                             value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
-        elif "创建元模型" == case_detail:
-            log.info("request data： %s" % data)
-            response = requests.post(url=url, headers=get_headers(), data=data.encode('utf-8'))
+        elif case_detail=='处理':
+            new_data = alarm_handle()
+            response = requests.post(url=url, headers=headers, data=new_data)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail=='批处理':
+            new_data = alarm_handle(5)
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
                 data = str(data)
-                if "{}" in url:
-                    data = data.split("##")
-                    new_url = url.format(data[1])
-                    log.info("请求new_url：%s" % new_url)
-                    response = requests.post(url=new_url, headers=headers, data=data[0].encode('utf-8'))
-                    log.info("response data：%s %s" % (response.status_code, response.text))
-                    clean_vaule(table_sheet_name, row, column)
-                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif data.startswith('{') and data.endswith('}'):
+                if (data.startswith('{') and data.endswith('}')):
                     data_dict = dict_res(data)
                     response = requests.post(url=url, headers=headers, json=data_dict)
                     log.info("response data：%s %s" % (response.status_code, response.text))
@@ -260,30 +215,11 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s " %case_detail)
-        log.info("请求url：%s" % url)
         if data:
-            if case_detail == '根据statement id,获取Sql Analyze结果(获取输出字段)':
-                statement_id, session_id, cluster_id = get_sql_analyse_statement_id(host, data)
-                new_url = url.format(statement_id, session_id, cluster_id)
-                log.info('new_url:%s' % new_url)
-                response = requests.get(url=new_url, headers=headers)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                count_num = 0
-                while "waiting" in response.text or "running" in response.text:
-                    log.info("再次查询前：%s %s" % (response.status_code, response.text))
-                    response = requests.get(url=new_url, headers=headers)
-                    count_num += 1
-                    if count_num == 100:
-                        return
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '结束指定statementId对应的查询任务':  # 取消SQL analyse接口
-                cancel_statement_id = get_sql_analyse_statement_id(host, data)
-                new_url = url.format(cancel_statement_id)
-                log.info("new_url：%s " % new_url)
-                response = requests.get(url=new_url, headers=headers)
+            if  case_detail == '自定义导出':
+                response = requests.get(url=url+'?'+'Authorization='+get_auth_token_root(),headers=headers)
+                with open(os.path.join(os.path.abspath('.'),'attachment\exportrule.xlsx'),'wb') as fp:
+                    fp.write(response.content)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -323,72 +259,50 @@ def put_request_result_check(url, row, data, table_sheet_name, column, headers):
     :return:
     """
     try:
+    
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s " %case_detail)
-        log.info("请求url：%s" % url)
+        #if data and isinstance(data, str):
         if data :
-            if case_detail == '资产目录重命名':
-                new_data = update_asset_directory(data)
-                new_data = json.dumps(new_data, separators=(',', ':'))
-                response = requests.put(url=url, headers=headers, data=new_data)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '资产目录重命名-名称重复':
-                new_data = duplicate_move_asset_directory(data)
-                new_data = json.dumps(new_data, separators=(',', ':'))
-                response = requests.put(url=url, headers=headers, data=new_data)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif '更新资产' in case_detail:
-                asset_id, new_data = update_asset(data)
-                url = url.format(asset_id)
-                log.info("new_url：%s " % url)
-                new_data = json.dumps(new_data, separators=(',', ':'))
-                response = requests.put(url=url, headers=headers, data=new_data)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif '&&' in str(data):
-                '''分隔参数'''
-                parameters = data.split('&&')
-                '''拼接URL'''
-                new_url = url.format(parameters[0])
-                log.info("new_url：%s" % new_url)
-                '''发送的参数体'''
-                parameters_data = parameters[1]
-                if parameters_data.startswith('{'):
-                    response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
+                if  str(data).startswith('{') and  str(data).endswith('}'):
+                    log.info("request   url：%s " %url)
+                    response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(table_sheet_name, row, column, response.status_code)
                     write_result(table_sheet_name, row, column + 4, response.text)
+                
+                elif '&&' in str(data):
+                    '''分隔参数'''
+                    parameters = data.split('&&')
+                    '''拼接URL'''
+                    new_url = url.format(parameters[0])
+                    log.info("new_url：%s" % new_url)
+                    '''发送的参数体'''
+                    parameters_data = parameters[1]
+                    if parameters_data.startswith('{'):
+                        response = requests.put(url=new_url, headers=headers, json=dict_res(parameters_data))
+                        log.info("response data：%s %s" % (response.status_code, response.text))
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column + 4, response.text)
+                    else:
+                        log.info('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
                 else:
-                    log.info('请确认第%d行parameters中需要update的值格式，应为id&{data}' % row)
-            elif "{}" in url:
-                new_url = url.format(data["id"])
-                log.info("new_url：%s" % new_url)
-                response = requests.put(url=new_url, headers=headers, data=json.dumps(data))
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            elif data.startswith('{') and data.endswith('}'):
-                response = requests.put(url=url, headers=headers, data=data.encode('utf-8'))
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
-            else:
-                response = requests.put(url=url, headers=headers, json=dict_res(data))
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(table_sheet_name, row, column, response.status_code)
-                write_result(table_sheet_name, row, column + 4, response.text)
+                    if "{}" in url:
+                        new_url = url.format(data["id"])
+                        log.info("new_url：%s" % new_url)
+                        response = requests.put(url=new_url, headers=headers, data=json.dumps(data))
+                        log.info("response data：%s %s" % (response.status_code, response.text))
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column + 4, response.text)
+                    else:
+                        response = requests.put(url=url, headers=headers, json=dict_res(data))
+                        log.info("response data：%s %s" % (response.status_code, response.text))
+                        clean_vaule(table_sheet_name, row, column)
+                        write_result(table_sheet_name, row, column, response.status_code)
+                        write_result(table_sheet_name, row, column + 4, response.text)
     except Exception as e:
             log.error("{}执行过程中出错{}".format(case_detail, e))
         
@@ -406,24 +320,21 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
     try:
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s " %case_detail)
-        log.info("请求url：%s" % url)
         if data:
-            if "删除资产目录" == case_detail:
-                asset_id, new_data = delete_asset_directory(data)
-                log.info("request   data：%s " % new_data)
-                new_url = url.format(asset_id)
-                log.info("new_url：%s " % new_url)
-                response = requests.delete(url=new_url, headers=headers, data=new_data)
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif isinstance(data, str):
+            if  isinstance(data, str):
                 log.info("data：%s" % data)
                 if "{}" in url:
                     new_url = url.format(data)
                     log.info("new_url：%s" % new_url)
                     response = requests.delete(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif data[0]=='[':
+                    new_url = url.format(data)
+                    log.info("new_url：%s" % new_url)
+                    response = requests.delete(url=new_url, headers=headers,data=data)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -479,7 +390,7 @@ def clean_vaule(sheet, row, column):
 
 def read_data():
         data = xlrd.open_workbook(cases_dir)
-        table = data.sheet_by_name(dw_master)
+        table = data.sheet_by_name(alarm_master)
         """获取总行数"""
         nrows = table.nrows
         if nrows > 1:
@@ -499,7 +410,6 @@ def read_data():
             return None
 
 testdata = read_data()
-
 
 
 @myddt.ddt
