@@ -93,8 +93,8 @@ Dsp_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-dw_sheet = "dw-asset"  #dw-asset
-dw_host = "http://192.168.1.62:8881"
+dw_sheet = "dw-asset"
+dw_host = "http://192.168.1.95:8515"
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -118,6 +118,23 @@ collect_MySQL_CONFIG = {
     "USER": 'merce',
     "PASSWORD": 'merce',
     "DB": 'merce_168',
+    'case_db': 'test'}
+
+"""
+-------95-indicator环境使用-------
+ sheet_name:indicator
+ HOST: "http://192.168.1.95:8515"
+ Dw_MySQL_CONFIG:数据库连接信息
+"""
+indicator_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
+indicator_sheet = "indicator"
+indicator_host = "http://192.168.1.95:8515"
+indicator_MySQL_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 3306,
+    "USER": 'merce',
+    "PASSWORD": 'merce',
+    "DB": 'merce_167',
     'case_db': 'test'}
 
 """
@@ -183,7 +200,8 @@ tenant_name = "default"
 """ 资源目录类型"""
 resource_type = ["datasource_dir", "dataset_dir", "schema_dir", "flow_dir", "poseidon_collect_dir", "poseidon_task_dir",
                  "storage_dir", "jobview_dir", "assets_dir", "dataresource_dir", "datasafe_job_dir", "fileset_dir",
-                 "standard_dir",  "schema_collect_task_dir", "qa_job_dir","schema_name_rule_dir", "tag_dir"]
+                 "standard_dir", "schema_collect_task_dir", "qa_job_dir", "schema_name_rule_dir", "tag_dir",
+                 "indicator_dir", "indicator_dim_dir"]
 
 """元数据相关信息"""
 data_source = ["datasource_id", "datasource_name", "schema_id", "schema_name", "dataset_id", "dataset_name",
@@ -208,10 +226,12 @@ qa_task_name = "gjb_qa_task"
 dsp_data_source_name = "gjb_dsp_push_datasource"
 
 """数据资源相关信息"""
-dsp_data_source = ["data_source_id","data_source_name"]
+dsp_data_source = ["data_source_id", "data_source_name"]
 
 """ 审批类型"""
-approval_type = ["ASSETS_DIRECTORY","DIMENSION_TABLE","DATA_APPLICATION","POSEIDON_TASK","DATA_GRANT_RECORD","SDS_JOB","STANDARD_JOB","INDICATOR","SUPPLEMENT","DATATIER","SUBJECTDOMAIN","META_MODEL","DATA_DATARES","QUALITY_JOB","SCHEMA_COLLECT_TASK"]
+approval_type = ["ASSETS_DIRECTORY", "DIMENSION_TABLE", "DATA_APPLICATION", "POSEIDON_TASK", "DATA_GRANT_RECORD",
+                 "SDS_JOB", "STANDARD_JOB", "INDICATOR", "SUPPLEMENT", "DATATIER", "SUBJECTDOMAIN", "META_MODEL",
+                 "DATA_DATARES", "QUALITY_JOB", "SCHEMA_COLLECT_TASK"]
 
 """数仓资产名称"""
 dw_name = ["gjb_test_asset","gjb_dw_datatier","gjb_dw_subjectdomain","gjb_dw_dicgroup","gjb_dw_dic"]
