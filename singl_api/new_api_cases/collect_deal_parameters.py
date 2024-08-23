@@ -132,7 +132,8 @@ def deal_parameters(data, request_method, request_url):
             request_data = request_data.replace('输入画布id', str(get_draft_id()))
             request_data = request_data.replace('输入输入元数据id', str(get_source_schema_id()))
             request_data = request_data.replace('输入输入元数据名称', get_source_schema_name())
-            request_data = request_data.replace('输入输出元数据名称', get_sink_schema_name())
+            if '输入输出元数据名称' in data:
+                request_data = request_data.replace('输入输出元数据名称', get_sink_schema_name())
             request_data = request_data.replace('输入输出数据源id', str(get_sink_dss_id()))
             request_data = request_data.replace('输入输出数据源名称', get_sink_dss_name())
             request_data = request_data.replace('输入采集任务id', str(get_collect_task_id()))
@@ -196,7 +197,7 @@ def deal_parameters(data, request_method, request_url):
                         return new_data
                 else:
                     try:
-                        if "{}" in request_url:
+                        if "{}" in request_url and '/meta/poseidon/metrics/summary/exec/' in request_url:
                             data = data_select_result[0]["id"]
                             return data
                         else:
