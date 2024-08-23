@@ -110,7 +110,7 @@ Dw_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-collect_sheet = "842"  #collect
+collect_sheet = "collect"  #collect
 collect_host = "http://192.168.1.62:8515"
 collect_MySQL_CONFIG = {
     'HOST': '192.168.1.67',

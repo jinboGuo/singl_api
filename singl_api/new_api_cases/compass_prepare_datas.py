@@ -219,7 +219,7 @@ def delete_scheduler():
     try:
         merce_resource_dir = "delete from merce_resource_dir where name like 'gjb_mysql%'"
         ms.ExecuNoQuery(merce_resource_dir.encode('utf-8'))
-        merce_flow_dataset_map1 = "delete from merce_flow_dataset_map where dataset_name like 'gjb%'"
+        merce_flow_dataset_map1 = "delete from merce_flow_dataset_map where dataset_name like 'gjb%' or dataset_name like 'New%'"
         ms.ExecuNoQuery(merce_flow_dataset_map1.encode('utf-8'))
         poseidon_draft_paint = "delete from poseidon_draft_paint where datasource_name like 'gjb_mysql%' or datasource_name like 'gjb_hdfs%'"
         ms.ExecuNoQuery(poseidon_draft_paint.encode('utf-8'))
@@ -231,7 +231,7 @@ def delete_scheduler():
         ms.ExecuNoQuery(merce_schema.encode('utf-8'))
         merce_dss = "delete from merce_dss where name = 'gjb_mysql' or name like 'gjb_hdfs%' or name = 'test_wmd_dss_py-oracle' or name='test_wmd_py-mysql'"
         ms.ExecuNoQuery(merce_dss.encode('utf-8'))
-        jar_package_info = "delete from merce_jar_package_info where name ='mysql-connector-java-8.0.2801.jar' or name ='woven-common-1.5.2.jar'"
+        jar_package_info = "delete from merce_jar_package_info where name ='mysql-connector-java-8.0.2801.jar' or name ='woven-common-1.5.2.jar' or name='hive-jdbc-3.1.0.3.1.5.0-152_driver.jar' or or name='dm7-18.0.0_driver.jar'"
         ms.ExecuNoQuery(jar_package_info.encode('utf-8'))
         log.info("测试数据已清除！！")
     except Exception as e:
