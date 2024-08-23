@@ -11,7 +11,7 @@ if __name__ == '__main__':
     """执行API用例并对比结果"""
     deal_request_method()
     CheckResult().deal_result()
-    total_time = get_result_report(indicator_host, pattern[6])
+    total_time = get_result_report(indicator_host, pattern[7])
 
     """发送邮件"""
-    # baymax_main(cases_dir, indicator_host, receivers_test, indicator_sheet, begin_times, total_time)
+    baymax_main(cases_dir, indicator_host, receivers_test, indicator_sheet, begin_times, total_time)
