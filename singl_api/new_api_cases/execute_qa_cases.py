@@ -10,7 +10,7 @@ from openpyxl import load_workbook
 import requests
 from util.format_res import dict_res
 from basic_info.setting import quality_host, log, quality_cases_dir, quality_sheet
-from basic_info.get_auth_token import get_headers_root, get_headers,get_auth_token_root
+from basic_info.get_auth_token import get_headers_root, get_headers, get_auth_token
 from new_api_cases.qa_deal_parameters import deal_parameters
 import unittest
 from new_api_cases.qa_prepare_datas import create_datasetjob_data,\
@@ -22,7 +22,7 @@ qa_master=quality_sheet
 case_table_sheet = case_table.get_sheet_by_name(qa_master)
 all_rows = case_table_sheet.max_row
 host = quality_host
-
+woven_dir = os.path.join(os.path.abspath('.'),'attachment\\exportrule.xlsx').replace('\\','/')
 
 def deal_request_method():
     """
@@ -126,8 +126,9 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail=='自定义导入':
-            head,newdata = create_rule_import(data)
-            response = requests.post(url=url, headers=head, files=newdata)
+            files = {"file": ('exportrule.xlsx',open(woven_dir, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -187,13 +188,13 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
         log.info("开始执行：%s " %case_detail)
         if data:
             if  case_detail == '自定义导出':
-                response = requests.get(url=url+'?'+'Authorization='+get_auth_token_root(),headers=headers)
-                with open(os.path.join(os.path.abspath('.'),'attachment\exportrule.xlsx'),'wb') as fp:
-                    fp.write(response.content)
+                response = requests.get(url=url+'?'+'Authorization='+get_auth_token(),headers=headers)
+                #with open(os.path.join(os.path.abspath('.'),'attachment\exportrule.xlsx'),'wb') as fp:
+                    #fp.write(response.content)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                #write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail=='规则预览':
                 sta=get_success_exehistoryjobid({'成功':"数据集",'exe':'all'})
                 response=requests.get(url.format(sta['mappingId']),headers=headers)

@@ -43,7 +43,7 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 compass_sheet = "scheduler" #scheduler
-compass_host = "http://192.168.1.62:8881"
+compass_host = "http://192.168.1.62:8515"
 Compass_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -59,8 +59,8 @@ Compass_MySQL_CONFIG = {
  alarm_MySQL_CONFIG:数据库连接信息
 """
 alarm_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-alarm_sheet = "alarm"
-alarm_host = "http://192.168.1.62:8881"
+alarm_sheet = "alarm"  #alarm
+alarm_host = "http://192.168.1.62:8515"
 Alarm_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -77,7 +77,7 @@ Alarm_MySQL_CONFIG = {
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
-dsp_host = "http://192.168.1.62:8881"
+dsp_host = "http://192.168.1.62:8515"
 Dsp_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -94,7 +94,7 @@ Dsp_MySQL_CONFIG = {
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dw_sheet = "dw-asset"  #dw-asset
-dw_host = "http://192.168.1.62:8881"
+dw_host = "http://192.168.1.62:8515"
 Dw_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -110,8 +110,8 @@ Dw_MySQL_CONFIG = {
  Dw_MySQL_CONFIG:数据库连接信息
 """
 collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-collect_sheet = "collect"
-collect_host = "http://192.168.1.62:8881"
+collect_sheet = "842"  #collect
+collect_host = "http://192.168.1.62:8515"
 collect_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -127,8 +127,8 @@ collect_MySQL_CONFIG = {
  quality_MySQL_CONFIG:数据库连接信息
 """
 quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
-quality_sheet = "quality"
-quality_host = "http://192.168.1.62:8881"
+quality_sheet = "quality" #quality
+quality_host = "http://192.168.1.62:8515"
 quality_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -161,7 +161,7 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 """
 baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 baymax_sheet = "baymax_master"  # baymax_master
-host = "http://192.168.1.62:8881"
+host = "http://192.168.1.62:8515"
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,

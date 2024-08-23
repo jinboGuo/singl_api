@@ -95,7 +95,7 @@ def deal_request_method():
         '''执行结束后保存表格'''
         case_table.save(cases_dir)
     except Exception as e:
-        log.error("{}执行过程中出错{}".format(i, e))
+        log.error("执行过程中出错{}".format( e))
 
 
 def post_request_result_check(row, column, url, host, headers, data, table_sheet_name):

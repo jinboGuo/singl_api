@@ -1,14 +1,9 @@
 # coding:utf-8
 import json
-import os
 import random
-import requests,string
-from basic_info.get_auth_token import get_headers
-from new_api_cases.dw_deal_parameters import deal_random
-from basic_info.setting import log, ms, host
-from util.get_deal_parameter import get_tenant_id, get_owner,get_dataset,get_resourceid,get_datasource
-from util.timestamp_13 import datatime_now, data_now
-from requests_toolbelt.multipart.encoder import MultipartEncoder
+from basic_info.setting import log, ms
+from util.get_deal_parameter import get_tenant_id, get_owner
+
 
 def alarm_job():
     tenant_id = get_tenant_id()

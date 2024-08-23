@@ -35,7 +35,7 @@ def get_selfqaruleid(name,build=1):
         resource_id = resource_dir[0]["id"]
         return resource_id
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到规则id：%s" % e)
         
 def get_qajobid(name):
 
@@ -62,8 +62,8 @@ def create_datacoljob_data(data):
     except Exception as e:
         log.error("异常信息：%s" %e)
         
-def create_rule_import(data):
-    ruledir=os.path.join(os.path.abspath('.'),'attachment\\'+data).replace("\\","/")
+def create_rule_import():
+    ruledir = os.path.join(os.path.abspath('.'),'attachment\\exportrule.xlsx').replace('\\','/')
     fs = {"file": open(ruledir, 'rb')}    
     
     head={'Accept':'*/*',

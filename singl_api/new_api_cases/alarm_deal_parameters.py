@@ -68,7 +68,15 @@ def deal_parameters(data,request_method,request_url):
             if '消息主键' in data:
                 data = data.replace('消息主键', str(get_messgeid()))
                 return deal_parameters(data, request_method, request_url)
-            
+            if "###" in data:
+                new_data=data.split("###")
+                try:
+                    response = requests.post(url=host + new_data[1], headers=get_headers(), data=new_data[0])
+                    new_data = response.json()["content"]["list"][0]
+                    log.info("QUERY查询接口响应数据:{}".format(new_data))
+                    return new_data
+                except Exception as e:
+                    log.error("执行过程中出错{}".format(e))
             if ('select id from' in data or 'select a.id from' in data) and '&&' not in data:
                 log.info("开始执行语句:{}".format(data))
                 data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -354,7 +362,7 @@ def get_zhanneixid():
 
     tenant_id = get_tenant_id()
     try:
-        sql = "select id From alarm_noter where  tenant_id='%s' and name='站内信'"%(tenant_id)
+        sql = "select id From alarm_noter where  tenant_id='%s' and name='站内信'"%tenant_id
         resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
         resource_id = resource_dir[0]["id"]
         return resource_id
@@ -362,8 +370,6 @@ def get_zhanneixid():
         log.error("没有获取到目录id：%s" % e)
 
 def get_monitorid():
-
-    tenant_id = get_tenant_id()
     try:
         sql = "select id From alarm_monitor where name like 'alarmmage_test%'  order by create_time desc limit 1"
         resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
@@ -378,10 +384,11 @@ def get_messgeid():
     try:
         sql = "select id from sys_message where message_status =0 and tenant_id={} order by create_time  desc limit 1".format(tenant_id)
         resource_dir = ms.ExecuQuery(sql.encode('utf-8'))
-        if resource_dir==[]:
-            return []
-        else:
+        if resource_dir:
             resource_id = resource_dir[0]["id"]
+            return resource_id
+        else:
+            resource_id ='1276032818153619456'
         return resource_id
     except Exception as e:
         log.error("没有获取到目录id：%s" % e)
