@@ -115,19 +115,11 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         log.info("开始执行：%s " % case_detail)
         if  case_detail == '监控管理-配置告警':
             mid,new_data = alarm_config(0)
-            response = requests.post(url=url.format(mid), headers=headers, data=new_data)
+            response = requests.post(url=url.format(mid), headers=headers, data=new_data.encode("utf-8"))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-        elif  case_detail == '监控管理-编辑':
-            new_data = alarm_config(1)
-            response = requests.post(url=url, headers=headers, data=new_data)
-            log.info("response data：%s %s" % (response.status_code, response.text))
-            clean_vaule(table_sheet_name, row, column)
-            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
         elif  case_detail == '监控管理-新建':
             new_data = alarm_job()
             response = requests.post(url=url, headers=headers, data=new_data)
@@ -172,16 +164,31 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
-                data = str(data)
-                if (data.startswith('{') and data.endswith('}')):
+                if "{}" in url:
+                    new_url = url.format(data[1], data[2], data[3])
+                    log.info("请求new_url：%s" % new_url)
+                    response = requests.post(url=new_url, headers=headers, data=json.dumps(data[0]))
+                    count_num = 0
+                    while "waiting" in response.text or "running" in response.text:
+                        response = requests.post(url=new_url, headers=headers, data=json.dumps(data[0]))
+                        time.sleep(5)
+                        count_num += 1
+                        if count_num == 50:
+                            return
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                elif str(data).startswith('{') and str(data).endswith('}'):
                     data_dict = dict_res(data)
+                    time.sleep(3)
                     response = requests.post(url=url, headers=headers, json=data_dict)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
                     write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                     write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-                elif data.startswith('[') and data.endswith(']'):
-                    response = requests.post(url=url, headers=headers, data=data)
+                elif str(data).startswith('[') and str(data).endswith(']'):
+                    response = requests.post(url=url, headers=headers, data=str(data))
                     time.sleep(3)
                     log.info("response data：%s %s" % (response.status_code, response.text))
                     clean_vaule(table_sheet_name, row, column)
@@ -191,13 +198,13 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
                     log.error("请求体数据错误！")
             else:
                 response = requests.post(url=url, headers=headers, data=data)
-                time.sleep(1)
+                time.sleep(2)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
-        log.error("测试用例{}执行过程中出错{}".format(case_detail, e))
+        log.error("测试用例:{} 执行过程中出错{}".format(case_detail, e))
 
 
 
@@ -562,7 +569,9 @@ class CheckResult(unittest.TestCase):
                         case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
 
             elif relation == 'in':
-                if "&&" in expect_text:
+                if expect_text == None and response_text == "":
+                    case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
+                elif "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
                             self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
