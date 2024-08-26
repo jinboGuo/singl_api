@@ -837,7 +837,7 @@ def get_asset_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-        tenant_id, asset_name)
+        tenant_id, dw_name[0])
         assets_info = ms.ExecuQuery(sql.encode('utf-8'))
         assets_info_id = assets_info[0]["id"]
         return str(assets_info_id)
