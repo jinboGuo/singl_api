@@ -7,7 +7,7 @@ from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_da
     get_source_dataset_name, get_tenant_id, get_owner, get_user_id, \
     get_source_dataset_id, get_indicator_id, \
     get_current_time, get_driver_name, get_indicator_subtask_id, get_indicator_dir_id, get_indicator_dimdir_id, \
-    get_indicator_dim_name, get_indicator_dim_id
+    get_indicator_dim_name, get_indicator_dim_id, get_indicator_name, get_indicator_dir_name
 
 
 def deal_parameters(data, request_method, request_url):
@@ -144,12 +144,18 @@ def deal_parameters(data, request_method, request_url):
                 request_data = request_data.replace('输入第一个数据集名称', str(get_source_dataset_name(1)))
                 request_data = request_data.replace('输入第一个数据集id', str(get_source_dataset_id(1)))
                 request_data = request_data.replace('输入指标任务id', str(get_indicator_id()))
+                request_data = request_data.replace('输入指标任务名称', str(get_indicator_name()))
+                if '输入指标任务第二个id' in data:
+                    request_data = request_data.replace('输入指标任务第二个id', str(get_indicator_id(1)))
+                    request_data = request_data.replace('输入指标任务第二个名称', str(get_indicator_name(1)))
                 request_data = request_data.replace('获取当前时间', str(get_current_time()))
                 request_data = request_data.replace('输入指标子任务id', str(get_indicator_subtask_id()))
                 request_data = request_data.replace('输入指标目录id', str(get_indicator_dir_id()))
+                request_data = request_data.replace('输入指标目录名称', str(get_indicator_dir_name()))
                 request_data = request_data.replace('输入维度目录id', str(get_indicator_dimdir_id()))
                 request_data = request_data.replace('输入指标维度id', str(get_indicator_dim_id()))
                 request_data = request_data.replace('输入指标维度名称', str(get_indicator_dim_name()))
+                request_data = request_data.replace('获取当前时间', str(get_current_time()))
                 return request_data
             except Exception as e:
                 log.error("没有可替换的值{}".format(e))
@@ -167,38 +173,49 @@ def deal_parameters(data, request_method, request_url):
 
         if 'select id from' in data:
             log.info("开始执行语句:{}".format(data))
-            data_select_result = ms.ExecuQuery(data.encode('utf-8'))
-            log.info("sql查询结果为:{}".format(data_select_result))
             new_data = []
-            if data_select_result:
-                if len(data_select_result) > 1:
-                    if '/meta/poseidon/task/submitApproval' in request_url:
-                        request_data = {"status": "OFFLINE", "approverId": "", "approverName": "",
-                                        "ids": ["1257646972197765120"],
-                                        "publishStatus": "OFFLINE"}
-                        for i in range(len(data_select_result)):
-                            new_data.append(str(data_select_result[i]["id"]))
-                        request_data["ids"] = new_data
-                        new_data = json.dumps(request_data)
-                        return new_data
-                    else:
-                        for i in range(len(data_select_result)):
-                            new_data.append(str(data_select_result[i]["id"]))
-                        new_data = json.dumps(new_data)
-                        return new_data
-                else:
-                    try:
-                        if "{}" in request_url and '/api/ind/indicator/execute/' in request_url:
-                            data = data_select_result[0]["id"]
-                            return data
+            if '&&' in data:
+                select_data = data.split('&&')[0]
+                data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+                log.info("sql查询结果为:{}".format(data_select_result))
+                request_data = json.loads(data.split('&&')[1])
+                for i in range(len(data_select_result)):
+                    new_data.append(str(data_select_result[i]["id"]))
+                request_data["ids"] = new_data
+                new_data = json.dumps(request_data)
+                return new_data
+            else:
+                data_select_result = ms.ExecuQuery(data.encode('utf-8'))
+                log.info("sql查询结果为:{}".format(data_select_result))
+                if data_select_result:
+                    if len(data_select_result) > 1:
+                        if '/meta/poseidon/task/submitApproval' in request_url:
+                            request_data = {"status": "OFFLINE", "approverId": "", "approverName": "",
+                                            "ids": ["1257646972197765120"],
+                                            "publishStatus": "OFFLINE"}
+                            for i in range(len(data_select_result)):
+                                new_data.append(str(data_select_result[i]["id"]))
+                            request_data["ids"] = new_data
+                            new_data = json.dumps(request_data)
+                            return new_data
                         else:
-                            new_data.append(str(data_select_result[0]["id"]))
+                            for i in range(len(data_select_result)):
+                                new_data.append(str(data_select_result[i]["id"]))
                             new_data = json.dumps(new_data)
                             return new_data
-                    except Exception as e:
-                        log.error("执行过程中出错{}".format(e))
-            else:
-                log.error("sql查询结果为空！")
+                    else:
+                        try:
+                            if "{}" in request_url and '/api/ind/indicator/execute/' in request_url:
+                                data = data_select_result[0]["id"]
+                                return data
+                            else:
+                                new_data.append(str(data_select_result[0]["id"]))
+                                new_data = json.dumps(new_data)
+                                return new_data
+                        except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
+                else:
+                    log.error("sql查询结果为空！")
         if 'select task_id from' in data:
             log.info("开始执行语句:{}".format(data))
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
