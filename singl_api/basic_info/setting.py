@@ -7,7 +7,7 @@ from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
 '''执行api脚本用例py'''
-pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py", "execute_qa_cases.py", "execute_collect_cases.py", "execute_alarm_cases.py"]
+pattern = ["execute_cases.py", "execute_dsp_cases.py", "execute_dw_cases.py", "execute_compass_cases.py", "execute_qa_cases.py", "execute_collect_cases.py", "execute_alarm_cases.py","execute_indicator_cases.py"]
 begin_times = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 REPORT_PATH = os.path.join(BASE_PATH, 'Reports')
@@ -134,7 +134,7 @@ indicator_MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_167',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """
