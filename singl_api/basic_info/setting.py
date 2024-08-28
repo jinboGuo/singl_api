@@ -128,7 +128,7 @@ collect_MySQL_CONFIG = {
 """
 indicator_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 indicator_sheet = "indicator"
-indicator_host = "http://192.168.1.95:8515"
+indicator_host = "http://192.168.1.62:8515"
 indicator_MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
@@ -240,7 +240,10 @@ dw_name = ["gjb_test_asset","gjb_dw_datatier","gjb_dw_subjectdomain","gjb_dw_dic
 dw_type= ["dic_group_id","dic_group_name","dw_datatier_id","dw_datatier_name","dw_subjectdomain_id","dw_subjectdomain_name","dic_id","dic_name","meta_data_id"]
 
 """dataflow名称"""
-dataflow_name = "gjb_type_dataflow"
+dataflow_name = ["gjb_type_dataflow","gjb_type_rtcflow"]
+
+"""scheduler名称"""
+scheduler_name=['mutil_sink_storage','multi_rtc_steps']
 
 """
 compass admin账户登录信息
