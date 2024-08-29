@@ -2,7 +2,7 @@ import json
 import random
 from basic_info.setting import resource_type, data_source, tag_type, ms, log
 from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, \
-    get_source_dss_id, get_source_dss_name, \
+    get_dss_id, get_dss_name, \
     get_source_schema_id, get_source_schema_name, \
     get_source_dataset_name, get_tenant_id, get_owner, get_user_id, \
     get_source_dataset_id, get_indicator_id, \
@@ -132,8 +132,8 @@ def deal_parameters(data, request_method, request_url):
             return request_data
         if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入输入数据集名称' in data or '输入指标任务id' in data or '租户主键' in data:
             try:
-                request_data = data.replace('输入输入数据源id', str(get_source_dss_id()))
-                request_data = request_data.replace('输入输入数据源名称', get_source_dss_name())
+                request_data = data.replace('输入输入数据源id', str(get_dss_id()))
+                request_data = request_data.replace('输入输入数据源名称', get_dss_name())
                 request_data = request_data.replace('输入输入元数据id', str(get_source_schema_id()))
                 request_data = request_data.replace('输入输入元数据名称', get_source_schema_name())
                 request_data = request_data.replace('租户主键', str(get_tenant_id()))

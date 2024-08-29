@@ -375,7 +375,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '查询指定时间段内的指标数':
-                url = url.format(get_current_time()[0, 11], get_current_time()[0, 11])
+                url = url.format(get_current_time()[:10], get_current_time()[:10])
                 log.info("request   url：%s" % url)
                 response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -383,14 +383,21 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '查看指标目录详情':
-                url = url.format(get_current_time()[0, 11], get_current_time()[0, 11])
+                url = url.format(get_indicator_dir_id())
                 log.info("request   url：%s" % url)
                 response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
+            elif case_detail == '查询血缘':
+                url = url.format(get_indicator_id())
+                log.info("request   url：%s" % url)
+                response = requests.get(url=url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("{}执行过程中出错{}".format(case_detail, e))
 
