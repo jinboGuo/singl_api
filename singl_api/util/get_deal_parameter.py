@@ -23,10 +23,10 @@ def get_owner():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_user where tenant_id='%s' and login_id='admin'" % tenant_id
-        user = ms.ExecuQuery(sql)
-        owner = user[0]["id"]
-        return str(owner)
+      sql = "select id from merce_user where tenant_id='%s' and login_id='admin'" % tenant_id
+      user = ms.ExecuQuery(sql)
+      owner = user[0]["id"]
+      return str(owner)
     except Exception as e:
         return log.error("没有查询到管理员id：%s" % e)
 
@@ -187,8 +187,7 @@ def get_job_view_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from s_v_job_view where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, job_view_name)
+        sql = "select id from s_v_job_view where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,job_view_name)
         job_view = ms.ExecuQuery(sql.encode('utf-8'))
         job_view_id = job_view[0]["id"]
         return str(job_view_id)
@@ -762,7 +761,7 @@ def get_qa_task_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from qa_job where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, qa_task_name)
+        tenant_id, qa_task_name)
         qa_task = ms.ExecuQuery(sql.encode('utf-8'))
         qa_task_id = qa_task[0]["id"]
         return str(qa_task_id)
@@ -777,14 +776,14 @@ def get_dsp_data_resource(dsp_data_source):
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from dsp_data_resource where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dsp_data_source_name)
+        tenant_id, dsp_data_source_name)
         dsp_data_resource = ms.ExecuQuery(sql.encode('utf-8'))
         dsp_data_resource_id = dsp_data_resource[0]["id"]
         dsp_data_resource_name = dsp_data_resource[0]["name"]
-        if dsp_data_source == "data_source_id":
-            return str(dsp_data_resource_id)
-        if dsp_data_source == "data_source_name":
-            return str(dsp_data_resource_name)
+        if dsp_data_source=="data_source_id":
+           return str(dsp_data_resource_id)
+        if dsp_data_source=="data_source_name":
+           return str(dsp_data_resource_name)
     except Exception as e:
         log.error("没有获取到数据资源id：%s" % e)
 
@@ -796,7 +795,7 @@ def get_dsp_data_application():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from dsp_data_application where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dsp_data_source_name)
+        tenant_id, dsp_data_source_name)
         dsp_data_application = ms.ExecuQuery(sql.encode('utf-8'))
         dsp_data_application_id = dsp_data_application[0]["id"]
         return str(dsp_data_application_id)
@@ -812,7 +811,7 @@ def get_sys_approval_target(approval_type):
     tenant_id = get_tenant_id()
     try:
         sql = "select id from sys_approval_target where tenant_id='%s' and code='%s' and type ='INTERNAL'" % (
-            tenant_id, approval_type)
+        tenant_id, approval_type)
         approval_type = ms.ExecuQuery(sql.encode('utf-8'))
         approval_type_id = approval_type[0]["id"]
         return str(approval_type_id)
@@ -841,7 +840,7 @@ def get_asset_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from assets_info where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, asset_name)
+        tenant_id, dw_name[0])
         assets_info = ms.ExecuQuery(sql.encode('utf-8'))
         assets_info_id = assets_info[0]["id"]
         return str(assets_info_id)
@@ -855,8 +854,7 @@ def get_dw_data_tier_id(dw_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from dw_data_tier where tenant_id='%s' and abbr like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dw_name[1])
+        sql = "select id,name from dw_data_tier where tenant_id='%s' and abbr like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
         dw_data_tier_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_data_tier_info_id = dw_data_tier_info[0]["id"]
         dw_data_tier_info_name = dw_data_tier_info[0]["name"]
@@ -874,8 +872,7 @@ def get_dw_subject_domain_id(dw_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from dw_subject_domain where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dw_name[2])
+        sql = "select id,name from dw_subject_domain where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[2])
         dw_subject_domain_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_subject_domain_info_id = dw_subject_domain_info[0]["id"]
         dw_subject_domain_info_name = dw_subject_domain_info[0]["name"]
@@ -893,18 +890,16 @@ def get_dw_dic_group_id(dw_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from dw_dic_group where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dw_name[3])
+        sql = "select id,name from dw_dic_group where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[3])
         dw_dic_group_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_dic_group_info_id = dw_dic_group_info[0]["id"]
         dw_dic_group_info_name = dw_dic_group_info[0]["name"]
         if dw_type == "dic_group_id":
-            return str(dw_dic_group_info_id)
+          return str(dw_dic_group_info_id)
         if dw_type == "dic_group_name":
-            return str(dw_dic_group_info_name)
+          return str(dw_dic_group_info_name)
     except Exception as e:
         log.error("没有获取到字典集id：%s" % e)
-
 
 def get_dw_dic_id(dw_type):
     """
@@ -912,18 +907,16 @@ def get_dw_dic_id(dw_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from dw_dic where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dw_name[4])
+        sql = "select id,name from dw_dic where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[4])
         dw_dic_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_dic_info_id = dw_dic_info[0]["id"]
         dw_dic_info_name = dw_dic_info[0]["name"]
         if dw_type == "dic_id":
-            return str(dw_dic_info_id)
+          return str(dw_dic_info_id)
         if dw_type == "dic_name":
-            return str(dw_dic_info_name)
+          return str(dw_dic_info_name)
     except Exception as e:
         log.error("没有获取到字典名称：%s" % e)
-
 
 def get_dw_metadata_id():
     """
@@ -931,8 +924,7 @@ def get_dw_metadata_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from dw_metadata where tenant_id='%s' and data_tier_name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dw_name[1])
+        sql = "select id from dw_metadata where tenant_id='%s' and data_tier_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
         dw_metadata_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_metadata_info_id = dw_metadata_info[0]["id"]
         return str(dw_metadata_info_id)
@@ -946,14 +938,12 @@ def get_approval_record(dwname):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dwname)
+        sql = "select id from sys_approval_record where tenant_id='%s' and approval_status='PENDING' and target_name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dwname)
         approval_record_info = ms.ExecuQuery(sql.encode('utf-8'))
         approval_record_info_id = approval_record_info[0]["id"]
         return str(approval_record_info_id)
     except Exception as e:
         log.error("没有获取到数仓资产审核id：%s" % e)
-
 
 def get_dw_subject_domain():
     """
@@ -961,13 +951,12 @@ def get_dw_subject_domain():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from dw_subject_domain where tenant_id='%s' and name = '主题域' ORDER BY create_time desc limit 1" % tenant_id
+        sql = "select id from dw_subject_domain where tenant_id='%s' and name = '主题域' ORDER BY create_time desc limit 1" %tenant_id
         dw_subject_domain_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_subject_domain_info_id = dw_subject_domain_info[0]["id"]
         return str(dw_subject_domain_info_id)
     except Exception as e:
         log.error("没有获取到数仓主题域目录：%s" % e)
-
 
 def get_dataflow_id():
     """
@@ -975,8 +964,7 @@ def get_dataflow_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, dataflow_name)
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name)
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         flow_info_id = flow_info[0]["id"]
         return str(flow_info_id)

@@ -4,8 +4,10 @@ import requests
 from basic_info.get_auth_token import get_headers
 from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, get_tags, get_dataset, get_dataflow_id, \
     get_tenant_id, get_owner
-from basic_info.setting import resource_type, host, data_source, tag_type, ms, log
+from basic_info.setting import resource_type, host, data_source, tag_type, ms, log, scheduler_name
 from util.timestamp_13 import data_now
+from new_api_cases.prepare_datas_for_cases import get_scheduler_id, get_execution_id, get_rtcflow_id, \
+    get_rtc_execution_id
 
 
 def deal_parameters(data,request_method,request_url):
@@ -58,15 +60,39 @@ def deal_parameters(data,request_method,request_url):
         if 'dataflow主键' in data:
             data = data.replace('dataflow主键',  str(get_dataflow_id()))
             return deal_parameters(data,request_method,request_url)
+        if 'rtcflow主键' in data:
+            data = data.replace('rtcflow主键',  str(get_rtcflow_id()))
+            return deal_parameters(data,request_method,request_url)
         if '租户主键' in data:
             data = data.replace('租户主键', str(get_tenant_id()))
             return deal_parameters(data, request_method, request_url)
         if '管理员主键' in data:
             data = data.replace('管理员主键', str(get_owner()))
             return deal_parameters(data, request_method, request_url)
-        if '/api/flowComment/detail' in data:
+        if '离线作业主键' in data:
+            data = data.replace('离线作业主键',  str(get_scheduler_id(scheduler_name[0])))
+            return deal_parameters(data,request_method,request_url)
+        if '离线作业记录主键' in data:
+            data = data.replace('离线作业记录主键',  str(get_execution_id(scheduler_name[0])))
+            return deal_parameters(data,request_method,request_url)
+        if '实时作业主键' in data:
+            data = data.replace('实时作业主键',  str(get_scheduler_id(scheduler_name[1])))
+            return deal_parameters(data,request_method,request_url)
+        if '实时作业记录主键' in data:
+            data = data.replace('实时作业记录主键',  str(get_rtc_execution_id(scheduler_name[1])))
+            return deal_parameters(data,request_method,request_url)
+        if '/api/flowComment/detail' in data and 'dataflow' in data:
             try:
-                data=data.format(str(get_dataflow_id()))
+                data=str(data).split("##")[0].format(str(get_dataflow_id()))
+                response = requests.get(url=host + data, headers=get_headers())
+                new_data = response.json()["content"][0]
+                log.info("QUERY查询接口响应数据:{}".format(new_data))
+                return new_data
+            except Exception as e:
+                log.error("执行过程中出错{}".format(e))
+        if '/api/flowComment/detail' in data and 'rtcflow' in data:
+            try:
+                data=str(data).split("##")[0].format(str(get_rtcflow_id()))
                 response = requests.get(url=host + data, headers=get_headers())
                 new_data = response.json()["content"][0]
                 log.info("QUERY查询接口响应数据:{}".format(new_data))

@@ -3,7 +3,7 @@ import json
 import os
 import requests
 from new_api_cases.compass_deal_parameters import deal_random
-from basic_info.setting import ms, log
+from basic_info.setting import ms, log, dataflow_name
 from util.get_deal_parameter import get_tenant_id
 from util.timestamp_13 import data_now
 
@@ -214,3 +214,45 @@ def get_scheduler_online_data(data):
         return new_data
     except Exception as e:
         log.error("异常信息：%s" % e)
+
+def get_scheduler_id(scheduler_name):
+    try:
+        tenant_id = get_tenant_id()
+        sql = "select id from merce_flow_schedule where tenant_id='%s' and flow_name = '%s' ORDER BY create_time desc limit 1" %(tenant_id,scheduler_name)
+        flow_schedule_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_schedule_info_id = flow_schedule_info[0]["id"]
+        return str(flow_schedule_info_id)
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+def get_execution_id(scheduler_name):
+    try:
+        tenant_id = get_tenant_id()
+        sql = "select id from merce_flow_execution where tenant_id='%s' and flow_name = '%s' ORDER BY create_time desc limit 1" %(tenant_id,scheduler_name)
+        flow_execution_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_execution_info_id = flow_execution_info[0]["id"]
+        return str(flow_execution_info_id)
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+def get_rtc_execution_id(scheduler_name):
+    try:
+        sql = "select id from rtc_executions where flow_name = '%s' ORDER BY create_time desc limit 1" %scheduler_name
+        flow_execution_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_execution_info_id = flow_execution_info[0]["id"]
+        return str(flow_execution_info_id)
+    except Exception as e:
+        log.error("异常信息：%s" % e)
+
+def get_rtcflow_id():
+    """
+    获取dataflow id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name[1])
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_info_id = flow_info[0]["id"]
+        return str(flow_info_id)
+    except Exception as e:
+        log.error("没有获取dataflow的id：%s" % e)
