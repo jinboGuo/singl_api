@@ -240,10 +240,10 @@ dw_name = ["gjb_test_asset","gjb_dw_datatier","gjb_dw_subjectdomain","gjb_dw_dic
 dw_type= ["dic_group_id","dic_group_name","dw_datatier_id","dw_datatier_name","dw_subjectdomain_id","dw_subjectdomain_name","dic_id","dic_name","meta_data_id"]
 
 """dataflow名称"""
-dataflow_name = ["gjb_type_dataflow","gjb_type_rtcflow"]
+dataflow_name = ["gjb_type_dataflow","gjb_type_rtcflow","gjb_type_workflow"]
 
 """scheduler名称"""
-scheduler_name=['mutil_sink_storage','multi_rtc_steps']
+scheduler_name=['mutil_sink_storage','multi_rtc_steps','gjb_workflow']
 
 """
 compass admin账户登录信息

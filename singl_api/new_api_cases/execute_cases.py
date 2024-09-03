@@ -39,6 +39,7 @@ woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\\import_dataflow_
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_df.woven').replace('\\','/')
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\\mutil_sink_storage.woven').replace('\\','/')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_rtc_steps.woven').replace('\\','/')
+multi_wf_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_wf_steps.woven').replace('\\','/')
 minio_data = []
 httpop = Httpop()
 host = host
@@ -185,6 +186,22 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "创建模型multi_wf_steps导入任务" == case_detail:
+            files = {"file": ('multi_wf_steps.woven',open(multi_wf_steps, 'rb'),"application/octet-stream"),"name":(None,"gjb_type_wf_import"+str(random.randint(0, 999999)),None),"remark":(None,"gjb_type_wf_import",None),"taskType":(None,"workflow",None),"flowResourceId":(None,str(get_resourceid(resource_type[3])),None),"flowResourcePath":(None,"Flows;",None),"datasetResourceId":(None,str(get_resourceid(resource_type[1])),None),"datasetResourcePath":(None,"Datasets;",None),"datasourceResourceId":(None,str(get_resourceid(resource_type[0])),None),"datasourceResourcePath":(None,"Datasources;",None),"schemaResourceId":(None,str(get_resourceid(resource_type[2])),None),"schemaResourcePath":(None,"Schemas;",None)}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif "导入模型multi_wf_steps文件" == case_detail:
+            new_data = get_import_dataflow(headers, host, data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=get_headers(), data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif case_detail == '获取SQL执行任务结果':
             exec_use_params = get_sql_analyse_dataset_info(host, data)
             exec_use_params = json.dumps(exec_use_params, separators=(',', ':'))
@@ -308,6 +325,41 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建作业woven-workflow':
+            new_data = get_dataflow_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            time.sleep(5)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '上线作业woven-workflow':
+            new_data = get_scheduler_online_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            time.sleep(5)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查找作业记录executions-woven-workflow':
+            new_data = query_dataflow_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            count_num = 0
+            time.sleep(5)
+            while '"statusType":"READY"' in response.text or '"list":[]' in response.text or '"statusType":"RUNNING"' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=new_data)
+                time.sleep(6)
+                count_num += 1
+                if count_num == 90:
+                    break
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '查询指定流程计划' in case_detail:
             new_data = get_schedulers_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))

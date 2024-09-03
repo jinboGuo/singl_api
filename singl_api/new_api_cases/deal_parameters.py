@@ -7,7 +7,7 @@ from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, 
 from basic_info.setting import resource_type, host, data_source, tag_type, ms, log, scheduler_name
 from util.timestamp_13 import data_now
 from new_api_cases.prepare_datas_for_cases import get_scheduler_id, get_execution_id, get_rtcflow_id, \
-    get_rtc_execution_id
+    get_rtc_execution_id, get_workflow_id
 
 
 def deal_parameters(data,request_method,request_url):
@@ -63,6 +63,9 @@ def deal_parameters(data,request_method,request_url):
         if 'rtcflow主键' in data:
             data = data.replace('rtcflow主键',  str(get_rtcflow_id()))
             return deal_parameters(data,request_method,request_url)
+        if 'workflow主键' in data:
+            data = data.replace('workflow主键',  str(get_workflow_id()))
+            return deal_parameters(data,request_method,request_url)
         if '租户主键' in data:
             data = data.replace('租户主键', str(get_tenant_id()))
             return deal_parameters(data, request_method, request_url)
@@ -81,6 +84,12 @@ def deal_parameters(data,request_method,request_url):
         if '实时作业记录主键' in data:
             data = data.replace('实时作业记录主键',  str(get_rtc_execution_id(scheduler_name[1])))
             return deal_parameters(data,request_method,request_url)
+        if '工作流作业主键' in data:
+            data = data.replace('工作流作业主键',  str(get_scheduler_id(scheduler_name[2])))
+            return deal_parameters(data,request_method,request_url)
+        if '工作流作业记录主键' in data:
+            data = data.replace('工作流作业记录主键',  str(get_execution_id(scheduler_name[2])))
+            return deal_parameters(data,request_method,request_url)
         if '/api/flowComment/detail' in data and 'dataflow' in data:
             try:
                 data=str(data).split("##")[0].format(str(get_dataflow_id()))
@@ -93,6 +102,15 @@ def deal_parameters(data,request_method,request_url):
         if '/api/flowComment/detail' in data and 'rtcflow' in data:
             try:
                 data=str(data).split("##")[0].format(str(get_rtcflow_id()))
+                response = requests.get(url=host + data, headers=get_headers())
+                new_data = response.json()["content"][0]
+                log.info("QUERY查询接口响应数据:{}".format(new_data))
+                return new_data
+            except Exception as e:
+                log.error("执行过程中出错{}".format(e))
+        if '/api/flowComment/detail' in data and 'workflow' in data:
+            try:
+                data=str(data).split("##")[0].format(str(get_workflow_id()))
                 response = requests.get(url=host + data, headers=get_headers())
                 new_data = response.json()["content"][0]
                 log.info("QUERY查询接口响应数据:{}".format(new_data))

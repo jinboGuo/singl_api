@@ -256,3 +256,16 @@ def get_rtcflow_id():
         return str(flow_info_id)
     except Exception as e:
         log.error("没有获取dataflow的id：%s" % e)
+
+def get_workflow_id():
+    """
+    获取dataflow id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name[2])
+        flow_info = ms.ExecuQuery(sql.encode('utf-8'))
+        flow_info_id = flow_info[0]["id"]
+        return str(flow_info_id)
+    except Exception as e:
+        log.error("没有获取dataflow的id：%s" % e)
