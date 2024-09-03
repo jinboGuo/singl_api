@@ -184,7 +184,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_168',
+    "DB": 'merce_168_95',
     'case_db': 'test'}
 
 """获取数据库连接"""

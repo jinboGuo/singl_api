@@ -217,7 +217,7 @@ def get_offline_collect_task_id():
     tenant_id = get_tenant_id()
     try:
         sql = "select id from poseidon_task where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-        tenant_id, collect_task_name)
+            tenant_id, collect_task_name)
         poseidon_task = ms.ExecuQuery(sql.encode('utf-8'))
         collect_id = poseidon_task[0]["id"]
         return str(collect_id)
@@ -228,52 +228,30 @@ def get_offline_collect_task_id():
 """获取采集的各种参数"""
 
 
-def get_source_dss_id():
+def get_dss_id(num=0):
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
             tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_id = query_data[0]["id"]
+        dss_id = query_data[num]["id"]
         return dss_id
     except Exception as e:
         log.error("没有获取到输入端数据源id：%s" % e)
 
 
-def get_source_dss_name():
+def get_dss_name(num=0):
     tenant_id = get_tenant_id()
     try:
         sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc" % (
             tenant_id, 'test_api_wjp')
         query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_name = query_data[0]["name"]
+        dss_name = query_data[num]["name"]
         return dss_name
     except Exception as e:
         log.error("没有获取到输入端数据源名称：%s" % e)
 
 
-def get_sink_dss_id():
-    tenant_id = get_tenant_id()
-    try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp')
-        query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_id = query_data[0]["id"]
-        return dss_id
-    except Exception as e:
-        log.error("没有获取到输出端数据源id：%s" % e)
-
-
-def get_sink_dss_name():
-    tenant_id = get_tenant_id()
-    try:
-        sql = "select id,name from merce_dss where  tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
-            tenant_id, 'test_api_wjp')
-        query_data = ms.ExecuQuery(sql.encode('utf-8'))
-        dss_name = query_data[0]["name"]
-        return dss_name
-    except Exception as e:
-        log.error("没有获取到输出端数据源id：%s" % e)
 
 
 def get_draft_id():
@@ -589,17 +567,30 @@ def get_rule_id():
         log.error("没有获取到元数据采集命名规则id：%s" % e)
 
 
-def get_indicator_id():
+def get_indicator_id(num=0):
     """获取指标任务id"""
     tenant_id = get_tenant_id()
     try:
         sql = "select id from ind_indicator where tenant_id='%s' and name like '%s%%%%' order by create_time desc " % (
             tenant_id, 'test_api_wjp_indicator')
         get_indicator_id = ms.ExecuQuery(sql.encode('utf-8'))
-        indicator_id = get_indicator_id[0]["id"]
+        indicator_id = get_indicator_id[num]["id"]
         return indicator_id
     except Exception as e:
         log.error("没有获取到指标任务id：%s" % e)
+
+
+def get_indicator_name(num=0):
+    """获取指标任务id"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select name from ind_indicator where tenant_id='%s' and name like '%s%%%%' order by create_time desc " % (
+            tenant_id, 'test_api_wjp_indicator')
+        get_indicator_name = ms.ExecuQuery(sql.encode('utf-8'))
+        indicator_name = get_indicator_name[num]["name"]
+        return indicator_name
+    except Exception as e:
+        log.error("没有获取到指标任务名称：%s" % e)
 
 
 def indicator_data():
@@ -650,6 +641,19 @@ def get_indicator_dir_id():
         log.error("没有获取到指标目录id：%s" % e)
 
 
+def get_indicator_dir_name():
+    """获取指标目录名称"""
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select name from ind_dir where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" % (
+            tenant_id, 'test_api_wjp_indicator')
+        get_indicator_dir_name = ms.ExecuQuery(sql.encode('utf-8'))
+        indicator_dir_name = get_indicator_dir_name[0]["id"]
+        return indicator_dir_name
+    except Exception as e:
+        log.error("没有获取到指标目录名称：%s" % e)
+
+
 def get_indicator_dimdir_id():
     """获取指标目录id"""
     tenant_id = get_tenant_id()
@@ -667,7 +671,6 @@ def get_indicator_dim_id():
     """获取指标维度id"""
     tenant_id = get_tenant_id()
     try:
-
         sql = "select id from ind_dim where tenant_id='%s' and name like '%s%%%%'" % (
             tenant_id, 'test_api_wjp_dim')
         get_indicator_dim_id = ms.ExecuQuery(sql.encode('utf-8'))
@@ -844,6 +847,7 @@ def get_asset_id():
     except Exception as e:
         log.error("没有获取到资产id：%s" % e)
 
+
 def get_dw_data_tier_id(dw_type):
     """
     获取数仓分层id
@@ -861,6 +865,7 @@ def get_dw_data_tier_id(dw_type):
     except Exception as e:
         log.error("没有获取到数仓分层id：%s" % e)
 
+
 def get_dw_subject_domain_id(dw_type):
     """
     获取数仓主题域id
@@ -877,6 +882,7 @@ def get_dw_subject_domain_id(dw_type):
             return str(dw_subject_domain_info_name)
     except Exception as e:
         log.error("没有获取到数仓主题域id：%s" % e)
+
 
 def get_dw_dic_group_id(dw_type):
     """
@@ -958,7 +964,7 @@ def get_dataflow_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name[0])
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name)
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         flow_info_id = flow_info[0]["id"]
         return str(flow_info_id)

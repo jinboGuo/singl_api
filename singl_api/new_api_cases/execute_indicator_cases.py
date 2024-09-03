@@ -254,6 +254,35 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查找相同维度的指标':
+            url = url.format(get_indicator_id())
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '复合指标试运行':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建复合指标':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '复合指标任务下线':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
                 data = str(data)
@@ -323,8 +352,8 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '获取指标信息':
-                url = url.format(get_indicator_id())
+            elif case_detail == '获取目录信息':
+                url = url.format(get_indicator_dir_id())
                 log.info("request   url：%s" % url)
                 response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -346,7 +375,7 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '查询指定时间段内的指标数':
-                url = url.format(get_current_time()[0, 11], get_current_time()[0, 11])
+                url = url.format(get_current_time()[:10], get_current_time()[:10])
                 log.info("request   url：%s" % url)
                 response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
@@ -354,14 +383,21 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             elif case_detail == '查看指标目录详情':
-                url = url.format(get_current_time()[0, 11], get_current_time()[0, 11])
+                url = url.format(get_indicator_dir_id())
                 log.info("request   url：%s" % url)
                 response = requests.get(url=url, headers=headers)
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-
+            elif case_detail == '查询血缘':
+                url = url.format(get_indicator_id())
+                log.info("request   url：%s" % url)
+                response = requests.get(url=url, headers=headers)
+                log.info("response data：%s %s" % (response.status_code, response.text))
+                clean_vaule(table_sheet_name, row, column)
+                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("{}执行过程中出错{}".format(case_detail, e))
 
