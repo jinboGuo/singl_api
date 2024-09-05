@@ -184,7 +184,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_168_95',
+    "DB": 'merce_168',
     'case_db': 'test'}
 
 """获取数据库连接"""
@@ -244,6 +244,10 @@ dataflow_name = ["gjb_type_dataflow","gjb_type_rtcflow","gjb_type_workflow"]
 
 """scheduler名称"""
 scheduler_name=['mutil_sink_storage','multi_rtc_steps','gjb_workflow']
+
+"""组织机构名称"""
+organization_name = ["gjb_role","gjb_user","gjb_menu"]
+
 
 """
 compass admin账户登录信息

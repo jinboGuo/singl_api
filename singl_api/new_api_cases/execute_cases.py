@@ -40,6 +40,9 @@ woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_d
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\\mutil_sink_storage.woven').replace('\\','/')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_rtc_steps.woven').replace('\\','/')
 multi_wf_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_wf_steps.woven').replace('\\','/')
+organization = os.path.join(os.path.abspath('.'),'attachment\\导入组织机构模板.xlsx').replace('\\','/')
+user = os.path.join(os.path.abspath('.'),'attachment\\导入用户模板.xlsx').replace('\\','/')
+menu = os.path.join(os.path.abspath('.'),'attachment\\导入权限模板.xlsx').replace('\\','/')
 minio_data = []
 httpop = Httpop()
 host = host
@@ -90,7 +93,7 @@ def deal_request_method():
                         else:
                             log.error("请求方法%s不在处理范围内" % request_method)
                 else:
-                    log.error(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
+                    log.warn(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
             else:
                 log.error("第 %d 行请求方法为空" % i)
         '''执行结束后保存表格'''
@@ -477,6 +480,30 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif case_detail == '导入组织机构模板':
+            files = {"file": ('导入组织机构模板.xlsx',open(organization, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '导入用户模板':
+            files = {"file": ('导入用户模板.xlsx',open(user, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '导入权限模板':
+            files = {"file": ('导入权限模板.xlsx',open(menu, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
                 if "{}" in url:
@@ -828,9 +855,9 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
         elif isinstance(data, str):
             log.info("data：%s" % data)
             if "{}" in url:
-                new_url = url.format(data)
+                new_url = url.format(data.split("##")[0])
                 log.info("new_url：%s" % new_url)
-                response = requests.delete(url=new_url, headers=headers)
+                response = requests.delete(url=new_url, headers=headers ,data=data.split("##")[1])
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -932,7 +959,7 @@ class CheckResult(unittest.TestCase):
                 else:
                     log.error("第 %d 行 status_code为空" %row)
             else:
-                log.error("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
+                log.warn("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
         case_table.save(cases_dir)
 
 

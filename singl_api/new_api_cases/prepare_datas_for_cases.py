@@ -3,7 +3,7 @@ import json
 import os
 import requests
 from new_api_cases.compass_deal_parameters import deal_random
-from basic_info.setting import ms, log, dataflow_name
+from basic_info.setting import ms, log, dataflow_name, organization_name
 from util.get_deal_parameter import get_tenant_id
 from util.timestamp_13 import data_now
 
@@ -269,3 +269,57 @@ def get_workflow_id():
         return str(flow_info_id)
     except Exception as e:
         log.error("没有获取dataflow的id：%s" % e)
+
+def get_safety_level():
+    """
+    获取safety_level id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_safety_level where tenant_id='%s' and level ='一级'" %tenant_id
+        safety_level = ms.ExecuQuery(sql.encode('utf-8'))
+        safety_level_id = safety_level[0]["id"]
+        return str(safety_level_id)
+    except Exception as e:
+        log.error("没有获取dataflow的id：%s" % e)
+
+def get_role_id():
+    """
+    获取role id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_role where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,organization_name[0])
+        role_info = ms.ExecuQuery(sql.encode('utf-8'))
+        role_info_id = role_info[0]["id"]
+        return str(role_info_id)
+    except Exception as e:
+        log.error("没有获取角色的id：%s" % e)
+
+
+def get_user_id():
+    """
+    获取user id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_user where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,organization_name[1])
+        user_info = ms.ExecuQuery(sql.encode('utf-8'))
+        user_info_id = user_info[0]["id"]
+        return str(user_info_id)
+    except Exception as e:
+        log.error("没有获取用户的id：%s" % e)
+
+
+def get_menu_id():
+    """
+    获取menu id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_permission where tenant_id='%s' and name like '%s%%%%' limit 1" %(tenant_id,organization_name[2])
+        user_info = ms.ExecuQuery(sql.encode('utf-8'))
+        user_info_id = user_info[0]["id"]
+        return str(user_info_id)
+    except Exception as e:
+        log.error("没有获取用户的id：%s" % e)
