@@ -14,7 +14,8 @@ import unittest
 import time
 from basic_info.setting import collect_host
 from util.get_deal_parameter import get_draft_id, get_collector_id, get_collect_task_id, get_collector_group_id, \
-    get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id, get_collect_dir_id
+    get_global_variable, get_sink_node_id, get_source_node_id, get_source_schema_id, get_collect_dir_id, \
+    get_collect_schema_task_id
 
 cases_dir = collect_cases_dir
 case_table = load_workbook(cases_dir)
@@ -22,7 +23,6 @@ collect_master = collect_sheet
 case_table_sheet = case_table.get_sheet_by_name(collect_master)
 all_rows = case_table_sheet.max_row
 host = collect_host
-
 
 
 def deal_request_method():
@@ -464,6 +464,76 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '创建元数据采集目录' in case_detail:
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '元数据采集任务下线':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '删除元数据采集任务':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询元数据采集命名规则':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询元数据采集任务':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data.encode('utf-8'))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '删除数据集':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '删除元数据':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询元数据采集执行历史':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询元数据采集执行详情':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查询元数据采集任务变化分析':
+            log.info("request   url：%s" % url)
+            response = requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
     except Exception as e:
         log.error("测试用例{}执行过程中出错{}".format(case_detail, e))
 
@@ -602,16 +672,17 @@ def get_request_result_check(url, headers, data, table_sheet_name, row, column):
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '删除数据集':
-                log.info("request   url：%s" % url)
-                response = requests.post(url=url, headers=headers, data=data)
+            elif case_detail == '查询元数据采集任务信息':
+                new_url = url.format(get_collect_schema_task_id())
+                log.info("request   url：%s" % new_url)
+                response = requests.get(url=new_url, headers=headers, data=data.encode('utf-8'))
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
-            elif case_detail == '删除元数据':
+            elif case_detail == '查询元数据采集服务':
                 log.info("request   url：%s" % url)
-                response = requests.post(url=url, headers=headers, data=data)
+                response = requests.get(url=url, headers=headers, data=data.encode('utf-8'))
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

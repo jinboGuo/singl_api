@@ -2,10 +2,9 @@ import json
 import random
 from basic_info.setting import resource_type, data_source, tag_type, ms, log
 from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, \
-    get_source_dss_id, get_source_dss_name, \
+    get_dss_id, get_dss_name, \
     get_draft_id, get_source_schema_id, get_source_schema_name, get_sink_schema_name, get_sink_schema_id, \
-    get_source_node_id, get_sink_node_id, get_collect_task_id, get_sink_dss_id, get_sink_dss_name, \
-    get_sink_dataset_name, \
+    get_source_node_id, get_sink_node_id, get_collect_task_id, get_sink_dataset_name, \
     get_source_dataset_name, get_collector_group_id, get_collector_group_name, get_tenant_id, get_owner, get_user_id, \
     get_sink_schema_name_and_random, get_sink_dataset_name_and_random, get_source_dataset_id, get_dss_mysql_id, \
     get_rule_name, get_dss_mysql_name, get_rule_id, get_collect_schema_task_id, get_schema_collect_task_name, \
@@ -127,15 +126,15 @@ def deal_parameters(data, request_method, request_url):
             request_data = data.replace('输入驱动名称', str(get_driver_name()))
             return request_data
         if '输入输入数据源id' in data or '输入输出元数据名称' in data or '输入画布id' in data or '输入采集任务id' in data or '输入元数据命名规则名称' in data or '输入元数据采集任务id' in data:
-            request_data = data.replace('输入输入数据源id', str(get_source_dss_id()))
-            request_data = request_data.replace('输入输入数据源名称', get_source_dss_name())
+            request_data = data.replace('输入输入数据源id', str(get_dss_id(1)))
+            request_data = request_data.replace('输入输入数据源名称', get_dss_name(1))
             request_data = request_data.replace('输入画布id', str(get_draft_id()))
             request_data = request_data.replace('输入输入元数据id', str(get_source_schema_id()))
             request_data = request_data.replace('输入输入元数据名称', get_source_schema_name())
             if '输入输出元数据名称' in data:
                 request_data = request_data.replace('输入输出元数据名称', get_sink_schema_name())
-            request_data = request_data.replace('输入输出数据源id', str(get_sink_dss_id()))
-            request_data = request_data.replace('输入输出数据源名称', get_sink_dss_name())
+            request_data = request_data.replace('输入输出数据源id', str(get_dss_id()))
+            request_data = request_data.replace('输入输出数据源名称', get_dss_name())
             request_data = request_data.replace('输入采集任务id', str(get_collect_task_id()))
             request_data = request_data.replace('输入输入端uuid', str(get_source_node_id()))
             request_data = request_data.replace('输入输出端uuid', str(get_sink_node_id()))
@@ -181,7 +180,7 @@ def deal_parameters(data, request_method, request_url):
             new_data = []
             if data_select_result:
                 if len(data_select_result) > 1:
-                    if '/meta/poseidon/task/submitApproval' in request_url:
+                    if '/task/submitApproval' in request_url:
                         request_data = {"status": "OFFLINE", "approverId": "", "approverName": "",
                                         "ids": ["1257646972197765120"],
                                         "publishStatus": "OFFLINE"}
