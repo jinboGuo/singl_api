@@ -39,6 +39,10 @@ woven_dataflow = os.path.join(os.path.abspath('.'),'attachment\\import_dataflow_
 woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_df.woven').replace('\\','/')
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\\mutil_sink_storage.woven').replace('\\','/')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_rtc_steps.woven').replace('\\','/')
+multi_wf_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_wf_steps.woven').replace('\\','/')
+organization = os.path.join(os.path.abspath('.'),'attachment\\导入组织机构模板.xlsx').replace('\\','/')
+user = os.path.join(os.path.abspath('.'),'attachment\\导入用户模板.xlsx').replace('\\','/')
+menu = os.path.join(os.path.abspath('.'),'attachment\\导入权限模板.xlsx').replace('\\','/')
 minio_data = []
 httpop = Httpop()
 host = host
@@ -89,7 +93,7 @@ def deal_request_method():
                         else:
                             log.error("请求方法%s不在处理范围内" % request_method)
                 else:
-                    log.error(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
+                    log.warn(" 第%d 行脚本未执行，请查看isRun是否为Y或者y！"% i)
             else:
                 log.error("第 %d 行请求方法为空" % i)
         '''执行结束后保存表格'''
@@ -178,6 +182,22 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif "导入模型multi-rtc_steps文件" == case_detail:
+            new_data = get_import_dataflow(headers, host, data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=get_headers(), data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif "创建模型multi_wf_steps导入任务" == case_detail:
+            files = {"file": ('multi_wf_steps.woven',open(multi_wf_steps, 'rb'),"application/octet-stream"),"name":(None,"gjb_type_wf_import"+str(random.randint(0, 999999)),None),"remark":(None,"gjb_type_wf_import",None),"taskType":(None,"workflow",None),"flowResourceId":(None,str(get_resourceid(resource_type[3])),None),"flowResourcePath":(None,"Flows;",None),"datasetResourceId":(None,str(get_resourceid(resource_type[1])),None),"datasetResourcePath":(None,"Datasets;",None),"datasourceResourceId":(None,str(get_resourceid(resource_type[0])),None),"datasourceResourcePath":(None,"Datasources;",None),"schemaResourceId":(None,str(get_resourceid(resource_type[2])),None),"schemaResourcePath":(None,"Schemas;",None)}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif "导入模型multi_wf_steps文件" == case_detail:
             new_data = get_import_dataflow(headers, host, data)
             new_data = json.dumps(new_data, separators=(',', ':'))
             response = requests.post(url=url, headers=get_headers(), data=new_data)
@@ -308,6 +328,41 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                 write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '创建作业woven-workflow':
+            new_data = get_dataflow_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            time.sleep(5)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '上线作业woven-workflow':
+            new_data = get_scheduler_online_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            time.sleep(5)
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '查找作业记录executions-woven-workflow':
+            new_data = query_dataflow_data(data)
+            new_data = json.dumps(new_data, separators=(',', ':'))
+            response = requests.post(url=url, headers=headers, data=new_data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            count_num = 0
+            time.sleep(5)
+            while '"statusType":"READY"' in response.text or '"list":[]' in response.text or '"statusType":"RUNNING"' in response.text:
+                log.info("再次查询前：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, data=new_data)
+                time.sleep(6)
+                count_num += 1
+                if count_num == 90:
+                    break
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif '查询指定流程计划' in case_detail:
             new_data = get_schedulers_data(data)
             new_data = json.dumps(new_data, separators=(',', ':'))
@@ -425,6 +480,30 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
+        elif case_detail == '导入组织机构模板':
+            files = {"file": ('导入组织机构模板.xlsx',open(organization, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '导入用户模板':
+            files = {"file": ('导入用户模板.xlsx',open(user, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif case_detail == '导入权限模板':
+            files = {"file": ('导入权限模板.xlsx',open(menu, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            headers.pop('Content-Type')
+            response = requests.post(url=url, files=files, headers=headers)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
                 if "{}" in url:
@@ -776,9 +855,9 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
         elif isinstance(data, str):
             log.info("data：%s" % data)
             if "{}" in url:
-                new_url = url.format(data)
+                new_url = url.format(data.split("##")[0])
                 log.info("new_url：%s" % new_url)
-                response = requests.delete(url=new_url, headers=headers)
+                response = requests.delete(url=new_url, headers=headers ,data=data.split("##")[1])
                 log.info("response data：%s %s" % (response.status_code, response.text))
                 clean_vaule(table_sheet_name, row, column)
                 write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
@@ -880,7 +959,7 @@ class CheckResult(unittest.TestCase):
                 else:
                     log.error("第 %d 行 status_code为空" %row)
             else:
-                log.error("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
+                log.warn("第 %d 行脚本未执行，请查看isRun是否为Y或者y！"%row)
         case_table.save(cases_dir)
 
 

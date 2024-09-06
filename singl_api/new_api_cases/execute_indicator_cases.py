@@ -771,25 +771,25 @@ class CheckResult(unittest.TestCase):
         case_table.save(cases_dir)
 
     @myddt.data(*testdata)
-    def test_api(self, data):
+    def test_api(self,data):
         self.case_name = data['case_detail']
-        self.url = host + data['url']
-        self.method = data['method']
+        self.url=host+data['url']
+        self.method=data['method']
         self.case_result = data['case_result']
         self.result2 = data['result2']
-        self.header = get_headers()
-        self.body = data['parameters']
+        self.header=get_headers()
+        self.body=data['parameters']
         self.expect_text = data['expect_text']
-        self.extract_data = data['response_text']
-        self.readData_code = data["response__status_code"]
+        self.extract_data=data['response_text']
+        self.readData_code =data["response__status_code"]
         print("******* 执行用例 ->{0} *********".format(self.case_name))
         print("请求URL: {0}".format(self.url))
         print("请求方式: {0}".format(self.method))
         print("请求header:{0}".format(self.header))
         print("请求body:{0}".format(self.body))
         if self.case_result == 'pass':
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code, self.extract_data))
-            self.assertIn(self.expect_text, self.extract_data, "返回实际结果是->:%s" % self.extract_data)
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code,self.extract_data))
+            self.assertIn(self.expect_text,self.extract_data,"返回实际结果是->:%s" % self.extract_data)
         else:
-            print("返回状态码：%d 响应信息：%s" % (self.readData_code, self.extract_data))
+            print("返回状态码：%s 响应信息：%s" % (self.readData_code, self.extract_data))
             self.assertIn(self.expect_text, self.extract_data, "返回实际结果是->:%s" % self.extract_data)
