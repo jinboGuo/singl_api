@@ -40,9 +40,9 @@ woven_dir = os.path.join(os.path.abspath('.'),'attachment\\import_auto_apitest_d
 multi_sink_steps = os.path.join(os.path.abspath('.'),'attachment\\mutil_sink_storage.woven').replace('\\','/')
 multi_rtc_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_rtc_steps.woven').replace('\\','/')
 multi_wf_steps = os.path.join(os.path.abspath('.'),'attachment\\multi_wf_steps.woven').replace('\\','/')
-organization = os.path.join(os.path.abspath('.'),'attachment\\导入组织机构模板.xlsx').replace('\\','/')
-user = os.path.join(os.path.abspath('.'),'attachment\\导入用户模板.xlsx').replace('\\','/')
-menu = os.path.join(os.path.abspath('.'),'attachment\\导入权限模板.xlsx').replace('\\','/')
+organization = os.path.join(os.path.abspath('.'),'attachment\\import_organization.xlsx').replace('\\','/')
+user = os.path.join(os.path.abspath('.'),'attachment\\import_user.xlsx').replace('\\','/')
+menu = os.path.join(os.path.abspath('.'),'attachment\\import_menu.xlsx').replace('\\','/')
 minio_data = []
 httpop = Httpop()
 host = host
@@ -481,7 +481,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=ILLEGAL_CHARACTERS_RE.sub(r'', response.text))
         elif case_detail == '导入组织机构模板':
-            files = {"file": ('导入组织机构模板.xlsx',open(organization, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            files = {"file": ('import_organization.xlsx',open(organization, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -489,7 +489,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '导入用户模板':
-            files = {"file": ('导入用户模板.xlsx',open(user, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            files = {"file": ('import_user.xlsx',open(user, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -497,7 +497,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '导入权限模板':
-            files = {"file": ('导入权限模板.xlsx',open(menu, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
+            files = {"file": ('import_menu.xlsx',open(menu, 'rb'),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}
             headers.pop('Content-Type')
             response = requests.post(url=url, files=files, headers=headers)
             log.info("response data：%s %s" % (response.status_code, response.text))
@@ -855,13 +855,22 @@ def delete_request_result_check(url, data, table_sheet_name, row, column, header
         elif isinstance(data, str):
             log.info("data：%s" % data)
             if "{}" in url:
-                new_url = url.format(data.split("##")[0])
-                log.info("new_url：%s" % new_url)
-                response = requests.delete(url=new_url, headers=headers ,data=data.split("##")[1])
-                log.info("response data：%s %s" % (response.status_code, response.text))
-                clean_vaule(table_sheet_name, row, column)
-                write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                if "##" in data:
+                    new_url = url.format(data.split("##")[0])
+                    log.info("new_url：%s" % new_url)
+                    response = requests.delete(url=new_url, headers=headers ,data=data.split("##")[1])
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                else:
+                    new_url = url.format(data)
+                    log.info("new_url：%s" % new_url)
+                    response = requests.delete(url=new_url, headers=headers)
+                    log.info("response data：%s %s" % (response.status_code, response.text))
+                    clean_vaule(table_sheet_name, row, column)
+                    write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                    write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
             else:
                 response = requests.delete(url=url, headers=headers,data=json.dumps(data))
                 log.info("response data：%s %s" % (response.status_code, response.text))

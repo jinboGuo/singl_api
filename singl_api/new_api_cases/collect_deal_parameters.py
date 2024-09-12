@@ -64,6 +64,15 @@ def deal_parameters(data, request_method, request_url):
         if '标签管理目录' in data:
             data = data.replace('标签管理目录', str(get_resourceid(resource_type[16])))
             return deal_parameters(data, request_method, request_url)
+        if '&&' in data and '输入' in data:
+            select_data = data.split('&&')[0]
+            log.info("开始执行语句:{}".format(select_data))
+            data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
+            log.info("sql查询结果为:{}".format(data_select_result))
+            data_select_result = data_select_result[0]['id']
+            request_data = data.split('&&')[1]
+            request_data = str(request_data).replace('输入', str(data_select_result))
+            return request_data
         if '&&' in data:
             new_data = str(data).split('&&')
             if request_method == "PUT":
@@ -113,15 +122,6 @@ def deal_parameters(data, request_method, request_url):
                     if '标签主键' in data:
                         data = data.replace('标签主键', str(get_tags(tag_type[0], new_data[1])))
                         return deal_parameters(data, request_method, request_url)
-        if '&&' in data and '输入' in data:
-            select_data = data.split('&&')[0]
-            log.info("开始执行语句:{}".format(select_data))
-            data_select_result = ms.ExecuQuery(select_data.encode('utf-8'))
-            log.info("sql查询结果为:{}".format(data_select_result))
-            data_select_result = data_select_result[0]['id']
-            request_data = data.split('&&')[1]
-            request_data = str(request_data).replace('输入', str(data_select_result))
-            return request_data
         if '输入驱动名称' in data:
             request_data = data.replace('输入驱动名称', str(get_driver_name()))
             return request_data

@@ -237,7 +237,7 @@ def get_execution_id(scheduler_name):
 
 def get_rtc_execution_id(scheduler_name):
     try:
-        sql = "select id from rtc_executions where flow_name = '%s' ORDER BY create_time desc limit 1" %scheduler_name
+        sql = "select id from merce_flow_execution where flow_name = '%s' ORDER BY create_time desc limit 1" %scheduler_name
         flow_execution_info = ms.ExecuQuery(sql.encode('utf-8'))
         flow_execution_info_id = flow_execution_info[0]["id"]
         return str(flow_execution_info_id)
@@ -246,7 +246,7 @@ def get_rtc_execution_id(scheduler_name):
 
 def get_rtcflow_id():
     """
-    获取dataflow id
+    获取rtcflow id
     """
     tenant_id = get_tenant_id()
     try:
@@ -259,7 +259,7 @@ def get_rtcflow_id():
 
 def get_workflow_id():
     """
-    获取dataflow id
+    获取workflow id
     """
     tenant_id = get_tenant_id()
     try:

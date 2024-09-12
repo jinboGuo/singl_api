@@ -95,7 +95,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
         if case_detail == '上传驱动包-mysql':
-            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\mysql-connector-java-8.0.32_driver.jar').replace('\\','/')
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\mysql-connector-j-8.0.32_driver.jar').replace('\\','/')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'Mysql'),
