@@ -964,7 +964,7 @@ def get_dataflow_id():
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name)
+        sql = "select id from merce_flow where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dataflow_name[0])
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
         flow_info_id = flow_info[0]["id"]
         return str(flow_info_id)
