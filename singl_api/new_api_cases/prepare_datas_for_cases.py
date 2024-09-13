@@ -322,4 +322,18 @@ def get_menu_id():
         user_info_id = user_info[0]["id"]
         return str(user_info_id)
     except Exception as e:
-        log.error("没有获取用户的id：%s" % e)
+        log.error("没有获取菜单的id：%s" % e)
+
+
+def get_explore_id():
+    """
+    获取数据探索能力配置 id
+    """
+    tenant_id = get_tenant_id()
+    try:
+        sql = "select id from merce_platform_capacity_data_explore where tenant_id='%s' " %tenant_id
+        platform_capacity_data_explore = ms.ExecuQuery(sql.encode('utf-8'))
+        platform_capacity_data_explore_id = platform_capacity_data_explore[0]["id"]
+        return str(platform_capacity_data_explore_id)
+    except Exception as e:
+        log.error("没有获取到数据探索能力配置的id：%s" % e)

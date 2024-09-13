@@ -504,33 +504,88 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '获取探索数据集sql过滤配置' == case_detail:
+            headers.pop('Content-Type')
+            headers["Content-Type"]="application/x-www-form-urlencoded"
+            data ={"sqls":"SELECT count(*) FROM `gjb_ttest_hdfs042219`"}
+            print(headers, data)
+            response=requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '解析探索数据集sql' == case_detail:
+            headers.pop('Content-Type')
+            headers["Content-Type"]="application/x-www-form-urlencoded"
+            data ={"sql": "SELECT count(*) FROM `gjb_ttest_hdfs042219`"}
+            print(headers, data)
+            response=requests.post(url=url, headers=headers, data=data)
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+        elif '监控探索离线任务执行成功' == case_detail:
+            #new_data = json.dumps(new_data, separators=(',', ':'))
+            log.info("data：%s" % data)
+            response = requests.post(url=url, headers=headers, json=dict_res(data))
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            count_num = 0
+            time.sleep(6)
+            while '"status":"wait"' in response.text or '"status":"running"' in response.text or '"list":[]' in response.text:
+                log.info("再次查询：%s %s" % (response.status_code, response.text))
+                response = requests.post(url=url, headers=headers, json=dict_res(data))
+                time.sleep(6)
+                count_num += 1
+                if count_num == 60:
+                    return
+            log.info("response data：%s %s" % (response.status_code, response.text))
+            clean_vaule(table_sheet_name, row, column)
+            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         else:
             if data:
                 if "{}" in url:
                     if "##" in data:
                         new_url = url.format(data.split("##")[1])
                         log.info("请求new_url：%s" % new_url)
-                        print(type(data.split("##")[0]),data.split("##")[0])
+                        #print(type(data.split("##")[0]),data.split("##")[0])
                         response = requests.post(url=new_url, headers=headers, data=data.split("##")[0].encode("utf-8"))
                         log.info("response data：%s %s" % (response.status_code, response.text))
                         clean_vaule(table_sheet_name, row, column)
                         write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
                         write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                     else:
-                        new_url = url.format(data[1], data[2],data[3])
-                        log.info("请求new_url：%s" % new_url)
-                        response = requests.post(url=new_url, headers=headers, data=json.dumps(data[0]))
-                        count_num = 0
-                        while "waiting" in response.text or "running" in response.text:
+                        if "/api/sys/meta/explore/sql/executeresult" in url:
+                            new_url = url.format(data[1], data[2], data[3],data[0])
+                            log.info("请求new_url：%s" % new_url)
+                            new_data=[]
+                            response = requests.post(url=new_url, headers=headers, data=json.dumps(new_data))
+                            count_num = 0
+                            while "waiting" in response.text or "running" in response.text:
+                                response = requests.post(url=new_url, headers=headers, data=json.dumps(new_data))
+                                time.sleep(5)
+                                count_num += 1
+                                if count_num == 50:
+                                    return
+                            log.info("response data：%s %s" % (response.status_code, response.text))
+                            clean_vaule(table_sheet_name, row, column)
+                            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                        else:
+                            new_url = url.format(data[1], data[2],data[3])
+                            log.info("请求new_url：%s" % new_url)
                             response = requests.post(url=new_url, headers=headers, data=json.dumps(data[0]))
-                            time.sleep(5)
-                            count_num += 1
-                            if count_num == 50:
-                                return
-                        log.info("response data：%s %s" % (response.status_code, response.text))
-                        clean_vaule(table_sheet_name, row, column)
-                        write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
-                        write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
+                            count_num = 0
+                            while "waiting" in response.text or "running" in response.text:
+                                response = requests.post(url=new_url, headers=headers, data=json.dumps(data[0]))
+                                time.sleep(5)
+                                count_num += 1
+                                if count_num == 50:
+                                    return
+                            log.info("response data：%s %s" % (response.status_code, response.text))
+                            clean_vaule(table_sheet_name, row, column)
+                            write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
+                            write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
                 elif str(data).startswith('{') and str(data).endswith('}'):
                     data_dict = dict_res(data)
                     time.sleep(3)
@@ -1051,7 +1106,9 @@ class CheckResult(unittest.TestCase):
 
             elif relation == 'in':
                 """返回多内容时，断言多个值可以用&连接，并且expect_text包含在response_text中"""
-                if "&&" in expect_text:
+                if expect_text == None and response_text == "":
+                    case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
+                elif "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
                             self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
