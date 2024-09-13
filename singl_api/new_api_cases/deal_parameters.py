@@ -7,7 +7,7 @@ from util.get_deal_parameter import get_resourceid, get_datasource, get_schema, 
 from basic_info.setting import resource_type, host, data_source, tag_type, ms, log, scheduler_name
 from util.timestamp_13 import data_now
 from new_api_cases.prepare_datas_for_cases import get_scheduler_id, get_execution_id, get_rtcflow_id, \
-    get_rtc_execution_id, get_workflow_id, get_safety_level, get_role_id, get_user_id, get_menu_id
+    get_rtc_execution_id, get_workflow_id, get_safety_level, get_role_id, get_user_id, get_menu_id, get_explore_id
 
 
 def deal_parameters(data,request_method,request_url):
@@ -104,6 +104,9 @@ def deal_parameters(data,request_method,request_url):
             return deal_parameters(data,request_method,request_url)
         if '菜单主键' in data:
             data = data.replace('菜单主键',  str(get_menu_id()))
+            return deal_parameters(data,request_method,request_url)
+        if '数据探索能力配置主键' in data:
+            data = data.replace('数据探索能力配置主键',  str(get_explore_id()))
             return deal_parameters(data,request_method,request_url)
         if '/api/flowComment/detail' in data and 'dataflow' in data:
             try:
@@ -230,6 +233,18 @@ def deal_parameters(data,request_method,request_url):
                         return new_data
                       except Exception as e:
                         log.error("执行过程中出错{}".format(e))
+                    if   '/api/sys/meta/explore/sql/executeinit' == new_data[1]:
+                        try:
+                            response1 = requests.post(url=host+new_data[1], headers=get_headers(), data=new_data[0])
+                            statement_id = response1.json()["content"]["statementId"]
+                            cluster_id = response1.json()["content"]["clusterId"]
+                            session_id = response1.json()["content"]["sessionId"]
+                            log_id = response1.json()["content"]["logId"]
+                            log.info("preview_ init接口响应数据:{}".format(response1.text))
+                            new_data2 = [log_id, statement_id, cluster_id, session_id]
+                            return new_data2
+                        except Exception as e:
+                            log.error("执行过程中出错{}".format(e))
         if 'select id from' in data:
             log.info("开始执行语句:{}".format(data))
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
@@ -252,12 +267,12 @@ def deal_parameters(data,request_method,request_url):
                             log.error("执行过程中出错{}".format(e))
             else:
                 log.error("sql查询结果为空！")
-        if 'select output_data_id' in data:
+        if 'select application_id' in data:
             data_select_result = ms.ExecuQuery(data.encode('utf-8'))
             if data_select_result:
                 try:
-                    data = data_select_result[0]["output_data_id"]
-                    return deal_parameters(data,request_method,request_url)
+                    data = data_select_result[0]["application_id"]
+                    return data
                 except Exception as e:
                     log.error("执行过程中出错{}".format(e))
             else:

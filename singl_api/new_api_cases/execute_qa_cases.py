@@ -488,7 +488,9 @@ class CheckResult(unittest.TestCase):
 
             elif relation == 'in':
                 """返回多内容时，断言多个值可以用&连接，并且expect_text包含在response_text中"""
-                if "&&" in expect_text:
+                if expect_text == None and response_text == "":
+                    case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
+                elif "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
                             self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
@@ -533,7 +535,9 @@ class CheckResult(unittest.TestCase):
                         case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
 
             elif relation == 'in':
-                if "&&" in expect_text:
+                if expect_text == None and response_text == "":
+                    case_table_sheet.cell(row=row, column=column, value='pass').fill=PatternFill('solid', fgColor=colors.COLOR_INDEX[3])
+                elif "&&" in expect_text:
                     for i in expect_text.split("&&"):
                         try:
                             self.assertIn(i, response_text, '第 %d 行 预期结果：%s没有包含在response_text中' %(row,i))
