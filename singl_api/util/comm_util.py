@@ -9,7 +9,7 @@ from pykafka import KafkaClient
 import json
 import requests
 from faker import Faker
-from util.timestamp_13 import data_now, hour_stamp, hour_slice, timestamp_now, timestamp_utc
+from util.timestamp_13 import data_now, hour_stamp, hour_slice, timestamp_now, timestamp_utc, day_now
 
 fake = Faker("zh_CN")  # 初始化，可生成中文数据
 
@@ -437,11 +437,11 @@ class operateKafka:
     :return: 操作kafka，往kafka发送字符串和json数据
     """
     def __init__(self):
-        hosts = ["192.168.1.55:9092","192.168.1.82:9094"]
+        hosts = ["192.168.1.67:9092","192.168.1.67:9092"]
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
-        self.bstrap_servers=['192.168.1.55:9092']   #192.168.1.82:9094 192.168.1.55:9092
-        self.topic = client.topics['commander.scheduler.xdr_62_16x']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
+        self.bstrap_servers=['192.168.1.65:9092']   #192.168.1.82:9094 192.168.1.67:9092
+        self.topic = client.topics['commander.scheduler.xdr.120.123']  #commander.scheduler.poseidon.flow COMMANDER_FLOW  commander.scheduler.xdr_compass_16x
         self.str_topic = clients.topics['test_kafka0209'] #往topic发送字符串
         self.json_topic = "test_kafka042712" #往topic发送json
 
@@ -466,34 +466,16 @@ class operateKafka:
     """
     function:send json message to kafka
     """
-    def send_json_kafka(self):
-     producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),bootstrap_servers=self.bstrap_servers)
-     new_data = []
-     start_time = datetime.datetime.now()
-     log.info("导入-开始时间：%s" % start_time)
-     for i in range(5):
-         for j in range(0, 30000):
-             data = {"id": i, "name": fake.name(), "sex": random.choice('男女'), "age": random.randint(21, 35),
-                     "stime": timestamp_utc(), "time": timestamp_utc(), "create_time": timestamp_utc(),
-                     "update_time": timestamp_utc(), "ssn": fake.ssn(),
-                     "randoms": random.randint(22, 35), "job": fake.job(), "rand_int": random.randint(10000, 1000000),
-                     "currency_code": fake.currency_code(),
-                     "credit_card_number": fake.credit_card_number(),
-                     "credit_card_provider": fake.credit_card_provider(),
-                     "credit_card_security_code": fake.credit_card_security_code(),
-                     "postcode": fake.postcode(), "province": fake.province(), "city_suffix": fake.city_suffix(),
-                     "street_address": fake.street_address()}
-             new_data.append(data)
-         log.info("往kafka输入的data：%s", new_data)
-         #time.sleep(1)
-         for message in new_data:
-          producer.send(self.json_topic, message)
-     # 记录执行完成时间
-     end_time = datetime.datetime.now()
-     log.info("导入结束时间：%s" % end_time)
-     # 计算时间差
-     log.info("导入数据总耗时：%s" % (end_time - start_time))
-     producer.close()
+    def send_string_kafka(self):
+        with self.str_topic.get_sync_producer() as producer:
+            new_data=[]
+            for i in range(10):
+                data={"test_int":i,"test_bigint":i+100000000,"test_byte":100+random.randint(1,5),"test_short":random.randint(32000,35000),"test_binary":None,"test_float":100.123456+i,"test_double":i+0.23456789123001,"test_decimal":123456789123456789.001+i,"test_boolean":"true","test_string1":"我是string类型1","test_string2":'{"test_json":"我json1"}',"test_string3":"<book><name>Izzy</name><tel>17302280361</tel><age>6</age></book>","test_timestamp":data_now(),"test_date":day_now()}
+                new_data.append(data)
+            log.info("往kafka输入的data：%s", new_data)
+            for data in new_data:
+                dat = ','.join([str(i) for i in list(data.values())])
+                producer.produce(str(dat).encode())
 
     """
     function:send str message to kafka

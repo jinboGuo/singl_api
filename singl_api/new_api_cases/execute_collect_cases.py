@@ -95,7 +95,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         case_detail = case_table_sheet.cell(row=row, column=2).value
         log.info("开始执行：%s" % case_detail)
         if case_detail == '上传驱动包-mysql':
-            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\mysql-connector-j-8.0.32_driver.jar')
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\mysql-connector-j-8.0.32_driver.jar').replace('\\','/')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'Mysql'),
@@ -107,7 +107,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '上传驱动包-hive':
-            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\hive-jdbc-3.1.0.3.1.5.0-152_driver.jar')
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\hive-jdbc-3.1.0.3.1.5.0-152_driver.jar').replace('\\','/')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'HIVE'),
@@ -119,7 +119,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '上传驱动包-dm':
-            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\dm7-18.0.0_driver.jar')
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\dm7-18.0.0_driver.jar').replace('\\','/')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'Dm'),
@@ -131,7 +131,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif case_detail == '上传驱动包-Oushu':
-            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\postgresql-42.2.23_driver.jar')
+            driver_file_path = os.path.join(os.path.abspath('.'), 'attachment\\postgresql-42.2.23_driver.jar').replace('\\','/')
             files = {
                 'file': (os.path.basename(driver_file_path), open(driver_file_path, 'rb')),
                 'dbType': (None, 'OushuDB'),

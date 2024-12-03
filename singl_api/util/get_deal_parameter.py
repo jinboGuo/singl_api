@@ -854,7 +854,7 @@ def get_dw_data_tier_id(dw_type):
     """
     tenant_id = get_tenant_id()
     try:
-        sql = "select id,name from dw_data_tier where tenant_id='%s' and abbr like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
+        sql = "select id,name from dw_data_tier where tenant_id='%s' and name like '%s%%%%' ORDER BY create_time desc limit 1" %(tenant_id,dw_name[1])
         dw_data_tier_info = ms.ExecuQuery(sql.encode('utf-8'))
         dw_data_tier_info_id = dw_data_tier_info[0]["id"]
         dw_data_tier_info_name = dw_data_tier_info[0]["name"]

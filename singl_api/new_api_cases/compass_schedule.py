@@ -5,18 +5,22 @@ from util.conn_linux import Linux
 from util.comm_util import operateKafka
 
 kafka =operateKafka()
-# fs_scheduler = {
-#     'HOST': '192.168.1.188',
-#     "USER": 'merce',
-#     "PASSWORD": 'merce'
-# }
-
 fs_scheduler = {
-    'HOST': '192.168.1.95',
+    'HOST': '192.168.1.62',
     "USER": 'merce',
-    "PASSWORD": 'merce@9595'
+    "PASSWORD": 'merce@6262'
 }
 
+# fs_scheduler = {
+#     'HOST': '192.168.1.95',
+#     "USER": 'merce',
+#     "PASSWORD": 'merce@9595'
+# }
+#fs_scheduler = {
+#    'HOST': '192.168.1.81',
+#    "USER": 'merce',
+#    "PASSWORD": 'merce'
+#}
 host = Linux(Compass_scheduler["HOST"], Compass_scheduler["USER"], Compass_scheduler["PASSWORD"])
 fs_host = Linux(fs_scheduler["HOST"], fs_scheduler["USER"], fs_scheduler["PASSWORD"])
 
@@ -304,8 +308,8 @@ cd = "cd /app/data/"
 sh = "sh createdata2.sh"
 dle = "rm -rf demo*"
 upload = "hadoop dfs -put [demo]* /tmp/gjt"
-msg = '<root><ip>370</ip><fileSourceID>1209549034981687296</fileSourceID><fullName>hdfs://into1:8020///tmp/gjt////demo-2022030719.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>2024-02-20 17:00:00</sliceTime><createTime>2024-02-20 17:02:00</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
-cluster ="hdfs://into1:8020"  # "hdfs://europa:8020"
+msg = '<root><ip>370</ip><fileSourceID>1209549034981687296</fileSourceID><fullName>hdfs://info1:8020///tmp/gjt////demo-2022030719.csv</fullName><fileName>test4</fileName><sliceType>H</sliceType><sliceTime>2024-02-20 17:00:00</sliceTime><createTime>2024-02-20 17:02:00</createTime><rowNumber>500</rowNumber><fieldSeparator>7C</fieldSeparator><fileSize>17528</fileSize><compressType></compressType><fileType>csv</fileType><fieldWrapper></fieldWrapper><code>utf-8</code></root>'
+cluster ="hdfs://info1:8020"  # "hdfs://europa:8020"
 
 def run_all():
     # host.connect()
@@ -338,4 +342,4 @@ def run_all():
 
 while True:
  run_all()
- sleep(60)
+ sleep(600)
