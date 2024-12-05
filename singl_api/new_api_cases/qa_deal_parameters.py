@@ -181,6 +181,8 @@ def deal_parameters(data,request_method,request_url):
                     data=new_data[0].rstrip().replace('\n','')
                     newdata=dict_res(new_data[1].rstrip())
                     for key in newdata.keys():
+                        if key=='租户名称' and '租户名称' in data:
+                                data=data.replace('租户名称',tenant_name)
                         if key=='数据源主键' and '数据源主键' in data:
                                 data = data.replace('数据源主键', str(get_schema(data_source[0], newdata[key])))
                         if key=='数据源名称'  and '数据源名称'  in data:
