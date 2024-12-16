@@ -1,7 +1,5 @@
 # coding:utf-8
-import json
 import os
-import requests
 from new_api_cases.dw_deal_parameters import deal_random
 from basic_info.setting import log, ms
 from util.get_deal_parameter import get_tenant_id
