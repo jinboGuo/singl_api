@@ -2,7 +2,7 @@
 import os
 import time
 from util.logs import Logger
-from util.Open_DB import MYSQL
+from util.Open_DB import MYSQL,oracle,kingbase
 from util.encrypt import encrypt_rf
 
 log = Logger().get_log()
@@ -39,136 +39,122 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 -------95-comapss环境使用-------
  sheet_name:scheduler
  HOST: "http://192.168.1.95:8515"
- Compass_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 compass_sheet = "scheduler" #scheduler
 compass_host = "http://192.168.1.62:8515"
-Compass_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+
 
 """
 -------95-alarm环境使用-------
  sheet_name:alarm
  HOST: "http://192.168.1.95:8515"
- alarm_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 alarm_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 alarm_sheet = "alarm"  #alarm
 alarm_host = "http://192.168.1.62:8515"
-Alarm_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168'
-}
+
 
 """
 -------95-dsp环境使用-------
  sheet_name:dsp
  HOST: "http://192.168.1.95:8515"
- Dsp_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
 dsp_host = "http://192.168.1.62:8515"
-Dsp_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168'
-}
+
 
 """
 -------95-dw环境使用-------
  sheet_name:dw-asset
  HOST: "http://192.168.1.95:8515"
- Dw_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 dw_sheet = "dw-asset"  #dw-asset
 dw_host = "http://192.168.1.62:8515"
-Dw_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+
 
 """
 -------95-collect环境使用-------
  sheet_name:collect
  HOST: "http://192.168.1.95:8515"
- Dw_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 collect_sheet = "collect"
 collect_host = "http://192.168.1.62:8515"
-collect_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+
 
 """
 -------95-indicator环境使用-------
  sheet_name:indicator
  HOST: "http://192.168.1.95:8515"
- Dw_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 indicator_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 indicator_sheet = "indicator"
 indicator_host = "http://192.168.1.62:8515"
-indicator_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+
 
 """
 -------95-quality环境使用-------
  sheet_name:quality
  HOST: "http://192.168.1.95:8515"
- quality_MySQL_CONFIG:数据库连接信息
+ MySQL_CONFIG:数据库连接信息
 """
 quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 quality_sheet = "quality"
 quality_host = "http://192.168.1.62:8515"
-quality_MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
-    "PORT": 3306,
-    "USER": 'merce',
-    "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+
+
 
 """
-测试数据库的连接配置
+kingbase数据库的连接配置
+"""
+KINGBASE_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 54321,
+    "USER": 'system',
+    "PASSWORD": '123456',
+    "DB": 'TEST'}
+
+"""获取king base数据库连接"""
+ms2 = kingbase(KINGBASE_CONFIG["HOST"], KINGBASE_CONFIG["USER"], KINGBASE_CONFIG["PASSWORD"], KINGBASE_CONFIG["DB"],
+                KINGBASE_CONFIG["PORT"])
+
+
+"""
+oracle数据库的连接配置
+"""
+ORACLE_CONFIG = {
+    'HOST': '192.168.1.67',
+    "PORT": 1521,
+    "USER": 'carpo',
+    "PASSWORD": '123456',
+    "DB": 'xe'}
+
+"""获取oracle数据库连接"""
+ms1 = oracle(ORACLE_CONFIG["HOST"], ORACLE_CONFIG["USER"], ORACLE_CONFIG["PASSWORD"], ORACLE_CONFIG["DB"],
+                ORACLE_CONFIG["PORT"])
+
+"""
+mysql测试数据库的连接配置
 """
 MySQL_CONFIG1 = {
     'HOST': '192.168.1.82',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'test',
-    'case_db': 'test'}
+    "DB": 'test'}
 
-"""获取数据库连接"""
+"""获取mysql测试数据库连接"""
 ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PASSWORD"], MySQL_CONFIG1["DB"],
                 MySQL_CONFIG1["PORT"])
-
 """
 -------95-baymax环境使用-------
  baymax_cases_dir:case文件的地址
@@ -179,17 +165,22 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.x.xlsx').replace('\\', '/')
 baymax_sheet = "baymax_master"  # baymax_master
 host = "http://192.168.1.62:8515"
+
+"""
+mysql数据库的连接配置
+"""
 MySQL_CONFIG = {
     'HOST': '192.168.1.67',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_168',
-    'case_db': 'test'}
+    "DB": 'merce_168'}
 
-"""获取数据库连接"""
+"""获取mysql数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],
            MySQL_CONFIG["PORT"])
+
+
 
 """elasticsearch集群服务器的地址"""
 ES = ['http://192.168.1.95:9200/']

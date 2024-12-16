@@ -195,7 +195,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
         elif 'oracle数据集-数据推送1/2' in case_detail:
             try:
                 log.info("request   url：%s" % url)
-                select_data1 = "select id from merce_dss where name = 'test_wmd_py-mysql'"
+                select_data1 = "select id from merce_dss where name = 'test_wmd_py-oracle'"
                 select_data2 = "select id from dsp_data_resource where name = 'test_py_向导_数据集_oracle_推送API'"
                 data_select_result1 = ms.ExecuQuery(select_data1.encode('utf-8'))
                 data_select_result2 = ms.ExecuQuery(select_data2.encode('utf-8'))

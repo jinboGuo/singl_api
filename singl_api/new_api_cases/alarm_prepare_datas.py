@@ -12,10 +12,10 @@ def alarm_job():
         sql="select id,name from merce_flow where  total_executed >1  and flow_type='dataflow' and is_hide =0  and tenant_id='{}' order by  last_modified_time desc limit 1".format(tenant_id)
         ids = ms.ExecuQuery(sql.encode('utf-8'))
         data=json.dumps({"monitoredTasks": [{"model": "数据计算","taskName": "%s","type": "dataflow","taskId": "%s"}],"name": "alarmmage_test%s","description ":""})
-        data=data % (ids[0]['name'],ids[0]['id'],str(random.randint(111,999)))
+        data=data % (ids[0]['name'],ids[0]['id'],str(random.randint(1111,99999)))
         return data
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到flow的id：%s" % e)
     
 
 def alarm_config(num):
@@ -159,7 +159,7 @@ def alarm_config(num):
         elif num==1:
             return data1.replace('True','true')
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到id：%s" % e)
 
 
 def alarm_jap(data,num):
@@ -184,7 +184,7 @@ def alarm_jap(data,num):
 
         return url
     except Exception as e:
-            log.error("没有获取到目录id：%s" % e)
+            log.error("没有获取到id：%s" % e)
     
 def alarm_handle(num=0):
     tenant_id = get_tenant_id()
@@ -207,5 +207,5 @@ def alarm_handle(num=0):
                 data.append(datas.format(str(tenant_id),res['id'],res['monitor_id'],res['monitor_name'],res['alarm_config_id'],res['alarm_type'],res['source_id'],res['source_name'],res['source_type'],res['execution_id'],res['execution_name'],res['alarm_rule_id'],res['alarm_rule_name'],res['alarm_level']))
             return data
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到id：%s" % e)
         
