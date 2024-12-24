@@ -117,15 +117,16 @@ quality_host = "http://192.168.1.62:8515"
 kingbase数据库的连接配置
 """
 KINGBASE_CONFIG = {
-    'HOST': '192.168.1.67',
+    'HOST': '192.168.1.134',
     "PORT": 54321,
     "USER": 'system',
     "PASSWORD": '123456',
-    "DB": 'TEST'}
+    "DB": 'TEST',
+    "SCHEMA":'merce_17x_101'}
 
 """获取king base数据库连接"""
 ms2 = kingbase(KINGBASE_CONFIG["HOST"], KINGBASE_CONFIG["USER"], KINGBASE_CONFIG["PASSWORD"], KINGBASE_CONFIG["DB"],
-                KINGBASE_CONFIG["PORT"])
+                KINGBASE_CONFIG["PORT"],KINGBASE_CONFIG["SCHEMA"])
 
 
 """
