@@ -1,6 +1,6 @@
 # coding:utf-8
+import psycopg2
 import pymysql
-import ksycopg2
 import cx_Oracle
 
 
@@ -75,7 +75,7 @@ class kingbase:
     def _get_connect(self):
         if not self.db:
             raise(NameError, '没有设置数据库连接信息')
-        self.conn = ksycopg2.connect(host=self.host, user=self.user, password=self.pwd, database=self.db, port=self.port)
+        self.conn = psycopg2.connect(host=self.host, user=self.user, password=self.pwd, database=self.db, port=self.port)
         cur = self.conn.cursor()
         cur.execute(f'SET search_path TO {self.schema};')
         if not cur:
