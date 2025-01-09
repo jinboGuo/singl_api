@@ -437,7 +437,7 @@ class operateKafka:
     :return: 操作kafka，往kafka发送字符串和json数据
     """
     def __init__(self):
-        hosts = ["192.168.1.67:9092","192.168.1.67:9092"]
+        hosts = ["192.168.1.67:9092","192.168.1.82:9094"]
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.65:9092']   #192.168.1.82:9094 192.168.1.67:9092
