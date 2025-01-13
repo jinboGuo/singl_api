@@ -406,11 +406,11 @@ def get_jobview_history(data):
         sql = "select id, owner, tenant_id, name, pool_id, resource_id, slice_type from s_v_job_view where tenant_id='%s' and name like'%s%%%%' order by create_time desc limit 1" % (tenant_id,data[1])
         job_view = ms.ExecuQuery(sql.encode('utf-8'))
         print("job_view", job_view)
-        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.`type` ='source' and mf.tenant_id='%s' and mf.dev_stage='PRODUCTION' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % (tenant_id,data[1])
+        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.type ='source' and mf.tenant_id='%s' and mf.dev_stage='PRODUCTION' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % (tenant_id,data[1])
         source_flow_dataset_map = ms.ExecuQuery(source_flow_dataset_map.encode('utf-8'))
         print("source_flow_dataset_map", source_flow_dataset_map)
         job_name = source_flow_dataset_map[0]["flow_name"]+"."+source_flow_dataset_map[0]["flow_id"]
-        sink_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.`type` ='sink' and mf.tenant_id='%s' and mf.dev_stage='PRODUCTION' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % (tenant_id,data[1])
+        sink_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.type ='sink' and mf.tenant_id='%s' and mf.dev_stage='PRODUCTION' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % (tenant_id,data[1])
         sink_flow_dataset_map = ms.ExecuQuery(sink_flow_dataset_map.encode('utf-8'))
         print("sink_flow_dataset_map", sink_flow_dataset_map)
         s_c_re = "select re_oid from s_c_re where tenant_id='%s' and re_name like'%s%%%%' limit 1" % (tenant_id,data[2])
@@ -428,7 +428,7 @@ def get_qa_jobview_history(data):
         dc_task = ms.ExecuQuery(dc_task.encode('utf-8'))
         sql = "select id, owner, tenant_id, name, pool_id, resource_id, slice_type from s_v_job_view where name like'%s%%%%' order by create_time desc limit 1" % data[1]
         job_view = ms.ExecuQuery(sql.encode('utf-8'))
-        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.`type` ='source' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % data[2]
+        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.type ='source' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % data[2]
         source_flow_dataset_map = ms.ExecuQuery(source_flow_dataset_map.encode('utf-8'))
         job_name = source_flow_dataset_map[0]["flow_name"]+"."+source_flow_dataset_map[0]["flow_id"]
         s_c_re = "select re_oid from s_c_re where re_name like'%s%%%%' limit 1" % data[3]
@@ -446,7 +446,7 @@ def get_dsp_jobview_history(data):
         dc_task = ms.ExecuQuery(dc_task.encode('utf-8'))
         sql = "select id, owner, tenant_id, name, pool_id, resource_id, slice_type from s_v_job_view where name like'%s%%%%' order by create_time desc limit 1" % data[1]
         job_view = ms.ExecuQuery(sql.encode('utf-8'))
-        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.`type` ='source' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % data[2]
+        source_flow_dataset_map = "select mfdm.dataset_id,mfdm.dataset_name,mfdm.flow_id,mfdm.flow_name from merce_flow_dataset_map mfdm inner join merce_flow mf on mf.id =mfdm.flow_id where mfdm.type ='source' and mf.name like '%s%%%%' order by mf.create_time DESC limit 1" % data[2]
         source_flow_dataset_map = ms.ExecuQuery(source_flow_dataset_map.encode('utf-8'))
         job_name = source_flow_dataset_map[0]["flow_name"]+"."+source_flow_dataset_map[0]["flow_id"]
         s_c_re = "select re_oid from s_c_re where re_name like'%s%%%%' limit 1" % data[3]

@@ -122,7 +122,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             write_result(sheet=table_sheet_name, row=row, column=column + 4, value=response.text)
         elif  case_detail == '监控管理-新建':
             new_data = alarm_job()
-            response = requests.post(url=url, headers=headers, data=new_data)
+            response = requests.post(url=url, headers=headers, data=new_data.encode("utf-8"))
             log.info("response data：%s %s" % (response.status_code, response.text))
             clean_vaule(table_sheet_name, row, column)
             write_result(sheet=table_sheet_name, row=row, column=column, value=response.status_code)

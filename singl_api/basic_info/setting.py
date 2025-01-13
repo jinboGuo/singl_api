@@ -64,7 +64,7 @@ alarm_host = "http://192.168.1.62:8515"
  MySQL_CONFIG:数据库连接信息
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.7.xlsx').replace('\\', '/')
-dsp_sheet = "dsp"
+dsp_sheet = "dsp" #dsp
 dsp_host = "http://192.168.1.62:8515"
 
 
@@ -97,7 +97,7 @@ collect_host = "http://192.168.1.62:8515"
  MySQL_CONFIG:数据库连接信息
 """
 indicator_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.7.xlsx').replace('\\', '/')
-indicator_sheet = "indicator"
+indicator_sheet = "indicator" #indicator
 indicator_host = "http://192.168.1.62:8515"
 
 
@@ -108,7 +108,7 @@ indicator_host = "http://192.168.1.62:8515"
  MySQL_CONFIG:数据库连接信息
 """
 quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.7.xlsx').replace('\\', '/')
-quality_sheet = "quality"
+quality_sheet = "quality" #quality
 quality_host = "http://192.168.1.62:8515"
 
 
@@ -122,7 +122,7 @@ KINGBASE_CONFIG = {
     "USER": 'system',
     "PASSWORD": '123456',
     "DB": 'TEST',
-    "SCHEMA":'merce_17x_101'}
+    "SCHEMA":'merce_171_101'}
 
 """获取king base数据库连接"""
 ms2 = kingbase(KINGBASE_CONFIG["HOST"], KINGBASE_CONFIG["USER"], KINGBASE_CONFIG["PASSWORD"], KINGBASE_CONFIG["DB"],
