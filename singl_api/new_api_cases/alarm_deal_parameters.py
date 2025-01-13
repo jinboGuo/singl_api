@@ -3,8 +3,8 @@ import random
 import requests
 from basic_info.get_auth_token import get_headers
 from util.format_res import dict_res
-from basic_info.setting import resource_type, data_source, tag_type, log,tenant_name
-from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset, ms,\
+from basic_info.setting import resource_type, data_source, tag_type, log, ms
+from util.get_deal_parameter import get_resourceid, get_schema, get_tags, get_datasource, get_dataset,\
     get_tenant_id,get_owner
 from basic_info.setting import host
 
@@ -335,18 +335,8 @@ def deal_random(new_data):
         return new_data
     except Exception as e:
         log.error("异常信息：%s" %e)
-def get_tenant_id():
-    """
-    :return: tenant_id
-    """
-    try:
-      sql = "select id from merce_tenant where name='%s' order by create_time desc limit 1" % tenant_name
-      tenant_id = ms.ExecuQuery(sql)
-      tenant_id = tenant_id[0]["id"]
-      return str(tenant_id)
-    except Exception as e:
-        return log.error("没有查询到租户id：%s" % e)
-    
+
+
 def get_dingdingid():
 
     tenant_id = get_tenant_id()
@@ -356,7 +346,7 @@ def get_dingdingid():
         resource_id = resource_dir[0]["id"]
         return resource_id
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到目id：%s" % e)
         
 def get_zhanneixid():
 
@@ -367,7 +357,7 @@ def get_zhanneixid():
         resource_id = resource_dir[0]["id"]
         return resource_id
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到id：%s" % e)
 
 def get_monitorid():
     try:
@@ -376,7 +366,7 @@ def get_monitorid():
         resource_id = resource_dir[0]["id"]
         return resource_id
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到id：%s" % e)
 
 def get_messgeid():
 
@@ -391,4 +381,4 @@ def get_messgeid():
             resource_id ='1276032818153619456'
         return resource_id
     except Exception as e:
-        log.error("没有获取到目录id：%s" % e)
+        log.error("没有获取到id：%s" % e)

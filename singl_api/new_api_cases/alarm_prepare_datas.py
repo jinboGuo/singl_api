@@ -177,12 +177,15 @@ def alarm_jap(data,num):
 
         if num==0:
             url=data.format(sche[0]['id'])
+            return url
         elif num==1:
             url=data.format(col[0]['id'])
+            return url
         elif num==2:
             url=data.format(cal[0]['id'])
-
-        return url
+            return url
+        else:
+         return
     except Exception as e:
             log.error("没有获取到id：%s" % e)
     
