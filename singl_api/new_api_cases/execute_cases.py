@@ -315,7 +315,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
             log.info("response data：%s %s" % (response.status_code, response.text))
             count_num = 0
             time.sleep(5)
-            while "waiting" in response.text or "READY" in response.text:
+            while "WAITING" in response.text or "READY" in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
                 time.sleep(5)
@@ -323,6 +323,7 @@ def post_request_result_check(row, column, url, host, headers, data, table_sheet
                 if count_num == 70:
                     break
             else:
+                time.sleep(10)
                 log.info("开始往kafka插入数据...")
                 operateKafka().send_str_kafka()
                 clean_vaule(table_sheet_name, row, column)

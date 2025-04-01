@@ -1,4 +1,6 @@
 # coding:utf-8
+import time
+
 from basic_info.setting import ms, log
 from util.get_deal_parameter import get_tenant_id
 from util.timestamp_13 import get_now, data_now
@@ -21,7 +23,7 @@ def get_dataflow_data(flow_name):
         elif "mutil_sink_storage" == flow_name:
             data = {"needApproval":1,"name":flow_info[0]["name"]+data_now(),"flowId":flow_info[0]["id"],"flowName":flow_info[0]["name"],"flowType":flow_info[0]["flow_type"],"flowVersion":flow_info[0]["version"],"schedulerId":"once","source":"rhinos","configurations":{"event":{"sourceId":"","type":"","datasetId":""},"mqConfig":{"nameServer":"","topic":"","groupId":"","subExpression":"*"},"startTime":get_now(),"endTime":None,"arguments":[],"extraConfigurations":{},"extraConfigurationsArray":[],"dependencies":[],"cron":"","schedulingMode":"TimingSchedulingMode","properties":[{"name":"all.debug","value":"false"},{"name":"all.debug-rows","value":20},{"name":"all.dataset-nullable","value":"false"},{"name":"all.optimized-enable","value":"true"},{"name":"all.output-notify","value":"true"},{"name":"all.cluster-id","value":"cluster1"},{"name":"dataflow.queue","value":"root.default"},{"name":"dataflow.verbose","value":"true"},{"name":"dataflow.master","value":"yarn"},{"name":"dataflow.deploy-mode","value":"cluster"},{"name":"dataflow.num-executors","value":1},{"name":"dataflow.driver-memory","value":"1G"},{"name":"dataflow.executor-memory","value":"2G"},{"name":"dataflow.executor-cores","value":1},{"name":"dataflow.local-dirs","value":""},{"name":"dataflow.temp-dir","value":"/tmp/dataflow/spark"},{"name":"dataflow.sink-concat-files","value":"true"}],"retry":{"enable":False,"limit":1,"timeInterval":1,"intervalUnit":"MINUTES"}}}
             return data
-        elif "scheduer" == flow_name:
+        elif "scheduler" == flow_name:
             data = {"needApproval":1,"name":flow_info[0]["name"]+data_now(),"flowId":flow_info[0]["id"],"flowName":flow_info[0]["name"],"flowType":flow_info[0]["flow_type"],"flowVersion":flow_info[0]["version"],"schedulerId":"once","source":"rhinos","configurations":{"event":{"sourceId":"","type":"","datasetId":""},"mqConfig":{"nameServer":"","topic":"","groupId":"","subExpression":"*"},"startTime":get_now(),"endTime":None,"arguments":[],"extraConfigurations":{},"extraConfigurationsArray":[],"dependencies":[],"cron":"","schedulingMode":"TimingSchedulingMode","properties":[{"name":"all.debug","value":"false"},{"name":"all.debug-rows","value":20},{"name":"all.dataset-nullable","value":"false"},{"name":"all.optimized-enable","value":"true"},{"name":"all.output-notify","value":"true"},{"name":"all.cluster-id","value":"cluster1"},{"name":"dataflow.queue","value":"root.default"},{"name":"dataflow.verbose","value":"true"},{"name":"dataflow.master","value":"yarn"},{"name":"dataflow.deploy-mode","value":"cluster"},{"name":"dataflow.num-executors","value":1},{"name":"dataflow.driver-memory","value":"1G"},{"name":"dataflow.executor-memory","value":"2G"},{"name":"dataflow.executor-cores","value":1},{"name":"dataflow.local-dirs","value":""},{"name":"dataflow.temp-dir","value":"/tmp/dataflow/spark"},{"name":"dataflow.sink-concat-files","value":"true"}],"retry":{"enable":False,"limit":1,"timeInterval":1,"intervalUnit":"MINUTES"}}}
             return data
         elif "multi_rtc_steps" == flow_name:
@@ -41,9 +43,15 @@ def query_dataflow_data(flow_name):
         tenant_id = get_tenant_id()
         sql = "select flow_scheduler_id from merce_flow_execution where tenant_id='%s' and flow_name = '%s' ORDER BY create_time desc limit 1" %(tenant_id,flow_name)
         flow_info = ms.ExecuQuery(sql.encode('utf-8'))
-        flow_scheduler_id= [flow_info[0]["flow_scheduler_id"]]
-        data = {"fieldGroup":{"type":"FieldGroup","group":True,"andOr":"AND","fields":[{"type":"Field","group":False,"andOr":"AND","name":"flowSchedulerId","oper":"EQUAL","value":flow_scheduler_id,"label":""}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":20,"pageable":True}}
-        return data
+        if flow_info:
+            flow_scheduler_id= [flow_info[0]["flow_scheduler_id"]]
+            data = {"fieldGroup":{"type":"FieldGroup","group":True,"andOr":"AND","fields":[{"type":"Field","group":False,"andOr":"AND","name":"flowSchedulerId","oper":"EQUAL","value":flow_scheduler_id,"label":""}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":20,"pageable":True}}
+            return data
+        else:
+            time.sleep(8)
+            flow_scheduler_id= [flow_info[0]["flow_scheduler_id"]]
+            data = {"fieldGroup":{"type":"FieldGroup","group":True,"andOr":"AND","fields":[{"type":"Field","group":False,"andOr":"AND","name":"flowSchedulerId","oper":"EQUAL","value":flow_scheduler_id,"label":""}]},"ordSort":[{"name":"lastModifiedTime","order":"DESC"}],"pageable":{"pageNum":1,"pageSize":20,"pageable":True}}
+            return data
     except Exception as e:
         log.error("异常信息：%s" % e)
 
