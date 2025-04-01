@@ -171,11 +171,11 @@ host = "http://192.168.1.62:8515"
 mysql数据库的连接配置
 """
 MySQL_CONFIG = {
-    'HOST': '192.168.1.67',
+    'HOST': '192.168.1.82',
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_168'}
+    "DB": 'merce_62_167'}
 
 """获取mysql数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],
