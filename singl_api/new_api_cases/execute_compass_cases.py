@@ -350,7 +350,7 @@ def post_request_result_check(row, column, url, headers, data, table_sheet_name)
             while '"status":1' in response.text or '"list":[]' in response.text:
                 log.info("再次查询前：%s %s" % (response.status_code, response.text))
                 response = requests.post(url=url, headers=headers, data=new_data)
-                time.sleep(6)
+                time.sleep(8)
                 count_num += 1
                 if count_num == 60:
                     return
