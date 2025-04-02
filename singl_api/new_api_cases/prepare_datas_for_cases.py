@@ -274,9 +274,8 @@ def get_safety_level():
     """
     获取safety_level id
     """
-    tenant_id = get_tenant_id()
     try:
-        sql = "select id from merce_safety_level where tenant_id='%s' and level ='一级'" %tenant_id
+        sql = "select id from merce_safety_level where security_level ='一级'"
         safety_level = ms.ExecuQuery(sql.encode('utf-8'))
         safety_level_id = safety_level[0]["id"]
         return str(safety_level_id)
