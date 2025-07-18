@@ -614,7 +614,7 @@ class operateKafka:
     :return: 操作kafka，往kafka发送字符串和json数据
     """
     def __init__(self):
-        hosts = ["192.168.1.82:9094","192.168.1.82:9094"]
+        hosts = ["192.168.1.82:9094","192.168.1.82:9096"]  #192.168.1.95:9092
         client = KafkaClient(hosts=hosts[0])
         clients = KafkaClient(hosts=hosts[1])
         self.bstrap_servers=['192.168.1.82:9094']   #192.168.1.82:9094 192.168.1.67:9092
@@ -646,7 +646,7 @@ class operateKafka:
     def send_string_kafka(self):
         with self.str_topic.get_sync_producer() as producer:
             new_data=[]
-            for i in range(10):
+            for i in range(10000):
                 data={"test_int":i,"test_bigint":i+100000000,"test_byte":100+random.randint(1,5),"test_short":random.randint(32000,35000),"test_binary":None,"test_float":100.123456+i,"test_double":i+0.23456789123001,"test_decimal":123456789123456789.001+i,"test_boolean":"true","test_string1":"我是string类型1","test_string2":'{"test_json":"我json1"}',"test_string3":"<book><name>Izzy</name><tel>17302280361</tel><age>6</age></book>","test_timestamp":data_now(),"test_date":day_now()}
                 new_data.append(data)
             log.info("往kafka输入的data：%s", new_data)
@@ -660,7 +660,7 @@ class operateKafka:
     def send_str_kafka(self):
         with self.str_topic.get_sync_producer() as producer:
             new_data=[]
-            for i in range(10000):
+            for i in range(10):
                 data={"id":i,"name":fake.name(),"sex":random.choice('男女'),"age":random.randint(22,35),"dates":timestamp_now()}
                 new_data.append(data)
             log.info("往kafka输入的data：%s", new_data)
@@ -692,6 +692,7 @@ class operateKafka:
         producer.close()
 
 # if __name__ == '__main__':
+#
 #
 #     while True:
 #      operateKafka().send_str_kafka()
