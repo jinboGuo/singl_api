@@ -38,78 +38,78 @@ datasource_url = "jdbc:mysql://192.168.1.82:3306/auto_apitest"
 """
 -------95-comapss环境使用-------
  sheet_name:scheduler
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 compass_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 compass_sheet = "scheduler" #scheduler
-compass_host = "http://192.168.1.62:8515"
+compass_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-alarm环境使用-------
  sheet_name:alarm
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 alarm_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 alarm_sheet = "alarm"  #alarm
-alarm_host = "http://192.168.1.62:8515"
+alarm_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-dsp环境使用-------
  sheet_name:dsp
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 dsp_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 dsp_sheet = "dsp"
-dsp_host = "http://192.168.1.62:8515"
+dsp_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-dw环境使用-------
  sheet_name:dw-asset
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 dw_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 dw_sheet = "dw-asset"  #dw-asset
-dw_host = "http://192.168.1.62:8515"
+dw_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-collect环境使用-------
  sheet_name:collect
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 collect_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 collect_sheet = "collect"
-collect_host = "http://192.168.1.62:8515"
+collect_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-indicator环境使用-------
  sheet_name:indicator
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 indicator_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 indicator_sheet = "indicator"
-indicator_host = "http://192.168.1.62:8515"
+indicator_host = "http://192.168.1.95:8516"
 
 
 """
 -------95-quality环境使用-------
  sheet_name:quality
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库连接信息
 """
 quality_cases_dir = os.path.join(os.path.abspath('.'),'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 quality_sheet = "quality"
-quality_host = "http://192.168.1.62:8515"
+quality_host = "http://192.168.1.95:8516"
 
 
 
@@ -160,12 +160,12 @@ ms_conn = MYSQL(MySQL_CONFIG1["HOST"], MySQL_CONFIG1["USER"], MySQL_CONFIG1["PAS
 -------95-baymax环境使用-------
  baymax_cases_dir:case文件的地址
  baymax_sheet:case文件的sheet页名称
- HOST: "http://192.168.1.62:8515"
+ HOST: "http://192.168.1.95:8516"
  MySQL_CONFIG:数据库的连接配置，需要根据不同环境进行变更
 """
 baymax_cases_dir = os.path.join(os.path.abspath('.'), 'all_version_cases\\api_cases_1.6.8.xlsx').replace('\\', '/')
 baymax_sheet = "baymax_master"  # baymax_master
-host = "http://192.168.1.62:8515"
+host = "http://192.168.1.95:8516"
 
 """
 mysql数据库的连接配置
@@ -175,7 +175,7 @@ MySQL_CONFIG = {
     "PORT": 3306,
     "USER": 'merce',
     "PASSWORD": 'merce',
-    "DB": 'merce_62_167'}
+    "DB": 'merce_95_168'}
 
 """获取mysql数据库连接"""
 ms = MYSQL(MySQL_CONFIG["HOST"], MySQL_CONFIG["USER"], MySQL_CONFIG["PASSWORD"], MySQL_CONFIG["DB"],
